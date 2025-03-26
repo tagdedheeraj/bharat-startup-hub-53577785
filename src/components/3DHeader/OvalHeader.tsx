@@ -122,21 +122,36 @@ const OvalHeader = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="center"
-                    className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-xl w-48 p-1"
+                    className="bg-gradient-to-b from-white/20 to-white/10 backdrop-blur-xl 
+                      border border-white/30 text-white rounded-2xl w-56 p-1.5 
+                      shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]
+                      animate-in zoom-in-95 duration-100"
                   >
-                    {item.children.map((child) => (
-                      <DropdownMenuItem key={child.name} asChild>
-                        <Link
-                          to={child.href}
-                          className={cn(
-                            "rounded-lg px-3 py-2 hover:bg-white/20 transition-colors",
-                            isActive(child.href) && "bg-white/20"
-                          )}
-                        >
-                          {child.name}
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
+                    <div className="px-1.5 py-1.5 space-y-0.5">
+                      {item.children.map((child) => (
+                        <DropdownMenuItem key={child.name} asChild>
+                          <Link
+                            to={child.href}
+                            className={cn(
+                              "flex items-center rounded-xl px-3 py-2.5 text-sm font-medium 
+                              transition-all duration-200 hover:bg-white/20 group",
+                              isActive(child.href) ? "bg-white/25 text-white" : "text-white/90 hover:text-white"
+                            )}
+                          >
+                            <span className="relative overflow-hidden">
+                              {child.name}
+                              <span className="absolute bottom-0 left-0 w-full h-px bg-white/60 
+                                transform scale-x-0 group-hover:scale-x-100 transition-transform 
+                                duration-300 origin-left"></span>
+                            </span>
+                            {isActive(child.href) && (
+                              <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-brand-300 
+                                animate-pulse"></span>
+                            )}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
@@ -208,20 +223,28 @@ const OvalHeader = () => {
           <nav className="flex flex-col space-y-1 px-4">
             {navItems.map((item) => (
               item.children ? (
-                <div key={item.name} className="py-1">
-                  <div className="font-medium text-white/90 px-4 py-2">{item.name}</div>
-                  <div className="ml-4 space-y-1">
+                <div key={item.name} className="py-1.5">
+                  <div className="font-medium text-white/90 px-4 py-2 flex items-center">
+                    <span className="mr-2">{item.name}</span>
+                    <div className="h-px flex-grow bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+                  </div>
+                  <div className="ml-4 space-y-1 pl-2 border-l border-white/20">
                     {item.children.map((child) => (
                       <Link
                         key={child.name}
                         to={child.href}
                         className={cn(
-                          "block px-4 py-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors",
-                          isActive(child.href) && "bg-white/10 text-white"
+                          "block px-4 py-2 rounded-lg text-white/80 hover:text-white transition-colors",
+                          isActive(child.href) 
+                            ? "bg-white/10 text-white border-l-2 border-brand-300" 
+                            : "hover:bg-white/5 hover:border-l-2 hover:border-white/40"
                         )}
                         onClick={toggleMobileMenu}
                       >
                         {child.name}
+                        {isActive(child.href) && (
+                          <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-brand-300 animate-pulse"></span>
+                        )}
                       </Link>
                     ))}
                   </div>
@@ -231,8 +254,10 @@ const OvalHeader = () => {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "block px-4 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors",
-                    isActive(item.href) && "bg-white/10 text-white"
+                    "block px-4 py-2.5 rounded-lg text-white/80 hover:text-white transition-all duration-200",
+                    isActive(item.href) 
+                      ? "bg-white/10 text-white border-l-2 border-brand-300" 
+                      : "hover:bg-white/5 hover:border-l-2 hover:border-white/40"
                   )}
                   onClick={toggleMobileMenu}
                 >
@@ -254,4 +279,3 @@ const OvalHeader = () => {
 };
 
 export default OvalHeader;
-
