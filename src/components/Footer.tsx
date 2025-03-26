@@ -90,12 +90,12 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="w-5 h-5 text-brand-400 mt-1 mr-3" />
-                <span className="text-gray-300">123 Startup Avenue, Innovation District, New Delhi, 110001</span>
+                <span className="text-gray-300">7th Floor - 727, Arved Transcube Plaza, 132 Ft. Ring Road, opp. Ranip BRTS, Ranip, Ahmedabad - 382480</span>
               </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-brand-400 mr-3" />
-                <a href="tel:+911234567890" className="text-gray-300 hover:text-white transition-colors">
-                  +91 1234 567 890
+                <a href="tel:+917046396020" className="text-gray-300 hover:text-white transition-colors">
+                  7046-396-020
                 </a>
               </li>
               <li className="flex items-center">

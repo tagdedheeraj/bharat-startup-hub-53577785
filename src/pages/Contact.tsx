@@ -186,8 +186,8 @@ const ContactPage = () => {
                     <div>
                       <h4 className="font-semibold text-lg">Office Address</h4>
                       <p className="text-gray-600 mt-1">
-                        123 Startup Avenue, Innovation District<br />
-                        New Delhi, 110001, India
+                        7th Floor - 727, Arved Transcube Plaza, 132 Ft. Ring Road,<br />
+                        opp. Ranip BRTS, Ranip, Ahmedabad - 382480, India
                       </p>
                     </div>
                   </div>
@@ -216,11 +216,8 @@ const ContactPage = () => {
                     <div>
                       <h4 className="font-semibold text-lg">Call Us</h4>
                       <p className="text-gray-600 mt-1">
-                        <a href="tel:+911234567890" className="hover:text-brand-600">
-                          +91 1234 567 890
-                        </a><br />
-                        <a href="tel:+911234567891" className="hover:text-brand-600">
-                          +91 1234 567 891
+                        <a href="tel:+917046396020" className="hover:text-brand-600">
+                          7046-396-020
                         </a>
                       </p>
                     </div>
@@ -256,7 +253,7 @@ const ContactPage = () => {
           <SectionHeading
             subheading="FIND US"
             heading="Our Location"
-            description="Visit our office in the heart of New Delhi's business district."
+            description="Visit our office in the heart of Ahmedabad's business district."
           />
           
           <div className="mt-8 rounded-xl overflow-hidden shadow-lg border border-gray-200 animate-fadeIn">
