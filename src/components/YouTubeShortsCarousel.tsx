@@ -32,21 +32,6 @@ const YouTubeShortsCarousel = () => {
       id: "k6t0Fivw0EQ",
       title: "Entrepreneurship Success Factors",
       thumbnail: "https://i3.ytimg.com/vi/k6t0Fivw0EQ/maxresdefault.jpg"
-    },
-    {
-      id: "G9xLmmBbyyI",
-      title: "Funding Options for Small Businesses",
-      thumbnail: "https://i3.ytimg.com/vi/G9xLmmBbyyI/maxresdefault.jpg"
-    },
-    {
-      id: "C_Mhig3Fl8k",
-      title: "Business Compliance Made Easy",
-      thumbnail: "https://i3.ytimg.com/vi/C_Mhig3Fl8k/maxresdefault.jpg"
-    },
-    {
-      id: "FIcxvEnCpH4",
-      title: "Marketing Strategies for New Startups",
-      thumbnail: "https://i3.ytimg.com/vi/FIcxvEnCpH4/maxresdefault.jpg"
     }
   ];
 
@@ -162,7 +147,7 @@ const YouTubeShortsCarousel = () => {
         <div className="relative overflow-hidden rounded-xl shadow-xl border border-purple-100 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm p-6 animate-fadeIn">
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, index) => (
+              {[...Array(3)].map((_, index) => (
                 <div key={index} className="aspect-[9/16] animate-pulse">
                   <Skeleton className="w-full h-full rounded-xl bg-gray-200 dark:bg-gray-700" />
                 </div>
