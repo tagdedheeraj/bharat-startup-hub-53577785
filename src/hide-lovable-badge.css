@@ -1,0 +1,9 @@
+
+/* Hide the "edit with lovable" badge */
+[class*="gptengineer-select-button"],
+[id*="gptengineer-"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
