@@ -5,6 +5,7 @@ import SectionHeading from '@/components/SectionHeading';
 import FundingCard from '@/components/FundingCard';
 import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 import StatisticsSlider from '@/components/StatisticsSlider';
+import PopularFundingServices from '@/components/PopularFundingServices';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -88,6 +89,9 @@ const HomePage = () => {
       {/* Statistics Slider Section */}
       <StatisticsSlider />
 
+      {/* Popular Funding Services Section */}
+      <PopularFundingServices />
+      
       {/* Features Section */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
