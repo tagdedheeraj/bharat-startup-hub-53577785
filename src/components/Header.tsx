@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
@@ -122,7 +123,6 @@ export default function Header() {
 
   const navigationItems = [
     { label: 'Home', to: '/' },
-    { label: 'About Us', to: '/about' },
     {
       label: 'Services',
       to: '/services',
