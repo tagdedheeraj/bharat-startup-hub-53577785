@@ -1,6 +1,5 @@
-
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, Briefcase, Phone, Menu } from 'lucide-react';
+import { Home, Info, Briefcase, Phone, Menu, Award } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sheet,
@@ -12,7 +11,6 @@ export default function MobileBottomNav() {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  // Don't render on desktop
   if (!isMobile) return null;
   
   const navItems = [
