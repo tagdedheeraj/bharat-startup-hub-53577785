@@ -14,8 +14,11 @@ export default function Layout({ children }: LayoutProps) {
   const isMobile = useIsMobile();
   const location = useLocation();
   
+  // Add a class to adjust background for 404 page
+  const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
+  
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-india-saffron via-india-white to-india-green">
+    <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>
       <OvalHeader />
       <main className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8">
         {children}
