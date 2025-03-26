@@ -16,9 +16,11 @@ import { Button } from './ui/button';
 const Logo = () => (
   <Link to="/" className="relative group">
     <div className="overflow-hidden relative z-10">
-      <span className="font-display text-2xl md:text-3xl font-bold bg-gradient-to-r from-brand-700 via-brand-500 to-brand-600 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 inline-block">
-        Bharat Startup Solution
-      </span>
+      <img 
+        src="/lovable-uploads/9e5fe674-093d-408f-b174-4f59a6ea7235.png" 
+        alt="Bharat Startup Solution" 
+        className="h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+      />
       <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-brand-600 via-brand-400 to-brand-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
     </div>
     <div className="absolute -inset-1 bg-gradient-to-r from-brand-200/20 to-brand-500/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500 group-hover:duration-200"></div>
