@@ -1,6 +1,5 @@
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, FileText, HelpCircle, Scale, Bookmark, Shield } from 'lucide-react';
+import { ArrowRight, CheckCircle, FileText, HelpCircle, Scale, Bookmark, Shield, FileCheck, ClipboardCheck, AlertTriangle } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const LegalConsultationPage = () => {
@@ -31,16 +30,62 @@ const LegalConsultationPage = () => {
     }
   ];
 
+  const advantages = [
+    {
+      icon: <AlertTriangle className="h-12 w-12 text-brand-600" />,
+      title: "Reduced Business Risks",
+      description: "Our thorough legal support identifies and mitigates potential risks before they become issues."
+    },
+    {
+      icon: <ClipboardCheck className="h-12 w-12 text-brand-600" />,
+      title: "Improved Business Efficiency",
+      description: "Streamlined legal processes save time and resources, allowing you to focus on core business activities."
+    },
+    {
+      icon: <Scale className="h-12 w-12 text-brand-600" />,
+      title: "Increased Legal Fee Savings",
+      description: "Our cost-effective solutions help reduce overall legal expenses compared to traditional law firms."
+    },
+    {
+      icon: <FileCheck className="h-12 w-12 text-brand-600" />,
+      title: "Higher Industry Impact",
+      description: "Proper legal compliance enhances your business credibility and competitive position in the market."
+    }
+  ];
+
+  const approach = [
+    {
+      title: "Comprehensive Assessment",
+      description: "We begin with a thorough evaluation of your current legal situation and business needs."
+    },
+    {
+      title: "Customized Solutions",
+      description: "We develop tailored legal strategies and solutions specific to your business requirements."
+    },
+    {
+      title: "Proactive Compliance",
+      description: "We implement forward-thinking compliance measures to prevent future legal issues."
+    },
+    {
+      title: "Expert Advice",
+      description: "Our team provides ongoing guidance and support for all your legal concerns."
+    },
+    {
+      title: "Documentation & Filing",
+      description: "We handle all necessary paperwork, submissions, and administrative requirements."
+    }
+  ];
+
   return (
     <div>
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Legal Consultation</span>
+            <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Legal & Compliances</span>
             <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Expert Legal Guidance for Your Business</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Navigate complex legal frameworks with confidence through our comprehensive legal consultation services.
+              We provide 360° support for all legal aspects, including company registration, compliance audits, and contract management.
             </p>
             <Link to="/contact" className="btn-primary inline-flex items-center mt-8">
               Get Legal Support
@@ -50,8 +95,35 @@ const LegalConsultationPage = () => {
         </div>
       </section>
 
-      {/* About Legal Consultation */}
+      {/* Advantages Section */}
       <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            subheading="OUR ADVANTAGES"
+            heading="The Legal & Compliance Advantages"
+            description="Discover how our legal services provide substantial benefits to your business"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+            {advantages.map((advantage, index) => (
+              <div 
+                key={index} 
+                className="bg-white rounded-xl p-8 shadow-md border border-gray-100 text-center animate-fadeIn"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="bg-brand-50 p-4 rounded-full inline-block mb-6 mx-auto">
+                  {advantage.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-4">{advantage.title}</h3>
+                <p className="text-gray-600">{advantage.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Legal Consultation */}
+      <section className="bg-gray-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2 animate-fadeInLeft">
@@ -80,6 +152,52 @@ const LegalConsultationPage = () => {
                   className="relative z-10 rounded-xl shadow-xl"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Approach */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            subheading="OUR METHODOLOGY"
+            heading="Our Approach"
+            description="A systematic methodology to deliver effective legal solutions for your business"
+          />
+          
+          <div className="max-w-4xl mx-auto mt-12">
+            <div className="relative">
+              {/* Process Timeline */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-brand-100"></div>
+              
+              {approach.map((step, index) => (
+                <div key={index} className="relative mb-8 md:mb-0 md:mt-8 animate-fadeIn" style={{ animationDelay: `${index * 100}ms` }}>
+                  <div className="flex flex-col md:flex-row items-center md:justify-between">
+                    <div className={`order-2 ${index % 2 === 0 ? 'md:order-1' : ''} md:w-5/12`}>
+                      {index % 2 === 0 ? (
+                        <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
+                          <h3 className="text-xl font-bold mb-2">{step.title}</h3>
+                          <p className="text-gray-600">{step.description}</p>
+                        </div>
+                      ) : <div></div>}
+                    </div>
+                    <div className={`order-1 ${index % 2 === 0 ? 'md:order-2' : ''} flex md:justify-center mb-4 md:mb-0`}>
+                      <div className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center z-10">
+                        <span className="font-bold">{index + 1}</span>
+                      </div>
+                    </div>
+                    <div className={`order-3 md:w-5/12`}>
+                      {index % 2 !== 0 ? (
+                        <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
+                          <h3 className="text-xl font-bold mb-2">{step.title}</h3>
+                          <p className="text-gray-600">{step.description}</p>
+                        </div>
+                      ) : <div></div>}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -163,104 +281,6 @@ const LegalConsultationPage = () => {
         </div>
       </section>
 
-      {/* Process */}
-      <section className="bg-gray-50 py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            subheading="OUR PROCESS"
-            heading="How Our Legal Consultation Works"
-            description="A streamlined process designed to provide effective legal solutions."
-          />
-          
-          <div className="max-w-4xl mx-auto mt-12">
-            <div className="relative">
-              {/* Process Steps */}
-              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-brand-100"></div>
-              
-              {/* Step 1 */}
-              <div className="relative mb-8 md:mb-0 animate-fadeIn">
-                <div className="flex flex-col md:flex-row items-center md:justify-between">
-                  <div className="order-2 md:order-1 md:w-5/12">
-                    <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Initial Consultation</h3>
-                      <p className="text-gray-600">
-                        We begin with a detailed discussion of your business, legal concerns, and objectives to understand your specific needs.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="order-1 md:order-2 flex md:justify-center mb-4 md:mb-0">
-                    <div className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center z-10">
-                      <span className="font-bold">1</span>
-                    </div>
-                  </div>
-                  <div className="order-3 md:w-5/12"></div>
-                </div>
-              </div>
-              
-              {/* Step 2 */}
-              <div className="relative mb-8 md:mb-0 md:mt-8 animate-fadeIn" style={{ animationDelay: "100ms" }}>
-                <div className="flex flex-col md:flex-row items-center md:justify-between">
-                  <div className="order-2 md:w-5/12"></div>
-                  <div className="order-1 flex md:justify-center mb-4 md:mb-0">
-                    <div className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center z-10">
-                      <span className="font-bold">2</span>
-                    </div>
-                  </div>
-                  <div className="order-3 md:w-5/12">
-                    <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Legal Assessment</h3>
-                      <p className="text-gray-600">
-                        Our legal team conducts a comprehensive assessment of your current legal position and identifies potential risks and opportunities.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Step 3 */}
-              <div className="relative mb-8 md:mb-0 md:mt-8 animate-fadeIn" style={{ animationDelay: "200ms" }}>
-                <div className="flex flex-col md:flex-row items-center md:justify-between">
-                  <div className="order-2 md:order-1 md:w-5/12">
-                    <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Strategy Development</h3>
-                      <p className="text-gray-600">
-                        Based on the assessment, we develop a customized legal strategy that addresses your specific requirements and business goals.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="order-1 md:order-2 flex md:justify-center mb-4 md:mb-0">
-                    <div className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center z-10">
-                      <span className="font-bold">3</span>
-                    </div>
-                  </div>
-                  <div className="order-3 md:w-5/12"></div>
-                </div>
-              </div>
-              
-              {/* Step 4 */}
-              <div className="relative md:mt-8 animate-fadeIn" style={{ animationDelay: "300ms" }}>
-                <div className="flex flex-col md:flex-row items-center md:justify-between">
-                  <div className="order-2 md:w-5/12"></div>
-                  <div className="order-1 flex md:justify-center mb-4 md:mb-0">
-                    <div className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center z-10">
-                      <span className="font-bold">4</span>
-                    </div>
-                  </div>
-                  <div className="order-3 md:w-5/12">
-                    <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Implementation & Support</h3>
-                      <p className="text-gray-600">
-                        We implement the agreed strategy and provide ongoing support to ensure your business remains legally compliant and protected.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -326,9 +346,9 @@ const LegalConsultationPage = () => {
       <section className="bg-gradient-to-r from-brand-600 to-blue-700 py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Need Legal Guidance for Your Business?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to streamline your legal processes?</h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Get expert legal consultation to protect your business interests and ensure compliance.
+              Contact Us for Expert Legal & Compliance Support!
             </p>
             <Link to="/contact" className="px-8 py-3 bg-white text-brand-700 font-medium rounded-lg hover:bg-white/90 transition-colors shadow-lg">
               Schedule a Consultation
