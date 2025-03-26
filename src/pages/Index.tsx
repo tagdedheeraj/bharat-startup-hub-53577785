@@ -7,6 +7,7 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
+import ContactForm from '@/components/ContactForm';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -331,6 +332,23 @@ const HomePage = () => {
               View All Success Stories
               <ArrowRight size={18} className="ml-2" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section - NEW */}
+      <section className="py-16 md:py-24 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <SectionHeading
+              subheading="GET STARTED TODAY"
+              heading="Contact Us"
+              description="Have a question or feedback? Fill out the form below and we'll get back to you as soon as possible."
+            />
+            
+            <div className="mt-8 bg-white p-8 rounded-lg shadow-md">
+              <ContactForm />
+            </div>
           </div>
         </div>
       </section>
