@@ -1,4 +1,3 @@
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -100,4 +99,17 @@
   display: block;
   width: calc(100% + 1.3px);
   height: 56px;
+}
+
+/* Mobile bottom navigation */
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .pb-mobile-nav {
+    padding-bottom: 4rem;
+  }
 }
