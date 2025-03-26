@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 import FundingCard from '@/components/FundingCard';
+import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -76,6 +77,11 @@ const HomePage = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* YouTube Shorts Section */}
+      <section className="py-16">
+        <YouTubeShortsCarousel />
       </section>
 
       {/* Features Section */}
