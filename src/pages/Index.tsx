@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -50,7 +51,7 @@ const HomePage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 md:pr-12 animate-fadeInLeft">
-              <span className="bg-brand-100 text-brand-800 text-sm font-medium px-4 py-1.5 rounded-full mb-5 inline-block">
+              <span className="bg-white curve-both text-brand-800 text-sm font-medium px-4 py-1.5 rounded-full mb-5 inline-block shadow-sm">
                 #1 Startup Solution Provider in India
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
