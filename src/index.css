@@ -10,10 +10,10 @@
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 100%;
+    --card: 215 25% 95%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
+    --popover: 215 25% 95%;
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 25 95% 53%;
@@ -38,12 +38,20 @@
     --radius: 0.75rem;
     
     /* Professional section colors */
-    --section-light: 210 40% 98%;
+    --section-light: 215 25% 97%;
     --section-medium: 215 25% 95%;
     --section-dark: 215 30% 92%;
     --section-accent: 25 30% 95%;
     --section-primary: 25 30% 97%;
     --section-secondary: 142 20% 95%;
+    
+    /* New gradient section colors */
+    --section-gradient-soft-1: 46 73% 96%;
+    --section-gradient-soft-2: 176 73% 96%;
+    --section-gradient-warm-1: 39 100% 97%;
+    --section-gradient-warm-2: 22 90% 97%;
+    --section-gradient-cool-1: 215 40% 97%;
+    --section-gradient-cool-2: 210 40% 94%;
   }
 
   .dark {
@@ -105,7 +113,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-md;
+    @apply bg-[hsl(var(--section-medium))]/80 backdrop-blur-sm border border-white/20 shadow-md;
   }
   
   .nav-link {
@@ -160,19 +168,19 @@
   }
   
   .section-gradient-1 {
-    @apply bg-gradient-to-b from-[hsl(var(--section-light))] to-[hsl(var(--section-medium))];
+    @apply bg-gradient-to-b from-[hsl(var(--section-gradient-cool-1))] to-[hsl(var(--section-gradient-cool-2))];
   }
   
   .section-gradient-2 {
-    @apply bg-gradient-to-br from-[hsl(var(--section-accent))] to-[hsl(var(--section-primary))];
+    @apply bg-gradient-to-br from-[hsl(var(--section-gradient-warm-1))] to-[hsl(var(--section-gradient-warm-2))];
   }
   
   .section-gradient-3 {
-    @apply bg-gradient-to-r from-[hsl(var(--section-secondary))] to-[hsl(var(--section-medium))];
+    @apply bg-gradient-to-r from-[hsl(var(--section-gradient-soft-1))] to-[hsl(var(--section-gradient-soft-2))];
   }
   
   .funding-card {
-    @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-india-saffron/50;
+    @apply bg-[hsl(var(--section-light))] rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-india-saffron/50;
   }
   
   .oval-header-glass {
@@ -208,4 +216,3 @@
   animation: gradient-x 15s ease infinite;
   background-size: 200% auto;
 }
-
