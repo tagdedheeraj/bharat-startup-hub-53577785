@@ -1,5 +1,5 @@
 
-import { ArrowRight, DollarSign, ArrowUpRight, Award } from 'lucide-react';
+import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
 import { Card, CardContent } from '@/components/ui/card';
@@ -50,7 +50,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <div className="flex justify-between items-start mb-4">
               <div className="bg-white/80 backdrop-blur-sm rounded-full p-2.5 shadow-md">
                 {index % 2 === 0 ? (
-                  <DollarSign className="h-6 w-6 text-brand-700" />
+                  <IndianRupee className="h-6 w-6 text-brand-700" />
                 ) : (
                   <Award className="h-6 w-6 text-brand-700" />
                 )}
