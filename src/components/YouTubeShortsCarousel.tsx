@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Youtube, Play, Pause, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -20,16 +19,6 @@ const YouTubeShortsCarousel = () => {
 
   const youtubeShorts: YouTubeShort[] = [
     {
-      id: "BF10yeFJvW0",
-      title: "Startup Legal Compliance Tips",
-      thumbnail: "https://i3.ytimg.com/vi/BF10yeFJvW0/maxresdefault.jpg"
-    },
-    {
-      id: "L31gn6yv1V0",
-      title: "Funding Opportunities for Startups",
-      thumbnail: "https://i3.ytimg.com/vi/L31gn6yv1V0/maxresdefault.jpg"
-    },
-    {
       id: "lM3Tswmx8zM",
       title: "Business Strategy Secrets",
       thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
@@ -45,24 +34,9 @@ const YouTubeShortsCarousel = () => {
       thumbnail: "https://i3.ytimg.com/vi/k6t0Fivw0EQ/maxresdefault.jpg"
     },
     {
-      id: "J4YZoMxz9PU",
-      title: "Start Your Business With Minimal Capital",
-      thumbnail: "https://i3.ytimg.com/vi/J4YZoMxz9PU/maxresdefault.jpg"
-    },
-    {
-      id: "sU_Kim5tpBw",
-      title: "How to Register Your Startup in India",
-      thumbnail: "https://i3.ytimg.com/vi/sU_Kim5tpBw/maxresdefault.jpg"
-    },
-    {
       id: "G9xLmmBbyyI",
       title: "Funding Options for Small Businesses",
       thumbnail: "https://i3.ytimg.com/vi/G9xLmmBbyyI/maxresdefault.jpg"
-    },
-    {
-      id: "xg2qaCQGQ0o",
-      title: "Tax Benefits for Startups in India",
-      thumbnail: "https://i3.ytimg.com/vi/xg2qaCQGQ0o/maxresdefault.jpg"
     },
     {
       id: "C_Mhig3Fl8k",
@@ -73,21 +47,6 @@ const YouTubeShortsCarousel = () => {
       id: "FIcxvEnCpH4",
       title: "Marketing Strategies for New Startups",
       thumbnail: "https://i3.ytimg.com/vi/FIcxvEnCpH4/maxresdefault.jpg"
-    },
-    {
-      id: "qVVJqGw_3fQ",
-      title: "Digital Marketing for Small Businesses",
-      thumbnail: "https://i3.ytimg.com/vi/qVVJqGw_3fQ/maxresdefault.jpg"
-    },
-    {
-      id: "eJO4_5TKKYI",
-      title: "Startup Pitch Deck Essentials",
-      thumbnail: "https://i3.ytimg.com/vi/eJO4_5TKKYI/maxresdefault.jpg"
-    },
-    {
-      id: "2y9oRHLUgrI",
-      title: "How to Grow Your Business Online",
-      thumbnail: "https://i3.ytimg.com/vi/2y9oRHLUgrI/maxresdefault.jpg"
     }
   ];
 
