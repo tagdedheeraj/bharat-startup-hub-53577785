@@ -18,7 +18,7 @@ const Logo = () => (
       <img 
         src="/lovable-uploads/5aa945b6-f31a-46aa-a7dd-0b27f6c14482.png" 
         alt="Bharat Startup Solution" 
-        className="h-16 md:h-18 w-auto transition-transform duration-300 group-hover:scale-105"
+        className="h-14 md:h-16 w-auto transition-transform duration-300 group-hover:scale-105"
       />
       <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-india-saffron via-india-white to-india-green transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
     </div>
@@ -77,20 +77,20 @@ const OvalHeader = () => {
   return (
     <header className={cn(
       "sticky top-0 z-50 w-full transition-all duration-500",
-      isScrolled ? "py-2" : "py-4"
+      isScrolled ? "py-2" : "py-3"
     )}>
       {/* 3D Background */}
       <Scene />
       
       {/* Glass Effect Container */}
       <div className={cn(
-        "container mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300",
+        "container mx-auto transition-all duration-300",
         "relative z-10 rounded-full backdrop-blur-xl",
         isScrolled 
           ? "bg-white/10 shadow-lg border border-white/20" 
           : "bg-transparent"
       )}>
-        <div className="flex items-center justify-between py-4 px-6">
+        <div className="flex items-center justify-between py-2 px-4 md:px-6 lg:px-8">
           <Logo />
           
           {/* Desktop Navigation */}
@@ -102,7 +102,7 @@ const OvalHeader = () => {
                     <Button
                       variant="ghost"
                       className={cn(
-                        "group relative px-4 py-2 font-medium transition-colors",
+                        "group relative px-3 py-2 font-medium transition-colors",
                         isActive(item.href) 
                           ? "text-india-saffron" 
                           : "text-black hover:text-india-saffron"
@@ -162,7 +162,7 @@ const OvalHeader = () => {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "group relative px-4 py-2 font-medium transition-colors",
+                    "group relative px-3 py-2 font-medium transition-colors",
                     isActive(item.href) 
                       ? "text-india-saffron" 
                       : "text-black hover:text-india-saffron"
@@ -181,25 +181,26 @@ const OvalHeader = () => {
           </nav>
           
           {/* Action Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
             <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
-              <Search size={20} />
+              <Search size={18} />
             </Button>
             <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300 relative">
-              <BellRing size={20} />
+              <BellRing size={18} />
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-india-saffron 
                 animate-pulse"></span>
             </Button>
             <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
-              <User size={20} />
+              <User size={18} />
             </Button>
             <Button 
               className="bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
-                shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 
+                shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
+              size="sm"
             >
               Get Started
             </Button>
@@ -213,7 +214,7 @@ const OvalHeader = () => {
               className="text-black hover:text-india-saffron"
               onClick={toggleMobileMenu}
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </Button>
           </div>
         </div>
