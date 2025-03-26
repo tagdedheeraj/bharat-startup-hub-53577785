@@ -15,10 +15,10 @@ import {
 const Logo = () => (
   <Link to="/" className="relative group z-10">
     <div className="overflow-hidden relative">
-      <span className="font-display text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-brand-200 to-brand-100 bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">
+      <span className="font-display text-3xl md:text-4xl font-bold gradient-text-india inline-block drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">
         Bharat Startup Solution
       </span>
-      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-brand-100 via-white to-brand-100 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-india-saffron via-india-white to-india-green transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
     </div>
   </Link>
 );
@@ -100,8 +100,10 @@ const OvalHeader = () => {
                     <Button
                       variant="ghost"
                       className={cn(
-                        "group relative px-4 py-2 text-white hover:text-brand-100 transition-colors",
-                        isActive(item.href) && "text-brand-100"
+                        "group relative px-4 py-2 font-medium transition-colors",
+                        isActive(item.href) 
+                          ? "text-india-saffron" 
+                          : "text-india-white hover:text-india-saffron"
                       )}
                     >
                       <span className="relative z-10 flex items-center">
@@ -116,8 +118,8 @@ const OvalHeader = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="center"
-                    className="bg-gradient-to-br from-brand-500/30 to-brand-700/30 backdrop-blur-xl 
-                      border border-white/40 text-white rounded-xl w-60 p-2
+                    className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
+                      border border-india-white/40 text-india-white rounded-xl w-60 p-2
                       shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
                   >
                     <div className="px-1 py-1 space-y-1">
@@ -126,21 +128,21 @@ const OvalHeader = () => {
                           <Link
                             to={child.href}
                             className={cn(
-                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-white/20 hover:to-white/5",
+                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
                               isActive(child.href) 
-                                ? "bg-gradient-to-r from-brand-400/30 to-brand-600/30 text-white shadow-inner border-l-2 border-brand-200" 
-                                : "text-white/90 hover:text-white"
+                                ? "bg-gradient-to-r from-india-white/30 to-transparent text-india-white shadow-inner border-l-2 border-india-white" 
+                                : "text-india-white/90 hover:text-india-white"
                             )}
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
                                 <div className={cn(
                                   "w-1.5 h-1.5 rounded-full",
-                                  isActive(child.href) ? "bg-brand-300 animate-pulse" : "bg-white/40 group-hover:bg-brand-300"
+                                  isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
                                 )}></div>
                                 <span className="font-medium">{child.name}</span>
                               </div>
-                              <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-brand-100 to-transparent 
+                              <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
                                 group-hover:w-full transition-all duration-300"></div>
                             </div>
                             <ChevronRight className={cn(
@@ -158,8 +160,10 @@ const OvalHeader = () => {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "group relative px-4 py-2 text-white hover:text-brand-100 transition-colors",
-                    isActive(item.href) && "text-brand-100"
+                    "group relative px-4 py-2 font-medium transition-colors",
+                    isActive(item.href) 
+                      ? "text-india-saffron" 
+                      : "text-india-white hover:text-india-saffron"
                   )}
                 >
                   <span className="relative z-10">{item.name}</span>
@@ -168,7 +172,7 @@ const OvalHeader = () => {
                     isActive(item.href) && "opacity-100"
                   )}></span>
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 
-                    bg-brand-100 group-hover:w-1/2 transition-all duration-300"></span>
+                    bg-india-saffron group-hover:w-1/2 transition-all duration-300"></span>
                 </Link>
               )
             ))}
@@ -176,23 +180,23 @@ const OvalHeader = () => {
           
           {/* Action Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="text-white/90 hover:text-white 
+            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
               <Search size={20} />
             </Button>
-            <Button variant="ghost" size="icon" className="text-white/90 hover:text-white 
+            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300 relative">
               <BellRing size={20} />
-              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-brand-500 
+              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-india-saffron 
                 animate-pulse"></span>
             </Button>
-            <Button variant="ghost" size="icon" className="text-white/90 hover:text-white 
+            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
               <User size={20} />
             </Button>
             <Button 
-              className="bg-gradient-to-r from-brand-500/50 to-brand-700/50 text-white hover:from-brand-500/60 hover:to-brand-700/60 backdrop-blur-sm 
-                shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-white/30 
+              className="bg-gradient-to-r from-india-saffron to-india-green text-india-white hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+                shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
             >
               Get Started
@@ -204,7 +208,7 @@ const OvalHeader = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="text-white"
+              className="text-india-white hover:text-india-saffron"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -223,26 +227,26 @@ const OvalHeader = () => {
             {navItems.map((item) => (
               item.children ? (
                 <div key={item.name} className="py-1.5">
-                  <div className="font-medium text-white px-4 py-2 flex items-center bg-gradient-to-r from-white/10 to-transparent rounded-lg mb-1">
+                  <div className="font-medium text-india-saffron px-4 py-2 flex items-center bg-gradient-to-r from-white/10 to-transparent rounded-lg mb-1">
                     <span className="mr-2">{item.name}</span>
-                    <div className="h-px flex-grow bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+                    <div className="h-px flex-grow bg-gradient-to-r from-transparent via-india-white/30 to-transparent"></div>
                   </div>
-                  <div className="ml-4 space-y-1 pl-2 border-l border-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
+                  <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
                     {item.children.map((child) => (
                       <Link
                         key={child.name}
                         to={child.href}
                         className={cn(
-                          "block px-4 py-2.5 rounded-lg text-white/80 hover:text-white transition-all duration-200 flex items-center",
+                          "block px-4 py-2.5 rounded-lg text-india-white/80 hover:text-india-white transition-all duration-200 flex items-center",
                           isActive(child.href) 
-                            ? "bg-gradient-to-r from-brand-500/20 to-transparent text-white border-l-2 border-brand-300 shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                            : "hover:bg-white/5 hover:border-l-2 hover:border-white/40"
+                            ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-white border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
+                            : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                         )}
                         onClick={toggleMobileMenu}
                       >
                         <div className={cn(
                           "w-1.5 h-1.5 rounded-full mr-2",
-                          isActive(child.href) ? "bg-brand-300 animate-pulse" : "bg-white/40"
+                          isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
                         )}></div>
                         {child.name}
                       </Link>
@@ -254,10 +258,10 @@ const OvalHeader = () => {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "block px-4 py-2.5 rounded-lg text-white/80 hover:text-white transition-all duration-200",
+                    "block px-4 py-2.5 rounded-lg transition-all duration-200",
                     isActive(item.href) 
-                      ? "bg-gradient-to-r from-brand-500/20 to-transparent text-white border-l-2 border-brand-300 shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                      : "hover:bg-white/5 hover:border-l-2 hover:border-white/40"
+                      ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
+                      : "text-india-white hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                   )}
                   onClick={toggleMobileMenu}
                 >
@@ -266,8 +270,8 @@ const OvalHeader = () => {
               )
             ))}
             <Button 
-              className="mt-4 bg-gradient-to-r from-brand-500/50 to-brand-700/50 text-white hover:from-brand-500/60 hover:to-brand-700/60 backdrop-blur-sm 
-                border border-white/30 transition-all"
+              className="mt-4 bg-gradient-to-r from-india-saffron to-india-green text-india-white hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+                border border-india-white/30 transition-all"
             >
               Get Started
             </Button>

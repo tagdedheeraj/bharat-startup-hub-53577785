@@ -129,6 +129,10 @@
   .gradient-text-3d {
     @apply bg-gradient-to-r from-india-saffron via-white to-india-green bg-clip-text text-transparent;
   }
+  
+  .gradient-text-india {
+    @apply bg-gradient-to-r from-india-saffron via-india-white to-india-green bg-clip-text text-transparent;
+  }
 }
 
 /* ... keep existing code (for keyframes and animations) */
