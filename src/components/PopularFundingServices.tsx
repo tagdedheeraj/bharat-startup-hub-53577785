@@ -1,4 +1,4 @@
-
+import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
@@ -10,7 +10,9 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import FundingForm from './FundingForm';
 
 interface FundingServiceProps {
   amount: string;
@@ -20,6 +22,8 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   // Create alternating color schemes
   const colorVariants = [
     "from-brand-50 to-brand-100 border-brand-200",
@@ -63,15 +67,28 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Link 
-                to="/services/funding-consultation" 
-                className="group inline-flex items-center justify-between w-full text-brand-700 font-medium"
-              >
-                <span>Learn More</span>
-                <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
-                  <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-              </Link>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <button 
+                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+                  >
+                    <span>Avail Now</span>
+                    <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
+                      <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Apply for Funding</DialogTitle>
+                  </DialogHeader>
+                  <FundingForm 
+                    fundingTitle={title} 
+                    fundingAmount={amount} 
+                    onSubmitSuccess={() => setIsDialogOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
@@ -99,7 +116,6 @@ export default function PopularFundingServices() {
           description="Explore our most sought-after funding services designed to meet the diverse needs of businesses across various sectors."
         />
         
-        {/* Desktop version - Grid */}
         <div className="hidden lg:grid lg:grid-cols-3 gap-6 mb-12">
           {services.map((service, index) => (
             <div
@@ -116,7 +132,6 @@ export default function PopularFundingServices() {
           ))}
         </div>
         
-        {/* Mobile/Tablet version - Carousel */}
         <div className="lg:hidden mb-12">
           <Carousel 
             opts={{ 

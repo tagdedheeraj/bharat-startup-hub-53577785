@@ -1,7 +1,9 @@
 
-import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, IndianRupee } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import FundingForm from './FundingForm';
 
 interface FundingCardProps {
   amount: string;
@@ -31,6 +33,7 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -49,15 +52,29 @@ export default function FundingCard({
       </div>
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
-      <Link 
-        to={to} 
-        className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium"
-      >
-        <span>Learn More</span>
-        <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
-          <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </span>
-      </Link>
+      
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <button 
+            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+          >
+            <span>Avail Now</span>
+            <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
+              <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Apply for Funding</DialogTitle>
+          </DialogHeader>
+          <FundingForm 
+            fundingTitle={title} 
+            fundingAmount={amount} 
+            onSubmitSuccess={() => setIsDialogOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
