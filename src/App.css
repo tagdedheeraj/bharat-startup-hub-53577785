@@ -1,4 +1,3 @@
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -36,7 +35,6 @@
 
 .card {
   padding: 2em;
-  background-color: hsl(var(--section-medium));
 }
 
 .read-the-docs {
