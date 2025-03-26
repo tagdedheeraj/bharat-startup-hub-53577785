@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, ThumbsUp, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -79,7 +80,7 @@ const ReviewsPage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
+      <section className="section-gradient-1 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Client Reviews</span>
@@ -92,7 +93,7 @@ const ReviewsPage = () => {
       </section>
 
       {/* Summary Stats */}
-      <section className="py-12 bg-gray-50">
+      <section className="section-light py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="glass-card rounded-xl p-6 text-center animate-fadeIn">
@@ -123,7 +124,7 @@ const ReviewsPage = () => {
       </section>
 
       {/* Featured Reviews */}
-      <section className="py-16 md:py-24">
+      <section className="section-medium py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="FEATURED REVIEWS"
@@ -169,7 +170,7 @@ const ReviewsPage = () => {
       </section>
 
       {/* More Client Reviews */}
-      <section className="bg-gray-50 py-16 md:py-24">
+      <section className="section-gradient-2 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="MORE TESTIMONIALS"
@@ -205,10 +206,12 @@ const ReviewsPage = () => {
       </section>
 
       {/* YouTube Shorts Section */}
-      <YouTubeShortsCarousel />
+      <section className="section-light py-16">
+        <YouTubeShortsCarousel />
+      </section>
 
       {/* Leave a Review */}
-      <section className="py-16 md:py-24">
+      <section className="section-gradient-3 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <SectionHeading

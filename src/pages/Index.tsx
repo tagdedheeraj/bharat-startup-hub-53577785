@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -46,7 +47,7 @@ const HomePage = () => {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-brand-50 to-blue-50 py-16 md:py-24">
+      <section className="section-gradient-1 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 md:pr-12 animate-fadeInLeft">
@@ -84,7 +85,7 @@ const HomePage = () => {
       </section>
 
       {/* YouTube Shorts Section */}
-      <section className="py-16">
+      <section className="section-light py-16">
         <YouTubeShortsCarousel />
       </section>
 
@@ -95,7 +96,7 @@ const HomePage = () => {
       <PopularFundingServices />
       
       {/* Features Section */}
-      <section className="py-16 md:py-24">
+      <section className="section-medium py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="WHY CHOOSE US"
@@ -186,7 +187,7 @@ const HomePage = () => {
       <ExpertiseSection />
 
       {/* Funding Options Section */}
-      <section className="bg-gray-50 py-16 md:py-24">
+      <section className="section-gradient-2 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="FUNDING OPTIONS"
@@ -254,7 +255,7 @@ const HomePage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 md:py-24">
+      <section className="section-gradient-3 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="SUCCESS STORIES"
@@ -337,7 +338,7 @@ const HomePage = () => {
       </section>
 
       {/* Contact Form Section - NEW */}
-      <section className="py-16 md:py-24 bg-gray-50">
+      <section className="section-accent py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <SectionHeading

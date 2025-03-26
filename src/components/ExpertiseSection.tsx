@@ -59,7 +59,7 @@ export default function ExpertiseSection() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="section-accent py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           subheading="OUR EXPERTISE"

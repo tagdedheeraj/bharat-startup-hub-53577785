@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -35,6 +36,14 @@
     --ring: 25 95% 53%;
 
     --radius: 0.75rem;
+    
+    /* Professional section colors */
+    --section-light: 210 40% 98%;
+    --section-medium: 215 25% 95%;
+    --section-dark: 215 30% 92%;
+    --section-accent: 25 30% 95%;
+    --section-primary: 25 30% 97%;
+    --section-secondary: 142 20% 95%;
   }
 
   .dark {
@@ -65,6 +74,14 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 25 95% 53%;
+    
+    /* Professional section colors for dark mode */
+    --section-light: 215 20% 15%;
+    --section-medium: 215 20% 12%;
+    --section-dark: 215 20% 10%;
+    --section-accent: 25 20% 15%;
+    --section-primary: 25 20% 12%;
+    --section-secondary: 142 20% 12%;
   }
 }
 
@@ -117,6 +134,43 @@
     @apply py-16 md:py-24;
   }
   
+  /* Professional section backgrounds */
+  .section-light {
+    @apply bg-[hsl(var(--section-light))];
+  }
+  
+  .section-medium {
+    @apply bg-[hsl(var(--section-medium))];
+  }
+  
+  .section-dark {
+    @apply bg-[hsl(var(--section-dark))];
+  }
+  
+  .section-accent {
+    @apply bg-[hsl(var(--section-accent))];
+  }
+  
+  .section-primary {
+    @apply bg-[hsl(var(--section-primary))];
+  }
+  
+  .section-secondary {
+    @apply bg-[hsl(var(--section-secondary))];
+  }
+  
+  .section-gradient-1 {
+    @apply bg-gradient-to-b from-[hsl(var(--section-light))] to-[hsl(var(--section-medium))];
+  }
+  
+  .section-gradient-2 {
+    @apply bg-gradient-to-br from-[hsl(var(--section-accent))] to-[hsl(var(--section-primary))];
+  }
+  
+  .section-gradient-3 {
+    @apply bg-gradient-to-r from-[hsl(var(--section-secondary))] to-[hsl(var(--section-medium))];
+  }
+  
   .funding-card {
     @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-india-saffron/50;
   }
@@ -154,3 +208,4 @@
   animation: gradient-x 15s ease infinite;
   background-size: 200% auto;
 }
+
