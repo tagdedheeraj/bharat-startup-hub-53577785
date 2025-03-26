@@ -6,6 +6,7 @@ import FundingCard from '@/components/FundingCard';
 import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/PopularFundingServices';
+import ExpertiseSection from '@/components/ExpertiseSection';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -201,8 +202,18 @@ const HomePage = () => {
               />
             ))}
           </div>
+          
+          <div className="mt-12 text-center">
+            <Link to="/success-stories" className="btn-primary inline-flex items-center">
+              View All Success Stories
+              <ArrowRight size={18} className="ml-2" />
+            </Link>
+          </div>
         </div>
       </section>
+
+      {/* Expertise Section - NEW */}
+      <ExpertiseSection />
 
       {/* Stats Section */}
       <section className="py-16 md:py-24 bg-brand-700 text-white">

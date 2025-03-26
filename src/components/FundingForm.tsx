@@ -30,12 +30,18 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 interface FundingFormProps {
-  fundingTitle: string;
-  fundingAmount: string;
+  fundingTitle?: string;
+  fundingAmount?: string;
+  expertiseTitle?: string;
   onSubmitSuccess: () => void;
 }
 
-export default function FundingForm({ fundingTitle, fundingAmount, onSubmitSuccess }: FundingFormProps) {
+export default function FundingForm({ 
+  fundingTitle, 
+  fundingAmount, 
+  expertiseTitle,
+  onSubmitSuccess 
+}: FundingFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -53,14 +59,19 @@ export default function FundingForm({ fundingTitle, fundingAmount, onSubmitSucce
     
     try {
       // Here you would normally submit the data to your backend
-      console.log('Form submitted:', { ...data, fundingTitle, fundingAmount });
+      console.log('Form submitted:', { 
+        ...data, 
+        fundingTitle, 
+        fundingAmount,
+        expertiseTitle
+      });
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
         title: "Application submitted successfully!",
-        description: "We'll contact you soon about your funding application.",
+        description: "We'll contact you soon about your application.",
       });
       
       onSubmitSuccess();
@@ -81,8 +92,15 @@ export default function FundingForm({ fundingTitle, fundingAmount, onSubmitSucce
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <p className="text-sm text-gray-500">Applying for</p>
-          <h3 className="font-bold">{fundingTitle}</h3>
-          <p className="text-sm text-brand-700">Up to ₹{fundingAmount}</p>
+          {fundingTitle && (
+            <>
+              <h3 className="font-bold">{fundingTitle}</h3>
+              {fundingAmount && <p className="text-sm text-brand-700">Up to ₹{fundingAmount}</p>}
+            </>
+          )}
+          {expertiseTitle && (
+            <h3 className="font-bold">{expertiseTitle}</h3>
+          )}
         </div>
         
         <FormField
