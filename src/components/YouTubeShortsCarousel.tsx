@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Youtube, Play, Pause, X } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -17,6 +16,21 @@ const YouTubeShortsCarousel = () => {
   const intervalRef = useRef<number | null>(null);
 
   const youtubeShorts: YouTubeShort[] = [
+    {
+      id: "BF10yeFJvW0",
+      title: "Startup Legal Compliance Tips",
+      thumbnail: "https://i3.ytimg.com/vi/BF10yeFJvW0/maxresdefault.jpg"
+    },
+    {
+      id: "L31gn6yv1V0",
+      title: "Funding Opportunities for Startups",
+      thumbnail: "https://i3.ytimg.com/vi/L31gn6yv1V0/maxresdefault.jpg"
+    },
+    {
+      id: "lM3Tswmx8zM",
+      title: "Business Strategy Secrets",
+      thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
+    },
     {
       id: "J4YZoMxz9PU",
       title: "Start Your Business With Minimal Capital",
@@ -42,7 +56,6 @@ const YouTubeShortsCarousel = () => {
       title: "Business Compliance Made Easy",
       thumbnail: "https://i3.ytimg.com/vi/C_Mhig3Fl8k/maxresdefault.jpg"
     },
-    // Adding more random YouTube shorts
     {
       id: "FIcxvEnCpH4",
       title: "Marketing Strategies for New Startups",
@@ -67,7 +80,6 @@ const YouTubeShortsCarousel = () => {
 
   const playVideo = (videoId: string) => {
     setCurrentVideoId(videoId);
-    // Pause the auto-slide when a video is playing
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -76,7 +88,6 @@ const YouTubeShortsCarousel = () => {
 
   const closeVideo = () => {
     setCurrentVideoId(null);
-    // Resume auto-slide when video is closed
     if (!isPaused) {
       startAutoSlide();
     }
@@ -85,24 +96,19 @@ const YouTubeShortsCarousel = () => {
   const togglePause = () => {
     setIsPaused(!isPaused);
     if (!isPaused) {
-      // Pause the slideshow
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
     } else {
-      // Resume the slideshow
       startAutoSlide();
     }
   };
 
   const startAutoSlide = () => {
-    // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    
-    // Set a new interval
     intervalRef.current = window.setInterval(() => {
       const carouselEl = document.querySelector('[data-embla-carousel]');
       if (carouselEl) {
@@ -111,21 +117,18 @@ const YouTubeShortsCarousel = () => {
           nextButton.click();
         }
       }
-    }, 5000); // Change slide every 5 seconds
+    }, 5000);
   };
 
   useEffect(() => {
-    // Simulate loading
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
-    // Start the auto slide when component mounts if not paused
     if (!isPaused) {
       startAutoSlide();
     }
 
-    // Clean up interval on unmount
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -212,7 +215,6 @@ const YouTubeShortsCarousel = () => {
                           </div>
                         </div>
                       </div>
-                      {/* Video indicator */}
                       <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="w-2 h-2 bg-white rounded-full animate-ping absolute"></span>
                         <span className="w-2 h-2 bg-white rounded-full relative"></span>
