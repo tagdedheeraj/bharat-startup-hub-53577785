@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { ArrowRight, Linkedin, Mail, ExternalLink, User, Briefcase, Star } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const ExpertsPage = () => {
@@ -63,14 +63,14 @@ const ExpertsPage = () => {
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero Section - Updated with new heading and description */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Our Experts</span>
-            <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Meet the Team Behind Your Success</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Meet our Experts</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Our team of industry experts brings decades of experience to help your business thrive.
+              The Team that Makes it Happen. Meet the brilliant minds that guide, support, and transform your business into a success story.
             </p>
           </div>
         </div>
