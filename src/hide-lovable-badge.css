@@ -1,9 +1,29 @@
 
-/* Hide the "edit with lovable" badge */
+/* Hide the "edit with lovable" badge and popups */
 [class*="gptengineer-select-button"],
-[id*="gptengineer-"] {
+[id*="gptengineer-"],
+[class*="lovable-"],
+[id*="lovable-"],
+[aria-label*="edit with lovable"],
+[data-lovable],
+.lovable-badge,
+.lovable-edit-button,
+#lovable-badge,
+#gptengineer-select-button {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  position: absolute !important;
+  z-index: -9999 !important;
+  overflow: hidden !important;
+}
+
+/* Hide any iframe that might be injecting the badge */
+iframe[src*="lovable"],
+iframe[src*="gptengineer"] {
+  display: none !important;
+  visibility: hidden !important;
 }
