@@ -1,10 +1,16 @@
 
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X } from 'lucide-react';
+import { Search, BellRing, User, Menu, X, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Logo = () => (
   <Link to="/" className="relative group z-10">
@@ -26,6 +32,8 @@ const Logo = () => (
 const OvalHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,10 +49,34 @@ const OvalHeader = () => {
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about' },
-    { name: 'Services', href: '/services' },
+    { 
+      name: 'Services', 
+      href: '/services',
+      children: [
+        { name: 'Funding Consultation', href: '/services/funding-consultation' },
+        { name: 'Certificate Marketing', href: '/services/certificate-marketing' },
+        { name: 'Legal Consultation', href: '/services/legal-consultation' }
+      ]
+    },
     { name: 'Success Stories', href: '/success-stories' },
-    { name: 'Contact', href: '/contact' },
+    { 
+      name: 'More', 
+      href: '#',
+      children: [
+        { name: 'Experts', href: '/more/experts' },
+        { name: 'MSME Events', href: '/more/msme-events' },
+        { name: 'Reviews', href: '/more/reviews' },
+        { name: 'Blogs', href: '/more/blogs' },
+        { name: 'Compliance', href: '/more/compliance' }
+      ]
+    },
+    { name: 'Contact', href: '/contact' }
   ];
+
+  const isActive = (path: string) => {
+    if (path === '/') return currentPath === '/';
+    return currentPath.startsWith(path);
+  };
 
   return (
     <header className={cn(
@@ -68,17 +100,63 @@ const OvalHeader = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="group relative px-4 py-2 text-white hover:text-brand-100 transition-colors"
-              >
-                <span className="relative z-10">{item.name}</span>
-                <span className="absolute inset-0 rounded-full bg-white/10 opacity-0 
-                  group-hover:opacity-100 transition-opacity duration-200"></span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 
-                  bg-brand-100 group-hover:w-1/2 transition-all duration-300"></span>
-              </Link>
+              item.children ? (
+                <DropdownMenu key={item.name}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        "group relative px-4 py-2 text-white hover:text-brand-100 transition-colors",
+                        isActive(item.href) && "text-brand-100"
+                      )}
+                    >
+                      <span className="relative z-10 flex items-center">
+                        {item.name}
+                        <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                      </span>
+                      <span className={cn(
+                        "absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                        isActive(item.href) && "opacity-100"
+                      )}></span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="center"
+                    className="bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-xl w-48 p-1"
+                  >
+                    {item.children.map((child) => (
+                      <DropdownMenuItem key={child.name} asChild>
+                        <Link
+                          to={child.href}
+                          className={cn(
+                            "rounded-lg px-3 py-2 hover:bg-white/20 transition-colors",
+                            isActive(child.href) && "bg-white/20"
+                          )}
+                        >
+                          {child.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    "group relative px-4 py-2 text-white hover:text-brand-100 transition-colors",
+                    isActive(item.href) && "text-brand-100"
+                  )}
+                >
+                  <span className="relative z-10">{item.name}</span>
+                  <span className={cn(
+                    "absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+                    isActive(item.href) && "opacity-100"
+                  )}></span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 
+                    bg-brand-100 group-hover:w-1/2 transition-all duration-300"></span>
+                </Link>
+              )
             ))}
           </nav>
           
@@ -127,16 +205,40 @@ const OvalHeader = () => {
             mobileMenuOpen ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0"
           )}
         >
-          <nav className="flex flex-col space-y-3 px-4">
+          <nav className="flex flex-col space-y-1 px-4">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-white py-2 px-4 rounded-full hover:bg-white/10 transition-all"
-                onClick={toggleMobileMenu}
-              >
-                {item.name}
-              </Link>
+              item.children ? (
+                <div key={item.name} className="py-1">
+                  <div className="font-medium text-white/90 px-4 py-2">{item.name}</div>
+                  <div className="ml-4 space-y-1">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.name}
+                        to={child.href}
+                        className={cn(
+                          "block px-4 py-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors",
+                          isActive(child.href) && "bg-white/10 text-white"
+                        )}
+                        onClick={toggleMobileMenu}
+                      >
+                        {child.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    "block px-4 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors",
+                    isActive(item.href) && "bg-white/10 text-white"
+                  )}
+                  onClick={toggleMobileMenu}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
             <Button 
               className="mt-4 bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm 
@@ -152,3 +254,4 @@ const OvalHeader = () => {
 };
 
 export default OvalHeader;
+
