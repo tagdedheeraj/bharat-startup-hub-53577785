@@ -105,7 +105,7 @@ const OvalHeader = () => {
                         "group relative px-4 py-2 font-medium transition-colors",
                         isActive(item.href) 
                           ? "text-india-saffron" 
-                          : "text-india-white hover:text-india-saffron"
+                          : "text-black hover:text-india-saffron"
                       )}
                     >
                       <span className="relative z-10 flex items-center">
@@ -121,7 +121,7 @@ const OvalHeader = () => {
                   <DropdownMenuContent
                     align="center"
                     className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
-                      border border-india-white/40 text-india-white rounded-xl w-60 p-2
+                      border border-india-white/40 text-black rounded-xl w-60 p-2
                       shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
                   >
                     <div className="px-1 py-1 space-y-1">
@@ -132,8 +132,8 @@ const OvalHeader = () => {
                             className={cn(
                               "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
                               isActive(child.href) 
-                                ? "bg-gradient-to-r from-india-white/30 to-transparent text-india-white shadow-inner border-l-2 border-india-white" 
-                                : "text-india-white/90 hover:text-india-white"
+                                ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
+                                : "text-black/90 hover:text-black"
                             )}
                           >
                             <div className="flex-1">
@@ -165,7 +165,7 @@ const OvalHeader = () => {
                     "group relative px-4 py-2 font-medium transition-colors",
                     isActive(item.href) 
                       ? "text-india-saffron" 
-                      : "text-india-white hover:text-india-saffron"
+                      : "text-black hover:text-india-saffron"
                   )}
                 >
                   <span className="relative z-10">{item.name}</span>
@@ -182,22 +182,22 @@ const OvalHeader = () => {
           
           {/* Action Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
+            <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
               <Search size={20} />
             </Button>
-            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
+            <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300 relative">
               <BellRing size={20} />
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-india-saffron 
                 animate-pulse"></span>
             </Button>
-            <Button variant="ghost" size="icon" className="text-india-white hover:text-india-saffron 
+            <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
               <User size={20} />
             </Button>
             <Button 
-              className="bg-gradient-to-r from-india-saffron to-india-green text-india-white hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+              className="bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
             >
@@ -210,7 +210,7 @@ const OvalHeader = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="text-india-white hover:text-india-saffron"
+              className="text-black hover:text-india-saffron"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -239,9 +239,9 @@ const OvalHeader = () => {
                         key={child.name}
                         to={child.href}
                         className={cn(
-                          "block px-4 py-2.5 rounded-lg text-india-white/80 hover:text-india-white transition-all duration-200 flex items-center",
+                          "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
                           isActive(child.href) 
-                            ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-white border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
+                            ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                             : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                         )}
                         onClick={toggleMobileMenu}
@@ -263,7 +263,7 @@ const OvalHeader = () => {
                     "block px-4 py-2.5 rounded-lg transition-all duration-200",
                     isActive(item.href) 
                       ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                      : "text-india-white hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
+                      : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                   )}
                   onClick={toggleMobileMenu}
                 >
@@ -272,7 +272,7 @@ const OvalHeader = () => {
               )
             ))}
             <Button 
-              className="mt-4 bg-gradient-to-r from-india-saffron to-india-green text-india-white hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+              className="mt-4 bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                 border border-india-white/30 transition-all"
             >
               Get Started

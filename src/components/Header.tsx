@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
@@ -175,16 +174,16 @@ export default function Header() {
       <div className="hidden sm:block relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 animate-gradient-x"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex justify-between items-center py-2 text-white">
+          <div className="flex justify-between items-center py-2 text-black">
             <div className="flex items-center space-x-6 text-sm">
-              <a href="tel:+911234567890" className="flex items-center gap-1.5 hover:text-white/80 transition-colors group">
+              <a href="tel:+911234567890" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
                 <div className="relative">
                   <Phone size={14} className="group-hover:animate-ping absolute opacity-0 group-hover:opacity-75" />
                   <Phone size={14} className="relative" />
                 </div>
                 <span>+91 1234567890</span>
               </a>
-              <a href="mailto:info@bharatstartup.com" className="flex items-center gap-1.5 hover:text-white/80 transition-colors group">
+              <a href="mailto:info@bharatstartup.com" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
                 <div className="relative">
                   <Mail size={14} className="group-hover:animate-ping absolute opacity-0 group-hover:opacity-75" />
                   <Mail size={14} className="relative" />
@@ -193,7 +192,7 @@ export default function Header() {
               </a>
             </div>
             <div className="flex items-center">
-              <div className="relative px-4 py-1 text-xs font-medium rounded-full text-white border border-white/20 hover:bg-white/10 transition-all cursor-pointer">
+              <div className="relative px-4 py-1 text-xs font-medium rounded-full text-black border border-white/20 hover:bg-white/10 transition-all cursor-pointer">
                 <span className="relative z-10">Join our network</span>
               </div>
             </div>
@@ -229,7 +228,7 @@ export default function Header() {
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
             </Button>
             <Button asChild className="relative group overflow-hidden">
-              <Link to="/contact" className="relative z-10 bg-brand-600 text-white px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700">
+              <Link to="/contact" className="relative z-10 bg-brand-600 text-black px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700">
                 <span className="relative z-10 flex items-center gap-2">
                   Get Started
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
@@ -300,7 +299,7 @@ export default function Header() {
           })}
           <div className="pt-4">
             <Button asChild className="w-full relative group overflow-hidden">
-              <Link to="/contact" onClick={toggleMobileMenu} className="relative z-10 bg-brand-600 hover:bg-brand-700 text-white">
+              <Link to="/contact" onClick={toggleMobileMenu} className="relative z-10 bg-brand-600 hover:bg-brand-700 text-black">
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Get Started
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
