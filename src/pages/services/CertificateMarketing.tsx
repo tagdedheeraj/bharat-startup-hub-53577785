@@ -1,29 +1,80 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Award, CheckCircle, FileCheck, HelpCircle, TrendingUp } from 'lucide-react';
+import { ArrowRight, Award, CheckCircle, FileCheck, HelpCircle, TrendingUp, BadgeCheck, BadgePercent, BadgeDollarSign, CreditCard, Building, Landmark, ShieldCheck } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
+import { Badge } from '@/components/ui/badge';
 
 const CertificateMarketingPage = () => {
   const certifications = [
     {
-      title: "ISO Certification",
-      description: "International standards that specify requirements for quality management systems.",
-      benefits: ["Enhanced credibility", "Improved processes", "Global recognition"]
-    },
-    {
-      title: "MSME Registration",
-      description: "Official recognition as a Micro, Small, or Medium Enterprise by the government.",
-      benefits: ["Access to government schemes", "Priority sector lending", "Tax benefits"]
+      title: "MSME Certification",
+      description: "Enjoy the benefits of government schemes and subsidies with MSME Certificate.",
+      benefits: [
+        "Easy Access to Loans & Tax Benefits",
+        "Credit Guarantee Schemes",
+        "Market Development Assistance",
+        "Interest Rate Subsidies",
+        "Tender Preferences",
+        "Business Growth Opportunities"
+      ],
+      icon: <Building className="h-10 w-10 text-brand-600" />
     },
     {
       title: "Startup India Recognition",
-      description: "Official recognition as a startup under the Startup India initiative.",
-      benefits: ["Tax exemptions", "Easy compliance", "Funding opportunities"]
+      description: "Gain eligibility for various government grants and funding opportunities with Startup India Certificate.",
+      benefits: [
+        "Access to Government Grants",
+        "Seed Funding Registration",
+        "Easier Public Procurement",
+        "Fast-Track IP and Patent Assistance",
+        "Get Tax Exemptions",
+        "Free Partner Services"
+      ],
+      icon: <BadgeCheck className="h-10 w-10 text-brand-600" />
     },
     {
-      title: "Industry-Specific Certifications",
-      description: "Specialized certifications relevant to your specific industry or sector.",
-      benefits: ["Industry recognition", "Competitive advantage", "Specialized benefits"]
+      title: "Tax Exemption Certificate",
+      description: "Get official tax benefits and exemptions for your business operations.",
+      benefits: [
+        "Reduced Tax Liability",
+        "Simplified Tax Compliance",
+        "Cost Savings",
+        "Improved Cash Flow"
+      ],
+      icon: <BadgeDollarSign className="h-10 w-10 text-brand-600" />
+    },
+    {
+      title: "NSIC Certification",
+      description: "National Small Industries Corporation certification for enhanced credibility.",
+      benefits: [
+        "Government Tender Participation",
+        "Raw Material Assistance",
+        "Marketing Support",
+        "Credit Facilitation"
+      ],
+      icon: <Landmark className="h-10 w-10 text-brand-600" />
+    },
+    {
+      title: "ISO Certification",
+      description: "International standards that specify requirements for quality management systems.",
+      benefits: [
+        "Enhanced Global Credibility",
+        "Improved Processes",
+        "Increased Efficiency",
+        "Access to International Markets"
+      ],
+      icon: <ShieldCheck className="h-10 w-10 text-brand-600" />
+    },
+    {
+      title: "Other Essential Certifications",
+      description: "Specialized certifications like ZED and FSSAI for specific industry needs.",
+      benefits: [
+        "ZED Certification for Quality",
+        "FSSAI License for Food Businesses",
+        "Industry-Specific Compliance",
+        "Competitive Market Advantage"
+      ],
+      icon: <BadgePercent className="h-10 w-10 text-brand-600" />
     }
   ];
 
@@ -33,12 +84,12 @@ const CertificateMarketingPage = () => {
       <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Certificate Marketing</span>
-            <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Boost Your Business Credibility</h1>
+            <Badge variant="outline" className="px-3 py-1 text-brand-600 border-brand-600/30 mb-4">Certificate Marketing</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Unlock Growth With Essential Certifications</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Enhance your market position with proper certification and strategic marketing that builds trust and opens new opportunities.
+              Enhance your market position with proper certification and strategic marketing that builds trust and opens new opportunities for MSMEs and startups.
             </p>
-            <Link to="/contact" className="btn-primary inline-flex items-center mt-8">
+            <Link to="/contact" className="btn-primary inline-flex items-center mt-8 bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-lg transition-all">
               Get Started
               <ArrowRight size={18} className="ml-2" />
             </Link>
@@ -52,19 +103,19 @@ const CertificateMarketingPage = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2 animate-fadeInLeft">
               <SectionHeading
-                subheading="WHAT WE OFFER"
-                heading="Certificate Marketing Solutions"
+                subheading="WHY CERTIFICATIONS MATTER"
+                heading="Certifications Unlock Growth Opportunities"
                 description=""
                 align="left"
               />
               <p className="text-gray-600 mb-6">
-                Certificate Marketing combines the power of official certifications with strategic marketing to enhance your business credibility and market position. Our comprehensive approach helps you obtain relevant certifications and effectively communicate them to your target audience.
+                In today's competitive business landscape, having the right certifications can significantly impact your business success. For MSMEs and startups, these certifications serve as official validation of your quality, processes, and commitment to excellence.
               </p>
               <p className="text-gray-600 mb-6">
-                In today's competitive market, having the right certifications can significantly impact your business success. They serve as third-party validation of your quality, processes, and commitment to excellence, giving you a distinct edge over competitors.
+                Government-recognized certifications like MSME and Startup India registration open doors to exclusive benefits, funding opportunities, tax exemptions, and preferential treatment in government procurement.
               </p>
               <p className="text-gray-600">
-                Our expert team guides you through the entire certification process and develops marketing strategies that highlight your certifications to build trust, win customers, and open new business opportunities.
+                Our expert team guides you through the entire certification process and helps you leverage these certifications to build trust, win customers, and access the full range of benefits available to certified businesses.
               </p>
             </div>
             <div className="lg:w-1/2 animate-fadeInRight">
@@ -81,33 +132,35 @@ const CertificateMarketingPage = () => {
         </div>
       </section>
 
-      {/* Certifications */}
+      {/* Certifications Grid */}
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="KEY CERTIFICATIONS"
             heading="Essential Certifications for Business Growth"
-            description="We help you obtain and market these valuable certifications to enhance your business credibility."
+            description="We help you obtain and market these valuable certifications to enhance your business credibility and access exclusive benefits."
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mt-12">
             {certifications.map((cert, index) => (
               <div 
                 key={index} 
-                className="glass-card rounded-xl p-8 animate-fadeIn"
+                className="glass-card rounded-xl p-8 animate-fadeIn bg-white shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 h-full flex flex-col"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="flex items-center mb-4">
-                  <FileCheck className="h-8 w-8 text-brand-600 mr-4" />
+                <div className="flex items-start mb-4">
+                  <div className="mr-4 bg-brand-50 p-3 rounded-lg">
+                    {cert.icon}
+                  </div>
                   <h3 className="text-xl font-bold">{cert.title}</h3>
                 </div>
                 <p className="text-gray-600 mb-6">{cert.description}</p>
-                <h4 className="font-semibold mb-2">Key Benefits:</h4>
-                <ul className="space-y-2">
+                <h4 className="font-semibold mb-3">Key Benefits:</h4>
+                <ul className="space-y-2 mt-auto">
                   {cert.benefits.map((benefit, i) => (
                     <li key={i} className="flex items-start">
-                      <CheckCircle className="h-5 w-5 text-brand-600 mr-2 mt-0.5" />
-                      <span>{benefit}</span>
+                      <CheckCircle className="h-5 w-5 text-brand-600 mr-2 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -122,7 +175,7 @@ const CertificateMarketingPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="OUR PROCESS"
-            heading="How We Help You Get Certified and Market It"
+            heading="How We Help You Get Certified"
             description="Our structured approach ensures you get the most value from your certifications."
           />
           
@@ -136,9 +189,9 @@ const CertificateMarketingPage = () => {
                 <div className="flex flex-col md:flex-row items-center md:justify-between">
                   <div className="order-2 md:order-1 md:w-5/12">
                     <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Assessment & Planning</h3>
+                      <h3 className="text-xl font-bold mb-2">Assessment & Eligibility</h3>
                       <p className="text-gray-600">
-                        We start by assessing your business needs, industry requirements, and market positioning to identify the most beneficial certifications for your growth.
+                        We start by assessing your business details, industry category, and eligibility for various certifications that would benefit your specific business needs.
                       </p>
                     </div>
                   </div>
@@ -164,7 +217,7 @@ const CertificateMarketingPage = () => {
                     <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
                       <h3 className="text-xl font-bold mb-2">Documentation & Preparation</h3>
                       <p className="text-gray-600">
-                        We help you prepare all required documentation, implement necessary processes, and ensure your business meets the standards for the target certifications.
+                        We help you prepare all required documentation, financial statements, and business information needed for the certification application process.
                       </p>
                     </div>
                   </div>
@@ -176,9 +229,9 @@ const CertificateMarketingPage = () => {
                 <div className="flex flex-col md:flex-row items-center md:justify-between">
                   <div className="order-2 md:order-1 md:w-5/12">
                     <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Certification Process</h3>
+                      <h3 className="text-xl font-bold mb-2">Application Process</h3>
                       <p className="text-gray-600">
-                        We guide you through the application, review, and audit processes, liaising with certification bodies to ensure smooth and successful certification.
+                        We guide you through the complete application process, handling form submissions, digital signatures, and ensuring all information is accurate.
                       </p>
                     </div>
                   </div>
@@ -202,9 +255,9 @@ const CertificateMarketingPage = () => {
                   </div>
                   <div className="order-3 md:w-5/12">
                     <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Marketing Strategy</h3>
+                      <h3 className="text-xl font-bold mb-2">Certification & Verification</h3>
                       <p className="text-gray-600">
-                        Once certified, we develop a comprehensive marketing strategy to effectively communicate your certifications and the value they bring to your customers.
+                        We follow up with relevant authorities, address any queries, and ensure the certification process moves smoothly toward completion.
                       </p>
                     </div>
                   </div>
@@ -216,9 +269,9 @@ const CertificateMarketingPage = () => {
                 <div className="flex flex-col md:flex-row items-center md:justify-between">
                   <div className="order-2 md:order-1 md:w-5/12">
                     <div className="p-6 rounded-xl bg-white shadow-md border border-gray-100">
-                      <h3 className="text-xl font-bold mb-2">Implementation & Monitoring</h3>
+                      <h3 className="text-xl font-bold mb-2">Benefit Activation</h3>
                       <p className="text-gray-600">
-                        We implement the marketing plan across various channels and continuously monitor its effectiveness, making adjustments to maximize its impact.
+                        Once certified, we help you access and activate all the benefits available to you through your certifications, ensuring maximum value for your business.
                       </p>
                     </div>
                   </div>
@@ -239,9 +292,9 @@ const CertificateMarketingPage = () => {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            subheading="BENEFITS"
-            heading="Why Invest in Certificate Marketing"
-            description="Discover how certificate marketing can transform your business prospects."
+            subheading="KEY ADVANTAGES"
+            heading="Why Invest in Business Certifications"
+            description="Discover how the right certifications can transform your business prospects."
           />
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-12">
@@ -249,9 +302,9 @@ const CertificateMarketingPage = () => {
               <div className="bg-brand-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Award className="h-8 w-8 text-brand-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Enhanced Credibility</h3>
+              <h3 className="text-xl font-bold mb-3">Government Recognition</h3>
               <p className="text-gray-600">
-                Build trust with customers and partners through third-party validation of your quality and standards.
+                Gain official recognition and priority status for government schemes, subsidies, and procurement opportunities.
               </p>
             </div>
             
@@ -259,9 +312,9 @@ const CertificateMarketingPage = () => {
               <div className="bg-brand-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <TrendingUp className="h-8 w-8 text-brand-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Competitive Advantage</h3>
+              <h3 className="text-xl font-bold mb-3">Financial Benefits</h3>
               <p className="text-gray-600">
-                Stand out in a crowded market and differentiate your business from competitors.
+                Access special loan schemes, tax exemptions, subsidies and improved terms for business funding.
               </p>
             </div>
             
@@ -269,9 +322,9 @@ const CertificateMarketingPage = () => {
               <div className="bg-brand-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <FileCheck className="h-8 w-8 text-brand-600" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Access to Opportunities</h3>
+              <h3 className="text-xl font-bold mb-3">Market Credibility</h3>
               <p className="text-gray-600">
-                Unlock new markets, partnerships, and business opportunities that require specific certifications.
+                Build trust with customers, partners, and investors through official validation of your business quality and standards.
               </p>
             </div>
           </div>
@@ -283,8 +336,8 @@ const CertificateMarketingPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="FREQUENTLY ASKED QUESTIONS"
-            heading="Common Questions About Certificate Marketing"
-            description="Get answers to your questions about our certificate marketing services."
+            heading="Common Questions About Certifications"
+            description="Get answers to your questions about our certification services."
           />
           
           <div className="max-w-3xl mx-auto mt-12 space-y-6">
@@ -292,9 +345,9 @@ const CertificateMarketingPage = () => {
               <div className="flex items-start">
                 <HelpCircle className="h-6 w-6 text-brand-600 mr-3 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="text-lg font-bold mb-2">How long does it take to get certified?</h4>
+                  <h4 className="text-lg font-bold mb-2">How long does it take to get MSME certification?</h4>
                   <p className="text-gray-600">
-                    The certification timeline varies depending on the type of certification, your current processes, and the certification body. Generally, it can take anywhere from 2-6 months. We'll provide you with a specific timeline during the initial assessment.
+                    The MSME certification process typically takes 3-7 working days once all documentation is complete and submitted correctly. Our assistance can help ensure a smooth and efficient process.
                   </p>
                 </div>
               </div>
@@ -306,7 +359,7 @@ const CertificateMarketingPage = () => {
                 <div>
                   <h4 className="text-lg font-bold mb-2">Which certifications are most valuable for my business?</h4>
                   <p className="text-gray-600">
-                    The most valuable certifications depend on your industry, target market, and business goals. During our initial consultation, we'll assess your specific situation and recommend the certifications that will provide the greatest return on investment for your business.
+                    The most valuable certifications depend on your industry, business stage, and goals. For most startups and MSMEs, the MSME and Startup India registrations provide the most immediate benefits. During our initial consultation, we'll assess your specific situation and recommend the certifications that will provide the greatest return on investment.
                   </p>
                 </div>
               </div>
@@ -316,9 +369,9 @@ const CertificateMarketingPage = () => {
               <div className="flex items-start">
                 <HelpCircle className="h-6 w-6 text-brand-600 mr-3 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="text-lg font-bold mb-2">How do you help market my certifications?</h4>
+                  <h4 className="text-lg font-bold mb-2">What documents are required for certification?</h4>
                   <p className="text-gray-600">
-                    Our marketing approach includes integrating your certifications into your brand messaging, website, marketing materials, and sales presentations. We also help with press releases, social media campaigns, and industry-specific marketing strategies to maximize the visibility and impact of your certifications.
+                    Documentation requirements vary by certification type. Generally, you'll need business registration documents, financial statements, bank details, PAN and Aadhar details, and sometimes category-specific documentation. Our team will provide you with a comprehensive checklist based on your specific certification needs.
                   </p>
                 </div>
               </div>
@@ -328,9 +381,9 @@ const CertificateMarketingPage = () => {
               <div className="flex items-start">
                 <HelpCircle className="h-6 w-6 text-brand-600 mr-3 mt-1 flex-shrink-0" />
                 <div>
-                  <h4 className="text-lg font-bold mb-2">What is the cost of certification and marketing?</h4>
+                  <h4 className="text-lg font-bold mb-2">How do I access benefits after certification?</h4>
                   <p className="text-gray-600">
-                    Costs vary based on the type of certification, your current readiness, and the scope of marketing services needed. We provide transparent pricing during our initial consultation after assessing your specific requirements. Many clients find that the return on investment significantly outweighs the costs.
+                    Once certified, you can access benefits through various government portals, financial institutions, and relevant departments. Our team provides comprehensive guidance on activating and maximizing each benefit available to you, including step-by-step assistance with applications for schemes, subsidies, and exemptions.
                   </p>
                 </div>
               </div>
@@ -343,9 +396,9 @@ const CertificateMarketingPage = () => {
       <section className="bg-gradient-to-r from-brand-600 to-blue-700 py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Enhance Your Business Credibility?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Accelerate Your Business Growth?</h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Get started with our certificate marketing services today and set your business apart from the competition.
+              Get started with our certification services today and unlock exclusive benefits for your business.
             </p>
             <Link to="/contact" className="px-8 py-3 bg-white text-brand-700 font-medium rounded-lg hover:bg-white/90 transition-colors shadow-lg">
               Schedule a Consultation
