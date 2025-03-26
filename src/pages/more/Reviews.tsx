@@ -1,7 +1,7 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, ThumbsUp, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
+import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 
 const ReviewsPage = () => {
   const featuredReviews = [
@@ -203,6 +203,9 @@ const ReviewsPage = () => {
           </div>
         </div>
       </section>
+
+      {/* YouTube Shorts Section */}
+      <YouTubeShortsCarousel />
 
       {/* Leave a Review */}
       <section className="py-16 md:py-24">
