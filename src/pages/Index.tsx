@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'l
 import SectionHeading from '@/components/SectionHeading';
 import FundingCard from '@/components/FundingCard';
 import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
+import StatisticsSlider from '@/components/StatisticsSlider';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -83,6 +84,9 @@ const HomePage = () => {
       <section className="py-16">
         <YouTubeShortsCarousel />
       </section>
+
+      {/* Statistics Slider Section */}
+      <StatisticsSlider />
 
       {/* Features Section */}
       <section className="py-16 md:py-24">
