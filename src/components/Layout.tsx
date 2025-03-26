@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-brand-900 via-brand-800 to-brand-700">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-india-saffron via-india-white to-india-green">
       <OvalHeader />
       <main className="flex-grow pt-6 px-4 sm:px-6 lg:px-8">{children}</main>
       <Footer />

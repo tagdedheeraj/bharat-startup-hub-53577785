@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -15,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 25 95% 53%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -24,15 +25,15 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 221.2 83.2% 53.3%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 142 81% 29%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 25 95% 53%;
 
     --radius: 0.75rem;
   }
@@ -47,8 +48,8 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -56,7 +57,7 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 142 81% 29%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -64,7 +65,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 25 95% 53%;
   }
 }
 
@@ -89,24 +90,24 @@
   
   .nav-link {
     @apply relative px-2 py-2 text-foreground/80 hover:text-foreground transition-colors 
-    after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-600
+    after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-india-saffron
     after:transition-all hover:after:w-full;
   }
   
   .nav-link.active {
-    @apply text-brand-600 after:w-full;
+    @apply text-india-saffron after:w-full;
   }
   
   .btn-primary {
-    @apply bg-brand-600 text-white px-6 py-3 rounded-lg hover:bg-brand-700 transition-all shadow-md hover:shadow-lg active:shadow-sm;
+    @apply bg-india-saffron text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg active:shadow-sm;
   }
   
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground px-6 py-3 rounded-lg hover:bg-secondary/90 border border-secondary transition-all;
+    @apply bg-india-green text-white px-6 py-3 rounded-lg hover:opacity-90 border border-transparent transition-all;
   }
   
   .sub-heading {
-    @apply text-sm font-medium tracking-wider text-brand-600 uppercase mb-2;
+    @apply text-sm font-medium tracking-wider text-india-saffron uppercase mb-2;
   }
   
   .section {
@@ -114,7 +115,7 @@
   }
   
   .funding-card {
-    @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-brand-200;
+    @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-india-saffron/50;
   }
   
   .oval-header-glass {
@@ -122,50 +123,12 @@
   }
   
   .nav-item-3d {
-    @apply relative px-4 py-2 text-white hover:text-brand-100 transition-colors;
+    @apply relative px-4 py-2 text-white hover:text-india-saffron/90 transition-colors;
   }
   
   .gradient-text-3d {
-    @apply bg-gradient-to-r from-white via-brand-200 to-brand-100 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-india-saffron via-white to-india-green bg-clip-text text-transparent;
   }
 }
 
-@keyframes gradient-x {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient-x {
-  animation: gradient-x 15s ease infinite;
-  background-size: 300% 300%;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
+/* ... keep existing code (for keyframes and animations) */
