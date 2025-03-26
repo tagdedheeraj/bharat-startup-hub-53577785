@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -181,6 +180,9 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Expertise Section - Moved below WHY CHOOSE US */}
+      <ExpertiseSection />
+
       {/* Funding Options Section */}
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -211,9 +213,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* Expertise Section - NEW */}
-      <ExpertiseSection />
 
       {/* Stats Section */}
       <section className="py-16 md:py-24 bg-brand-700 text-white">
