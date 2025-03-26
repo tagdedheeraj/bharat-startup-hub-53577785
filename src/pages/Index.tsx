@@ -6,6 +6,7 @@ import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
+import NewsHeadlines from '@/components/NewsHeadlines';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -213,6 +214,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* News Headlines Section - NEW */}
+      <NewsHeadlines />
 
       {/* Stats Section */}
       <section className="py-16 md:py-24 bg-brand-700 text-white">

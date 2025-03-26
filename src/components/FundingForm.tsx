@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -34,13 +33,15 @@ interface FundingFormProps {
   fundingAmount?: string;
   expertiseTitle?: string;
   onSubmitSuccess: () => void;
+  formType?: string;
 }
 
 export default function FundingForm({ 
   fundingTitle, 
   fundingAmount, 
   expertiseTitle,
-  onSubmitSuccess 
+  onSubmitSuccess,
+  formType
 }: FundingFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
