@@ -59,8 +59,16 @@ export default function ExpertiseSection() {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-gray-50 curved-section-both">
+      {/* Top wave shape */}
+      <div className="curved-wave-top text-white">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-12 w-full opacity-10">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
+        </svg>
+      </div>
+      
+      {/* Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
           subheading="OUR EXPERTISE"
           heading="Our Expertise helps your startup grow at every stage"
@@ -99,6 +107,17 @@ export default function ExpertiseSection() {
           </div>
         </div>
       </div>
+      
+      {/* Bottom wave shape */}
+      <div className="curved-wave-bottom text-white">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-12 w-full opacity-10">
+          <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+        </svg>
+      </div>
+      
+      {/* Decorative blob shapes */}
+      <div className="blob-shape bg-india-saffron w-96 h-96 -left-48 top-24"></div>
+      <div className="blob-shape bg-india-green w-72 h-72 right-0 bottom-12"></div>
     </section>
   );
 }

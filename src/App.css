@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -35,8 +36,62 @@
 
 .card {
   padding: 2em;
+  border-radius: 1.5rem;
+  overflow: hidden;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+/* Curved shapes */
+.curve-top {
+  position: relative;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+}
+
+.curve-bottom {
+  position: relative;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+.curve-both {
+  position: relative;
+  border-radius: 2rem;
+}
+
+.card-curve {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card-curve:hover {
+  transform: translateY(-5px);
+}
+
+/* Section dividers */
+.section-divider {
+  position: relative;
+  height: 100px;
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+
+.divider-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.divider-curve svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 56px;
 }

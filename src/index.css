@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -135,6 +136,39 @@
   
   .gradient-text-india {
     @apply bg-gradient-to-r from-india-saffron via-india-white to-india-green bg-clip-text text-transparent;
+  }
+  
+  /* New curved section utilities */
+  .curved-section {
+    @apply relative rounded-3xl overflow-hidden;
+  }
+  
+  .curved-section-top {
+    @apply relative pt-16 rounded-t-3xl overflow-hidden;
+  }
+  
+  .curved-section-bottom {
+    @apply relative pb-16 rounded-b-3xl overflow-hidden;
+  }
+  
+  .curved-section-both {
+    @apply relative py-16 rounded-3xl overflow-hidden;
+  }
+  
+  .curved-wave-top {
+    @apply absolute top-0 left-0 w-full overflow-hidden leading-[0] rotate-180;
+  }
+  
+  .curved-wave-bottom {
+    @apply absolute bottom-0 left-0 w-full overflow-hidden leading-[0];
+  }
+  
+  .wave-divider {
+    @apply relative h-24 overflow-hidden -mb-1;
+  }
+  
+  .blob-shape {
+    @apply absolute opacity-10 rounded-full filter blur-3xl;
   }
 }
 
