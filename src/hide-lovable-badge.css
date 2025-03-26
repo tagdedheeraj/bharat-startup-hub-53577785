@@ -9,7 +9,15 @@
 .lovable-badge,
 .lovable-edit-button,
 #lovable-badge,
-#gptengineer-select-button {
+#gptengineer-select-button,
+[class*="LovableBadge"],
+[id*="LovableBadge"],
+[class^="Badge_"],
+[class*="editButton"],
+[class*="badge"],
+[class*="love"],
+div[style*="position: fixed"][style*="bottom"],
+div[style*="position: fixed"][style*="right"] {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -19,11 +27,30 @@
   position: absolute !important;
   z-index: -9999 !important;
   overflow: hidden !important;
+  transform: scale(0) !important;
+  max-height: 0 !important;
+  max-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Hide any iframe that might be injecting the badge */
 iframe[src*="lovable"],
-iframe[src*="gptengineer"] {
+iframe[src*="gptengineer"],
+iframe[style*="position: fixed"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Additional body/html styles to prevent injected elements */
+html [id*="lovable-root"],
+body [id*="lovable-root"],
+html [id*="gptengineer-root"],
+body [id*="gptengineer-root"] {
   display: none !important;
   visibility: hidden !important;
 }
