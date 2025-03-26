@@ -1,5 +1,6 @@
+
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, Briefcase, Phone, Menu, Award } from 'lucide-react';
+import { Home, Info, Briefcase, Phone, Menu, Star } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sheet,
@@ -50,7 +51,7 @@ export default function MobileBottomNav() {
               <h3 className="text-lg font-medium mb-4">More Options</h3>
               <div className="space-y-3">
                 <Link to="/success-stories" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Award size={18} className="text-brand-600" />
+                  <Star size={18} className="text-brand-600" />
                   <span>Success Stories</span>
                 </Link>
                 <Link to="/more/experts" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
