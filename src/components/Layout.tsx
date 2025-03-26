@@ -4,6 +4,7 @@ import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const isMobile = useIsMobile();
+  const location = useLocation();
   
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-india-saffron via-india-white to-india-green">
