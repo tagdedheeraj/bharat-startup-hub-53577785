@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
@@ -43,6 +44,7 @@ const OvalHeader = () => {
 
   const navItems = [
     { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
     { 
       name: 'Services', 
       href: '/services',

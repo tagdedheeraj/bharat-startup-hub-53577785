@@ -123,6 +123,7 @@ export default function Header() {
 
   const navigationItems = [
     { label: 'Home', to: '/' },
+    { label: 'About', to: '/about' },
     {
       label: 'Services',
       to: '/services',
