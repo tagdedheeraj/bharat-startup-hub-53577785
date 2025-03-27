@@ -51,7 +51,20 @@ const OvalHeader = () => {
       children: [
         { name: 'Funding Consultation', href: '/services/funding-consultation' },
         { name: 'Certificate Marketing', href: '/services/certificate-marketing' },
-        { name: 'Legal Consultation', href: '/services/legal-consultation' }
+        { name: 'Legal Consultation', href: '/services/legal-consultation' },
+        { 
+          name: 'CA Services', 
+          href: '/services/ca-services',
+          children: [
+            { name: 'Certification Services', href: '/services/ca-services/certification' },
+            { name: 'Trademark Services', href: '/services/ca-services/trademark' },
+            { name: 'Income Tax Services', href: '/services/ca-services/income-tax' },
+            { name: 'Accounting Services', href: '/services/ca-services/accounting' },
+            { name: 'GST Services', href: '/services/ca-services/gst' },
+            { name: 'Payroll Services', href: '/services/ca-services/payroll' },
+            { name: 'Compliance Services', href: '/services/ca-services/compliance' },
+          ]
+        }
       ]
     },
     { name: 'Success Stories', href: '/success-stories' },
@@ -72,6 +85,33 @@ const OvalHeader = () => {
   const isActive = (path: string) => {
     if (path === '/') return currentPath === '/';
     return currentPath.startsWith(path);
+  };
+
+  // Function to render nested submenus for CA Services
+  const renderCAServicesSubmenu = (caServiceItems: any[], parentPath: string) => {
+    return (
+      <div className="pl-4 space-y-1 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
+        {caServiceItems.map((caItem) => (
+          <Link
+            key={caItem.name}
+            to={caItem.href}
+            className={cn(
+              "block px-4 py-2 text-sm rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
+              isActive(caItem.href) 
+                ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
+                : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
+            )}
+            onClick={toggleMobileMenu}
+          >
+            <div className={cn(
+              "w-1.5 h-1.5 rounded-full mr-2",
+              isActive(caItem.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
+            )}></div>
+            {caItem.name}
+          </Link>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -126,33 +166,97 @@ const OvalHeader = () => {
                   >
                     <div className="px-1 py-1 space-y-1">
                       {item.children.map((child) => (
-                        <DropdownMenuItem key={child.name} asChild>
-                          <Link
-                            to={child.href}
-                            className={cn(
-                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
-                              isActive(child.href) 
-                                ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
-                                : "text-black/90 hover:text-black"
-                            )}
-                          >
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                <div className={cn(
-                                  "w-1.5 h-1.5 rounded-full",
-                                  isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
-                                )}></div>
-                                <span className="font-medium">{child.name}</span>
+                        child.children ? (
+                          <DropdownMenu key={child.name}>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className={cn(
+                                  "w-full justify-start group flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                                  isActive(child.href) 
+                                    ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
+                                    : "text-black/90 hover:text-black"
+                                )}
+                              >
+                                <div className="flex-1 flex items-center">
+                                  <div className={cn(
+                                    "w-1.5 h-1.5 rounded-full mr-2",
+                                    isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
+                                  )}></div>
+                                  <span className="font-medium">{child.name}</span>
+                                  <ChevronRight className="ml-auto h-4 w-4" />
+                                </div>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent
+                              side="right"
+                              align="start"
+                              className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
+                                border border-india-white/40 text-black rounded-xl w-60 p-2
+                                shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
+                            >
+                              <div className="px-1 py-1 space-y-1">
+                                {child.children.map((subChild) => (
+                                  <DropdownMenuItem key={subChild.name} asChild>
+                                    <Link
+                                      to={subChild.href}
+                                      className={cn(
+                                        "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                                        isActive(subChild.href) 
+                                          ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
+                                          : "text-black/90 hover:text-black"
+                                      )}
+                                    >
+                                      <div className="flex-1">
+                                        <div className="flex items-center space-x-2">
+                                          <div className={cn(
+                                            "w-1.5 h-1.5 rounded-full",
+                                            isActive(subChild.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
+                                          )}></div>
+                                          <span className="font-medium">{subChild.name}</span>
+                                        </div>
+                                        <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
+                                          group-hover:w-full transition-all duration-300"></div>
+                                      </div>
+                                      <ChevronRight className={cn(
+                                        "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
+                                        "group-hover:opacity-100 group-hover:translate-x-0"
+                                      )} />
+                                    </Link>
+                                  </DropdownMenuItem>
+                                ))}
                               </div>
-                              <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
-                                group-hover:w-full transition-all duration-300"></div>
-                            </div>
-                            <ChevronRight className={cn(
-                              "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
-                              "group-hover:opacity-100 group-hover:translate-x-0"
-                            )} />
-                          </Link>
-                        </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        ) : (
+                          <DropdownMenuItem key={child.name} asChild>
+                            <Link
+                              to={child.href}
+                              className={cn(
+                                "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                                isActive(child.href) 
+                                  ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
+                                  : "text-black/90 hover:text-black"
+                              )}
+                            >
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2">
+                                  <div className={cn(
+                                    "w-1.5 h-1.5 rounded-full",
+                                    isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
+                                  )}></div>
+                                  <span className="font-medium">{child.name}</span>
+                                </div>
+                                <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
+                                  group-hover:w-full transition-all duration-300"></div>
+                              </div>
+                              <ChevronRight className={cn(
+                                "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
+                                "group-hover:opacity-100 group-hover:translate-x-0"
+                              )} />
+                            </Link>
+                          </DropdownMenuItem>
+                        )
                       ))}
                     </div>
                   </DropdownMenuContent>
@@ -236,23 +340,36 @@ const OvalHeader = () => {
                   </div>
                   <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
                     {item.children.map((child) => (
-                      <Link
-                        key={child.name}
-                        to={child.href}
-                        className={cn(
-                          "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
-                          isActive(child.href) 
-                            ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                            : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
-                        )}
-                        onClick={toggleMobileMenu}
-                      >
-                        <div className={cn(
-                          "w-1.5 h-1.5 rounded-full mr-2",
-                          isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
-                        )}></div>
-                        {child.name}
-                      </Link>
+                      child.children ? (
+                        <div key={child.name} className="py-1">
+                          <div className="px-4 py-2 flex items-center text-black/90 hover:text-black">
+                            <div className={cn(
+                              "w-1.5 h-1.5 rounded-full mr-2",
+                              isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
+                            )}></div>
+                            <span>{child.name}</span>
+                          </div>
+                          {renderCAServicesSubmenu(child.children, child.href)}
+                        </div>
+                      ) : (
+                        <Link
+                          key={child.name}
+                          to={child.href}
+                          className={cn(
+                            "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
+                            isActive(child.href) 
+                              ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
+                              : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
+                          )}
+                          onClick={toggleMobileMenu}
+                        >
+                          <div className={cn(
+                            "w-1.5 h-1.5 rounded-full mr-2",
+                            isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
+                          )}></div>
+                          {child.name}
+                        </Link>
+                      )
                     ))}
                   </div>
                 </div>
