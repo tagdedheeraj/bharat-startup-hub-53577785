@@ -53,6 +53,19 @@ const OvalHeader = () => {
         { name: 'Legal Consultation', href: '/services/legal-consultation' }
       ]
     },
+    { 
+      name: 'CA Services', 
+      href: '/services/ca-services',
+      children: [
+        { name: 'Certifications', href: '/services/ca-services/certifications' },
+        { name: 'Trademark', href: '/services/ca-services/trademark' },
+        { name: 'Income Tax', href: '/services/ca-services/income-tax' },
+        { name: 'Accounting', href: '/services/ca-services/accounting' },
+        { name: 'GST', href: '/services/ca-services/gst' },
+        { name: 'Payroll', href: '/services/ca-services/payroll' },
+        { name: 'Compliance', href: '/services/ca-services/compliance' }
+      ]
+    },
     { name: 'IT Solutions', href: '/it-solutions' },
     { name: 'Success Stories', href: '/success-stories' },
     { 
@@ -65,8 +78,7 @@ const OvalHeader = () => {
         { name: 'Blogs', href: '/more/blogs' },
         { name: 'Compliance', href: '/more/compliance' }
       ]
-    },
-    { name: 'Contact', href: '/contact' }
+    }
   ];
 
   const isActive = (path: string) => {
