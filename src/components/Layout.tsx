@@ -21,23 +21,34 @@ export default function Layout({ children }: LayoutProps) {
   // Run once on component mount to remove any dynamically added badges
   useEffect(() => {
     const removeBadges = () => {
-      // Find and remove any badges that might have been injected
-      const badges = document.querySelectorAll(
-        '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
-      );
-      
-      badges.forEach((badge) => {
-        if (badge.parentNode) {
-          badge.parentNode.removeChild(badge);
-        }
-      });
+      try {
+        // Find and remove any badges that might have been injected
+        const badges = document.querySelectorAll(
+          '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
+        );
+        
+        badges.forEach((badge) => {
+          try {
+            if (badge && badge.parentNode) {
+              badge.parentNode.removeChild(badge);
+            }
+          } catch (e) {
+            // Silently handle any errors during individual node removal
+            console.debug("Could not remove badge element:", e);
+          }
+        });
+      } catch (error) {
+        // Catch any errors that might occur during the badge removal process
+        console.debug("Error in badge removal:", error);
+      }
     };
     
     // Run immediately
     removeBadges();
     
-    // Also set up an interval to continuously check and remove
-    const interval = setInterval(removeBadges, 1000);
+    // Also set up an interval to continuously check and remove, but with a longer interval
+    // to reduce potential performance impact
+    const interval = setInterval(removeBadges, 2000);
     
     // Clean up
     return () => clearInterval(interval);
