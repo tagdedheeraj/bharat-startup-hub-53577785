@@ -40,19 +40,18 @@ const OvalHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on location change
+  // Close mobile menu on location change and clean up portals
   useEffect(() => {
     setMobileMenuOpen(false);
     
-    // Cleanup function to handle any dropdown portals when location changes
-    return () => {
+    // Cleanup function to ensure portals are removed when location changes
+    const cleanupPortals = () => {
       try {
-        const portals = document.querySelectorAll('[data-radix-portal]');
+        // Target dropdown portals specifically
+        const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
         portals.forEach(portal => {
           try {
-            if (portal && document.body.contains(portal)) {
-              document.body.removeChild(portal);
-            }
+            portal.remove();
           } catch (e) {
             // Silent fail for portal removal
             console.debug("Portal cleanup error:", e);
@@ -60,8 +59,15 @@ const OvalHeader = () => {
         });
       } catch (e) {
         // Silent fail
+        console.debug("Portal search error:", e);
       }
     };
+    
+    // Run cleanup immediately when location changes
+    cleanupPortals();
+    
+    // Also cleanup on unmount
+    return cleanupPortals;
   }, [location]);
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -97,25 +103,51 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  // Helper function to safely navigate using Link
+  // Safer navigation that ensures portals are cleaned up
   const safeNavigate = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     
-    // Clean up any portal elements before navigation
+    // Clean up portals before navigation
     try {
-      const portals = document.querySelectorAll('[data-radix-portal]');
+      const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
       portals.forEach(portal => {
         try {
           portal.remove();
         } catch (e) {
           // Silent fail
+          console.debug("Pre-navigation portal cleanup error:", e);
         }
       });
     } catch (e) {
       // Silent fail
+      console.debug("Pre-navigation portal search error:", e);
     }
     
-    // Small delay to ensure cleanup completes
+    // Use window.location for more reliable navigation with small delay
+    setTimeout(() => {
+      window.location.href = href;
+    }, 50);
+  };
+
+  // Function to handle dropdown item clicks safely
+  const handleDropdownItemClick = (href: string) => {
+    // Force close any open portals before navigation
+    try {
+      const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
+      portals.forEach(portal => {
+        try {
+          portal.remove();
+        } catch (e) {
+          // Silent fail
+          console.debug("Dropdown click portal cleanup error:", e);
+        }
+      });
+    } catch (e) {
+      // Silent fail
+      console.debug("Dropdown click portal search error:", e);
+    }
+    
+    // Use direct navigation with delay
     setTimeout(() => {
       window.location.href = href;
     }, 50);
@@ -170,30 +202,17 @@ const OvalHeader = () => {
                     className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
                       border border-india-white/40 text-black rounded-xl w-60 p-2
                       shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
-                    forceMount={true}
                   >
                     <div className="px-1 py-1 space-y-1">
                       {item.children.map((child) => (
-                        <DropdownMenuItem key={child.name} asChild>
-                          <Link
-                            to={child.href}
+                        <DropdownMenuItem key={child.name} asChild onClick={() => handleDropdownItemClick(child.href)}>
+                          <div
                             className={cn(
-                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium cursor-pointer transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
                               isActive(child.href) 
                                 ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
                                 : "text-black/90 hover:text-black"
                             )}
-                            onClick={(e) => {
-                              // Force close any open portals before navigation
-                              const portals = document.querySelectorAll('[data-radix-portal]');
-                              portals.forEach(portal => {
-                                try {
-                                  portal.remove();
-                                } catch (e) {
-                                  // Silent fail
-                                }
-                              });
-                            }}
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
@@ -210,7 +229,7 @@ const OvalHeader = () => {
                               "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
                               "group-hover:opacity-100 group-hover:translate-x-0"
                             )} />
-                          </Link>
+                          </div>
                         </DropdownMenuItem>
                       ))}
                     </div>
@@ -296,23 +315,25 @@ const OvalHeader = () => {
                   </div>
                   <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
                     {item.children.map((child) => (
-                      <Link
+                      <div
                         key={child.name}
-                        to={child.href}
                         className={cn(
-                          "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
+                          "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center cursor-pointer",
                           isActive(child.href) 
                             ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                             : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                         )}
-                        onClick={toggleMobileMenu}
+                        onClick={() => {
+                          toggleMobileMenu();
+                          handleDropdownItemClick(child.href);
+                        }}
                       >
                         <div className={cn(
                           "w-1.5 h-1.5 rounded-full mr-2",
                           isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
                         )}></div>
                         {child.name}
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -332,17 +353,14 @@ const OvalHeader = () => {
                 </Link>
               )
             ))}
-            <Link to="/contact" onClick={(e) => {
-              toggleMobileMenu();
-              safeNavigate(e, '/contact');
-            }} className="w-full">
+            <div onClick={() => handleDropdownItemClick('/contact')} className="w-full cursor-pointer">
               <Button 
                 className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                   border border-india-white/30 transition-all"
               >
                 Get Started
               </Button>
-            </Link>
+            </div>
           </nav>
         </div>
       </div>

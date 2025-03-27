@@ -17,11 +17,12 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Run once on component mount to remove any dynamically added badges
+  // Comprehensive cleanup for any dynamically added elements and portals
   useEffect(() => {
-    const removeBadges = () => {
+    // Function to thoroughly clean up all potential portal and dropdown elements
+    const cleanupAllPortals = () => {
       try {
-        // Find and remove any badges that might have been injected
+        // Clean up any badges that might have been injected
         const badges = document.querySelectorAll(
           '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
         );
@@ -32,47 +33,75 @@ export default function Layout({ children }: LayoutProps) {
               badge.parentNode.removeChild(badge);
             }
           } catch (e) {
-            // Silently handle any errors during individual node removal
-            console.debug("Could not remove badge element:", e);
+            console.debug("Badge removal error:", e);
+          }
+        });
+        
+        // Clean up dropdown and popover portals
+        const portals = document.querySelectorAll(
+          '[data-radix-portal], [data-radix-dropdown-menu-content], [data-radix-popper-content-wrapper]'
+        );
+        
+        portals.forEach((portal) => {
+          try {
+            if (portal && document.body.contains(portal)) {
+              document.body.removeChild(portal);
+            }
+          } catch (e) {
+            console.debug("Portal removal error:", e);
+          }
+        });
+        
+        // Clean toast elements
+        const toasts = document.querySelectorAll('[role="status"]');
+        toasts.forEach((toast) => {
+          try {
+            if (toast && toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          } catch (e) {
+            console.debug("Toast removal error:", e);
           }
         });
       } catch (error) {
-        // Catch any errors that might occur during the badge removal process
-        console.debug("Error in badge removal:", error);
+        console.debug("Cleanup operation error:", error);
       }
     };
     
-    // Run immediately
-    removeBadges();
+    // Run immediately on mount
+    cleanupAllPortals();
     
-    // Also set up an interval to continuously check and remove, but with a longer interval
-    // to reduce potential performance impact
-    const interval = setInterval(removeBadges, 2000);
+    // Also set up an interval to continuously check and clean up
+    const interval = setInterval(cleanupAllPortals, 2000);
     
-    // Clean up
-    return () => clearInterval(interval);
+    // Clean up on unmount
+    return () => {
+      clearInterval(interval);
+      cleanupAllPortals();
+    };
   }, []);
 
-  // Clean up any portal elements when routes change
+  // Clean up portal elements when routes change
   useEffect(() => {
-    // Create a function to clean up any orphaned portal elements
+    // Function to clean up any orphaned portal elements
     const cleanupPortalElements = () => {
       try {
-        // Target common portal containers
-        const portalElements = document.querySelectorAll('[data-radix-portal]');
+        // Target common portal containers and dropdown menus
+        const portalElements = document.querySelectorAll(
+          '[data-radix-portal], [data-radix-dropdown-menu-content], [data-radix-popper-content-wrapper]'
+        );
         
         portalElements.forEach((element) => {
-          // Only remove portal elements that aren't connected to the active DOM
-          if (element && !document.body.contains(element)) {
-            try {
+          try {
+            if (element) {
               element.remove();
-            } catch (e) {
-              console.debug("Could not remove portal element:", e);
             }
+          } catch (e) {
+            console.debug("Portal element removal error:", e);
           }
         });
       } catch (error) {
-        console.debug("Error during portal cleanup:", error);
+        console.debug("Portal cleanup error:", error);
       }
     };
     
