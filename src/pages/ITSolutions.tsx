@@ -39,8 +39,8 @@ const ITSolutions = () => {
   return (
     <div className="py-12">
       <SectionHeading
-        title="IT Solutions"
-        subtitle="Comprehensive IT services for businesses of all sizes"
+        heading="IT Solutions"
+        subheading="Comprehensive IT services for businesses of all sizes"
         centered
       />
       

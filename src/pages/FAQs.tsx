@@ -46,8 +46,8 @@ const FAQs = () => {
   return (
     <div className="py-12">
       <SectionHeading
-        title="Frequently Asked Questions"
-        subtitle="Find answers to common questions about our services"
+        heading="Frequently Asked Questions"
+        subheading="Find answers to common questions about our services"
         centered
       />
       
