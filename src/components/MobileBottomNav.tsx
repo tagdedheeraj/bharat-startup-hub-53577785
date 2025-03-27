@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, Briefcase, Phone, Menu, Star } from 'lucide-react';
+import { Home, Info, Briefcase, Phone, Menu, Star, Receipt, FileSpreadsheet, Shield } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sheet,
@@ -18,6 +18,7 @@ export default function MobileBottomNav() {
     { icon: Home, label: 'Home', to: '/' },
     { icon: Info, label: 'About', to: '/about' },
     { icon: Briefcase, label: 'Services', to: '/services' },
+    { icon: Shield, label: 'CA Services', to: '/ca-services' },
     { icon: Phone, label: 'Contact', to: '/contact' },
   ];
 
@@ -31,10 +32,10 @@ export default function MobileBottomNav() {
               key={item.to}
               to={item.to}
               className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-                isActive ? 'text-brand-600' : 'text-gray-500 hover:text-brand-500'
+                isActive ? 'text-india-saffron' : 'text-gray-500 hover:text-brand-500'
               }`}
             >
-              <item.icon size={20} className={isActive ? 'text-brand-600' : ''} />
+              <item.icon size={20} className={isActive ? 'text-india-saffron' : ''} />
               <span className="text-xs mt-1">{item.label}</span>
             </Link>
           );
@@ -51,27 +52,51 @@ export default function MobileBottomNav() {
               <h3 className="text-lg font-medium mb-4">More Options</h3>
               <div className="space-y-3">
                 <Link to="/success-stories" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Star size={18} className="text-brand-600" />
+                  <Star size={18} className="text-india-saffron" />
                   <span>Success Stories</span>
                 </Link>
+                
+                <h4 className="font-medium text-india-saffron mt-6 mb-2 border-b pb-1">CA Services</h4>
+                <Link to="/ca-services/certifications" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
+                  <Shield size={18} className="text-india-saffron" />
+                  <span>Certifications</span>
+                </Link>
+                <Link to="/ca-services/trademark" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
+                  <Shield size={18} className="text-india-saffron" />
+                  <span>Trademark</span>
+                </Link>
+                <Link to="/ca-services/income-tax" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
+                  <Info size={18} className="text-india-saffron" />
+                  <span>Income Tax</span>
+                </Link>
+                <Link to="/ca-services/gst" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
+                  <Receipt size={18} className="text-india-saffron" />
+                  <span>GST</span>
+                </Link>
+                <Link to="/ca-services/payroll" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
+                  <FileSpreadsheet size={18} className="text-india-saffron" />
+                  <span>Payroll</span>
+                </Link>
+                
+                <h4 className="font-medium text-india-saffron mt-6 mb-2 border-b pb-1">More Pages</h4>
                 <Link to="/more/experts" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Briefcase size={18} className="text-brand-600" />
+                  <Briefcase size={18} className="text-india-saffron" />
                   <span>Experts</span>
                 </Link>
                 <Link to="/more/msme-events" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Info size={18} className="text-brand-600" />
+                  <Info size={18} className="text-india-saffron" />
                   <span>MSME Events</span>
                 </Link>
                 <Link to="/more/reviews" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Home size={18} className="text-brand-600" />
+                  <Star size={18} className="text-india-saffron" />
                   <span>Reviews</span>
                 </Link>
                 <Link to="/more/blogs" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Menu size={18} className="text-brand-600" />
+                  <Menu size={18} className="text-india-saffron" />
                   <span>Blogs</span>
                 </Link>
                 <Link to="/more/compliance" className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors">
-                  <Phone size={18} className="text-brand-600" />
+                  <Shield size={18} className="text-india-saffron" />
                   <span>Compliance</span>
                 </Link>
               </div>

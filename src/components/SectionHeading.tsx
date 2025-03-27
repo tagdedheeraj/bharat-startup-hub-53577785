@@ -1,33 +1,32 @@
 
-import { ReactNode } from 'react';
+import { cn } from "@/lib/utils";
 
-interface SectionHeadingProps {
-  subheading?: string;
+export interface SectionHeadingProps {
   heading: string;
   description?: string;
-  align?: 'left' | 'center' | 'right';
-  children?: ReactNode;
+  centered?: boolean;
 }
 
-export default function SectionHeading({ 
-  subheading, 
-  heading, 
-  description, 
-  align = 'center',
-  children 
+export default function SectionHeading({
+  heading,
+  description,
+  centered = false,
 }: SectionHeadingProps) {
-  const alignmentClasses = {
-    left: 'text-left',
-    center: 'text-center mx-auto',
-    right: 'text-right ml-auto',
-  };
-  
   return (
-    <div className={`max-w-3xl mb-12 ${alignmentClasses[align]}`}>
-      {subheading && <p className="sub-heading">{subheading}</p>}
-      <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">{heading}</h2>
-      {description && <p className="text-lg text-gray-600">{description}</p>}
-      {children}
+    <div
+      className={cn(
+        "max-w-3xl",
+        centered ? "text-center mx-auto" : "text-left"
+      )}
+    >
+      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+        {heading}
+      </h2>
+      {description && (
+        <p className="text-lg text-muted-foreground max-w-3xl">
+          {description}
+        </p>
+      )}
     </div>
   );
 }

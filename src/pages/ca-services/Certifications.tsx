@@ -1,47 +1,47 @@
 
-import { Certificate } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import CAServiceTemplate from '@/components/ca-services/CAServiceTemplate';
 
 export default function CertificationsPage() {
   return (
     <CAServiceTemplate
       title="Certifications"
-      subtitle="Professional certification services for businesses"
-      icon={<Certificate className="h-8 w-8 text-india-saffron" />}
+      subtitle="Professional MSME and business certification services"
+      icon={<Shield className="h-8 w-8 text-india-saffron" />}
       color="bg-gradient-to-r from-indigo-50 to-indigo-100"
-      description="Our certification services ensure that your business meets all the necessary industry standards and regulatory requirements. We handle the entire certification process from application to approval, making it hassle-free for you."
+      description="Our certification services provide comprehensive solutions for businesses seeking various industry and government certifications. From MSME and ISO to specialized industry certifications, our team of experts guides you through the entire process, ensuring compliance with all requirements and timely approval."
       benefits={[
-        "Increased credibility and trust with clients and partners",
-        "Access to new markets and business opportunities",
-        "Compliance with industry regulations and standards",
-        "Competitive advantage in your industry",
-        "Streamlined processes and improved efficiency",
-        "Risk management and liability protection"
+        "Increased market credibility and trust",
+        "Access to government schemes and benefits",
+        "Preference in government tenders and contracts",
+        "Tax benefits and incentives",
+        "Access to specialized funding options",
+        "Enhanced business opportunities and partnerships"
       ]}
       process={[
         {
-          title: "Initial Assessment",
-          description: "We conduct a thorough assessment of your business to determine the certifications required and your readiness."
+          title: "Initial Consultation",
+          description: "We assess your business needs and recommend the most suitable certifications for your industry and goals."
         },
         {
-          title: "Documentation",
-          description: "Our team prepares all the necessary documentation and ensures compliance with certification requirements."
+          title: "Documentation Preparation",
+          description: "Our team helps you prepare all necessary documents and records required for certification."
         },
         {
           title: "Application Submission",
-          description: "We submit your application and handle all communications with the certification authority."
+          description: "We complete and submit all application forms and supporting documents to the relevant authorities."
         },
         {
-          title: "Pre-audit Preparation",
-          description: "We prepare your business for any required audits or inspections by the certification authority."
+          title: "Compliance Verification",
+          description: "Our experts ensure your business meets all standards and requirements for the certifications."
         },
         {
-          title: "Audit Support",
-          description: "Our experts provide support during the audit process to ensure smooth certification."
+          title: "Inspection Support",
+          description: "We prepare you for any site inspections or audits required as part of the certification process."
         },
         {
-          title: "Certification Maintenance",
-          description: "We help you maintain your certification with regular reviews and updates as required."
+          title: "Certification Acquisition",
+          description: "Our team follows up with authorities to ensure prompt issuance of your certification documents."
         }
       ]}
     />

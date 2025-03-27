@@ -40,8 +40,8 @@ export default function CAServiceTemplate({
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <SectionHeading
-              title={title}
-              subtitle={subtitle}
+              heading={title}
+              description={subtitle}
               centered={false}
             />
             

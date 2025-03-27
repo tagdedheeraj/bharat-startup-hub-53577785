@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server, Shield, ShieldCheck, IndianRupee, FileText, Receipt, FileSpreadsheet } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -149,6 +149,54 @@ export default function Header() {
     },
     { label: 'IT Solutions', to: '/it-solutions' },
     { label: 'Success Stories', to: '/success-stories' },
+    {
+      label: 'CA Services',
+      to: '/ca-services',
+      children: [
+        { 
+          label: 'Certifications', 
+          to: '/ca-services/certifications',
+          description: 'Comprehensive certification services for businesses of all sizes',
+          icon: Shield
+        },
+        { 
+          label: 'Trademark', 
+          to: '/ca-services/trademark',
+          description: 'Protect your brand identity with our expert trademark services',
+          icon: ShieldCheck
+        },
+        { 
+          label: 'Income Tax', 
+          to: '/ca-services/income-tax',
+          description: 'Professional income tax filing and advisory services',
+          icon: IndianRupee
+        },
+        { 
+          label: 'Accounting', 
+          to: '/ca-services/accounting',
+          description: 'Comprehensive accounting services for your business',
+          icon: FileText
+        },
+        { 
+          label: 'GST', 
+          to: '/ca-services/gst',
+          description: 'Complete GST compliance solutions for your business',
+          icon: Receipt
+        },
+        { 
+          label: 'Payroll', 
+          to: '/ca-services/payroll',
+          description: 'End-to-end payroll management services',
+          icon: FileSpreadsheet
+        },
+        { 
+          label: 'Compliance', 
+          to: '/ca-services/compliance',
+          description: 'Stay compliant with all regulatory requirements',
+          icon: ShieldCheck
+        },
+      ],
+    },
     {
       label: 'More',
       to: '/more',

@@ -1,5 +1,5 @@
 
-import { Trademark } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import CAServiceTemplate from '@/components/ca-services/CAServiceTemplate';
 
 export default function TrademarkPage() {
@@ -7,7 +7,7 @@ export default function TrademarkPage() {
     <CAServiceTemplate
       title="Trademark"
       subtitle="Protect your brand identity"
-      icon={<Trademark className="h-8 w-8 text-india-saffron" />}
+      icon={<ShieldCheck className="h-8 w-8 text-india-saffron" />}
       color="bg-gradient-to-r from-blue-50 to-blue-100"
       description="Our trademark services help you protect your brand identity through proper registration and management. We guide you through the entire process, from trademark search to registration and maintenance, ensuring your intellectual property is fully protected."
       benefits={[

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Certificate, Trademark, IndianRupee, FileText, Receipt, FileSpreadsheet, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Shield, ShieldCheck, IndianRupee, FileText, Receipt, FileSpreadsheet, ArrowRight } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -62,7 +62,7 @@ export default function CAServicesPage() {
     {
       title: "Certifications",
       description: "Comprehensive certification services for businesses of all sizes, ensuring compliance with industry standards and regulations.",
-      icon: Certificate,
+      icon: Shield,
       href: "/ca-services/certifications",
       color: "bg-gradient-to-r from-indigo-50 to-indigo-100",
       delay: 0
@@ -70,7 +70,7 @@ export default function CAServicesPage() {
     {
       title: "Trademark",
       description: "Protect your brand identity with our expert trademark registration and management services.",
-      icon: Trademark,
+      icon: ShieldCheck,
       href: "/ca-services/trademark",
       color: "bg-gradient-to-r from-blue-50 to-blue-100",
       delay: 1
@@ -120,8 +120,8 @@ export default function CAServicesPage() {
   return (
     <div className="py-8 md:py-12">
       <SectionHeading
-        title="CA Services"
-        subtitle="Comprehensive accounting and compliance solutions for your business"
+        heading="CA Services"
+        description="Comprehensive accounting and compliance solutions for your business"
         centered
       />
       

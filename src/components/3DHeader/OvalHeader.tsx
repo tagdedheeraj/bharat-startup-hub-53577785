@@ -1,8 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Certificate, Trademark, IndianRupee, FileText, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
+import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Shield, FileText, IndianRupee, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -81,13 +82,13 @@ const OvalHeader = () => {
       name: 'CA Services', 
       href: '/ca-services',
       children: [
-        { name: 'Certifications', href: '/ca-services/certifications', icon: Certificate },
-        { name: 'Trademark', href: '/ca-services/trademark', icon: Trademark },
+        { name: 'Certifications', href: '/ca-services/certifications', icon: Shield },
+        { name: 'Trademark', href: '/ca-services/trademark', icon: ShieldCheck },
         { name: 'Income Tax', href: '/ca-services/income-tax', icon: IndianRupee },
         { name: 'Accounting', href: '/ca-services/accounting', icon: FileText },
         { name: 'GST', href: '/ca-services/gst', icon: Receipt },
         { name: 'Payroll', href: '/ca-services/payroll', icon: FileSpreadsheet },
-        { name: 'Compliance', href: '/ca-services/compliance', icon: ShieldCheck }
+        { name: 'Compliance', href: '/ca-services/compliance', icon: Shield }
       ]
     },
     { 
