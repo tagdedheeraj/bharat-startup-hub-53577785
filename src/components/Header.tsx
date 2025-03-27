@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server, Shield, ShieldCheck, IndianRupee, FileText, Receipt, FileSpreadsheet } from 'lucide-react';
 import {
   NavigationMenu,
@@ -41,6 +41,17 @@ interface NavItemProps {
 }
 
 const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    if (toggleMobileMenu) toggleMobileMenu();
+    // Small delay to allow dropdown to close
+    setTimeout(() => {
+      navigate(path);
+    }, 10);
+  };
+
   if (children) {
     return (
       <NavigationMenuItem>
@@ -54,10 +65,10 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
             {children.map((item) => (
               <li key={item.to} className="group">
                 <NavigationMenuLink asChild>
-                  <Link
-                    to={item.to}
+                  <a
+                    href={item.to}
                     className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
-                    onClick={toggleMobileMenu}
+                    onClick={(e) => handleNavigation(item.to, e)}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
@@ -71,7 +82,7 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
                       </div>
                     </div>
                     <ArrowRight className="h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-brand-500" />
-                  </Link>
+                  </a>
                 </NavigationMenuLink>
               </li>
             ))}
@@ -105,6 +116,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
   
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -120,6 +132,20 @@ export default function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location]);
+
+  const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    toggleMobileMenu();
+    // Small delay to allow menu to close
+    setTimeout(() => {
+      navigate(path);
+    }, 10);
+  };
 
   const navigationItems = [
     { label: 'Home', to: '/' },
@@ -316,15 +342,15 @@ export default function Header() {
                   <div className="font-medium text-brand-700 mb-1">{item.label}</div>
                   <div className="ml-4 space-y-1">
                     {item.children.map((child) => (
-                      <Link
+                      <a
                         key={child.to}
-                        to={child.to}
+                        href={child.to}
                         className="flex items-center gap-2 py-1.5 text-sm text-gray-600 hover:text-brand-600 transition-colors"
-                        onClick={toggleMobileMenu}
+                        onClick={(e) => handleMobileItemClick(child.to, e)}
                       >
                         {child.icon && <child.icon size={16} className="text-brand-500" />}
                         {child.label}
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 </div>

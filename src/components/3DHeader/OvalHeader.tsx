@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
 import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Shield, FileText, IndianRupee, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
@@ -29,6 +29,7 @@ const OvalHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
 
   useEffect(() => {
@@ -42,25 +43,6 @@ const OvalHeader = () => {
 
   useEffect(() => {
     setMobileMenuOpen(false);
-    
-    const cleanupPortals = () => {
-      try {
-        const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
-        portals.forEach(portal => {
-          try {
-            portal.remove();
-          } catch (e) {
-            console.debug("Portal cleanup error:", e);
-          }
-        });
-      } catch (e) {
-        console.debug("Portal search error:", e);
-      }
-    };
-    
-    cleanupPortals();
-    
-    return cleanupPortals;
   }, [location]);
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
@@ -109,44 +91,12 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  const safeNavigate = (e: React.MouseEvent, href: string) => {
+  const handleNavigation = (href: string, e: React.MouseEvent) => {
     e.preventDefault();
-    
-    try {
-      const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
-      portals.forEach(portal => {
-        try {
-          portal.remove();
-        } catch (e) {
-          console.debug("Pre-navigation portal cleanup error:", e);
-        }
-      });
-    } catch (e) {
-      console.debug("Pre-navigation portal search error:", e);
-    }
-    
+    // Small delay to allow dropdown to close
     setTimeout(() => {
-      window.location.href = href;
-    }, 50);
-  };
-
-  const handleDropdownItemClick = (href: string) => {
-    try {
-      const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
-      portals.forEach(portal => {
-        try {
-          portal.remove();
-        } catch (e) {
-          console.debug("Dropdown click portal cleanup error:", e);
-        }
-      });
-    } catch (e) {
-      console.debug("Dropdown click portal search error:", e);
-    }
-    
-    setTimeout(() => {
-      window.location.href = href;
-    }, 50);
+      navigate(href);
+    }, 10);
   };
 
   return (
@@ -198,7 +148,7 @@ const OvalHeader = () => {
                   >
                     <div className="px-1 py-1 space-y-1">
                       {item.children.map((child) => (
-                        <DropdownMenuItem key={child.name} asChild onClick={() => handleDropdownItemClick(child.href)}>
+                        <DropdownMenuItem key={child.name} asChild onClick={(e: React.MouseEvent) => handleNavigation(child.href, e)}>
                           <div
                             className={cn(
                               "flex items-center rounded-lg px-3 py-3 text-sm font-medium cursor-pointer transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
@@ -272,7 +222,7 @@ const OvalHeader = () => {
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               size="sm"
-              onClick={(e) => safeNavigate(e, '/contact')}
+              onClick={(e) => handleNavigation('/contact', e)}
             >
               Get Started
             </Button>
@@ -306,17 +256,21 @@ const OvalHeader = () => {
                   </div>
                   <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
                     {item.children.map((child) => (
-                      <div
+                      <a
                         key={child.name}
+                        href={child.href}
                         className={cn(
                           "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center cursor-pointer",
                           isActive(child.href) 
                             ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                             : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                         )}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
                           toggleMobileMenu();
-                          handleDropdownItemClick(child.href);
+                          setTimeout(() => {
+                            navigate(child.href);
+                          }, 10);
                         }}
                       >
                         {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
@@ -325,7 +279,7 @@ const OvalHeader = () => {
                           isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
                         )}></div>
                         {child.name}
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
@@ -345,10 +299,17 @@ const OvalHeader = () => {
                 </Link>
               )
             ))}
-            <div onClick={() => handleDropdownItemClick('/contact')} className="w-full cursor-pointer">
+            <div className="w-full cursor-pointer">
               <Button 
                 className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                   border border-india-white/30 transition-all"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleMobileMenu();
+                  setTimeout(() => {
+                    navigate('/contact');
+                  }, 10);
+                }}
               >
                 Get Started
               </Button>

@@ -59,29 +59,6 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
-  // Add cleanup function when component unmounts
-  React.useEffect(() => {
-    return () => {
-      // Find and safely remove any orphaned portal elements
-      try {
-        const portals = document.querySelectorAll('[data-radix-dropdown-menu-content]');
-        portals.forEach(portal => {
-          try {
-            if (portal && document.body.contains(portal)) {
-              portal.remove();
-            }
-          } catch (e) {
-            // Silent fail for any removal issues
-            console.debug("Portal cleanup error:", e);
-          }
-        });
-      } catch (e) {
-        // Silent fail
-        console.debug("Portal search error:", e);
-      }
-    };
-  }, []);
-
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
@@ -91,12 +68,10 @@ const DropdownMenuContent = React.forwardRef<
           "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           className
         )}
-        // Add an attribute to make it easier to find this element
-        data-radix-dropdown-menu-content
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
-  );
+  )
 })
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 
