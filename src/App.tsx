@@ -22,6 +22,16 @@ import BlogsPage from "./pages/more/Blogs";
 import CompliancePage from "./pages/more/Compliance";
 import NotFound from "./pages/NotFound";
 
+// CA Services Pages
+import CAServicesPage from "./pages/services/CAServices";
+import CertificationsPage from "./pages/services/ca/Certifications";
+import TrademarkPage from "./pages/services/ca/Trademark";
+import IncomeTaxPage from "./pages/services/ca/IncomeTax";
+import AccountingPage from "./pages/services/ca/Accounting";
+import GSTServicesPage from "./pages/services/ca/GSTServices";
+import PayrollPage from "./pages/services/ca/Payroll";
+import CACompliancePage from "./pages/services/ca/Compliance";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,6 +48,17 @@ const App = () => (
             <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
             <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
             <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
+            
+            {/* CA Services Routes */}
+            <Route path="/services/ca-services" element={<CAServicesPage />} />
+            <Route path="/services/ca-services/certifications" element={<CertificationsPage />} />
+            <Route path="/services/ca-services/trademark" element={<TrademarkPage />} />
+            <Route path="/services/ca-services/income-tax" element={<IncomeTaxPage />} />
+            <Route path="/services/ca-services/accounting" element={<AccountingPage />} />
+            <Route path="/services/ca-services/gst-services" element={<GSTServicesPage />} />
+            <Route path="/services/ca-services/payroll" element={<PayrollPage />} />
+            <Route path="/services/ca-services/compliance" element={<CACompliancePage />} />
+            
             <Route path="/success-stories" element={<SuccessStoriesPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/more/experts" element={<ExpertsPage />} />

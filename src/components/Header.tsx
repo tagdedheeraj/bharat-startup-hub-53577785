@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, FileText, Receipt, Certificate, Shield, Briefcase } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -138,13 +138,19 @@ export default function Header() {
           label: 'Certificate Marketing', 
           to: '/services/certificate-marketing',
           description: 'Enhance your market presence with professional certification services',
-          icon: Globe
+          icon: Certificate
         },
         { 
           label: 'Legal Consultation', 
           to: '/services/legal-consultation',
           description: 'Expert legal advice tailored for startups and MSMEs',
-          icon: LifeBuoy
+          icon: Shield
+        },
+        { 
+          label: 'CA Services', 
+          to: '/services/ca-services',
+          description: 'Comprehensive accounting and taxation services for businesses',
+          icon: Receipt
         },
       ],
     },
@@ -154,11 +160,11 @@ export default function Header() {
       label: 'More',
       to: '/more',
       children: [
-        { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: LifeBuoy },
+        { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: Briefcase },
         { label: 'MSME Events', to: '/more/msme-events', description: 'Upcoming events and workshops for MSMEs', icon: BellRing },
-        { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: LifeBuoy },
-        { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: LifeBuoy },
-        { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Globe },
+        { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: FileText },
+        { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: FileText },
+        { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Shield },
       ],
     },
   ];

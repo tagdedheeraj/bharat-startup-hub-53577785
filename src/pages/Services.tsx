@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Scale, FileCheck, Landmark, Search, PieChart } from 'lucide-react';
+import { ArrowRight, TrendingUp, Scale, FileText, Landmark, Search, PieChart, Receipt, Certificate, Shield, Briefcase } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const ServicesPage = () => {
@@ -12,7 +12,7 @@ const ServicesPage = () => {
       link: "/services/funding-consultation"
     },
     {
-      icon: <FileCheck className="h-8 w-8 text-brand-600" />,
+      icon: <Certificate className="h-8 w-8 text-brand-600" />,
       title: "Certificate Marketing",
       description: "Enhance your business credibility and market position with proper certification and marketing strategies.",
       link: "/services/certificate-marketing"
@@ -22,6 +22,12 @@ const ServicesPage = () => {
       title: "Legal Consultation",
       description: "Navigate complex legal frameworks with our expert guidance on compliance, contracts, and regulations.",
       link: "/services/legal-consultation"
+    },
+    {
+      icon: <Receipt className="h-8 w-8 text-brand-600" />,
+      title: "CA Services",
+      description: "Comprehensive accounting, taxation, and compliance services for businesses and individuals.",
+      link: "/services/ca-services"
     },
     {
       icon: <Landmark className="h-8 w-8 text-brand-600" />,
@@ -34,12 +40,33 @@ const ServicesPage = () => {
       title: "Market Research",
       description: "Get data-driven insights about your market, competitors, and target audience to make informed decisions.",
       link: "/services"
+    }
+  ];
+
+  const caServices = [
+    {
+      icon: <Certificate className="h-8 w-8 text-brand-600" />,
+      title: "Certifications",
+      description: "Obtain essential business certifications to enhance your credibility and market presence.",
+      link: "/services/ca-services/certifications"
     },
     {
-      icon: <PieChart className="h-8 w-8 text-brand-600" />,
-      title: "Business Planning",
-      description: "Develop comprehensive business plans and strategies to achieve your growth objectives.",
-      link: "/services"
+      icon: <Briefcase className="h-8 w-8 text-brand-600" />,
+      title: "Trademark Registration",
+      description: "Protect your brand identity with trademark registration and intellectual property services.",
+      link: "/services/ca-services/trademark"
+    },
+    {
+      icon: <FileText className="h-8 w-8 text-brand-600" />,
+      title: "Income Tax Services",
+      description: "Comprehensive income tax planning, filing, and compliance services for businesses and individuals.",
+      link: "/services/ca-services/income-tax"
+    },
+    {
+      icon: <Receipt className="h-8 w-8 text-brand-600" />,
+      title: "Accounting Services",
+      description: "Professional bookkeeping, financial statement preparation, and accounting services.",
+      link: "/services/ca-services/accounting"
     }
   ];
 
@@ -89,8 +116,45 @@ const ServicesPage = () => {
         </div>
       </section>
 
+      {/* CA Services Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            subheading="CA SERVICES"
+            heading="Professional Accounting & Tax Solutions"
+            description="Our comprehensive CA services to help your business maintain financial health and compliance."
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+            {caServices.map((service, index) => (
+              <div 
+                key={index} 
+                className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              >
+                <div className="bg-brand-50 p-3 rounded-xl inline-block mb-4">
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
+                <Link to={service.link} className="inline-flex items-center text-brand-600 text-sm font-medium hover:text-brand-700">
+                  View Details
+                  <ArrowRight size={14} className="ml-1 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-10">
+            <Link to="/services/ca-services" className="btn-primary inline-flex items-center">
+              View All CA Services
+              <ArrowRight size={16} className="ml-2" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Main Services Detail */}
-      <section className="bg-gray-50 py-16 md:py-24">
+      <section className="bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="DETAILED SERVICES"
