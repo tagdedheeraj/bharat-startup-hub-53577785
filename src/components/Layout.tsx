@@ -5,6 +5,7 @@ import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -16,6 +17,31 @@ export default function Layout({ children }: LayoutProps) {
   
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
+  
+  // Run once on component mount to remove any dynamically added badges
+  useEffect(() => {
+    const removeBadges = () => {
+      // Find and remove any badges that might have been injected
+      const badges = document.querySelectorAll(
+        '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
+      );
+      
+      badges.forEach((badge) => {
+        if (badge.parentNode) {
+          badge.parentNode.removeChild(badge);
+        }
+      });
+    };
+    
+    // Run immediately
+    removeBadges();
+    
+    // Also set up an interval to continuously check and remove
+    const interval = setInterval(removeBadges, 1000);
+    
+    // Clean up
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>
