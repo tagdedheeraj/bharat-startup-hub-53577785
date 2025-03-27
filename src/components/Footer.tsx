@@ -1,7 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { Button } from './ui/button';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -52,9 +51,6 @@ export default function Footer() {
                 <Link to="/services" className="text-gray-300 hover:text-white transition-colors">Services</Link>
               </li>
               <li>
-                <Link to="/services/ca-services" className="text-gray-300 hover:text-white transition-colors">CA Services</Link>
-              </li>
-              <li>
                 <Link to="/it-solutions" className="text-gray-300 hover:text-white transition-colors">IT Solutions</Link>
               </li>
               <li>
@@ -88,16 +84,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/services/ca-services/certifications" className="text-gray-300 hover:text-white transition-colors">
-                  Certifications
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/ca-services/gst" className="text-gray-300 hover:text-white transition-colors">
-                  GST Services
-                </Link>
-              </li>
-              <li>
                 <Link to="/more/compliance" className="text-gray-300 hover:text-white transition-colors">
                   Compliance Services
                 </Link>
@@ -125,11 +111,6 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-            <div className="mt-6">
-              <Button asChild className="w-full bg-white text-gray-900 hover:bg-gray-200">
-                <Link to="/contact">Contact Us Now</Link>
-              </Button>
-            </div>
           </div>
         </div>
         
