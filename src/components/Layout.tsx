@@ -1,11 +1,10 @@
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -24,8 +23,6 @@ export default function Layout({ children }: LayoutProps) {
     // Function to safely check if an element exists in the DOM
     const elementExists = (element: Element | null): boolean => {
       if (!element) return false;
-      
-      // Check if the element is connected to the document
       return document.contains(element);
     };
     
@@ -65,12 +62,7 @@ export default function Layout({ children }: LayoutProps) {
           '.lovable-badge',
           '.lovable-edit-button',
           '#lovable-badge',
-          '#gptengineer-select-button',
-          // Additional selectors for potential dynamic elements
-          '[class*="LovableBadge"]',
-          '[id*="LovableBadge"]',
-          '[class^="Badge_"]',
-          'div[role="dialog"]'
+          '#gptengineer-select-button'
         ];
         
         // Query all selectors at once
@@ -81,41 +73,13 @@ export default function Layout({ children }: LayoutProps) {
           try {
             const badges = document.querySelectorAll(allSelectors);
             
-            let removedCount = 0;
             badges.forEach((badge) => {
-              const removed = safeRemoveElement(badge);
-              if (removed) removedCount++;
+              safeRemoveElement(badge);
             });
-            
-            // If we've removed badges, log success message
-            if (removedCount > 0) {
-              console.debug(`Successfully removed ${removedCount} badge elements`);
-            }
           } catch (queryError) {
             console.debug("Error in badge query selection:", queryError);
           }
         }
-        
-        // Also try to detect and remove any iframes that might be added dynamically
-        try {
-          const iframes = document.querySelectorAll('iframe:not([src]), iframe[allow*="clipboard-write"]');
-          iframes.forEach((iframe) => {
-            safeRemoveElement(iframe);
-          });
-        } catch (iframeError) {
-          console.debug("Error removing iframes:", iframeError);
-        }
-        
-        // Look for and remove portal containers
-        try {
-          const portals = document.querySelectorAll('[id*="portal"], [id*="lovable-root"], [id*="gptengineer-root"]');
-          portals.forEach((portal) => {
-            safeRemoveElement(portal);
-          });
-        } catch (portalError) {
-          console.debug("Error removing portals:", portalError);
-        }
-        
       } catch (error) {
         // Catch any errors that might occur during the badge removal process
         console.debug("Error in badge removal:", error);
@@ -126,7 +90,6 @@ export default function Layout({ children }: LayoutProps) {
     setTimeout(removeBadges, 0);
     
     // Set up an interval to check periodically, but with a reasonable interval
-    // to reduce potential performance impact
     if (cleanupIntervalRef.current) {
       window.clearInterval(cleanupIntervalRef.current);
       cleanupIntervalRef.current = null;

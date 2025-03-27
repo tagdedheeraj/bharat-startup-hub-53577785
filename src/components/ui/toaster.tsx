@@ -1,3 +1,4 @@
+
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
@@ -7,9 +8,23 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import { useEffect, useState } from "react"
 
 export function Toaster() {
   const { toasts } = useToast()
+  const [mountedToasts, setMountedToasts] = useState(false)
+
+  // Delay mounting toasts to ensure DOM is ready
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMountedToasts(true)
+    }, 100)
+    return () => clearTimeout(timeout)
+  }, [])
+
+  if (!mountedToasts) {
+    return null
+  }
 
   return (
     <ToastProvider>
