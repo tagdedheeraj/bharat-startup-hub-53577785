@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Award, Shield, Briefcase, FileText, Receipt } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -137,19 +138,13 @@ export default function Header() {
           label: 'Certificate Marketing', 
           to: '/services/certificate-marketing',
           description: 'Enhance your market presence with professional certification services',
-          icon: Award
+          icon: Globe
         },
         { 
           label: 'Legal Consultation', 
           to: '/services/legal-consultation',
           description: 'Expert legal advice tailored for startups and MSMEs',
-          icon: Shield
-        },
-        { 
-          label: 'CA Services', 
-          to: '/services/ca-services',
-          description: 'Comprehensive accounting and taxation services for businesses',
-          icon: Receipt
+          icon: LifeBuoy
         },
       ],
     },
@@ -159,11 +154,11 @@ export default function Header() {
       label: 'More',
       to: '/more',
       children: [
-        { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: Briefcase },
+        { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: LifeBuoy },
         { label: 'MSME Events', to: '/more/msme-events', description: 'Upcoming events and workshops for MSMEs', icon: BellRing },
-        { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: FileText },
-        { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: FileText },
-        { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Shield },
+        { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: LifeBuoy },
+        { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: LifeBuoy },
+        { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Globe },
       ],
     },
   ];
@@ -176,6 +171,7 @@ export default function Header() {
           : 'bg-white'
       }`}
     >
+      {/* Top Bar with animated gradient background */}
       <div className="hidden sm:block relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 animate-gradient-x"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -205,10 +201,12 @@ export default function Header() {
         </div>
       </div>
       
+      {/* Main Navigation with glass effect when scrolled */}
       <nav className={`container mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
         <div className="flex justify-between items-center">
           <Logo />
           
+          {/* Desktop Menu */}
           <div className="hidden lg:block">
             <NavigationMenu>
               <NavigationMenuList className="flex space-x-1">
@@ -241,6 +239,7 @@ export default function Header() {
             </Button>
           </div>
           
+          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-2">
             <Button variant="ghost" size="icon" className="text-foreground/70">
               <Search size={20} />
@@ -256,6 +255,7 @@ export default function Header() {
         </div>
       </nav>
       
+      {/* Mobile Menu with smooth animation */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           mobileMenuOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
