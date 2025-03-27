@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, FileText, Receipt, Certificate, Shield, Briefcase } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Award, Shield, Briefcase, FileText, Receipt } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -138,7 +137,7 @@ export default function Header() {
           label: 'Certificate Marketing', 
           to: '/services/certificate-marketing',
           description: 'Enhance your market presence with professional certification services',
-          icon: Certificate
+          icon: Award
         },
         { 
           label: 'Legal Consultation', 
@@ -177,7 +176,6 @@ export default function Header() {
           : 'bg-white'
       }`}
     >
-      {/* Top Bar with animated gradient background */}
       <div className="hidden sm:block relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 animate-gradient-x"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -207,12 +205,10 @@ export default function Header() {
         </div>
       </div>
       
-      {/* Main Navigation with glass effect when scrolled */}
       <nav className={`container mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
         <div className="flex justify-between items-center">
           <Logo />
           
-          {/* Desktop Menu */}
           <div className="hidden lg:block">
             <NavigationMenu>
               <NavigationMenuList className="flex space-x-1">
@@ -245,7 +241,6 @@ export default function Header() {
             </Button>
           </div>
           
-          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-2">
             <Button variant="ghost" size="icon" className="text-foreground/70">
               <Search size={20} />
@@ -261,7 +256,6 @@ export default function Header() {
         </div>
       </nav>
       
-      {/* Mobile Menu with smooth animation */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           mobileMenuOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'

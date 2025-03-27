@@ -1,12 +1,11 @@
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, Certificate, FileText, Receipt, Shield, Briefcase } from 'lucide-react';
+import { ArrowRight, Award, FileText, Receipt, Shield, Briefcase } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const CAServicesPage = () => {
   const services = [
     {
-      icon: <Certificate className="h-8 w-8 text-brand-600" />,
+      icon: <Award className="h-8 w-8 text-brand-600" />,
       title: "Certifications",
       description: "Obtain essential business certifications to enhance your credibility and market presence.",
       link: "/services/ca-services/certifications"

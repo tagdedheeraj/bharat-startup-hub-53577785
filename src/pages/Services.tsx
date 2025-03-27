@@ -1,6 +1,5 @@
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Scale, FileText, Landmark, Search, PieChart, Receipt, Certificate, Shield, Briefcase } from 'lucide-react';
+import { ArrowRight, TrendingUp, Scale, FileText, Landmark, Search, PieChart, Receipt, Award, Shield, Briefcase } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const ServicesPage = () => {
@@ -12,7 +11,7 @@ const ServicesPage = () => {
       link: "/services/funding-consultation"
     },
     {
-      icon: <Certificate className="h-8 w-8 text-brand-600" />,
+      icon: <Award className="h-8 w-8 text-brand-600" />,
       title: "Certificate Marketing",
       description: "Enhance your business credibility and market position with proper certification and marketing strategies.",
       link: "/services/certificate-marketing"
@@ -45,7 +44,7 @@ const ServicesPage = () => {
 
   const caServices = [
     {
-      icon: <Certificate className="h-8 w-8 text-brand-600" />,
+      icon: <Award className="h-8 w-8 text-brand-600" />,
       title: "Certifications",
       description: "Obtain essential business certifications to enhance your credibility and market presence.",
       link: "/services/ca-services/certifications"

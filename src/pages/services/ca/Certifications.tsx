@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Certificate, Check } from 'lucide-react';
+import { ArrowRight, Award, Check } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const CertificationsPage = () => {
@@ -65,7 +65,7 @@ const CertificationsPage = () => {
                 className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
               >
                 <div className="bg-brand-50 p-4 rounded-xl inline-block mb-6">
-                  <Certificate className="h-8 w-8 text-brand-600" />
+                  <Award className="h-8 w-8 text-brand-600" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{cert.title}</h3>
                 <p className="text-gray-600 mb-6">{cert.description}</p>
