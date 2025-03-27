@@ -21,6 +21,8 @@ import ReviewsPage from "./pages/more/Reviews";
 import BlogsPage from "./pages/more/Blogs";
 import CompliancePage from "./pages/more/Compliance";
 import NotFound from "./pages/NotFound";
+import ITSolutionsPage from "./pages/ITSolutions";
+import FAQsPage from "./pages/FAQs";
 
 const queryClient = new QueryClient();
 
@@ -38,8 +40,10 @@ const App = () => (
             <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
             <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
             <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
+            <Route path="/it-solutions" element={<ITSolutionsPage />} />
             <Route path="/success-stories" element={<SuccessStoriesPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faqs" element={<FAQsPage />} />
             <Route path="/more/experts" element={<ExpertsPage />} />
             <Route path="/more/msme-events" element={<MSMEEventsPage />} />
             <Route path="/more/reviews" element={<ReviewsPage />} />

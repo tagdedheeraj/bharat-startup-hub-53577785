@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Server } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -44,7 +44,6 @@ const OvalHeader = () => {
 
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
     { 
       name: 'Services', 
       href: '/services',
@@ -54,6 +53,7 @@ const OvalHeader = () => {
         { name: 'Legal Consultation', href: '/services/legal-consultation' }
       ]
     },
+    { name: 'IT Solutions', href: '/it-solutions' },
     { name: 'Success Stories', href: '/success-stories' },
     { 
       name: 'More', 

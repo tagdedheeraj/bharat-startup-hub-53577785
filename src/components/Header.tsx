@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -123,7 +123,6 @@ export default function Header() {
 
   const navigationItems = [
     { label: 'Home', to: '/' },
-    { label: 'About', to: '/about' },
     {
       label: 'Services',
       to: '/services',
@@ -148,6 +147,7 @@ export default function Header() {
         },
       ],
     },
+    { label: 'IT Solutions', to: '/it-solutions' },
     { label: 'Success Stories', to: '/success-stories' },
     { label: 'Contact Us', to: '/contact' },
     {
