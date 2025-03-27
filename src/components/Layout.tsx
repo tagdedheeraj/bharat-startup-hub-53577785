@@ -1,11 +1,10 @@
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -53,6 +52,38 @@ export default function Layout({ children }: LayoutProps) {
     // Clean up
     return () => clearInterval(interval);
   }, []);
+
+  // Clean up any portal elements when routes change
+  useEffect(() => {
+    // Create a function to clean up any orphaned portal elements
+    const cleanupPortalElements = () => {
+      try {
+        // Target common portal containers
+        const portalElements = document.querySelectorAll('[data-radix-portal]');
+        
+        portalElements.forEach((element) => {
+          // Only remove portal elements that aren't connected to the active DOM
+          if (element && !document.body.contains(element)) {
+            try {
+              element.remove();
+            } catch (e) {
+              console.debug("Could not remove portal element:", e);
+            }
+          }
+        });
+      } catch (error) {
+        console.debug("Error during portal cleanup:", error);
+      }
+    };
+    
+    // Run cleanup when location changes
+    cleanupPortalElements();
+    
+    return () => {
+      // Extra cleanup on unmount
+      cleanupPortalElements();
+    };
+  }, [location]);
   
   return (
     <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>

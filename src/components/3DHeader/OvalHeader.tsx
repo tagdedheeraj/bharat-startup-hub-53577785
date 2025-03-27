@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Server } from 'lucide-react';
+import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -40,6 +40,30 @@ const OvalHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu on location change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    
+    // Cleanup function to handle any dropdown portals when location changes
+    return () => {
+      try {
+        const portals = document.querySelectorAll('[data-radix-portal]');
+        portals.forEach(portal => {
+          try {
+            if (portal && document.body.contains(portal)) {
+              document.body.removeChild(portal);
+            }
+          } catch (e) {
+            // Silent fail for portal removal
+            console.debug("Portal cleanup error:", e);
+          }
+        });
+      } catch (e) {
+        // Silent fail
+      }
+    };
+  }, [location]);
+
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const navItems = [
@@ -71,6 +95,30 @@ const OvalHeader = () => {
   const isActive = (path: string) => {
     if (path === '/') return currentPath === '/';
     return currentPath.startsWith(path);
+  };
+
+  // Helper function to safely navigate using Link
+  const safeNavigate = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    
+    // Clean up any portal elements before navigation
+    try {
+      const portals = document.querySelectorAll('[data-radix-portal]');
+      portals.forEach(portal => {
+        try {
+          portal.remove();
+        } catch (e) {
+          // Silent fail
+        }
+      });
+    } catch (e) {
+      // Silent fail
+    }
+    
+    // Small delay to ensure cleanup completes
+    setTimeout(() => {
+      window.location.href = href;
+    }, 50);
   };
 
   return (
@@ -122,6 +170,7 @@ const OvalHeader = () => {
                     className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
                       border border-india-white/40 text-black rounded-xl w-60 p-2
                       shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
+                    forceMount={true}
                   >
                     <div className="px-1 py-1 space-y-1">
                       {item.children.map((child) => (
@@ -134,6 +183,17 @@ const OvalHeader = () => {
                                 ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
                                 : "text-black/90 hover:text-black"
                             )}
+                            onClick={(e) => {
+                              // Force close any open portals before navigation
+                              const portals = document.querySelectorAll('[data-radix-portal]');
+                              portals.forEach(portal => {
+                                try {
+                                  portal.remove();
+                                } catch (e) {
+                                  // Silent fail
+                                }
+                              });
+                            }}
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
@@ -200,7 +260,7 @@ const OvalHeader = () => {
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               size="sm"
-              onClick={() => window.location.href = '/contact'}
+              onClick={(e) => safeNavigate(e, '/contact')}
             >
               Get Started
             </Button>
@@ -272,7 +332,10 @@ const OvalHeader = () => {
                 </Link>
               )
             ))}
-            <Link to="/contact" onClick={toggleMobileMenu} className="w-full">
+            <Link to="/contact" onClick={(e) => {
+              toggleMobileMenu();
+              safeNavigate(e, '/contact');
+            }} className="w-full">
               <Button 
                 className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                   border border-india-white/30 transition-all"

@@ -1,10 +1,39 @@
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import OvalEffect from './OvalEffect';
 
 export default function Scene() {
+  const [isClient, setIsClient] = useState(false);
+
+  // Make sure we only render the Canvas on the client side
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Cleanup for the Three.js context when unmounting
+    return () => {
+      // Force cleanup of any WebGL contexts that might be lingering
+      const canvases = document.querySelectorAll('canvas');
+      canvases.forEach(canvas => {
+        const context = canvas.getContext('webgl') || canvas.getContext('webgl2');
+        if (context && 'getExtension' in context) {
+          try {
+            // @ts-ignore - we know this is a WebGL context
+            context.getExtension('WEBGL_lose_context')?.loseContext();
+          } catch (e) {
+            // Silent fail
+          }
+        }
+      });
+    };
+  }, []);
+
+  // Don't render on server or during hydration
+  if (!isClient) {
+    return <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden"></div>;
+  }
+
   return (
     <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden">
       <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
