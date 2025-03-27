@@ -48,7 +48,7 @@ const FAQs = () => {
       <SectionHeading
         heading="Frequently Asked Questions"
         subheading="Find answers to common questions about our services"
-        centered
+        align="center"
       />
       
       <div className="mt-8 max-w-3xl mx-auto">

@@ -41,7 +41,7 @@ const ITSolutions = () => {
       <SectionHeading
         heading="IT Solutions"
         subheading="Comprehensive IT services for businesses of all sizes"
-        centered
+        align="center"
       />
       
       <div className="mt-12">
