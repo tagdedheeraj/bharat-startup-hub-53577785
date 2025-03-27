@@ -50,8 +50,7 @@ const OvalHeader = () => {
       children: [
         { name: 'Funding Consultation', href: '/services/funding-consultation' },
         { name: 'Certificate Marketing', href: '/services/certificate-marketing' },
-        { name: 'Legal Consultation', href: '/services/legal-consultation' },
-        { name: 'CA Services', href: '/services/ca-services' }
+        { name: 'Legal Consultation', href: '/services/legal-consultation' }
       ]
     },
     { name: 'IT Solutions', href: '/it-solutions' },
@@ -64,8 +63,7 @@ const OvalHeader = () => {
         { name: 'MSME Events', href: '/more/msme-events' },
         { name: 'Reviews', href: '/more/reviews' },
         { name: 'Blogs', href: '/more/blogs' },
-        { name: 'Compliance', href: '/more/compliance' },
-        { name: 'FAQs', href: '/faqs' }
+        { name: 'Compliance', href: '/more/compliance' }
       ]
     },
     { name: 'Contact', href: '/contact' }

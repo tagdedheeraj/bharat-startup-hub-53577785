@@ -1,14 +1,12 @@
 
-import { Suspense, useRef, useEffect } from 'react';
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import OvalEffect from './OvalEffect';
 
 export default function Scene() {
-  const canvasRef = useRef<HTMLDivElement>(null);
-
   return (
-    <div ref={canvasRef} className="absolute inset-0 -z-10 h-full w-full overflow-hidden">
+    <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden">
       <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 5]} intensity={1} />

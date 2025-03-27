@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Scale, FileCheck, Landmark, Search, PieChart, Calculator } from 'lucide-react';
+import { ArrowRight, TrendingUp, Scale, FileCheck, Landmark, Search, PieChart } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const ServicesPage = () => {
@@ -24,12 +24,6 @@ const ServicesPage = () => {
       link: "/services/legal-consultation"
     },
     {
-      icon: <Calculator className="h-8 w-8 text-brand-600" />,
-      title: "CA Services",
-      description: "Comprehensive chartered accountant services including taxation, accounting, GST, and compliance.",
-      link: "/services/ca-services"
-    },
-    {
       icon: <Landmark className="h-8 w-8 text-brand-600" />,
       title: "MSME Registration",
       description: "Simplify your MSME registration process and access government schemes and benefits.",
@@ -39,6 +33,12 @@ const ServicesPage = () => {
       icon: <Search className="h-8 w-8 text-brand-600" />,
       title: "Market Research",
       description: "Get data-driven insights about your market, competitors, and target audience to make informed decisions.",
+      link: "/services"
+    },
+    {
+      icon: <PieChart className="h-8 w-8 text-brand-600" />,
+      title: "Business Planning",
+      description: "Develop comprehensive business plans and strategies to achieve your growth objectives.",
       link: "/services"
     }
   ];
