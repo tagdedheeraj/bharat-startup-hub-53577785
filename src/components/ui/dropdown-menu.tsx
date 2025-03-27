@@ -59,12 +59,33 @@ const DropdownMenuContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
   React.useEffect(() => {
-    return () => {
+    const initialCleanup = () => {
       try {
-        const cleanup = () => {
+        const portals = document.querySelectorAll('[data-radix-portal]');
+        portals.forEach(portal => {
+          if ((!portal.hasChildNodes() || portal.getAttribute('aria-hidden') === 'true') && document.body.contains(portal)) {
+            try {
+              document.body.removeChild(portal);
+            } catch (e) {
+              console.debug("Portal cleanup on mount failed:", e);
+            }
+          }
+        });
+      } catch (e) {
+        console.debug("Error in initial portal cleanup:", e);
+      }
+    };
+    
+    initialCleanup();
+    
+    setTimeout(initialCleanup, 50);
+    
+    return () => {
+      const cleanup = () => {
+        try {
           const portals = document.querySelectorAll('[data-radix-portal]');
           portals.forEach(portal => {
-            if (!portal.hasChildNodes() && document.body.contains(portal)) {
+            if (document.body.contains(portal)) {
               try {
                 document.body.removeChild(portal);
               } catch (e) {
@@ -72,13 +93,26 @@ const DropdownMenuContent = React.forwardRef<
               }
             }
           });
-        };
-        
-        cleanup();
-        setTimeout(cleanup, 50);
-      } catch (e) {
-        console.debug("Error in portal cleanup:", e);
-      }
+          
+          const menus = document.querySelectorAll('[role="menu"]');
+          menus.forEach(menu => {
+            if (menu.parentElement && document.body.contains(menu.parentElement)) {
+              try {
+                menu.parentElement.removeChild(menu);
+              } catch (e) {
+                console.debug("Menu cleanup failed:", e);
+              }
+            }
+          });
+        } catch (e) {
+          console.debug("Error in portal cleanup:", e);
+        }
+      };
+      
+      cleanup();
+      setTimeout(cleanup, 10);
+      setTimeout(cleanup, 50);
+      setTimeout(cleanup, 100);
     };
   }, []);
   

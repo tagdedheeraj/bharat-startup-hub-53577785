@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface NavDropdownItem {
   name: string;
@@ -26,16 +26,24 @@ interface NavDropdownProps {
 const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const navigationInProgress = useRef(false);
 
   // Close dropdown when route changes
   useEffect(() => {
+    if (open) setOpen(false);
+    navigationInProgress.current = false;
+    
     return () => {
       setOpen(false);
     };
-  }, []);
+  }, [location.pathname]);
 
   // Handle portal cleanup before navigation
   const handleNavigation = (path: string) => {
+    // Prevent multiple navigations
+    if (navigationInProgress.current) return;
+    navigationInProgress.current = true;
+    
     // Close dropdown first
     setOpen(false);
     
@@ -43,7 +51,7 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
     const cleanup = () => {
       try {
         // Find and clean up any dropdown portals
-        document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+        document.querySelectorAll('[data-radix-portal], [role="menu"]').forEach(portal => {
           try {
             if (document.body.contains(portal)) {
               document.body.removeChild(portal);
@@ -65,7 +73,12 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
       // Run one more cleanup before navigating
       cleanup();
       navigate(path);
-    }, 100);
+      
+      // Reset navigation flag after a delay
+      setTimeout(() => {
+        navigationInProgress.current = false;
+      }, 500);
+    }, 150);
   };
 
   return (
@@ -100,6 +113,7 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
           // Prevent focus events that might cause issues with portal removal
           e.preventDefault();
         }}
+        forceMount // Force mount to prevent remove/add cycles
       >
         <div className="px-1 py-1 space-y-1">
           {children.map((child) => (

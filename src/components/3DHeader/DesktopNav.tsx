@@ -1,5 +1,6 @@
 
-import { useLocation, useNavigate, useEffect } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import NavLink from './NavLink';
 import NavDropdown from './NavDropdown';
@@ -46,6 +47,7 @@ const DesktopNav = ({ navItems }: DesktopNavProps) => {
       cleanupPortals();
       // Do it again after a small delay
       setTimeout(cleanupPortals, 50);
+      setTimeout(cleanupPortals, 150);
     };
   }, []);
 
