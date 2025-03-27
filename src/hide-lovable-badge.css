@@ -88,11 +88,9 @@ body::after {
   animation: blockLovable 0.1s infinite;
 }
 
-/* Fix Radix UI Portal issues that may be causing DOM errors */
-:root {
-  --radix-dropdown-menu-content-transform-origin: var(--radix-popper-transform-origin);
-  --radix-dropdown-menu-content-available-width: var(--radix-popper-available-width);
-  --radix-dropdown-menu-content-available-height: var(--radix-popper-available-height);
-  --radix-dropdown-menu-trigger-width: var(--radix-popper-anchor-width);
-  --radix-dropdown-menu-trigger-height: var(--radix-popper-anchor-height);
+/* Ensure scripts injecting lovable are blocked from the DOM */
+script[src*="lovable"],
+script[src*="gptengineer"],
+script[src*="gpteng"] {
+  display: none !important;
 }
