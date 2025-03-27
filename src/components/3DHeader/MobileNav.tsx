@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
@@ -25,6 +25,11 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="lg:hidden">

@@ -1,11 +1,10 @@
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -43,16 +42,44 @@ export default function Layout({ children }: LayoutProps) {
       }
     };
     
+    // Clean up any orphaned portal elements that could cause React errors
+    const cleanupPortals = () => {
+      try {
+        // Find any orphaned portal elements
+        const portalElements = document.querySelectorAll('[data-radix-portal]');
+        
+        portalElements.forEach((portal) => {
+          // Only remove portal elements that are orphaned (no parent component)
+          if (portal && !portal.hasChildNodes()) {
+            try {
+              document.body.removeChild(portal);
+            } catch (e) {
+              // Portal might already be gone
+              console.debug("Could not remove portal element:", e);
+            }
+          }
+        });
+      } catch (error) {
+        console.debug("Error cleaning up portals:", error);
+      }
+    };
+    
     // Run immediately
     removeBadges();
+    cleanupPortals();
     
     // Also set up an interval to continuously check and remove, but with a longer interval
     // to reduce potential performance impact
-    const interval = setInterval(removeBadges, 2000);
+    const badgeInterval = setInterval(removeBadges, 2000);
+    const portalInterval = setInterval(cleanupPortals, 1000);
     
     // Clean up
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(badgeInterval);
+      clearInterval(portalInterval);
+      cleanupPortals(); // Clean up portals on unmount
+    };
+  }, [location.pathname]); // Re-run when route changes
   
   return (
     <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>

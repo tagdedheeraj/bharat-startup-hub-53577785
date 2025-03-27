@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from 'react';
 
 interface NavDropdownItem {
   name: string;
@@ -23,8 +24,18 @@ interface NavDropdownProps {
 }
 
 const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
+  // Add state to properly manage the dropdown open state
+  const [open, setOpen] = useState(false);
+
+  // Close dropdown when navigating away
+  useEffect(() => {
+    return () => {
+      setOpen(false);
+    };
+  }, []);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -47,13 +58,20 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"
+        sideOffset={8}
         className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
           border border-india-white/40 text-black rounded-xl w-60 p-2
           shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
+        // Force the dropdown to be shown directly in the body to avoid portal issues
+        forceMount={open}
       >
         <div className="px-1 py-1 space-y-1">
           {children.map((child) => (
-            <DropdownMenuItem key={child.name} asChild>
+            <DropdownMenuItem key={child.name} asChild onSelect={(e) => {
+              // Prevent the default select behavior to avoid race conditions
+              e.preventDefault();
+              setOpen(false);
+            }}>
               <Link
                 to={child.href}
                 className={cn(
