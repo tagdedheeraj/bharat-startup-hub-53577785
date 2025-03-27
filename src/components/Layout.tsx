@@ -75,16 +75,18 @@ export default function Layout({ children }: LayoutProps) {
     removeBadges();
     cleanupPortals();
     
-    // Also set up an interval to continuously check and remove, but with a longer interval
+    // Set up an interval to continuously check and remove, but with a reasonable interval
     // to reduce potential performance impact
-    const badgeInterval = setInterval(removeBadges, 2000);
-    const portalInterval = setInterval(cleanupPortals, 1000);
+    const badgeInterval = setInterval(removeBadges, 3000);
+    const portalInterval = setInterval(cleanupPortals, 1500);
     
     // Clean up
     return () => {
       clearInterval(badgeInterval);
       clearInterval(portalInterval);
-      cleanupPortals(); // Clean up portals on unmount
+      
+      // Final cleanup
+      setTimeout(cleanupPortals, 0);
     };
   }, [location.pathname]); // Re-run when route changes
   

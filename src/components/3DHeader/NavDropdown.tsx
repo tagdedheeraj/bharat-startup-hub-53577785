@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,7 @@ interface NavDropdownProps {
 const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
   // Add state to properly manage the dropdown open state
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Close dropdown when navigating away
   useEffect(() => {
@@ -65,16 +66,25 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
       >
         <div className="px-1 py-1 space-y-1">
           {children.map((child) => (
-            <DropdownMenuItem key={child.name} asChild onSelect={(e) => {
-              // Prevent the default select behavior to avoid race conditions
-              e.preventDefault();
-              // First close the dropdown, then navigate
-              setOpen(false);
-            }}>
-              <Link
-                to={child.href}
+            <DropdownMenuItem 
+              key={child.name} 
+              asChild 
+              onSelect={(e) => {
+                // Prevent the default select behavior
+                e.preventDefault();
+                
+                // Close dropdown first
+                setOpen(false);
+                
+                // Use setTimeout to ensure dropdown is closed before navigation
+                setTimeout(() => {
+                  navigate(child.href);
+                }, 10);
+              }}
+            >
+              <div 
                 className={cn(
-                  "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                  "flex items-center rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5 cursor-pointer",
                   isActive(child.href) 
                     ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
                     : "text-black/90 hover:text-black"
@@ -95,7 +105,7 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
                   "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
                   "group-hover:opacity-100 group-hover:translate-x-0"
                 )} />
-              </Link>
+              </div>
             </DropdownMenuItem>
           ))}
         </div>
