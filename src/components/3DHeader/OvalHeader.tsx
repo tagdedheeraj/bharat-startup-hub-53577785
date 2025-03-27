@@ -160,7 +160,7 @@ const OvalHeader = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="center"
-                    className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
+                    className="bg-gradient-to-br from-india-saffron/90 to-india-green/90 backdrop-blur-xl 
                       border border-india-white/40 text-black rounded-xl w-60 p-2
                       shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
                   >
@@ -191,8 +191,9 @@ const OvalHeader = () => {
                             <DropdownMenuContent
                               side="right"
                               align="start"
-                              className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
-                                border border-india-white/40 text-black rounded-xl w-60 p-2
+                              sideOffset={0}
+                              className="bg-gradient-to-br from-india-saffron/90 to-india-green/90 backdrop-blur-xl 
+                                border border-india-white/40 text-black rounded-xl w-64 p-2
                                 shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
                             >
                               <div className="px-1 py-1 space-y-1">
