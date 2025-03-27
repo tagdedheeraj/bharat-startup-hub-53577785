@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server, Calculator } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -145,6 +144,12 @@ export default function Header() {
           description: 'Expert legal advice tailored for startups and MSMEs',
           icon: LifeBuoy
         },
+        { 
+          label: 'CA Services', 
+          to: '/services/ca-services',
+          description: 'Comprehensive chartered accountant services for your business',
+          icon: Calculator
+        },
       ],
     },
     { label: 'IT Solutions', to: '/it-solutions' },
@@ -159,6 +164,7 @@ export default function Header() {
         { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: LifeBuoy },
         { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: LifeBuoy },
         { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Globe },
+        { label: 'FAQs', to: '/faqs', description: 'Frequently asked questions about our services', icon: LifeBuoy },
       ],
     },
   ];

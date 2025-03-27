@@ -13,13 +13,21 @@ import ServicesPage from "./pages/Services";
 import FundingConsultationPage from "./pages/services/FundingConsultation";
 import CertificateMarketingPage from "./pages/services/CertificateMarketing";
 import LegalConsultationPage from "./pages/services/LegalConsultation";
+import CAServicesPage from "./pages/services/CAServices";
+import CertificationsPage from "./pages/services/ca-services/Certifications";
+import TrademarkPage from "./pages/services/ca-services/Trademark";
+import IncomeTaxPage from "./pages/services/ca-services/IncomeTax";
+import AccountingPage from "./pages/services/ca-services/Accounting";
+import GSTPage from "./pages/services/ca-services/GST";
+import PayrollPage from "./pages/services/ca-services/Payroll";
+import CompliancePage from "./pages/services/ca-services/Compliance";
 import SuccessStoriesPage from "./pages/SuccessStories";
 import ContactPage from "./pages/Contact";
 import ExpertsPage from "./pages/more/Experts";
 import MSMEEventsPage from "./pages/more/MSMEEvents";
 import ReviewsPage from "./pages/more/Reviews";
 import BlogsPage from "./pages/more/Blogs";
-import CompliancePage from "./pages/more/Compliance";
+import ComplianceMorePage from "./pages/more/Compliance";
 import NotFound from "./pages/NotFound";
 import ITSolutionsPage from "./pages/ITSolutions";
 import FAQsPage from "./pages/FAQs";
@@ -38,6 +46,14 @@ const App = () => (
             <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
             <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
             <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
+            <Route path="/services/ca-services" element={<CAServicesPage />} />
+            <Route path="/services/ca-services/certifications" element={<CertificationsPage />} />
+            <Route path="/services/ca-services/trademark" element={<TrademarkPage />} />
+            <Route path="/services/ca-services/income-tax" element={<IncomeTaxPage />} />
+            <Route path="/services/ca-services/accounting" element={<AccountingPage />} />
+            <Route path="/services/ca-services/gst" element={<GSTPage />} />
+            <Route path="/services/ca-services/payroll" element={<PayrollPage />} />
+            <Route path="/services/ca-services/compliance" element={<CompliancePage />} />
             <Route path="/it-solutions" element={<ITSolutionsPage />} />
             <Route path="/success-stories" element={<SuccessStoriesPage />} />
             <Route path="/contact" element={<ContactPage />} />
@@ -46,7 +62,7 @@ const App = () => (
             <Route path="/more/msme-events" element={<MSMEEventsPage />} />
             <Route path="/more/reviews" element={<ReviewsPage />} />
             <Route path="/more/blogs" element={<BlogsPage />} />
-            <Route path="/more/compliance" element={<CompliancePage />} />
+            <Route path="/more/compliance" element={<ComplianceMorePage />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
