@@ -24,27 +24,48 @@ interface NavDropdownProps {
 }
 
 const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
-  // Add state to properly manage the dropdown open state
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Close dropdown when navigating away and when component unmounts
+  // Close dropdown when route changes
   useEffect(() => {
     return () => {
       setOpen(false);
     };
   }, []);
 
-  // Handler to safely navigate after closing dropdown
+  // Handle portal cleanup before navigation
   const handleNavigation = (path: string) => {
     // Close dropdown first
     setOpen(false);
     
-    // Use setTimeout to ensure dropdown is closed before navigation
-    // This helps prevent React DOM tree inconsistencies
+    // Ensure all portals are cleaned up before navigation
+    const cleanup = () => {
+      try {
+        // Find and clean up any dropdown portals
+        document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+          try {
+            if (document.body.contains(portal)) {
+              document.body.removeChild(portal);
+            }
+          } catch (e) {
+            console.debug("Portal cleanup failed:", e);
+          }
+        });
+      } catch (e) {
+        console.debug("Cleanup failed:", e);
+      }
+    };
+    
+    // Run cleanup immediately
+    cleanup();
+    
+    // Use a slightly longer delay for navigation to ensure DOM is stable
     setTimeout(() => {
+      // Run one more cleanup before navigating
+      cleanup();
       navigate(path);
-    }, 50);
+    }, 100);
   };
 
   return (
@@ -75,6 +96,10 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
         className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
           border border-india-white/40 text-black rounded-xl w-60 p-2
           shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
+        onCloseAutoFocus={(e) => {
+          // Prevent focus events that might cause issues with portal removal
+          e.preventDefault();
+        }}
       >
         <div className="px-1 py-1 space-y-1">
           {children.map((child) => (

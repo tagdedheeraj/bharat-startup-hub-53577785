@@ -1,5 +1,5 @@
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useEffect } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import NavLink from './NavLink';
 import NavDropdown from './NavDropdown';
@@ -16,11 +16,38 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ navItems }: DesktopNavProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
     return location.pathname.startsWith(path);
   };
+
+  // Handle cleanup of any portals when the component unmounts
+  useEffect(() => {
+    return () => {
+      // Final cleanup on unmount
+      const cleanupPortals = () => {
+        try {
+          document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+            if (document.body.contains(portal)) {
+              try {
+                document.body.removeChild(portal);
+              } catch (e) {
+                console.debug("Portal cleanup on nav unmount failed:", e);
+              }
+            }
+          });
+        } catch (e) {
+          console.debug("Nav unmount cleanup failed:", e);
+        }
+      };
+      
+      cleanupPortals();
+      // Do it again after a small delay
+      setTimeout(cleanupPortals, 50);
+    };
+  }, []);
 
   return (
     <nav className="hidden lg:flex items-center space-x-1">

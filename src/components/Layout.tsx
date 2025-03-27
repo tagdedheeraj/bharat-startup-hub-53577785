@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Enhanced cleanup function that runs more frequently and with extra safeguards
+  // Enhanced cleanup function with additional safeguards
   useEffect(() => {
     const removeBadges = () => {
       try {
@@ -42,11 +42,14 @@ export default function Layout({ children }: LayoutProps) {
       }
     };
     
-    // Enhanced portal cleanup with extra checks and safety measures
+    // More aggressive portal cleanup with extra safety checks
     const cleanupPortals = () => {
       try {
-        // Find any orphaned portal elements
-        const portalElements = document.querySelectorAll('[data-radix-portal]');
+        // Pre-check to ensure document.body exists and is valid
+        if (!document.body) return;
+        
+        // Find any orphaned portal elements with more specific selectors
+        const portalElements = document.querySelectorAll('[data-radix-portal], [role="menu"], [role="tooltip"], [role="dialog"]');
         
         portalElements.forEach((portal) => {
           try {
@@ -55,16 +58,16 @@ export default function Layout({ children }: LayoutProps) {
               portal && 
               (!portal.hasChildNodes() || 
                portal.getAttribute('aria-hidden') === 'true' ||
-               portal.childNodes.length === 0);
+               portal.childNodes.length === 0 ||
+               getComputedStyle(portal).opacity === '0');
             
             if (shouldRemove) {
-              // Only attempt to remove if it's actually in the document
+              // First check if portal is actually in the DOM still
               if (document.body.contains(portal)) {
                 try {
                   document.body.removeChild(portal);
                 } catch (e) {
-                  // This specific error means the node was already removed
-                  // or is no longer a child of document.body
+                  // This specific error means the node is no longer a child
                   console.debug("Portal removal failed:", e);
                 }
               }
@@ -72,6 +75,19 @@ export default function Layout({ children }: LayoutProps) {
           } catch (e) {
             // Portal might already be gone
             console.debug("Could not process portal element:", e);
+          }
+        });
+        
+        // Also clean up any loose dropdown menus
+        const menus = document.querySelectorAll('.radix-dropdown-content');
+        menus.forEach(menu => {
+          try {
+            const parent = menu.parentNode;
+            if (parent && document.body.contains(parent)) {
+              parent.removeChild(menu);
+            }
+          } catch (e) {
+            console.debug("Menu cleanup failed:", e);
           }
         });
       } catch (error) {
@@ -84,9 +100,17 @@ export default function Layout({ children }: LayoutProps) {
     cleanupPortals();
     
     // Set up intervals with different frequencies
-    // Run portal cleanup more frequently than badge removal
+    // Run portal cleanup more frequently
     const badgeInterval = setInterval(removeBadges, 3000);
-    const portalInterval = setInterval(cleanupPortals, 1000);
+    const portalInterval = setInterval(cleanupPortals, 500); // More frequent cleanup
+    
+    // Additional interval for very aggressive cleanup during navigation
+    const aggressiveCleanupInterval = setInterval(() => {
+      if (document.hidden) {
+        // Clean more aggressively when tab is not visible
+        cleanupPortals();
+      }
+    }, 200);
     
     // Cleanup all portals on route change too
     cleanupPortals();
@@ -95,13 +119,15 @@ export default function Layout({ children }: LayoutProps) {
     return () => {
       clearInterval(badgeInterval);
       clearInterval(portalInterval);
+      clearInterval(aggressiveCleanupInterval);
       
-      // Final cleanup before unmounting
+      // Final cleanup before unmounting - multiple passes with delays
       removeBadges();
       cleanupPortals();
       
       // Add a slight delay for final cleanup to catch any lingering elements
-      setTimeout(cleanupPortals, 100);
+      setTimeout(cleanupPortals, 50);
+      setTimeout(cleanupPortals, 150);
     };
   }, [location.pathname]); // Re-run when route changes
   
