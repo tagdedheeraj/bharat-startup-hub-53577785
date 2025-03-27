@@ -28,12 +28,24 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Close dropdown when navigating away
+  // Close dropdown when navigating away and when component unmounts
   useEffect(() => {
     return () => {
       setOpen(false);
     };
   }, []);
+
+  // Handler to safely navigate after closing dropdown
+  const handleNavigation = (path: string) => {
+    // Close dropdown first
+    setOpen(false);
+    
+    // Use setTimeout to ensure dropdown is closed before navigation
+    // This helps prevent React DOM tree inconsistencies
+    setTimeout(() => {
+      navigate(path);
+    }, 50);
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -72,14 +84,8 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
               onSelect={(e) => {
                 // Prevent the default select behavior
                 e.preventDefault();
-                
-                // Close dropdown first
-                setOpen(false);
-                
-                // Use setTimeout to ensure dropdown is closed before navigation
-                setTimeout(() => {
-                  navigate(child.href);
-                }, 10);
+                // Handle navigation safely
+                handleNavigation(child.href);
               }}
             >
               <div 

@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
@@ -59,22 +58,27 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
-  // Add cleanup effect for portal
   React.useEffect(() => {
     return () => {
-      // Clean up on unmount
-      setTimeout(() => {
-        try {
+      try {
+        const cleanup = () => {
           const portals = document.querySelectorAll('[data-radix-portal]');
           portals.forEach(portal => {
             if (!portal.hasChildNodes() && document.body.contains(portal)) {
-              document.body.removeChild(portal);
+              try {
+                document.body.removeChild(portal);
+              } catch (e) {
+                console.debug("Portal already removed:", e);
+              }
             }
           });
-        } catch (e) {
-          // Silent fail
-        }
-      }, 0);
+        };
+        
+        cleanup();
+        setTimeout(cleanup, 50);
+      } catch (e) {
+        console.debug("Error in portal cleanup:", e);
+      }
     };
   }, []);
   

@@ -17,7 +17,7 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Run once on component mount to remove any dynamically added badges
+  // Enhanced cleanup function that runs more frequently and with extra safeguards
   useEffect(() => {
     const removeBadges = () => {
       try {
@@ -42,7 +42,7 @@ export default function Layout({ children }: LayoutProps) {
       }
     };
     
-    // Clean up any orphaned portal elements that could cause React errors
+    // Enhanced portal cleanup with extra checks and safety measures
     const cleanupPortals = () => {
       try {
         // Find any orphaned portal elements
@@ -50,20 +50,28 @@ export default function Layout({ children }: LayoutProps) {
         
         portalElements.forEach((portal) => {
           try {
-            // Check if the portal is potentially problematic
-            if (portal && (
-              !portal.hasChildNodes() || 
-              !portal.parentNode || 
-              portal.getAttribute('aria-hidden') === 'true'
-            )) {
-              // Try to safely remove it
+            // Enhanced check for problematic portals
+            const shouldRemove = 
+              portal && 
+              (!portal.hasChildNodes() || 
+               portal.getAttribute('aria-hidden') === 'true' ||
+               portal.childNodes.length === 0);
+            
+            if (shouldRemove) {
+              // Only attempt to remove if it's actually in the document
               if (document.body.contains(portal)) {
-                document.body.removeChild(portal);
+                try {
+                  document.body.removeChild(portal);
+                } catch (e) {
+                  // This specific error means the node was already removed
+                  // or is no longer a child of document.body
+                  console.debug("Portal removal failed:", e);
+                }
               }
             }
           } catch (e) {
             // Portal might already be gone
-            console.debug("Could not remove portal element:", e);
+            console.debug("Could not process portal element:", e);
           }
         });
       } catch (error) {
@@ -71,22 +79,29 @@ export default function Layout({ children }: LayoutProps) {
       }
     };
     
-    // Run immediately
+    // Run immediately on mount and route change
     removeBadges();
     cleanupPortals();
     
-    // Set up an interval to continuously check and remove, but with a reasonable interval
-    // to reduce potential performance impact
+    // Set up intervals with different frequencies
+    // Run portal cleanup more frequently than badge removal
     const badgeInterval = setInterval(removeBadges, 3000);
-    const portalInterval = setInterval(cleanupPortals, 1500);
+    const portalInterval = setInterval(cleanupPortals, 1000);
     
-    // Clean up
+    // Cleanup all portals on route change too
+    cleanupPortals();
+    
+    // Clean up intervals on unmount
     return () => {
       clearInterval(badgeInterval);
       clearInterval(portalInterval);
       
-      // Final cleanup
-      setTimeout(cleanupPortals, 0);
+      // Final cleanup before unmounting
+      removeBadges();
+      cleanupPortals();
+      
+      // Add a slight delay for final cleanup to catch any lingering elements
+      setTimeout(cleanupPortals, 100);
     };
   }, [location.pathname]); // Re-run when route changes
   
