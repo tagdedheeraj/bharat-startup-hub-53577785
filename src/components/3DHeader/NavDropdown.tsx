@@ -62,8 +62,6 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
         className="bg-gradient-to-br from-india-saffron/80 to-india-green/80 backdrop-blur-xl 
           border border-india-white/40 text-black rounded-xl w-60 p-2
           shadow-[0_10px_25px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-100"
-        // Force the dropdown to be shown directly in the body to avoid portal issues
-        forceMount={open}
       >
         <div className="px-1 py-1 space-y-1">
           {children.map((child) => (
