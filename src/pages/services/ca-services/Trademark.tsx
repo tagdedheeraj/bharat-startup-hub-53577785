@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Trademark, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
+import { Copyright, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const TrademarkPage = () => {
@@ -31,7 +31,7 @@ const TrademarkPage = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-brand-50 p-4 rounded-full">
-                <Trademark className="h-10 w-10 text-brand-600" />
+                <Copyright className="h-10 w-10 text-brand-600" />
               </div>
             </div>
             <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">CA Services</span>

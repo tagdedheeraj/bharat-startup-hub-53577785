@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Award, Trademark, FileText, Calculator, Receipt, ListChecks, Shield } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Award, Copyright, FileText, Calculator, Receipt, ListChecks, Shield } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -167,7 +168,7 @@ export default function Header() {
           label: 'Trademark', 
           to: '/services/ca-services/trademark',
           description: 'Protect your brand identity with trademark registration',
-          icon: Trademark
+          icon: Copyright
         },
         { 
           label: 'Income Tax', 

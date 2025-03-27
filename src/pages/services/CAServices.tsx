@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Award, Trademark, FileText, Calculator, Receipt, ListChecks, Shield } from 'lucide-react';
+import { ArrowRight, Award, Copyright, FileText, Calculator, Receipt, ListChecks, Shield } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const CAServicesPage = () => {
@@ -12,7 +12,7 @@ const CAServicesPage = () => {
       link: "/services/ca-services/certifications"
     },
     {
-      icon: <Trademark className="h-8 w-8 text-brand-600" />,
+      icon: <Copyright className="h-8 w-8 text-brand-600" />,
       title: "Trademark",
       description: "Protect your brand identity with trademark registration and related legal services.",
       link: "/services/ca-services/trademark"
