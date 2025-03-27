@@ -49,14 +49,21 @@ export default function Layout({ children }: LayoutProps) {
         const portalElements = document.querySelectorAll('[data-radix-portal]');
         
         portalElements.forEach((portal) => {
-          // Only remove portal elements that are orphaned (no parent component)
-          if (portal && !portal.hasChildNodes()) {
-            try {
-              document.body.removeChild(portal);
-            } catch (e) {
-              // Portal might already be gone
-              console.debug("Could not remove portal element:", e);
+          try {
+            // Check if the portal is potentially problematic
+            if (portal && (
+              !portal.hasChildNodes() || 
+              !portal.parentNode || 
+              portal.getAttribute('aria-hidden') === 'true'
+            )) {
+              // Try to safely remove it
+              if (document.body.contains(portal)) {
+                document.body.removeChild(portal);
+              }
             }
+          } catch (e) {
+            // Portal might already be gone
+            console.debug("Could not remove portal element:", e);
           }
         });
       } catch (error) {

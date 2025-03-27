@@ -67,7 +67,7 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
                           ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                           : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                       )}
-                      onClick={toggleMobileMenu}
+                      onClick={() => setMobileMenuOpen(false)}
                     >
                       <div className={cn(
                         "w-1.5 h-1.5 rounded-full mr-2",
@@ -88,7 +88,7 @@ const MobileNav = ({ navItems }: MobileNavProps) => {
                     ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                     : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                 )}
-                onClick={toggleMobileMenu}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>

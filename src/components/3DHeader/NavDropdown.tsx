@@ -68,6 +68,7 @@ const NavDropdown = ({ name, href, children, isActive }: NavDropdownProps) => {
             <DropdownMenuItem key={child.name} asChild onSelect={(e) => {
               // Prevent the default select behavior to avoid race conditions
               e.preventDefault();
+              // First close the dropdown, then navigate
               setOpen(false);
             }}>
               <Link
