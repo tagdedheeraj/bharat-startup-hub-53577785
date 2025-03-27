@@ -149,7 +149,6 @@ export default function Header() {
     },
     { label: 'IT Solutions', to: '/it-solutions' },
     { label: 'Success Stories', to: '/success-stories' },
-    { label: 'Contact Us', to: '/contact' },
     {
       label: 'More',
       to: '/more',

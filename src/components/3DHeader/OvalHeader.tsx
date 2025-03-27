@@ -65,8 +65,7 @@ const OvalHeader = () => {
         { name: 'Blogs', href: '/more/blogs' },
         { name: 'Compliance', href: '/more/compliance' }
       ]
-    },
-    { name: 'Contact', href: '/contact' }
+    }
   ];
 
   const isActive = (path: string) => {
@@ -201,6 +200,7 @@ const OvalHeader = () => {
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               size="sm"
+              onClick={() => window.location.href = '/contact'}
             >
               Get Started
             </Button>
@@ -272,12 +272,14 @@ const OvalHeader = () => {
                 </Link>
               )
             ))}
-            <Button 
-              className="mt-4 bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
-                border border-india-white/30 transition-all"
-            >
-              Get Started
-            </Button>
+            <Link to="/contact" onClick={toggleMobileMenu} className="w-full">
+              <Button 
+                className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+                  border border-india-white/30 transition-all"
+              >
+                Get Started
+              </Button>
+            </Link>
           </nav>
         </div>
       </div>
