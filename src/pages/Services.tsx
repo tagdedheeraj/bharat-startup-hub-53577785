@@ -1,6 +1,5 @@
-
 import { Link } from 'react-router-dom';
-import { ArrowRight, TrendingUp, Scale, FileCheck, Landmark, Search, PieChart } from 'lucide-react';
+import { ArrowRight, TrendingUp, Scale, FileCheck, Landmark, Search, PieChart, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 
 const ServicesPage = () => {
@@ -10,6 +9,12 @@ const ServicesPage = () => {
       title: "Funding Consultation",
       description: "Access funding options ranging from ₹50 Lac to ₹5 CR for various business stages and needs.",
       link: "/services/funding-consultation"
+    },
+    {
+      icon: <Award className="h-8 w-8 text-brand-600" />,
+      title: "CA Services",
+      description: "Comprehensive chartered accountancy services including certifications, tax, accounting, and compliance.",
+      link: "/services/ca-services"
     },
     {
       icon: <FileCheck className="h-8 w-8 text-brand-600" />,

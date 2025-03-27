@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy } from 'lucide-react';
+import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Award, Trademark, FileText, Calculator, Receipt, ListChecks, Shield } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -135,6 +134,12 @@ export default function Header() {
           icon: LifeBuoy
         },
         { 
+          label: 'CA Services', 
+          to: '/services/ca-services',
+          description: 'Comprehensive chartered accountancy services for your business',
+          icon: Award
+        },
+        { 
           label: 'Certificate Marketing', 
           to: '/services/certificate-marketing',
           description: 'Enhance your market presence with professional certification services',
@@ -145,6 +150,54 @@ export default function Header() {
           to: '/services/legal-consultation',
           description: 'Expert legal advice tailored for startups and MSMEs',
           icon: LifeBuoy
+        },
+      ],
+    },
+    {
+      label: 'CA Services',
+      to: '/services/ca-services',
+      children: [
+        { 
+          label: 'Certifications', 
+          to: '/services/ca-services/certifications',
+          description: 'Professional certifications to validate your business credibility',
+          icon: Award
+        },
+        { 
+          label: 'Trademark', 
+          to: '/services/ca-services/trademark',
+          description: 'Protect your brand identity with trademark registration',
+          icon: Trademark
+        },
+        { 
+          label: 'Income Tax', 
+          to: '/services/ca-services/income-tax',
+          description: 'Expert income tax filing and planning services',
+          icon: FileText
+        },
+        { 
+          label: 'Accounting', 
+          to: '/services/ca-services/accounting',
+          description: 'Professional accounting services for your business',
+          icon: Calculator
+        },
+        { 
+          label: 'GST Services', 
+          to: '/services/ca-services/gst-services',
+          description: 'Complete GST registration and compliance support',
+          icon: Receipt
+        },
+        { 
+          label: 'Payroll', 
+          to: '/services/ca-services/payroll',
+          description: 'End-to-end payroll management services',
+          icon: ListChecks
+        },
+        { 
+          label: 'Compliance', 
+          to: '/services/ca-services/compliance',
+          description: 'Stay compliant with all regulatory requirements',
+          icon: Shield
         },
       ],
     },
