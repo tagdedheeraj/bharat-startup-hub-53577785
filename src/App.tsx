@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,16 @@ import CompliancePage from "./pages/more/Compliance";
 import NotFound from "./pages/NotFound";
 import ITSolutionsPage from "./pages/ITSolutions";
 import FAQsPage from "./pages/FAQs";
+
+// CA Services Pages
+import CAServicesPage from "./pages/CAServices";
+import CertificationsPage from "./pages/ca-services/Certifications";
+import TrademarkPage from "./pages/ca-services/Trademark";
+import IncomeTaxPage from "./pages/ca-services/IncomeTax";
+import AccountingPage from "./pages/ca-services/Accounting";
+import GSTPage from "./pages/ca-services/GST";
+import PayrollPage from "./pages/ca-services/Payroll";
+import CACompliancePage from "./pages/ca-services/Compliance";
 
 // Error boundary to prevent the whole app from crashing
 class ErrorBoundary extends Component<{ children: ReactNode, fallback?: ReactNode }> {
@@ -142,6 +151,18 @@ const App = () => {
                     <Route path="/success-stories" element={<SuccessStoriesPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/faqs" element={<FAQsPage />} />
+                    
+                    {/* CA Services Routes */}
+                    <Route path="/ca-services" element={<CAServicesPage />} />
+                    <Route path="/ca-services/certifications" element={<CertificationsPage />} />
+                    <Route path="/ca-services/trademark" element={<TrademarkPage />} />
+                    <Route path="/ca-services/income-tax" element={<IncomeTaxPage />} />
+                    <Route path="/ca-services/accounting" element={<AccountingPage />} />
+                    <Route path="/ca-services/gst" element={<GSTPage />} />
+                    <Route path="/ca-services/payroll" element={<PayrollPage />} />
+                    <Route path="/ca-services/compliance" element={<CACompliancePage />} />
+                    
+                    {/* More Routes */}
                     <Route path="/more/experts" element={<ExpertsPage />} />
                     <Route path="/more/msme-events" element={<MSMEEventsPage />} />
                     <Route path="/more/reviews" element={<ReviewsPage />} />

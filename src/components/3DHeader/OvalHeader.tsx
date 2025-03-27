@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Certificate, Trademark, IndianRupee, FileText, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -40,33 +39,26 @@ const OvalHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on location change and clean up portals
   useEffect(() => {
     setMobileMenuOpen(false);
     
-    // Cleanup function to ensure portals are removed when location changes
     const cleanupPortals = () => {
       try {
-        // Target dropdown portals specifically
         const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
         portals.forEach(portal => {
           try {
             portal.remove();
           } catch (e) {
-            // Silent fail for portal removal
             console.debug("Portal cleanup error:", e);
           }
         });
       } catch (e) {
-        // Silent fail
         console.debug("Portal search error:", e);
       }
     };
     
-    // Run cleanup immediately when location changes
     cleanupPortals();
     
-    // Also cleanup on unmount
     return cleanupPortals;
   }, [location]);
 
@@ -86,6 +78,19 @@ const OvalHeader = () => {
     { name: 'IT Solutions', href: '/it-solutions' },
     { name: 'Success Stories', href: '/success-stories' },
     { 
+      name: 'CA Services', 
+      href: '/ca-services',
+      children: [
+        { name: 'Certifications', href: '/ca-services/certifications', icon: Certificate },
+        { name: 'Trademark', href: '/ca-services/trademark', icon: Trademark },
+        { name: 'Income Tax', href: '/ca-services/income-tax', icon: IndianRupee },
+        { name: 'Accounting', href: '/ca-services/accounting', icon: FileText },
+        { name: 'GST', href: '/ca-services/gst', icon: Receipt },
+        { name: 'Payroll', href: '/ca-services/payroll', icon: FileSpreadsheet },
+        { name: 'Compliance', href: '/ca-services/compliance', icon: ShieldCheck }
+      ]
+    },
+    { 
       name: 'More', 
       href: '#',
       children: [
@@ -103,51 +108,41 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  // Safer navigation that ensures portals are cleaned up
   const safeNavigate = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     
-    // Clean up portals before navigation
     try {
       const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
       portals.forEach(portal => {
         try {
           portal.remove();
         } catch (e) {
-          // Silent fail
           console.debug("Pre-navigation portal cleanup error:", e);
         }
       });
     } catch (e) {
-      // Silent fail
       console.debug("Pre-navigation portal search error:", e);
     }
     
-    // Use window.location for more reliable navigation with small delay
     setTimeout(() => {
       window.location.href = href;
     }, 50);
   };
 
-  // Function to handle dropdown item clicks safely
   const handleDropdownItemClick = (href: string) => {
-    // Force close any open portals before navigation
     try {
       const portals = document.querySelectorAll('[data-radix-portal], [data-radix-dropdown-menu-content]');
       portals.forEach(portal => {
         try {
           portal.remove();
         } catch (e) {
-          // Silent fail
           console.debug("Dropdown click portal cleanup error:", e);
         }
       });
     } catch (e) {
-      // Silent fail
       console.debug("Dropdown click portal search error:", e);
     }
     
-    // Use direct navigation with delay
     setTimeout(() => {
       window.location.href = href;
     }, 50);
@@ -158,10 +153,8 @@ const OvalHeader = () => {
       "sticky top-0 z-50 w-full transition-all duration-500",
       isScrolled ? "py-2" : "py-3"
     )}>
-      {/* 3D Background */}
       <Scene />
       
-      {/* Glass Effect Container */}
       <div className={cn(
         "container mx-auto transition-all duration-300",
         "relative z-10 rounded-full backdrop-blur-xl",
@@ -172,7 +165,6 @@ const OvalHeader = () => {
         <div className="flex items-center justify-between py-2 px-4 md:px-6 lg:px-8">
           <Logo />
           
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => (
               item.children ? (
@@ -216,6 +208,7 @@ const OvalHeader = () => {
                           >
                             <div className="flex-1">
                               <div className="flex items-center space-x-2">
+                                {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
                                 <div className={cn(
                                   "w-1.5 h-1.5 rounded-full",
                                   isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
@@ -258,7 +251,6 @@ const OvalHeader = () => {
             ))}
           </nav>
           
-          {/* Action Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
               hover:bg-white/10 transition-all duration-300">
@@ -285,7 +277,6 @@ const OvalHeader = () => {
             </Button>
           </div>
           
-          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center">
             <Button
               variant="ghost"
@@ -298,7 +289,6 @@ const OvalHeader = () => {
           </div>
         </div>
         
-        {/* Mobile Menu */}
         <div
           className={cn(
             "lg:hidden overflow-hidden transition-all duration-500 ease-in-out",
@@ -328,6 +318,7 @@ const OvalHeader = () => {
                           handleDropdownItemClick(child.href);
                         }}
                       >
+                        {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
                         <div className={cn(
                           "w-1.5 h-1.5 rounded-full mr-2",
                           isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
