@@ -91,12 +91,9 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  const handleNavigation = (href: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    // Small delay to allow dropdown to close
-    setTimeout(() => {
-      navigate(href);
-    }, 10);
+  // Fixed navigation handler to prevent React unmount issues
+  const handleNavigation = (href: string) => {
+    navigate(href);
   };
 
   return (
@@ -148,32 +145,32 @@ const OvalHeader = () => {
                   >
                     <div className="px-1 py-1 space-y-1">
                       {item.children.map((child) => (
-                        <DropdownMenuItem key={child.name} asChild onClick={(e: React.MouseEvent) => handleNavigation(child.href, e)}>
-                          <div
-                            className={cn(
-                              "flex items-center rounded-lg px-3 py-3 text-sm font-medium cursor-pointer transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
-                              isActive(child.href) 
-                                ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
-                                : "text-black/90 hover:text-black"
-                            )}
-                          >
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
-                                <div className={cn(
-                                  "w-1.5 h-1.5 rounded-full",
-                                  isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
-                                )}></div>
-                                <span className="font-medium">{child.name}</span>
-                              </div>
-                              <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
-                                group-hover:w-full transition-all duration-300"></div>
+                        <DropdownMenuItem 
+                          key={child.name}
+                          onClick={() => handleNavigation(child.href)}
+                          className={cn(
+                            "flex items-center rounded-lg px-3 py-3 text-sm font-medium cursor-pointer transition-all duration-200 group hover:bg-gradient-to-r hover:from-india-white/20 hover:to-india-white/5",
+                            isActive(child.href) 
+                              ? "bg-gradient-to-r from-india-white/30 to-transparent text-black shadow-inner border-l-2 border-india-white" 
+                              : "text-black/90 hover:text-black"
+                          )}
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2">
+                              {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
+                              <div className={cn(
+                                "w-1.5 h-1.5 rounded-full",
+                                isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40 group-hover:bg-india-saffron"
+                              )}></div>
+                              <span className="font-medium">{child.name}</span>
                             </div>
-                            <ChevronRight className={cn(
-                              "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
-                              "group-hover:opacity-100 group-hover:translate-x-0"
-                            )} />
+                            <div className="mt-0.5 h-px w-0 bg-gradient-to-r from-india-saffron to-transparent 
+                              group-hover:w-full transition-all duration-300"></div>
                           </div>
+                          <ChevronRight className={cn(
+                            "h-4 w-4 opacity-0 -translate-x-2 transition-all duration-200",
+                            "group-hover:opacity-100 group-hover:translate-x-0"
+                          )} />
                         </DropdownMenuItem>
                       ))}
                     </div>
@@ -222,7 +219,7 @@ const OvalHeader = () => {
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               size="sm"
-              onClick={(e) => handleNavigation('/contact', e)}
+              onClick={() => handleNavigation('/contact')}
             >
               Get Started
             </Button>
@@ -256,20 +253,18 @@ const OvalHeader = () => {
                   </div>
                   <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
                     {item.children.map((child) => (
-                      <a
+                      <button
                         key={child.name}
-                        href={child.href}
                         className={cn(
-                          "block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center cursor-pointer",
+                          "w-full text-left block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center cursor-pointer",
                           isActive(child.href) 
                             ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                             : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                         )}
-                        onClick={(e) => {
-                          e.preventDefault();
+                        onClick={() => {
                           toggleMobileMenu();
                           setTimeout(() => {
-                            navigate(child.href);
+                            handleNavigation(child.href);
                           }, 10);
                         }}
                       >
@@ -279,7 +274,7 @@ const OvalHeader = () => {
                           isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
                         )}></div>
                         {child.name}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -303,11 +298,10 @@ const OvalHeader = () => {
               <Button 
                 className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                   border border-india-white/30 transition-all"
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={() => {
                   toggleMobileMenu();
                   setTimeout(() => {
-                    navigate('/contact');
+                    handleNavigation('/contact');
                   }, 10);
                 }}
               >

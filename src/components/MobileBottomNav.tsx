@@ -23,12 +23,8 @@ export default function MobileBottomNav() {
     { icon: Phone, label: 'Contact', to: '/contact' },
   ];
 
-  const handleSafeNavigation = (path: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    // Small delay to prevent React unmount issues
-    setTimeout(() => {
-      navigate(path);
-    }, 10);
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
 
   return (
@@ -60,98 +56,87 @@ export default function MobileBottomNav() {
             <div className="py-6">
               <h3 className="text-lg font-medium mb-4">More Options</h3>
               <div className="space-y-3">
-                <a 
-                  href="/success-stories" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/success-stories', e)}
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/success-stories')}
                 >
                   <Star size={18} className="text-india-saffron" />
                   <span>Success Stories</span>
-                </a>
+                </button>
                 
                 <h4 className="font-medium text-india-saffron mt-6 mb-2 border-b pb-1">CA Services</h4>
-                <a 
-                  href="/ca-services/certifications" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/ca-services/certifications', e)}
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/ca-services/certifications')}
                 >
                   <Shield size={18} className="text-india-saffron" />
                   <span>Certifications</span>
-                </a>
-                <a 
-                  href="/ca-services/trademark" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/ca-services/trademark', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/ca-services/trademark')}
                 >
                   <Shield size={18} className="text-india-saffron" />
                   <span>Trademark</span>
-                </a>
-                <a 
-                  href="/ca-services/income-tax" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/ca-services/income-tax', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/ca-services/income-tax')}
                 >
                   <Info size={18} className="text-india-saffron" />
                   <span>Income Tax</span>
-                </a>
-                <a 
-                  href="/ca-services/gst" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/ca-services/gst', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/ca-services/gst')}
                 >
                   <Receipt size={18} className="text-india-saffron" />
                   <span>GST</span>
-                </a>
-                <a 
-                  href="/ca-services/payroll" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/ca-services/payroll', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/ca-services/payroll')}
                 >
                   <FileSpreadsheet size={18} className="text-india-saffron" />
                   <span>Payroll</span>
-                </a>
+                </button>
                 
                 <h4 className="font-medium text-india-saffron mt-6 mb-2 border-b pb-1">More Pages</h4>
-                <a 
-                  href="/more/experts" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/more/experts', e)}
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/more/experts')}
                 >
                   <Briefcase size={18} className="text-india-saffron" />
                   <span>Experts</span>
-                </a>
-                <a 
-                  href="/more/msme-events" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/more/msme-events', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/more/msme-events')}
                 >
                   <Info size={18} className="text-india-saffron" />
                   <span>MSME Events</span>
-                </a>
-                <a 
-                  href="/more/reviews" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/more/reviews', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/more/reviews')}
                 >
                   <Star size={18} className="text-india-saffron" />
                   <span>Reviews</span>
-                </a>
-                <a 
-                  href="/more/blogs" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/more/blogs', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/more/blogs')}
                 >
                   <Menu size={18} className="text-india-saffron" />
                   <span>Blogs</span>
-                </a>
-                <a 
-                  href="/more/compliance" 
-                  className="flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
-                  onClick={(e) => handleSafeNavigation('/more/compliance', e)}
+                </button>
+                <button 
+                  className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md hover:bg-gray-100 transition-colors"
+                  onClick={() => handleNavigation('/more/compliance')}
                 >
                   <Shield size={18} className="text-india-saffron" />
                   <span>Compliance</span>
-                </a>
+                </button>
               </div>
             </div>
           </SheetContent>

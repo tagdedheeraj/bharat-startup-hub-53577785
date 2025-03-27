@@ -17,100 +17,66 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Comprehensive cleanup for any dynamically added elements and portals
+  // Cleanup for any dynamically added elements and portals
   useEffect(() => {
-    // Function to thoroughly clean up all potential portal and dropdown elements
-    const cleanupAllPortals = () => {
-      try {
-        // Clean up any badges that might have been injected
-        const badges = document.querySelectorAll(
-          '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
-        );
-        
-        badges.forEach((badge) => {
+    const observer = new MutationObserver((mutations) => {
+      // Check for any orphaned portals when DOM changes
+      const orphanedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
+      orphanedPortals.forEach((portal) => {
+        if (portal && portal.parentNode) {
           try {
-            if (badge && badge.parentNode) {
-              badge.parentNode.removeChild(badge);
-            }
+            portal.parentNode.removeChild(portal);
           } catch (e) {
-            console.debug("Badge removal error:", e);
+            console.debug("Failed to remove orphaned portal:", e);
           }
-        });
-        
-        // Clean up dropdown and popover portals
-        const portals = document.querySelectorAll(
-          '[data-radix-portal], [data-radix-dropdown-menu-content], [data-radix-popper-content-wrapper]'
-        );
-        
-        portals.forEach((portal) => {
-          try {
-            if (portal && document.body.contains(portal)) {
-              document.body.removeChild(portal);
-            }
-          } catch (e) {
-            console.debug("Portal removal error:", e);
-          }
-        });
-        
-        // Clean toast elements
-        const toasts = document.querySelectorAll('[role="status"]');
-        toasts.forEach((toast) => {
-          try {
-            if (toast && toast.parentNode) {
-              toast.parentNode.removeChild(toast);
-            }
-          } catch (e) {
-            console.debug("Toast removal error:", e);
-          }
-        });
-      } catch (error) {
-        console.debug("Cleanup operation error:", error);
-      }
-    };
+        }
+      });
+    });
     
-    // Run immediately on mount
-    cleanupAllPortals();
+    // Start observing document body for mutations
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style']
+    });
     
-    // Also set up an interval to continuously check and clean up
-    const interval = setInterval(cleanupAllPortals, 2000);
-    
-    // Clean up on unmount
+    // Cleanup function
     return () => {
-      clearInterval(interval);
-      cleanupAllPortals();
+      observer.disconnect();
+      
+      // Final cleanup of portals
+      const portals = document.querySelectorAll('[data-radix-portal]');
+      portals.forEach((portal) => {
+        try {
+          if (portal && portal.parentNode) {
+            portal.parentNode.removeChild(portal);
+          }
+        } catch (e) {
+          console.debug("Cleanup portal error:", e);
+        }
+      });
     };
   }, []);
 
-  // Clean up portal elements when routes change
+  // Cleanup portals on route changes
   useEffect(() => {
-    // Function to clean up any orphaned portal elements
-    const cleanupPortalElements = () => {
-      try {
-        // Target common portal containers and dropdown menus
-        const portalElements = document.querySelectorAll(
-          '[data-radix-portal], [data-radix-dropdown-menu-content], [data-radix-popper-content-wrapper]'
-        );
-        
-        portalElements.forEach((element) => {
-          try {
-            if (element) {
-              element.remove();
-            }
-          } catch (e) {
-            console.debug("Portal element removal error:", e);
+    // Small delay to allow animations to complete
+    const timeoutId = setTimeout(() => {
+      const unusedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
+      unusedPortals.forEach((portal) => {
+        try {
+          if (portal && portal.parentNode) {
+            portal.parentNode.removeChild(portal);
           }
-        });
-      } catch (error) {
-        console.debug("Portal cleanup error:", error);
-      }
-    };
-    
-    // Run cleanup when location changes
-    cleanupPortalElements();
+        } catch (e) {
+          console.debug("Route change cleanup error:", e);
+        }
+      });
+    }, 300);
     
     return () => {
-      // Extra cleanup on unmount
-      cleanupPortalElements();
+      clearTimeout(timeoutId);
     };
   }, [location]);
   
