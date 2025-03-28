@@ -91,9 +91,10 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  // Fixed navigation handler to prevent React unmount issues
+  // Updated navigation handler to include scroll to top functionality
   const handleNavigation = (href: string) => {
     navigate(href);
+    window.scrollTo(0, 0); // Scroll to top when navigating
   };
 
   return (
@@ -186,6 +187,7 @@ const OvalHeader = () => {
                       ? "text-india-saffron" 
                       : "text-black hover:text-india-saffron"
                   )}
+                  onClick={() => window.scrollTo(0, 0)}
                 >
                   <span className="relative z-10">{item.name}</span>
                   <span className={cn(
@@ -219,7 +221,10 @@ const OvalHeader = () => {
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
                 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               size="sm"
-              onClick={() => handleNavigation('/contact')}
+              onClick={() => {
+                handleNavigation('/contact');
+                window.scrollTo(0, 0); // Ensure scroll to top
+              }}
             >
               Get Started
             </Button>
@@ -288,7 +293,10 @@ const OvalHeader = () => {
                       ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
                       : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                   )}
-                  onClick={toggleMobileMenu}
+                  onClick={() => {
+                    toggleMobileMenu();
+                    window.scrollTo(0, 0);
+                  }}
                 >
                   {item.name}
                 </Link>

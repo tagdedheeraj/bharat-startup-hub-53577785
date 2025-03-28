@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server, Shield, ShieldCheck, IndianRupee, FileText, Receipt, FileSpreadsheet } from 'lucide-react';
@@ -46,9 +45,9 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     if (toggleMobileMenu) toggleMobileMenu();
-    // Small delay to allow dropdown to close
     setTimeout(() => {
       navigate(path);
+      window.scrollTo(0, 0);
     }, 10);
   };
 
@@ -100,7 +99,10 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
           "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
           active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
         )}
-        onClick={toggleMobileMenu}
+        onClick={() => {
+          if (toggleMobileMenu) toggleMobileMenu();
+          window.scrollTo(0, 0);
+        }}
       >
         <span className="relative z-10">{label}</span>
         {active && (
@@ -133,7 +135,6 @@ export default function Header() {
     };
   }, []);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
@@ -141,9 +142,9 @@ export default function Header() {
   const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     toggleMobileMenu();
-    // Small delay to allow menu to close
     setTimeout(() => {
       navigate(path);
+      window.scrollTo(0, 0);
     }, 10);
   };
 
@@ -244,7 +245,6 @@ export default function Header() {
           : 'bg-white'
       }`}
     >
-      {/* Top Bar with animated gradient background */}
       <div className="hidden sm:block relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-brand-600 via-brand-500 to-brand-700 animate-gradient-x"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -274,12 +274,10 @@ export default function Header() {
         </div>
       </div>
       
-      {/* Main Navigation with glass effect when scrolled */}
       <nav className={`container mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${isScrolled ? 'py-2' : 'py-4'}`}>
         <div className="flex justify-between items-center">
           <Logo />
           
-          {/* Desktop Menu */}
           <div className="hidden lg:block">
             <NavigationMenu>
               <NavigationMenuList className="flex space-x-1">
@@ -302,7 +300,11 @@ export default function Header() {
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
             </Button>
             <Button asChild className="relative group overflow-hidden">
-              <Link to="/contact" className="relative z-10 bg-brand-600 text-black px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700">
+              <Link 
+                to="/contact" 
+                className="relative z-10 bg-brand-600 text-black px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700"
+                onClick={() => window.scrollTo(0, 0)}
+              >
                 <span className="relative z-10 flex items-center gap-2">
                   Get Started
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
@@ -312,7 +314,6 @@ export default function Header() {
             </Button>
           </div>
           
-          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-2">
             <Button variant="ghost" size="icon" className="text-foreground/70">
               <Search size={20} />
@@ -328,7 +329,6 @@ export default function Header() {
         </div>
       </nav>
       
-      {/* Mobile Menu with smooth animation */}
       <div
         className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           mobileMenuOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
@@ -365,7 +365,10 @@ export default function Header() {
                     ? 'text-brand-600 font-medium' 
                     : 'text-gray-600'
                 } hover:text-brand-700 transition-colors`}
-                onClick={toggleMobileMenu}
+                onClick={() => {
+                  toggleMobileMenu();
+                  window.scrollTo(0, 0);
+                }}
               >
                 {item.label}
               </Link>
@@ -373,7 +376,14 @@ export default function Header() {
           })}
           <div className="pt-4">
             <Button asChild className="w-full relative group overflow-hidden">
-              <Link to="/contact" onClick={toggleMobileMenu} className="relative z-10 bg-brand-600 hover:bg-brand-700 text-black">
+              <Link 
+                to="/contact" 
+                onClick={() => {
+                  toggleMobileMenu();
+                  window.scrollTo(0, 0);
+                }} 
+                className="relative z-10 bg-brand-600 hover:bg-brand-700 text-black"
+              >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Get Started
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
