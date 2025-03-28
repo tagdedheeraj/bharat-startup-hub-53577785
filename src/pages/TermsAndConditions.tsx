@@ -1,8 +1,13 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import SectionHeading from '@/components/SectionHeading';
 
 const TermsAndConditions = () => {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   return (
     <div className="max-w-4xl mx-auto py-8">
       <SectionHeading
