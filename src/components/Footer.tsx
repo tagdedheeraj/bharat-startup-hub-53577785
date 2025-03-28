@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -89,6 +89,29 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+            
+            {/* Legal Pages Section - NEW */}
+            <h3 className="text-lg font-semibold mb-4 mt-8">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/terms-and-conditions" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <FileText className="w-4 h-4 mr-2 text-brand-400" />
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <Shield className="w-4 h-4 mr-2 text-brand-400" />
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/disclaimer" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <Info className="w-4 h-4 mr-2 text-brand-400" />
+                  Disclaimer
+                </Link>
+              </li>
+            </ul>
           </div>
           
           <div>
@@ -114,8 +137,23 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>© {currentYear} Bharat Startup Solution. All rights reserved.</p>
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400">© {currentYear} Bharat Startup Solution. All rights reserved.</p>
+            <div className="flex space-x-4 mt-4 md:mt-0">
+              <Link to="/terms-and-conditions" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Terms & Conditions
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Privacy Policy
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Disclaimer
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

@@ -23,6 +23,9 @@ import CompliancePage from "./pages/more/Compliance";
 import NotFound from "./pages/NotFound";
 import ITSolutionsPage from "./pages/ITSolutions";
 import FAQsPage from "./pages/FAQs";
+import TermsAndConditionsPage from "./pages/TermsAndConditions";
+import PrivacyPolicyPage from "./pages/PrivacyPolicy";
+import DisclaimerPage from "./pages/Disclaimer";
 
 // CA Services Pages
 import CAServicesPage from "./pages/CAServices";
@@ -151,6 +154,11 @@ const App = () => {
                     <Route path="/success-stories" element={<SuccessStoriesPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/faqs" element={<FAQsPage />} />
+                    
+                    {/* Legal Pages - NEW */}
+                    <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                    <Route path="/disclaimer" element={<DisclaimerPage />} />
                     
                     {/* CA Services Routes */}
                     <Route path="/ca-services" element={<CAServicesPage />} />
