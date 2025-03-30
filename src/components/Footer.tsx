@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, FileText, Shield, Info } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -90,7 +90,7 @@ export default function Footer() {
               </li>
             </ul>
             
-            {/* Legal Pages Section - NEW */}
+            {/* Legal Pages Section */}
             <h3 className="text-lg font-semibold mb-4 mt-8">Legal</h3>
             <ul className="space-y-2">
               <li>
@@ -109,6 +109,12 @@ export default function Footer() {
                 <Link to="/disclaimer" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <Info className="w-4 h-4 mr-2 text-brand-400" />
                   Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link to="/service-agreement" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <FileSignature className="w-4 h-4 mr-2 text-brand-400" />
+                  Service Agreement
                 </Link>
               </li>
             </ul>
@@ -151,6 +157,10 @@ export default function Footer() {
               <span className="text-gray-600">|</span>
               <Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Disclaimer
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link to="/service-agreement" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Service Agreement
               </Link>
             </div>
           </div>

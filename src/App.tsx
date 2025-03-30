@@ -26,6 +26,7 @@ import FAQsPage from "./pages/FAQs";
 import TermsAndConditionsPage from "./pages/TermsAndConditions";
 import PrivacyPolicyPage from "./pages/PrivacyPolicy";
 import DisclaimerPage from "./pages/Disclaimer";
+import ServiceAgreementPage from "./pages/ServiceAgreement";
 
 // CA Services Pages
 import CAServicesPage from "./pages/CAServices";
@@ -155,10 +156,11 @@ const App = () => {
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/faqs" element={<FAQsPage />} />
                     
-                    {/* Legal Pages - NEW */}
+                    {/* Legal Pages */}
                     <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                     <Route path="/disclaimer" element={<DisclaimerPage />} />
+                    <Route path="/service-agreement" element={<ServiceAgreementPage />} />
                     
                     {/* CA Services Routes */}
                     <Route path="/ca-services" element={<CAServicesPage />} />
