@@ -10,7 +10,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAb0wpqDwPPG-oepTYi97BUQtW80-SlW2Y",
   authDomain: "bharat-startup.firebaseapp.com",
   projectId: "bharat-startup",
-  storageBucket: "bharat-startup.appspot.com", // Fixed storage bucket URL
+  storageBucket: "bharat-startup.appspot.com",
   messagingSenderId: "483893755966",
   appId: "1:483893755966:web:8ab88e30679c35e7d8116f",
   measurementId: "G-7MEXQK6P5K"
