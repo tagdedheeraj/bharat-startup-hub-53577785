@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -15,6 +17,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
   
   const { register } = useAuth();
@@ -22,22 +25,20 @@ const Register = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     
     if (!name || !email || !password || !confirmPassword) {
-      toast({
-        title: "Validation Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
+      setError("Please fill in all fields");
       return;
     }
     
     if (password !== confirmPassword) {
-      toast({
-        title: "Password Error",
-        description: "Passwords do not match",
-        variant: "destructive"
-      });
+      setError("Passwords do not match");
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
       return;
     }
     
@@ -56,13 +57,9 @@ const Register = () => {
       } else {
         navigate('/dashboard/investor');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Registration error:', error);
-      toast({
-        title: "Registration Failed",
-        description: "Unable to create your account. Please try again.",
-        variant: "destructive"
-      });
+      setError(error.message || "Unable to create your account. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -78,6 +75,15 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="startup">Startup</TabsTrigger>

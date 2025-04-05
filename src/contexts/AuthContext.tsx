@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { 
   createUserWithEmailAndPassword, 
@@ -8,8 +7,9 @@ import {
   User as FirebaseUser,
   updateProfile
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
+import { toast } from '@/hooks/use-toast';
 
 // Define user types
 export type UserRole = 'startup' | 'investor' | null;
@@ -72,6 +72,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
+          // Don't logout here, as it may be a temporary connectivity issue
+          // Just set user to null and isAuthenticated to false
+          setUser(null);
+          setIsAuthenticated(false);
         }
       } else {
         setUser(null);
@@ -88,47 +92,75 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
       
-      // Get user role from Firestore
-      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-      
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
+      try {
+        // Get user role from Firestore
+        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
         
-        // Verify that the user has the role they're trying to log in with
-        if (userData.role !== role) {
-          // If roles don't match, log them out and throw an error
-          await signOut(auth);
-          throw new Error(`You are registered as a ${userData.role}, not as a ${role}.`);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          
+          // Verify that the user has the role they're trying to log in with
+          if (userData.role !== role) {
+            // If roles don't match, log them out and throw an error
+            await signOut(auth);
+            throw new Error(`You are registered as a ${userData.role}, not as a ${role}.`);
+          }
+          
+          // Update local state
+          setUser({
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || '',
+            email: firebaseUser.email || '',
+            role: userData.role as UserRole
+          });
+          setIsAuthenticated(true);
+        } else {
+          // If user doesn't exist in Firestore, create a record
+          await setDoc(doc(db, 'users', firebaseUser.uid), {
+            name: firebaseUser.displayName || '',
+            email: firebaseUser.email || '',
+            role: role,
+            createdAt: serverTimestamp()
+          });
+          
+          setUser({
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || '',
+            email: firebaseUser.email || '',
+            role: role
+          });
+          setIsAuthenticated(true);
         }
+      } catch (error: any) {
+        // If there's an error with Firestore, we should still keep the user logged in
+        // but display an error message
+        console.error('Firestore error during login:', error);
+        toast({
+          title: "Warning",
+          description: "Logged in, but user profile could not be loaded. Some features may be limited.",
+          variant: "destructive"
+        });
         
-        // Update local state
+        // Set minimal user data from Firebase Auth
         setUser({
           id: firebaseUser.uid,
           name: firebaseUser.displayName || '',
           email: firebaseUser.email || '',
-          role: userData.role as UserRole
-        });
-        setIsAuthenticated(true);
-      } else {
-        // If user doesn't exist in Firestore, create a record
-        await setDoc(doc(db, 'users', firebaseUser.uid), {
-          name: firebaseUser.displayName || '',
-          email: firebaseUser.email || '',
-          role: role,
-          createdAt: new Date()
-        });
-        
-        setUser({
-          id: firebaseUser.uid,
-          name: firebaseUser.displayName || '',
-          email: firebaseUser.email || '',
-          role: role
+          role: role // Use the role they're trying to login with
         });
         setIsAuthenticated(true);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      throw error;
+      
+      // Provide more specific error messages
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        throw new Error('Invalid email or password. Please try again.');
+      } else if (error.code === 'auth/too-many-requests') {
+        throw new Error('Too many failed login attempts. Please try again later or reset your password.');
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -141,25 +173,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Update profile with name
       await updateProfile(firebaseUser, { displayName: name });
       
-      // Store additional user data in Firestore
-      await setDoc(doc(db, 'users', firebaseUser.uid), {
-        name,
-        email,
-        role,
-        createdAt: new Date()
-      });
-      
-      // Update local state
-      setUser({
-        id: firebaseUser.uid,
-        name,
-        email,
-        role
-      });
-      setIsAuthenticated(true);
-    } catch (error) {
+      try {
+        // Store additional user data in Firestore
+        await setDoc(doc(db, 'users', firebaseUser.uid), {
+          name,
+          email,
+          role,
+          createdAt: serverTimestamp()
+        });
+        
+        // Update local state
+        setUser({
+          id: firebaseUser.uid,
+          name,
+          email,
+          role
+        });
+        setIsAuthenticated(true);
+      } catch (firestoreError) {
+        console.error('Firestore error during registration:', firestoreError);
+        // If Firestore fails, we should still keep the user registered
+        // but show a warning
+        toast({
+          title: "Registration Partial Success",
+          description: "Account created, but profile data couldn't be saved. Some features may be limited.",
+          variant: "destructive"
+        });
+        
+        setUser({
+          id: firebaseUser.uid,
+          name,
+          email,
+          role
+        });
+        setIsAuthenticated(true);
+      }
+    } catch (error: any) {
       console.error('Registration error:', error);
-      throw error;
+      
+      // Provide more specific error messages
+      if (error.code === 'auth/email-already-in-use') {
+        throw new Error('This email is already registered. Please use a different email or try logging in.');
+      } else if (error.code === 'auth/weak-password') {
+        throw new Error('Password is too weak. Please choose a stronger password.');
+      } else if (error.code === 'auth/invalid-email') {
+        throw new Error('Invalid email address. Please check and try again.');
+      } else {
+        throw error;
+      }
     }
   };
 

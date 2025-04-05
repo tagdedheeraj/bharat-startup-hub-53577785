@@ -8,11 +8,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
   
   const { login } = useAuth();
@@ -20,13 +23,10 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     
     if (!email || !password) {
-      toast({
-        title: "Validation Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
+      setError("Please fill in all fields");
       return;
     }
     
@@ -45,13 +45,9 @@ const Login = () => {
       } else {
         navigate('/dashboard/investor');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive"
-      });
+      setError(error.message || "Invalid email or password. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -67,6 +63,15 @@ const Login = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="startup">Startup</TabsTrigger>
