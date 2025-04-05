@@ -22,9 +22,24 @@ const StartupDashboard = () => {
   ];
 
   const services = [
-    { id: 1, name: "Startup Registration", description: "Get your startup officially registered with the government." },
-    { id: 2, name: "Funding Consultation", description: "Expert advice on securing funding for your startup." },
-    { id: 3, name: "Legal Consultation", description: "Legal advice for startups regarding compliance and more." },
+    { 
+      id: 1, 
+      name: "Startup Registration", 
+      description: "Get your startup officially registered with the government.",
+      link: "/services/certificate-marketing"
+    },
+    { 
+      id: 2, 
+      name: "Funding Consultation", 
+      description: "Expert advice on securing funding for your startup.",
+      link: "/services/funding-consultation"
+    },
+    { 
+      id: 3, 
+      name: "Legal Consultation", 
+      description: "Legal advice for startups regarding compliance and more.",
+      link: "/services/legal-consultation"
+    },
   ];
 
   const upcomingEvents = [
@@ -154,7 +169,7 @@ const StartupDashboard = () => {
                         <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
                         <p className="text-sm text-muted-foreground">{service.description}</p>
                         <Button className="mt-4 w-full">
-                          Learn More
+                          <Link to={service.link} className="w-full">Learn More</Link>
                         </Button>
                       </div>
                     </CardContent>
