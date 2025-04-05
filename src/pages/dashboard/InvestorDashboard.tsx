@@ -5,8 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { PieChart, BarChart3, TrendingUp, Building2, Calendar, Users } from 'lucide-react';
+import { PieChart, BarChart3, TrendingUp, Building2, Calendar, Users, MessageSquare } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import PortfolioAnalysis from '@/components/dashboard/PortfolioAnalysis';
+import DealFlowManager from '@/components/dashboard/DealFlowManager';
+import MessagingCenter from '@/components/dashboard/MessagingCenter';
 
 const InvestorDashboard = () => {
   const { user, logout } = useAuth();
@@ -92,10 +95,12 @@ const InvestorDashboard = () => {
       </div>
 
       <Tabs defaultValue="portfolio" className="w-full">
-        <TabsList className="grid grid-cols-1 md:grid-cols-3 mb-4">
+        <TabsList className="grid grid-cols-1 md:grid-cols-5 mb-4">
           <TabsTrigger value="portfolio">My Portfolio</TabsTrigger>
           <TabsTrigger value="opportunities">Investment Opportunities</TabsTrigger>
           <TabsTrigger value="events">Upcoming Events</TabsTrigger>
+          <TabsTrigger value="analytics">Portfolio Analysis</TabsTrigger>
+          <TabsTrigger value="messaging">Messaging</TabsTrigger>
         </TabsList>
         
         <TabsContent value="portfolio">
@@ -216,7 +221,17 @@ const InvestorDashboard = () => {
             </CardContent>
           </Card>
         </TabsContent>
+        
+        <TabsContent value="analytics">
+          <PortfolioAnalysis />
+        </TabsContent>
+        
+        <TabsContent value="messaging">
+          <MessagingCenter />
+        </TabsContent>
       </Tabs>
+      
+      <DealFlowManager />
     </div>
   );
 };
