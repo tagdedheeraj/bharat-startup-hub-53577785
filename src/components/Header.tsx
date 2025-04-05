@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Search, Phone, Mail, ChevronDown, ArrowRight, Globe, BellRing, LifeBuoy, Server, Shield, ShieldCheck, IndianRupee, FileText, Receipt, FileSpreadsheet } from 'lucide-react';
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import AuthButtons from './AuthButtons';
 
 const Logo = () => (
   <Link to="/" className="relative group">
@@ -299,6 +301,7 @@ export default function Header() {
               <Search size={20} className="transition-all group-hover:scale-110" />
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
             </Button>
+            <AuthButtons />
             <Button asChild className="relative group overflow-hidden">
               <Link 
                 to="/contact" 
@@ -318,6 +321,7 @@ export default function Header() {
             <Button variant="ghost" size="icon" className="text-foreground/70">
               <Search size={20} />
             </Button>
+            <AuthButtons />
             <button
               type="button"
               className="p-2 rounded-md text-gray-600 hover:text-gray-900 transition-colors"

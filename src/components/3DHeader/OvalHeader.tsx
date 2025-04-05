@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Scene from './Scene';
 import { cn } from '@/lib/utils';
-import { Search, BellRing, User, Menu, X, ChevronDown, ChevronRight, Shield, FileText, IndianRupee, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
+import { Search, BellRing, Menu, X, ChevronDown, ChevronRight, Shield, FileText, IndianRupee, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -11,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AuthButtons from '../AuthButtons';
 
 const Logo = () => (
   <Link to="/" className="relative group z-10">
@@ -91,10 +91,9 @@ const OvalHeader = () => {
     return currentPath.startsWith(path);
   };
 
-  // Updated navigation handler to include scroll to top functionality
   const handleNavigation = (href: string) => {
     navigate(href);
-    window.scrollTo(0, 0); // Scroll to top when navigating
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -212,10 +211,7 @@ const OvalHeader = () => {
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-india-saffron 
                 animate-pulse"></span>
             </Button>
-            <Button variant="ghost" size="icon" className="text-black hover:text-india-saffron 
-              hover:bg-white/10 transition-all duration-300">
-              <User size={18} />
-            </Button>
+            <AuthButtons />
             <Button 
               className="bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
                 shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
@@ -223,7 +219,7 @@ const OvalHeader = () => {
               size="sm"
               onClick={() => {
                 handleNavigation('/contact');
-                window.scrollTo(0, 0); // Ensure scroll to top
+                window.scrollTo(0, 0);
               }}
             >
               Get Started
@@ -231,6 +227,7 @@ const OvalHeader = () => {
           </div>
           
           <div className="lg:hidden flex items-center">
+            <AuthButtons />
             <Button
               variant="ghost"
               size="icon"
