@@ -4,11 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PortfolioTab from './tabs/PortfolioTab';
 import OpportunitiesTab from './tabs/OpportunitiesTab';
 import EventsTab from './tabs/EventsTab';
-import PortfolioAnalysis from './PortfolioAnalysis';
-import MessagingCenter from './MessagingCenter';
-import ToolsTab from './tabs/ToolsTab';
+import AnalyticsTab from './tabs/AnalyticsTab';
 import VisualizationTab from './tabs/VisualizationTab';
-import NotificationSystem from './notifications/NotificationSystem';
+import ToolsTab from './tabs/ToolsTab';
+import NotificationsTab from './tabs/NotificationsTab';
+import MessagingTab from './tabs/MessagingTab';
 
 const InvestorDashboardTabs = () => {
   return (
@@ -37,7 +37,7 @@ const InvestorDashboardTabs = () => {
       </TabsContent>
       
       <TabsContent value="analytics">
-        <PortfolioAnalysis />
+        <AnalyticsTab />
       </TabsContent>
       
       <TabsContent value="visualization">
@@ -49,11 +49,11 @@ const InvestorDashboardTabs = () => {
       </TabsContent>
       
       <TabsContent value="notifications">
-        <NotificationSystem />
+        <NotificationsTab />
       </TabsContent>
       
       <TabsContent value="messaging">
-        <MessagingCenter />
+        <MessagingTab />
       </TabsContent>
     </Tabs>
   );
