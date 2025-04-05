@@ -1,11 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '@/contexts/AuthContext';
 import { saveInvestment } from '@/services/firebaseDataService';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,6 +18,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Investment } from '@/hooks/useFirebaseData';
+import { AlertCircle, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const portfolioSchema = z.object({
   startupName: z.string().min(3, 'Startup name must be at least 3 characters'),
@@ -30,6 +32,9 @@ type PortfolioFormValues = z.infer<typeof portfolioSchema>;
 
 const AddPortfolioItemForm = () => {
   const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
   const form = useForm<PortfolioFormValues>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
@@ -42,13 +47,14 @@ const AddPortfolioItemForm = () => {
 
   const onSubmit = async (data: PortfolioFormValues) => {
     if (!user?.id) {
-      toast({
-        title: "Authentication Error",
+      toast.error("Authentication Error", {
         description: "You must be logged in to add portfolio items",
-        variant: "destructive",
       });
       return;
     }
+    
+    setIsSubmitting(true);
+    setError(null);
     
     try {
       // Add to Firestore
@@ -63,17 +69,24 @@ const AddPortfolioItemForm = () => {
       
       form.reset();
       
-      toast({
-        title: "Success",
+      toast.success("Success", {
         description: "Portfolio item added successfully",
       });
     } catch (error) {
       console.error("Error adding portfolio item:", error);
-      toast({
-        title: "Error",
+      
+      // Check for Firebase permission error
+      if (error instanceof Error && error.message.includes("permission")) {
+        setError("Permission denied. You don't have access to add investments. Please contact support.");
+      } else {
+        setError("Failed to add portfolio item. Please try again later.");
+      }
+      
+      toast.error("Error", {
         description: "Failed to add portfolio item",
-        variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -83,6 +96,14 @@ const AddPortfolioItemForm = () => {
         <CardTitle>Add New Investment</CardTitle>
       </CardHeader>
       <CardContent>
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -141,7 +162,20 @@ const AddPortfolioItemForm = () => {
               )}
             />
             
-            <Button type="submit" className="w-full">Add Investment</Button>
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Adding...
+                </>
+              ) : (
+                'Add Investment'
+              )}
+            </Button>
           </form>
         </Form>
       </CardContent>
