@@ -1,5 +1,15 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser,
+  updateProfile
+} from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase';
 
 // Define user types
 export type UserRole = 'startup' | 'investor' | null;
@@ -16,7 +26,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (email: string, password: string, role: UserRole) => Promise<void>;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,68 +46,137 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
-  // Check for existing session on mount
+  // Listen for auth state changes
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          // Get additional user data from Firestore
+          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUser({
+              id: firebaseUser.uid,
+              name: firebaseUser.displayName || '',
+              email: firebaseUser.email || '',
+              role: userData.role as UserRole
+            });
+            setIsAuthenticated(true);
+          } else {
+            // User record in Firestore not found
+            console.error('User Firestore record not found');
+            await logout();
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  // Simple mock login function (in a real app, this would call an API)
   const login = async (email: string, password: string, role: UserRole) => {
-    // This is just a mock implementation
-    const mockUser: User = {
-      id: role === 'startup' ? 'startup-123' : 'investor-456',
-      name: role === 'startup' ? 'Sample Startup' : 'Sample Investor',
-      email,
-      role
-    };
-
-    // In a real app, you would validate credentials against a backend
-    console.log(`Logging in as ${role} with email: ${email}`);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Store user in local storage
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    setIsAuthenticated(true);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      
+      // Get user role from Firestore
+      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        
+        // Verify that the user has the role they're trying to log in with
+        if (userData.role !== role) {
+          // If roles don't match, log them out and throw an error
+          await signOut(auth);
+          throw new Error(`You are registered as a ${userData.role}, not as a ${role}.`);
+        }
+        
+        // Update local state
+        setUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || '',
+          email: firebaseUser.email || '',
+          role: userData.role as UserRole
+        });
+        setIsAuthenticated(true);
+      } else {
+        // If user doesn't exist in Firestore, create a record
+        await setDoc(doc(db, 'users', firebaseUser.uid), {
+          name: firebaseUser.displayName || '',
+          email: firebaseUser.email || '',
+          role: role,
+          createdAt: new Date()
+        });
+        
+        setUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || '',
+          email: firebaseUser.email || '',
+          role: role
+        });
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
   };
 
   const register = async (name: string, email: string, password: string, role: UserRole) => {
-    // This is just a mock implementation
-    const mockUser: User = {
-      id: Math.random().toString(36).substring(2, 11),
-      name,
-      email,
-      role
-    };
-
-    // In a real app, you would register the user with a backend
-    console.log(`Registering as ${role} with name: ${name}, email: ${email}`);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Store user in local storage
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    setUser(mockUser);
-    setIsAuthenticated(true);
+    try {
+      // Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      
+      // Update profile with name
+      await updateProfile(firebaseUser, { displayName: name });
+      
+      // Store additional user data in Firestore
+      await setDoc(doc(db, 'users', firebaseUser.uid), {
+        name,
+        email,
+        role,
+        createdAt: new Date()
+      });
+      
+      // Update local state
+      setUser({
+        id: firebaseUser.uid,
+        name,
+        email,
+        role
+      });
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    setIsAuthenticated(false);
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+      throw error;
+    }
   };
 
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
