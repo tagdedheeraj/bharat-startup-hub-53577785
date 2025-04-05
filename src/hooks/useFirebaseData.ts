@@ -9,7 +9,19 @@ import {
   FirebaseData
 } from '@/services/firebaseDataService';
 import { useAuth } from '@/contexts/AuthContext';
-import { where, orderBy, limit } from 'firebase/firestore';
+import { where, orderBy, limit as firestoreLimit } from 'firebase/firestore';
+
+// Interfaces for our data types
+export interface Investment {
+  id?: string;
+  startupName: string;
+  amountInvested: number;
+  equityPercentage: number;
+  investmentDate: string;
+  investorId: string;
+  status: 'active' | 'inactive' | 'exited';
+  createdAt?: any;
+}
 
 // Generic hook for getting a document
 export function useDocument<T>(collectionName: string, docId: string | null) {
@@ -135,7 +147,7 @@ export function useUserData<T extends FirebaseData>(collectionName: string) {
 export function useInvestorPortfolio() {
   const { user } = useAuth();
   
-  return useCollection(
+  return useCollection<Investment>(
     'investments',
     user?.id ? [
       where('investorId', '==', user.id),
@@ -145,13 +157,13 @@ export function useInvestorPortfolio() {
 }
 
 // Example hook for investment opportunities
-export function useInvestmentOpportunities(limit: number = 20) {
+export function useInvestmentOpportunities(limitCount: number = 20) {
   return useCollection(
     'fundingRequests',
     [
       where('status', '==', 'active'),
       orderBy('createdAt', 'desc'),
-      limit(limit)
+      firestoreLimit(limitCount)
     ]
   );
 }

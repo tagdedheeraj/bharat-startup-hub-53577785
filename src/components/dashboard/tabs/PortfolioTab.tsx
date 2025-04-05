@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useInvestorPortfolio } from '@/hooks/useFirebaseData';
+import { useInvestorPortfolio, Investment } from '@/hooks/useFirebaseData';
 import AddPortfolioItemForm from '@/components/dashboard/portfolio/AddPortfolioItemForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -41,8 +41,8 @@ const PortfolioTab = () => {
                 <TabsContent value="active">
                   <div className="space-y-4">
                     {investments
-                      .filter(investment => investment.status === 'active')
-                      .map((investment, index) => (
+                      .filter((investment: Investment) => investment.status === 'active')
+                      .map((investment: Investment, index) => (
                         <Card key={index}>
                           <CardContent className="p-4">
                             <div className="flex justify-between items-start">
@@ -61,7 +61,7 @@ const PortfolioTab = () => {
                         </Card>
                       ))}
                       
-                    {investments.filter(i => i.status === 'active').length === 0 && (
+                    {investments.filter((i: Investment) => i.status === 'active').length === 0 && (
                       <p className="text-center py-8 text-muted-foreground">
                         No active investments found.
                       </p>
@@ -71,7 +71,7 @@ const PortfolioTab = () => {
                 
                 <TabsContent value="all">
                   <div className="space-y-4">
-                    {investments.map((investment, index) => (
+                    {investments.map((investment: Investment, index) => (
                       <Card key={index}>
                         <CardContent className="p-4">
                           <div className="flex justify-between items-start">

@@ -17,11 +17,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Investment } from '@/hooks/useFirebaseData';
 
 const portfolioSchema = z.object({
   startupName: z.string().min(3, 'Startup name must be at least 3 characters'),
-  amountInvested: z.string().transform((val) => parseFloat(val)),
-  equityPercentage: z.string().transform((val) => parseFloat(val)),
+  amountInvested: z.coerce.number().min(1, 'Amount must be greater than 0'),
+  equityPercentage: z.coerce.number().min(0.01, 'Equity must be greater than 0').max(100, 'Equity cannot exceed 100%'),
   investmentDate: z.string(),
 });
 
@@ -33,8 +34,8 @@ const AddPortfolioItemForm = () => {
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
       startupName: '',
-      amountInvested: '',
-      equityPercentage: '',
+      amountInvested: 0,
+      equityPercentage: 0,
       investmentDate: new Date().toISOString().substring(0, 10),
     },
   });
@@ -58,7 +59,7 @@ const AddPortfolioItemForm = () => {
         investmentDate: data.investmentDate,
         investorId: user.id,
         status: 'active'
-      });
+      } as Investment);
       
       form.reset();
       
