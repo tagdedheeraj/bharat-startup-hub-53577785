@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import { Suspense, useEffect, useState, Component, ErrorInfo, ReactNode } from "react";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
 import HomePage from "./pages/Index";
@@ -37,6 +40,12 @@ import AccountingPage from "./pages/ca-services/Accounting";
 import GSTPage from "./pages/ca-services/GST";
 import PayrollPage from "./pages/ca-services/Payroll";
 import CACompliancePage from "./pages/ca-services/Compliance";
+
+// Auth and Dashboard Pages
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import StartupDashboard from "./pages/dashboard/StartupDashboard";
+import InvestorDashboard from "./pages/dashboard/InvestorDashboard";
 
 // Error boundary to prevent the whole app from crashing
 class ErrorBoundary extends Component<{ children: ReactNode, fallback?: ReactNode }> {
@@ -138,56 +147,80 @@ const App = () => {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <BrowserRouter>
-            <NavigationObserver />
-            <ErrorBoundary>
-              <Layout>
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/services" element={<ServicesPage />} />
-                    <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
-                    <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
-                    <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
-                    <Route path="/it-solutions" element={<ITSolutionsPage />} />
-                    <Route path="/success-stories" element={<SuccessStoriesPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/faqs" element={<FAQsPage />} />
-                    
-                    {/* Legal Pages */}
-                    <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
-                    <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                    <Route path="/disclaimer" element={<DisclaimerPage />} />
-                    <Route path="/service-agreement" element={<ServiceAgreementPage />} />
-                    
-                    {/* CA Services Routes */}
-                    <Route path="/ca-services" element={<CAServicesPage />} />
-                    <Route path="/ca-services/certifications" element={<CertificationsPage />} />
-                    <Route path="/ca-services/trademark" element={<TrademarkPage />} />
-                    <Route path="/ca-services/income-tax" element={<IncomeTaxPage />} />
-                    <Route path="/ca-services/accounting" element={<AccountingPage />} />
-                    <Route path="/ca-services/gst" element={<GSTPage />} />
-                    <Route path="/ca-services/payroll" element={<PayrollPage />} />
-                    <Route path="/ca-services/compliance" element={<CACompliancePage />} />
-                    
-                    {/* More Routes */}
-                    <Route path="/more/experts" element={<ExpertsPage />} />
-                    <Route path="/more/msme-events" element={<MSMEEventsPage />} />
-                    <Route path="/more/reviews" element={<ReviewsPage />} />
-                    <Route path="/more/blogs" element={<BlogsPage />} />
-                    <Route path="/more/compliance" element={<CompliancePage />} />
-                    <Route path="/404" element={<NotFound />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </Layout>
-            </ErrorBoundary>
-            <Toaster />
-            <Sonner />
-          </BrowserRouter>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <BrowserRouter>
+              <NavigationObserver />
+              <ErrorBoundary>
+                <Layout>
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/services" element={<ServicesPage />} />
+                      <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
+                      <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
+                      <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
+                      <Route path="/it-solutions" element={<ITSolutionsPage />} />
+                      <Route path="/success-stories" element={<SuccessStoriesPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                      <Route path="/faqs" element={<FAQsPage />} />
+                      
+                      {/* Auth Routes */}
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      
+                      {/* Dashboard Routes */}
+                      <Route 
+                        path="/dashboard/startup" 
+                        element={
+                          <ProtectedRoute allowedRoles={['startup']}>
+                            <StartupDashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/dashboard/investor" 
+                        element={
+                          <ProtectedRoute allowedRoles={['investor']}>
+                            <InvestorDashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      
+                      {/* Legal Pages */}
+                      <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
+                      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                      <Route path="/disclaimer" element={<DisclaimerPage />} />
+                      <Route path="/service-agreement" element={<ServiceAgreementPage />} />
+                      
+                      {/* CA Services Routes */}
+                      <Route path="/ca-services" element={<CAServicesPage />} />
+                      <Route path="/ca-services/certifications" element={<CertificationsPage />} />
+                      <Route path="/ca-services/trademark" element={<TrademarkPage />} />
+                      <Route path="/ca-services/income-tax" element={<IncomeTaxPage />} />
+                      <Route path="/ca-services/accounting" element={<AccountingPage />} />
+                      <Route path="/ca-services/gst" element={<GSTPage />} />
+                      <Route path="/ca-services/payroll" element={<PayrollPage />} />
+                      <Route path="/ca-services/compliance" element={<CACompliancePage />} />
+                      
+                      {/* More Routes */}
+                      <Route path="/more/experts" element={<ExpertsPage />} />
+                      <Route path="/more/msme-events" element={<MSMEEventsPage />} />
+                      <Route path="/more/reviews" element={<ReviewsPage />} />
+                      <Route path="/more/blogs" element={<BlogsPage />} />
+                      <Route path="/more/compliance" element={<CompliancePage />} />
+                      <Route path="/404" element={<NotFound />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </Layout>
+              </ErrorBoundary>
+              <Toaster />
+              <Sonner />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
