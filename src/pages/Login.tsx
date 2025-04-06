@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { LoginForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
+import { LoginForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
 import { retryOperation } from '@/contexts/auth/AuthUtils';
 
 const Login = () => {
@@ -13,13 +13,30 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
   
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  // Monitor online status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setShowFirebaseAlert(false);
     
     if (!email || !password) {
       setError("Please fill in all fields");
@@ -45,6 +62,14 @@ const Login = () => {
       console.error('Login error:', error);
       setError(error.message || "Invalid email or password. Please try again.");
       
+      // Check if it's a Firebase connection error
+      if (error.code === 'auth/network-request-failed' || 
+          error.message.includes("network") || 
+          error.message.includes("Failed to fetch") || 
+          !navigator.onLine) {
+        setShowFirebaseAlert(true);
+      }
+      
       // Show a toast for network errors to make them more visible
       if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
         toast({
@@ -69,6 +94,8 @@ const Login = () => {
         </CardHeader>
         <CardContent>
           <NetworkStatusAlert />
+          
+          {showFirebaseAlert && <OfflineFirebaseAlert />}
           
           {error && <ErrorAlert message={error} />}
           

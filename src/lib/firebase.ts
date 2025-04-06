@@ -57,10 +57,11 @@ if (typeof window !== 'undefined') {
 // Connect to emulators if in development
 if (import.meta.env.DEV) {
   try {
-    // Uncomment these lines if you're running Firebase emulators locally
-    // connectFirestoreEmulator(db, 'localhost', 8080);
-    // connectStorageEmulator(storage, 'localhost', 9199);
-    // connectAuthEmulator(auth, 'http://localhost:9099');
+    // Uncomment these lines to use Firebase emulators locally
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectStorageEmulator(storage, 'localhost', 9199);
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+    console.log('Connected to Firebase emulators');
   } catch (error) {
     console.error("Failed to connect to emulators:", error);
   }

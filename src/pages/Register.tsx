@@ -5,7 +5,7 @@ import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { RegisterForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
+import { RegisterForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
 import { retryOperation } from '@/contexts/auth/AuthUtils';
 
 const Register = () => {
@@ -17,6 +17,7 @@ const Register = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
   
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Register = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setShowFirebaseAlert(false);
     
     // Form validation
     if (!name || !email || !password || !confirmPassword) {
@@ -74,6 +76,14 @@ const Register = () => {
       console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
       
+      // Check if it's a Firebase connection error
+      if (error.code === 'auth/network-request-failed' || 
+          error.message.includes("network") || 
+          error.message.includes("Failed to fetch") || 
+          !navigator.onLine) {
+        setShowFirebaseAlert(true);
+      }
+      
       // Show a toast for network errors to make them more visible
       if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
         toast({
@@ -98,6 +108,8 @@ const Register = () => {
         </CardHeader>
         <CardContent>
           <NetworkStatusAlert />
+          
+          {showFirebaseAlert && <OfflineFirebaseAlert />}
           
           {error && <ErrorAlert message={error} />}
           
