@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { UserRole, User, AuthContextType } from './AuthTypes';
 import { AuthContext } from './AuthContext';
 import { useAuthFunctions } from './useAuthFunctions';
+import { toast } from '@/hooks/use-toast';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -33,9 +34,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             role: role
           });
           setIsAuthenticated(true);
+          
+          // Show toast on successful login or signup (except for initial session)
+          if (event === 'SIGNED_IN' && !loading) {
+            toast({
+              title: "Successfully Signed In",
+              description: `Welcome ${session.user.user_metadata?.name || ''}!`,
+            });
+          } else if (event === 'SIGNED_UP') {
+            toast({
+              title: "Account Created",
+              description: "Your account has been created successfully!",
+            });
+          }
         } else {
           setUser(null);
           setIsAuthenticated(false);
+          
+          // Show toast on sign out (except for initial session check)
+          if (event === 'SIGNED_OUT' && !loading) {
+            toast({
+              title: "Signed Out",
+              description: "You have been signed out successfully.",
+            });
+          }
         }
       }
     );
@@ -61,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [loading]);
 
   const authValue = useAuthFunctions(user, setUser, isAuthenticated, setIsAuthenticated);
 

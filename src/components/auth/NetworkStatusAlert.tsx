@@ -29,6 +29,9 @@ const NetworkStatusAlert: React.FC = () => {
       });
     };
 
+    // Check network status immediately
+    setIsOnline(navigator.onLine);
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
@@ -41,10 +44,10 @@ const NetworkStatusAlert: React.FC = () => {
   if (isOnline) return null;
 
   return (
-    <Alert variant="destructive" className="mb-4">
-      <WifiOff className="h-4 w-4" />
-      <AlertDescription>
-        You are currently offline. Please check your internet connection to use all features.
+    <Alert variant="destructive" className="mb-4 border-2 border-red-500 animate-pulse">
+      <WifiOff className="h-5 w-5 mr-2" />
+      <AlertDescription className="text-base font-medium">
+        You are currently offline. Please check your internet connection to sign up or log in.
       </AlertDescription>
     </Alert>
   );

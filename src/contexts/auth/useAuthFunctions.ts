@@ -35,23 +35,42 @@ export const useAuthFunctions = (
       // User state will be updated by onAuthStateChange listener
     } catch (error: any) {
       console.error('Login error:', error);
-      throw new Error(error.message || "Failed to login. Please check your credentials.");
+      
+      // Improved error messages
+      if (error.message.includes('fetch')) {
+        throw new Error("Network connection error. Please check your internet connection and try again.");
+      } else if (error.message.includes('Invalid login credentials')) {
+        throw new Error("Invalid email or password. Please check your credentials and try again.");
+      } else {
+        throw new Error(error.message || "Failed to login. Please check your credentials.");
+      }
     }
   };
 
   const register = async (name: string, email: string, password: string, role: UserRole) => {
     try {
-      // Create user in Supabase Auth
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            name,
-            role,
+      // Check network connection first
+      if (!navigator.onLine) {
+        throw new Error("You are currently offline. Please connect to the internet to register.");
+      }
+      
+      console.log("Starting registration process with Supabase");
+      
+      // Create user in Supabase Auth with retry logic
+      const { data, error } = await retryOperation(
+        async () => supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name,
+              role,
+            }
           }
-        }
-      });
+        }),
+        3, // 3 retry attempts
+        1000 // 1 second delay between retries
+      );
       
       if (error) throw error;
       
@@ -65,7 +84,17 @@ export const useAuthFunctions = (
       // User state will be updated by onAuthStateChange listener
     } catch (error: any) {
       console.error('Registration error:', error);
-      throw new Error(error.message || "Failed to register. Please try again.");
+      
+      // Enhanced error messages based on common issues
+      if (error.message.includes('fetch') || error.message.includes('network')) {
+        throw new Error("Network connection error. Please check your internet connection and try again.");
+      } else if (error.message.includes('User already registered')) {
+        throw new Error("This email is already registered. Please try logging in instead.");
+      } else if (error.message.includes('rate limit')) {
+        throw new Error("Too many registration attempts. Please wait a moment and try again.");
+      } else {
+        throw new Error(error.message || "Failed to register. Please try again.");
+      }
     }
   };
 
@@ -78,6 +107,26 @@ export const useAuthFunctions = (
       console.error('Logout error:', error);
       throw error;
     }
+  };
+  
+  // Helper function for retry logic
+  const retryOperation = async (operation: () => Promise<any>, maxRetries: number, delay: number) => {
+    let lastError;
+    
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        return await operation();
+      } catch (error: any) {
+        console.log(`Attempt ${i + 1} failed. Retrying...`, error);
+        lastError = error;
+        
+        if (i < maxRetries - 1) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      }
+    }
+    
+    throw lastError;
   };
 
   return {
