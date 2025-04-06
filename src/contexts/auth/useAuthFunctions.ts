@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { auth, db, safeSignIn, safeSignUp } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { toast } from '@/hooks/use-toast';
 import { UserRole, User, AuthContextType } from './AuthTypes';
 import { retryOperation } from './AuthUtils';
@@ -16,32 +18,25 @@ export const useAuthFunctions = (
     try {
       console.log(`Attempting to login with email: ${email} and role: ${role}`);
       
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { user: firebaseUser } = await safeSignIn(email, password);
       
-      if (error) throw error;
+      // Verify role in Firestore
+      const userDocRef = doc(db, 'users', firebaseUser.uid);
+      const userDoc = await retryOperation(() => firebaseUser.getIdTokenResult());
       
-      console.log("Login successful with Supabase:", data);
+      // User state will be updated by onAuthStateChanged listener
+      console.log("Login successful:", firebaseUser);
       
-      // Check if user has the role they're trying to log in with
-      if (data.user.user_metadata?.role && data.user.user_metadata.role !== role) {
-        // If roles don't match, log them out and throw an error
-        console.error(`Role mismatch: user is ${data.user.user_metadata.role}, trying to login as ${role}`);
-        await supabase.auth.signOut();
-        throw new Error(`You are registered as a ${data.user.user_metadata.role}, not as a ${role}.`);
-      }
-      
-      // User state will be updated by onAuthStateChange listener
     } catch (error: any) {
       console.error('Login error:', error);
       
       // Improved error messages
-      if (error.message.includes('fetch')) {
+      if (error.code === 'auth/network-request-failed') {
         throw new Error("Network connection error. Please check your internet connection and try again.");
-      } else if (error.message.includes('Invalid login credentials')) {
+      } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
         throw new Error("Invalid email or password. Please check your credentials and try again.");
+      } else if (error.code === 'auth/user-not-found') {
+        throw new Error("User not found. Please check your email or register for a new account.");
       } else {
         throw new Error(error.message || "Failed to login. Please check your credentials.");
       }
@@ -55,44 +50,41 @@ export const useAuthFunctions = (
         throw new Error("You are currently offline. Please connect to the internet to register.");
       }
       
-      console.log("Starting registration process with Supabase");
+      console.log("Starting registration process with Firebase");
       
-      // Create user in Supabase Auth with retry logic
-      const { data, error } = await retryOperation(
-        async () => supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name,
-              role,
-            }
-          }
-        }),
+      // Create user in Firebase Auth with retry logic
+      const { user: firebaseUser } = await retryOperation(
+        () => safeSignUp(email, password, name),
         3, // 3 retry attempts
         1000 // 1 second delay between retries
       );
       
-      if (error) throw error;
+      // Store additional user data in Firestore
+      await setDoc(doc(db, 'users', firebaseUser.uid), {
+        name,
+        email,
+        role,
+        createdAt: serverTimestamp()
+      });
       
-      console.log("Registration successful with Supabase:", data);
+      console.log("Registration successful:", firebaseUser);
       
       toast({
         title: "Registration Successful",
         description: `Your ${role} account has been created successfully.`,
       });
       
-      // User state will be updated by onAuthStateChange listener
+      // User state will be updated by onAuthStateChanged listener
     } catch (error: any) {
       console.error('Registration error:', error);
       
       // Enhanced error messages based on common issues
-      if (error.message.includes('fetch') || error.message.includes('network')) {
+      if (error.code === 'auth/network-request-failed') {
         throw new Error("Network connection error. Please check your internet connection and try again.");
-      } else if (error.message.includes('User already registered')) {
+      } else if (error.code === 'auth/email-already-in-use') {
         throw new Error("This email is already registered. Please try logging in instead.");
-      } else if (error.message.includes('rate limit')) {
-        throw new Error("Too many registration attempts. Please wait a moment and try again.");
+      } else if (error.code === 'auth/weak-password') {
+        throw new Error("Password is too weak. Please use a stronger password.");
       } else {
         throw new Error(error.message || "Failed to register. Please try again.");
       }
@@ -101,9 +93,8 @@ export const useAuthFunctions = (
 
   const logout = async () => {
     try {
-      await supabase.auth.signOut();
-      setUser(null);
-      setIsAuthenticated(false);
+      await signOut(auth);
+      // Auth state listener will handle state updates
     } catch (error) {
       console.error('Logout error:', error);
       throw error;

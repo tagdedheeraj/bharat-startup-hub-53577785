@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect, ReactNode } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { auth, db } from '@/lib/firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { UserRole, User, AuthContextType } from './AuthTypes';
 import { AuthContext } from './AuthContext';
 import { useAuthFunctions } from './useAuthFunctions';
@@ -19,71 +21,68 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Listen for auth state changes
   useEffect(() => {
-    // Set up auth state listener first
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log("Supabase auth state changed:", event, session);
-        if (session) {
-          // Get user's role from metadata
-          const role = session.user?.user_metadata?.role as UserRole || 'startup';
-
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        try {
+          // Try to get user role from Firestore
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          
+          let role: UserRole = 'startup'; // Default role
+          let name = firebaseUser.displayName || '';
+          
+          if (userDoc.exists()) {
+            // Use data from Firestore if available
+            const userData = userDoc.data();
+            role = userData.role as UserRole;
+            name = userData.name || name;
+          }
+          
           setUser({
-            id: session.user.id,
-            name: session.user.user_metadata?.name || '',
-            email: session.user.email || '',
+            id: firebaseUser.uid,
+            name: name,
+            email: firebaseUser.email || '',
             role: role
           });
           setIsAuthenticated(true);
           
-          // Show toast on successful login or signup (except for initial session)
-          if (event === 'SIGNED_IN' && !loading) {
+          // Show welcome toast for sign-in (except initial load)
+          if (!loading) {
             toast({
-              title: "Successfully Signed In",
-              description: `Welcome ${session.user.user_metadata?.name || ''}!`,
-            });
-          } else if (event === 'SIGNED_UP') {
-            toast({
-              title: "Account Created",
-              description: "Your account has been created successfully!",
+              title: "Signed In",
+              description: `Welcome ${name}!`,
             });
           }
-        } else {
-          setUser(null);
-          setIsAuthenticated(false);
           
-          // Show toast on sign out (except for initial session check)
-          if (event === 'SIGNED_OUT' && !loading) {
-            toast({
-              title: "Signed Out",
-              description: "You have been signed out successfully.",
-            });
-          }
+        } catch (error) {
+          console.error("Error getting user data:", error);
+          // Still set basic user info even if Firestore fetch fails
+          setUser({
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || '',
+            email: firebaseUser.email || '',
+            role: 'startup' // Default role
+          });
+          setIsAuthenticated(true);
+        }
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        
+        // Show signout toast (except for initial load)
+        if (!loading && isAuthenticated) {
+          toast({
+            title: "Signed Out",
+            description: "You have been signed out successfully.",
+          });
         }
       }
-    );
-
-    // Then check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Retrieved session:", session);
-      if (session) {
-        // Get user's role from metadata
-        const role = session.user?.user_metadata?.role as UserRole || 'startup';
-
-        setUser({
-          id: session.user.id,
-          name: session.user.user_metadata?.name || '',
-          email: session.user.email || '',
-          role: role
-        });
-        setIsAuthenticated(true);
-      }
+      
       setLoading(false);
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [loading]);
+    return () => unsubscribe();
+  }, [loading, isAuthenticated]);
 
   const authValue = useAuthFunctions(user, setUser, isAuthenticated, setIsAuthenticated);
 

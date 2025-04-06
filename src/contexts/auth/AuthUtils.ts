@@ -17,7 +17,7 @@ export const fetchUserData = async (firebaseUser: FirebaseUser): Promise<User | 
       
       return {
         id: firebaseUser.uid,
-        name: firebaseUser.displayName || '',
+        name: firebaseUser.displayName || userData.name || '',
         email: firebaseUser.email || '',
         role: userData.role as UserRole
       };
