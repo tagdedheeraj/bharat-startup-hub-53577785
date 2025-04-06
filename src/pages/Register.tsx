@@ -5,9 +5,7 @@ import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { RegisterForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
-import { retryOperation } from '@/contexts/auth/AuthUtils';
-import { getNetworkStatus } from '@/lib/firebase';
+import { RegisterForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -17,8 +15,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(getNetworkStatus());
-  const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
   
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -30,21 +27,19 @@ const Register = () => {
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    window.addEventListener('app-online', handleOnline);
-    window.addEventListener('app-offline', handleOffline);
+    
+    // Set initial status
+    setIsOnline(navigator.onLine);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('app-online', handleOnline);
-      window.removeEventListener('app-offline', handleOffline);
     };
   }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setShowFirebaseAlert(false);
     
     // Form validation
     if (!name || !email || !password || !confirmPassword) {
@@ -65,33 +60,12 @@ const Register = () => {
     try {
       setIsLoading(true);
       
-      try {
-        await register(name, email, password, activeRole);
-        
-        toast({
-          title: "Registration Successful",
-          description: `Your ${activeRole} account has been created successfully.`,
-        });
-        
-        // Redirect to the appropriate dashboard
-        navigate(`/dashboard/${activeRole}`);
-      } catch (error: any) {
-        console.error('Registration error:', error);
-        
-        // If we have a network error, try to show a more helpful message
-        if (error.message.includes('network') || !navigator.onLine) {
-          setShowFirebaseAlert(true);
-          if (import.meta.env.DEV) {
-            toast({
-              title: "Development Mode",
-              description: "Using mock authentication in development mode due to network issues.",
-            });
-          }
-        }
-        
-        throw error;
-      }
+      await register(name, email, password, activeRole);
+      
+      // Redirect to the appropriate dashboard
+      navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
+      console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
       
       // Show a toast for network errors to make them more visible
@@ -118,8 +92,6 @@ const Register = () => {
         </CardHeader>
         <CardContent>
           <NetworkStatusAlert />
-          
-          {showFirebaseAlert && <OfflineFirebaseAlert />}
           
           {error && <ErrorAlert message={error} />}
           
