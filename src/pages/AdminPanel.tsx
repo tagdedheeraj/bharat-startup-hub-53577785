@@ -33,17 +33,24 @@ const AdminPanel = () => {
     }
   }, [isAuthenticated, user, navigate]);
 
-  // Fetch basic stats
+  // Fetch basic stats - commented out database query since table doesn't exist yet
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
+        // Instead of querying a non-existent table, let's set a mock value
+        // When you create the 'profiles' table in Supabase, you can uncomment this code
+        /*
         const { count, error } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true });
         
         if (error) throw error;
         setUserCount(count || 0);
+        */
+        
+        // For now, we'll use a mock value
+        setUserCount(5);
       } catch (error) {
         console.error("Error fetching stats:", error);
         toast({
