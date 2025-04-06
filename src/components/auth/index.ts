@@ -6,3 +6,5 @@ export { default as OfflineAlert } from './OfflineAlert';
 export { default as ErrorAlert } from './ErrorAlert';
 export { default as NetworkStatusAlert } from './NetworkStatusAlert';
 export { default as OfflineFirebaseAlert } from './OfflineFirebaseAlert';
+export { default as NetworkRetryButton } from './NetworkRetryButton';
+export { default as RegisterTabs } from './RegisterTabs';
