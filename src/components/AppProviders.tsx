@@ -1,7 +1,7 @@
 
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/contexts/auth/AuthContext";
+import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter } from "react-router-dom";
 import NavigationObserver from "./NavigationObserver";
