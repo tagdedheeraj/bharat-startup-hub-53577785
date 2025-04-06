@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useRegisterForm = () => {
   const [name, setName] = useState('');
@@ -58,20 +57,24 @@ export const useRegisterForm = () => {
       const testTimeout = setTimeout(() => {
         setError("Connection timeout. Please try again later.");
         setIsRetrying(false);
-      }, 10000);
+      }, 5000);
       
-      await supabase.auth.getSession();
+      // Test connection with a simple fetch
+      await fetch('https://www.google.com/favicon.ico', { 
+        mode: 'no-cors',
+        cache: 'no-store'
+      });
       
       clearTimeout(testTimeout);
       
       toast({
         title: "Connection Restored",
-        description: "Your connection to our servers is working now. You can try to register again.",
+        description: "Your connection to the internet is working now. You can try to register again.",
       });
       
     } catch (error) {
       console.error("Connection test failed:", error);
-      setError("Unable to connect to authentication service. Please check your internet and try again.");
+      setError("Unable to connect to the internet. Please check your connection and try again.");
     } finally {
       setIsRetrying(false);
     }
@@ -106,9 +109,12 @@ export const useRegisterForm = () => {
       // Create a timeout to show a message if registration takes too long
       const registrationTimeout = setTimeout(() => {
         if (isLoading) {
-          setError("The registration is taking longer than expected. Please check your internet connection.");
+          toast({
+            title: "Registration is taking longer than expected",
+            description: "Please wait while we try to complete your registration...",
+          });
         }
-      }, 8000);
+      }, 5000);
       
       await register(name, email, password, activeRole);
       
@@ -122,14 +128,11 @@ export const useRegisterForm = () => {
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
       console.error('Registration error:', error);
-      setError(error.message || "Unable to create your account. Please try again.");
       
-      if (error.message.includes("Network") || error.message.includes("internet connection") || error.message.includes("offline")) {
-        toast({
-          title: "Network Error",
-          description: "Could not connect to authentication service. Please check your internet connection and try again.",
-          variant: "destructive"
-        });
+      if (error.message.includes("Network") || error.message.includes("offline") || !navigator.onLine) {
+        setError("Network connection error. Please check your internet connection and try again.");
+      } else {
+        setError(error.message || "Unable to create your account. Please try again.");
       }
     } finally {
       setIsLoading(false);

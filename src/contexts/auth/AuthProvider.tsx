@@ -16,8 +16,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   console.log("Auth state:", { user, isAuthenticated }); // Debug auth state
+
+  // Monitor network status
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      toast({
+        title: "You're back online",
+        description: "Reconnected to the network. You can now use all features.",
+      });
+    };
+    
+    const handleOffline = () => {
+      setIsOnline(false);
+      toast({
+        title: "You're offline",
+        description: "Some features may be limited. Please check your connection.",
+        variant: "destructive"
+      });
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Listen for auth state changes
   useEffect(() => {
@@ -36,6 +65,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const userData = userDoc.data();
             role = userData.role as UserRole;
             name = userData.name || name;
+          } else if (firebaseUser.uid.startsWith('mock-')) {
+            // This is a mock user in development mode
+            console.log("Using mock user data in development mode");
           }
           
           setUser({
