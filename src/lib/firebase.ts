@@ -96,7 +96,7 @@ export const getNetworkStatus = () => isOnline;
 // Create a more complete mock user that satisfies the Firebase User interface
 const createMockFirebaseUser = (uid: string, email: string, displayName?: string): User => {
   // Create a mock user object with all required properties of Firebase User
-  return {
+  const mockUser: any = {
     uid,
     email,
     displayName,
@@ -133,11 +133,11 @@ const createMockFirebaseUser = (uid: string, email: string, displayName?: string
     toJSON: () => ({}),
     phoneNumber: null,
     photoURL: null,
-    providerId: 'firebase',
-    multiFactor: {
-      enrolledFactors: []
-    }
+    providerId: 'firebase'
   };
+  
+  // Cast the mock user to User type to satisfy TypeScript
+  return mockUser as User;
 };
 
 // Store mock users for dev environment
