@@ -15,7 +15,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(true);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -41,6 +41,12 @@ const Register = () => {
     e.preventDefault();
     setError(null);
     
+    // Check online status first
+    if (!navigator.onLine) {
+      setError("You are offline. Please check your internet connection and try again.");
+      return;
+    }
+    
     // Form validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
@@ -62,19 +68,30 @@ const Register = () => {
       
       await register(name, email, password, activeRole);
       
+      // Show success message
+      toast({
+        title: "Registration Successful",
+        description: "Your account has been created. Redirecting to dashboard...",
+      });
+      
       // Redirect to the appropriate dashboard
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
       console.error('Registration error:', error);
-      setError(error.message || "Unable to create your account. Please try again.");
       
-      // Show a toast for network errors to make them more visible
-      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
+      // Handle network errors explicitly
+      if (error.message.includes('Network error') || 
+          error.message.includes('Failed to fetch') || 
+          error.message.includes('offline')) {
+        setError("Network connection error. Please check your internet connection and try again.");
+        
         toast({
-          title: "Network Error",
-          description: "Could not connect to authentication service. Please check your internet connection and try again.",
+          title: "Connection Error",
+          description: "Failed to connect to authentication service. Please check your internet connection.",
           variant: "destructive"
         });
+      } else {
+        setError(error.message || "Unable to create your account. Please try again.");
       }
     } finally {
       setIsLoading(false);

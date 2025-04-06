@@ -35,12 +35,22 @@ export const useAuthFunctions = (
       // User state will be updated by onAuthStateChange listener
     } catch (error: any) {
       console.error('Login error:', error);
+      
+      // Network error handling
+      if (error.message === 'Failed to fetch' || !navigator.onLine) {
+        throw new Error('Network error. Please check your internet connection and try again.');
+      }
+      
       throw new Error(error.message || "Failed to login. Please check your credentials.");
     }
   };
 
   const register = async (name: string, email: string, password: string, role: UserRole) => {
     try {
+      if (!navigator.onLine) {
+        throw new Error('You are offline. Please check your internet connection and try again.');
+      }
+      
       // Create user in Supabase Auth
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -65,6 +75,12 @@ export const useAuthFunctions = (
       // User state will be updated by onAuthStateChange listener
     } catch (error: any) {
       console.error('Registration error:', error);
+      
+      // Network error handling
+      if (error.message === 'Failed to fetch' || !navigator.onLine) {
+        throw new Error('Network error. Please check your internet connection and try again.');
+      }
+      
       throw new Error(error.message || "Failed to register. Please try again.");
     }
   };
