@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { UserRole, User, AuthContextType } from './AuthTypes';
+import { retryOperation } from './AuthUtils';
 
 export const useAuthFunctions = (
   user: User | null,
@@ -107,26 +108,6 @@ export const useAuthFunctions = (
       console.error('Logout error:', error);
       throw error;
     }
-  };
-  
-  // Helper function for retry logic
-  const retryOperation = async (operation: () => Promise<any>, maxRetries: number, delay: number) => {
-    let lastError;
-    
-    for (let i = 0; i < maxRetries; i++) {
-      try {
-        return await operation();
-      } catch (error: any) {
-        console.log(`Attempt ${i + 1} failed. Retrying...`, error);
-        lastError = error;
-        
-        if (i < maxRetries - 1) {
-          await new Promise(resolve => setTimeout(resolve, delay));
-        }
-      }
-    }
-    
-    throw lastError;
   };
 
   return {
