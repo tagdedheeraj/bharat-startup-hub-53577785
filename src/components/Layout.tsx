@@ -47,14 +47,16 @@ export default function Layout({ children }: LayoutProps) {
       // Check for iframes that might be added dynamically
       const iframes = document.querySelectorAll('iframe:not([src*="youtube"]):not([src*="vimeo"])');
       iframes.forEach((iframe) => {
-        if (iframe && iframe.parentNode && (
-          !iframe.src || 
-          iframe.src.includes('lovable') || 
-          iframe.src.includes('gptengineer') ||
-          iframe.hasAttribute('style')
+        // Type cast the element to HTMLIFrameElement to access src property
+        const iframeElement = iframe as HTMLIFrameElement;
+        if (iframeElement && iframeElement.parentNode && (
+          !iframeElement.src || 
+          iframeElement.src.includes('lovable') || 
+          iframeElement.src.includes('gptengineer') ||
+          iframeElement.hasAttribute('style')
         )) {
           try {
-            iframe.parentNode.removeChild(iframe);
+            iframeElement.parentNode.removeChild(iframeElement);
           } catch (e) {
             console.debug("Failed to remove suspicious iframe:", e);
           }
