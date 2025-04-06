@@ -5,6 +5,7 @@ import { UserRole, User, AuthContextType } from './AuthTypes';
 import { AuthContext } from './AuthContext';
 import { useAuthFunctions } from './useAuthFunctions';
 import { toast } from '@/hooks/use-toast';
+import { AuthChangeEvent } from '@supabase/supabase-js';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -21,7 +22,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (event: AuthChangeEvent, session) => {
         console.log("Supabase auth state changed:", event, session);
         if (session) {
           // Get user's role from metadata

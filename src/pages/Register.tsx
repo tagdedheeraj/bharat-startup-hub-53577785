@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
@@ -107,7 +108,8 @@ const Register = () => {
     try {
       setIsLoading(true);
       
-      const timeoutId = setTimeout(() => {
+      // Create a timeout to show a message if registration takes too long
+      const registrationTimeout = setTimeout(() => {
         if (isLoading) {
           setError("The registration is taking longer than expected. Please check your internet connection.");
         }
@@ -115,7 +117,7 @@ const Register = () => {
       
       await register(name, email, password, activeRole);
       
-      clearTimeout(timeoutId);
+      clearTimeout(registrationTimeout);
       
       toast({
         title: "Registration Successful",
@@ -124,7 +126,6 @@ const Register = () => {
       
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
-      clearTimeout(timeoutId);
       console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
       
