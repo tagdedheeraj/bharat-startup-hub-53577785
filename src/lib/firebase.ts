@@ -37,11 +37,10 @@ export const db = getFirestore(app);
 // Initialize Storage
 export const storage = getStorage(app);
 
-// Enable offline persistence for Firestore with unlimited cache size
+// Enable offline persistence for Firestore
+// Note: Removing the cacheSizeBytes option as it's causing a TypeScript error
 if (typeof window !== 'undefined') {
-  enableIndexedDbPersistence(db, {
-    cacheSizeBytes: CACHE_SIZE_UNLIMITED
-  })
+  enableIndexedDbPersistence(db)
     .then(() => {
       console.log("Firestore offline persistence enabled");
     })
