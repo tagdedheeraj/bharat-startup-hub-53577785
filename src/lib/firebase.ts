@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
+import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -22,16 +22,26 @@ const app = initializeApp(firebaseConfig);
 // Initialize Authentication
 export const auth = getAuth(app);
 
+// Set local persistence for better offline support
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Firebase Auth persistence set to local");
+  })
+  .catch((error) => {
+    console.error("Error setting persistence:", error);
+  });
+
 // Initialize Firestore
 export const db = getFirestore(app);
 
 // Initialize Storage
 export const storage = getStorage(app);
 
-// Enable offline persistence for Firestore
-// This allows the app to work with cached data when offline
+// Enable offline persistence for Firestore with unlimited cache size
 if (typeof window !== 'undefined') {
-  enableIndexedDbPersistence(db)
+  enableIndexedDbPersistence(db, {
+    cacheSizeBytes: CACHE_SIZE_UNLIMITED
+  })
     .then(() => {
       console.log("Firestore offline persistence enabled");
     })
@@ -57,16 +67,28 @@ if (import.meta.env.DEV) {
   }
 }
 
-// Add network status detection
+// Add comprehensive network status detection
+let isOnline = navigator.onLine;
+
 if (typeof window !== 'undefined') {
   window.addEventListener('online', () => {
     console.log('App is now online');
+    isOnline = true;
+    
+    // Dispatch a custom event that components can listen for
+    window.dispatchEvent(new CustomEvent('app-online'));
   });
   
   window.addEventListener('offline', () => {
     console.log('App is now offline');
+    isOnline = false;
+    
+    // Dispatch a custom event that components can listen for
+    window.dispatchEvent(new CustomEvent('app-offline'));
   });
 }
+
+export const getNetworkStatus = () => isOnline;
 
 // Initialize Analytics conditionally (only in browser environments)
 export const initAnalytics = async () => {

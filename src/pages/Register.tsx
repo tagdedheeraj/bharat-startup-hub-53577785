@@ -5,9 +5,8 @@ import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import RegisterForm from '@/components/auth/RegisterForm';
-import OfflineAlert from '@/components/auth/OfflineAlert';
-import ErrorAlert from '@/components/auth/ErrorAlert';
+import { RegisterForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
+import { retryOperation } from '@/contexts/auth/AuthUtils';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -40,12 +39,7 @@ const Register = () => {
     e.preventDefault();
     setError(null);
     
-    // Check if user is online
-    if (!navigator.onLine) {
-      setError("You appear to be offline. Please check your internet connection and try again.");
-      return;
-    }
-    
+    // Form validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
       return;
@@ -63,7 +57,11 @@ const Register = () => {
     
     try {
       setIsLoading(true);
-      await register(name, email, password, activeRole);
+      
+      // Use the retry operation utility for better resilience
+      await retryOperation(async () => {
+        await register(name, email, password, activeRole);
+      }, 3);
       
       toast({
         title: "Registration Successful",
@@ -77,10 +75,10 @@ const Register = () => {
       setError(error.message || "Unable to create your account. Please try again.");
       
       // Show a toast for network errors to make them more visible
-      if (error.message.includes("Network error") || error.message.includes("internet connection")) {
+      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
         toast({
           title: "Network Error",
-          description: "Could not connect to authentication service. Please check your internet connection.",
+          description: "Could not connect to authentication service. Please check your internet connection and try again.",
           variant: "destructive"
         });
       }
@@ -99,7 +97,7 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {!isOnline && <OfflineAlert />}
+          <NetworkStatusAlert />
           
           {error && <ErrorAlert message={error} />}
           

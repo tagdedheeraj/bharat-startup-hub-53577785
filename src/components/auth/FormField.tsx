@@ -1,26 +1,28 @@
 
 import React from 'react';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface FormFieldProps {
   id: string;
   label: string;
   type?: string;
-  placeholder: string;
+  placeholder?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
   required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const FormField: React.FC<FormFieldProps> = ({
   id,
   label,
   type = 'text',
-  placeholder,
+  placeholder = '',
   value,
-  onChange,
-  required = true
+  disabled = false,
+  required = true,
+  onChange
 }) => {
   return (
     <div className="space-y-2">
@@ -28,10 +30,12 @@ const FormField: React.FC<FormFieldProps> = ({
       <Input 
         id={id} 
         type={type} 
-        placeholder={placeholder} 
+        placeholder={placeholder}
         value={value}
         onChange={onChange}
         required={required}
+        disabled={disabled}
+        className={disabled ? "bg-gray-100" : ""}
       />
     </div>
   );

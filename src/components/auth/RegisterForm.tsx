@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, WifiOff } from 'lucide-react';
 import FormField from './FormField';
 import { UserRole } from '@/contexts/auth';
 
@@ -47,6 +45,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         placeholder={namePlaceholder}
         value={name}
         onChange={(e) => setName(e.target.value)}
+        disabled={isLoading}
       />
       
       <FormField
@@ -56,6 +55,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         placeholder={emailPlaceholder}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        disabled={isLoading}
       />
       
       <FormField
@@ -65,6 +65,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        disabled={isLoading}
       />
       
       <FormField
@@ -74,11 +75,24 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         placeholder="Confirm Password"
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
+        disabled={isLoading}
       />
       
-      <Button type="submit" className="w-full" disabled={isLoading || !isOnline}>
+      <Button 
+        type="submit" 
+        className="w-full" 
+        disabled={isLoading || !isOnline}
+        aria-label={isLoading ? "Creating account..." : `Register as ${roleCapitalized}`}
+      >
         {isLoading ? "Creating Account..." : `Register as ${roleCapitalized}`}
+        {!isOnline && !isLoading && " (Offline Mode)"}
       </Button>
+      
+      {!isOnline && (
+        <p className="text-xs text-center text-yellow-600">
+          You're currently offline. Connect to the internet to register.
+        </p>
+      )}
     </form>
   );
 };

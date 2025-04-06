@@ -4,7 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { LoginForm, ErrorAlert } from '@/components/auth';
+import { LoginForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
+import { retryOperation } from '@/contexts/auth/AuthUtils';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -27,7 +28,11 @@ const Login = () => {
     
     try {
       setIsLoading(true);
-      await login(email, password, activeRole);
+      
+      // Use retry operation for better resilience
+      await retryOperation(async () => {
+        await login(email, password, activeRole);
+      }, 3);
       
       toast({
         title: "Login Successful",
@@ -39,6 +44,15 @@ const Login = () => {
     } catch (error: any) {
       console.error('Login error:', error);
       setError(error.message || "Invalid email or password. Please try again.");
+      
+      // Show a toast for network errors to make them more visible
+      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
+        toast({
+          title: "Network Error",
+          description: "Could not connect to authentication service. Please check your internet connection and try again.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -54,6 +68,8 @@ const Login = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <NetworkStatusAlert />
+          
           {error && <ErrorAlert message={error} />}
           
           <LoginForm
