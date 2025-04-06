@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth, UserRole } from '@/contexts/auth';
+import { UserRole } from '@/contexts/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,10 +30,11 @@ const LoginForm: React.FC<LoginFormProps> = ({
   handleLogin
 }) => {
   return (
-    <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
-      <TabsList className="grid w-full grid-cols-2 mb-4">
+    <Tabs defaultValue={activeRole || "startup"} onValueChange={(value) => setActiveRole(value as UserRole)}>
+      <TabsList className="grid w-full grid-cols-3 mb-4">
         <TabsTrigger value="startup">Startup</TabsTrigger>
         <TabsTrigger value="investor">Investor</TabsTrigger>
+        <TabsTrigger value="admin">Admin</TabsTrigger>
       </TabsList>
       
       <TabsContent value="startup">
@@ -94,6 +95,37 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login as Investor"}
+          </Button>
+        </form>
+      </TabsContent>
+
+      <TabsContent value="admin">
+        <form onSubmit={handleLogin} className="space-y-4">
+          <FormField
+            id="admin-email"
+            label="Email"
+            type="email"
+            placeholder="admin@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="admin-password">Password</Label>
+              <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+            <Input 
+              id="admin-password" 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login as Admin"}
           </Button>
         </form>
       </TabsContent>

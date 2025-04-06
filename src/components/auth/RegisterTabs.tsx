@@ -37,9 +37,10 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
 }) => {
   return (
     <Tabs defaultValue={activeRole} onValueChange={(value) => setActiveRole(value as UserRole)}>
-      <TabsList className="grid w-full grid-cols-2 mb-4">
+      <TabsList className="grid w-full grid-cols-3 mb-4">
         <TabsTrigger value="startup">Startup</TabsTrigger>
         <TabsTrigger value="investor">Investor</TabsTrigger>
+        <TabsTrigger value="admin">Admin</TabsTrigger>
       </TabsList>
       
       <TabsContent value="startup">
@@ -62,6 +63,23 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
       <TabsContent value="investor">
         <RegisterForm
           role="investor"
+          name={name}
+          email={email}
+          password={password}
+          confirmPassword={confirmPassword}
+          isLoading={isLoading}
+          isOnline={isOnline}
+          setName={setName}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setConfirmPassword={setConfirmPassword}
+          handleRegister={handleRegister}
+        />
+      </TabsContent>
+
+      <TabsContent value="admin">
+        <RegisterForm
+          role="admin"
           name={name}
           email={email}
           password={password}

@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserCircle, LogOut, LayoutDashboard, UserPlus, LogIn } from 'lucide-react';
+import { UserCircle, LogOut, LayoutDashboard, UserPlus, LogIn, Shield } from 'lucide-react';
 
 const AuthButtons = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -31,12 +31,21 @@ const AuthButtons = () => {
           <>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to={`/dashboard/${user.role}`} className="flex items-center gap-2 cursor-pointer w-full">
-                <LayoutDashboard className="h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-            </DropdownMenuItem>
+            {user.role === 'admin' ? (
+              <DropdownMenuItem asChild>
+                <Link to="/admin" className="flex items-center gap-2 cursor-pointer w-full">
+                  <Shield className="h-4 w-4" />
+                  <span>Admin Panel</span>
+                </Link>
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem asChild>
+                <Link to={`/dashboard/${user.role}`} className="flex items-center gap-2 cursor-pointer w-full">
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem 
               onClick={() => logout()} 
               className="flex items-center gap-2 cursor-pointer"

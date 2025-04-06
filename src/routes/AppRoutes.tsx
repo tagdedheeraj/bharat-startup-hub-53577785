@@ -41,6 +41,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import StartupDashboard from "@/pages/dashboard/StartupDashboard";
 import InvestorDashboard from "@/pages/dashboard/InvestorDashboard";
+import AdminPanel from "@/pages/AdminPanel";
 
 const AppRoutes = () => {
   return (
@@ -76,6 +77,14 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute allowedRoles={['investor']}>
                 <InvestorDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminPanel />
               </ProtectedRoute>
             } 
           />
