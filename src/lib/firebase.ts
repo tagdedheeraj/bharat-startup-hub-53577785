@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -28,15 +28,44 @@ export const db = getFirestore(app);
 // Initialize Storage
 export const storage = getStorage(app);
 
+// Enable offline persistence for Firestore
+// This allows the app to work with cached data when offline
+if (typeof window !== 'undefined') {
+  enableIndexedDbPersistence(db)
+    .then(() => {
+      console.log("Firestore offline persistence enabled");
+    })
+    .catch((err) => {
+      console.error("Error enabling offline persistence:", err);
+      if (err.code === 'failed-precondition') {
+        console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+      } else if (err.code === 'unimplemented') {
+        console.warn('The current browser does not support offline persistence.');
+      }
+    });
+}
+
 // Connect to emulators if in development
 if (import.meta.env.DEV) {
   try {
     // Uncomment these lines if you're running Firebase emulators locally
     // connectFirestoreEmulator(db, 'localhost', 8080);
     // connectStorageEmulator(storage, 'localhost', 9199);
+    // connectAuthEmulator(auth, 'http://localhost:9099');
   } catch (error) {
     console.error("Failed to connect to emulators:", error);
   }
+}
+
+// Add network status detection
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    console.log('App is now online');
+  });
+  
+  window.addEventListener('offline', () => {
+    console.log('App is now offline');
+  });
 }
 
 // Initialize Analytics conditionally (only in browser environments)

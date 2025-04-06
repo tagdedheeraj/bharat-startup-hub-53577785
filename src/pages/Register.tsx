@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, WifiOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Register = () => {
@@ -19,13 +19,34 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  // Monitor online status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    // Check if user is online
+    if (!navigator.onLine) {
+      setError("You appear to be offline. Please check your internet connection and try again.");
+      return;
+    }
     
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
@@ -56,6 +77,15 @@ const Register = () => {
     } catch (error: any) {
       console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
+      
+      // Show a toast for network errors to make them more visible
+      if (error.message.includes("Network error") || error.message.includes("internet connection")) {
+        toast({
+          title: "Network Error",
+          description: "Could not connect to authentication service. Please check your internet connection.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -71,6 +101,15 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {!isOnline && (
+            <Alert variant="destructive" className="mb-4">
+              <WifiOff className="h-4 w-4" />
+              <AlertDescription>
+                You are currently offline. Please connect to the internet to register.
+              </AlertDescription>
+            </Alert>
+          )}
+          
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertCircle className="h-4 w-4" />
@@ -129,7 +168,7 @@ const Register = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full" disabled={isLoading || !isOnline}>
                   {isLoading ? "Creating Account..." : "Register as Startup"}
                 </Button>
               </form>

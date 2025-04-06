@@ -1,15 +1,10 @@
 
 import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
-  updateProfile,
   User as FirebaseUser
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { UserRole, User } from './AuthTypes';
-import { toast } from '@/hooks/use-toast';
 
 export const fetchUserData = async (firebaseUser: FirebaseUser): Promise<User | null> => {
   try {
@@ -58,6 +53,8 @@ export const handleLoginError = (error: any): string => {
     return 'Invalid email or password. Please try again.';
   } else if (error.code === 'auth/too-many-requests') {
     return 'Too many failed login attempts. Please try again later or reset your password.';
+  } else if (error.code === 'auth/network-request-failed') {
+    return 'Network error. Please check your internet connection and try again.';
   } else {
     return error.message || 'An error occurred during login.';
   }
@@ -73,7 +70,10 @@ export const handleRegistrationError = (error: any): string => {
     return 'Password is too weak. Please choose a stronger password.';
   } else if (error.code === 'auth/invalid-email') {
     return 'Invalid email address. Please check and try again.';
+  } else if (error.code === 'auth/network-request-failed') {
+    return 'Network error. Please check your internet connection and try again.';
   } else {
     return error.message || 'An error occurred during registration.';
   }
 };
+
