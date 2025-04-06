@@ -8,7 +8,7 @@ import {
   deleteDocument,
   FirebaseData
 } from '@/services/firebaseDataService';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth';
 import { where, orderBy, limit as firestoreLimit } from 'firebase/firestore';
 
 // Interfaces for our data types
