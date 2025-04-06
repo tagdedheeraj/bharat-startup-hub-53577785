@@ -31,6 +31,35 @@ export default function Layout({ children }: LayoutProps) {
           }
         }
       });
+      
+      // Remove any Lovable badges or branding that might be dynamically added
+      const lovableBadges = document.querySelectorAll('[class*="lovable-"], [id*="lovable-"], .lovable-badge, [class*="badge"], [class*="love"]');
+      lovableBadges.forEach((badge) => {
+        if (badge && badge.parentNode) {
+          try {
+            badge.parentNode.removeChild(badge);
+          } catch (e) {
+            console.debug("Failed to remove lovable badge:", e);
+          }
+        }
+      });
+      
+      // Check for iframes that might be added dynamically
+      const iframes = document.querySelectorAll('iframe:not([src*="youtube"]):not([src*="vimeo"])');
+      iframes.forEach((iframe) => {
+        if (iframe && iframe.parentNode && (
+          !iframe.src || 
+          iframe.src.includes('lovable') || 
+          iframe.src.includes('gptengineer') ||
+          iframe.hasAttribute('style')
+        )) {
+          try {
+            iframe.parentNode.removeChild(iframe);
+          } catch (e) {
+            console.debug("Failed to remove suspicious iframe:", e);
+          }
+        }
+      });
     });
     
     // Start observing document body for mutations
@@ -38,7 +67,7 @@ export default function Layout({ children }: LayoutProps) {
       childList: true, 
       subtree: true,
       attributes: true,
-      attributeFilter: ['style']
+      attributeFilter: ['style', 'class', 'id']
     });
     
     // Cleanup function
