@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
 import { RegisterForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
 import { retryOperation } from '@/contexts/auth/AuthUtils';
+import { getNetworkStatus } from '@/lib/firebase';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -16,7 +17,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(getNetworkStatus());
   const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
   
   const { register } = useAuth();
@@ -29,10 +30,14 @@ const Register = () => {
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('app-online', handleOnline);
+    window.addEventListener('app-offline', handleOffline);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('app-online', handleOnline);
+      window.removeEventListener('app-offline', handleOffline);
     };
   }, []);
 
@@ -60,29 +65,34 @@ const Register = () => {
     try {
       setIsLoading(true);
       
-      // Use the retry operation utility for better resilience
-      await retryOperation(async () => {
+      try {
         await register(name, email, password, activeRole);
-      }, 3);
-      
-      toast({
-        title: "Registration Successful",
-        description: `Your ${activeRole} account has been created successfully.`,
-      });
-      
-      // Redirect to the appropriate dashboard
-      navigate(`/dashboard/${activeRole}`);
-    } catch (error: any) {
-      console.error('Registration error:', error);
-      setError(error.message || "Unable to create your account. Please try again.");
-      
-      // Check if it's a Firebase connection error
-      if (error.code === 'auth/network-request-failed' || 
-          error.message.includes("network") || 
-          error.message.includes("Failed to fetch") || 
-          !navigator.onLine) {
-        setShowFirebaseAlert(true);
+        
+        toast({
+          title: "Registration Successful",
+          description: `Your ${activeRole} account has been created successfully.`,
+        });
+        
+        // Redirect to the appropriate dashboard
+        navigate(`/dashboard/${activeRole}`);
+      } catch (error: any) {
+        console.error('Registration error:', error);
+        
+        // If we have a network error, try to show a more helpful message
+        if (error.message.includes('network') || !navigator.onLine) {
+          setShowFirebaseAlert(true);
+          if (import.meta.env.DEV) {
+            toast({
+              title: "Development Mode",
+              description: "Using mock authentication in development mode due to network issues.",
+            });
+          }
+        }
+        
+        throw error;
       }
+    } catch (error: any) {
+      setError(error.message || "Unable to create your account. Please try again.");
       
       // Show a toast for network errors to make them more visible
       if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {

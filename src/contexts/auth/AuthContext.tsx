@@ -1,13 +1,11 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import {
   onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
   signOut,
   updateProfile
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, safeSignIn, safeSignUp } from '@/lib/firebase';
 import { toast } from '@/hooks/use-toast';
 import { UserRole, User, AuthContextType } from './AuthTypes';
 import { fetchUserData, createUserRecord, handleLoginError, handleRegistrationError } from './AuthUtils';
@@ -62,7 +60,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       console.log(`Attempting to login with email: ${email} and role: ${role}`);
       
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await safeSignIn(email, password);
       const firebaseUser = userCredential.user;
       
       console.log("Login successful with Firebase:", firebaseUser);
@@ -142,7 +140,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (name: string, email: string, password: string, role: UserRole) => {
     try {
       // Create user in Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await safeSignUp(email, password);
       const firebaseUser = userCredential.user;
       
       // Update profile with name

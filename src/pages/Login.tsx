@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from '@/hooks/use-toast';
 import { LoginForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
 import { retryOperation } from '@/contexts/auth/AuthUtils';
+import { getNetworkStatus } from '@/lib/firebase';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState(getNetworkStatus());
   const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
   
   const { login } = useAuth();
@@ -26,10 +27,14 @@ const Login = () => {
 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
+    window.addEventListener('app-online', handleOnline);
+    window.addEventListener('app-offline', handleOffline);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('app-online', handleOnline);
+      window.removeEventListener('app-offline', handleOffline);
     };
   }, []);
 
@@ -46,29 +51,34 @@ const Login = () => {
     try {
       setIsLoading(true);
       
-      // Use retry operation for better resilience
-      await retryOperation(async () => {
+      try {
         await login(email, password, activeRole);
-      }, 3);
-      
-      toast({
-        title: "Login Successful",
-        description: `Welcome back! You've been logged in as a ${activeRole}.`,
-      });
-      
-      // Redirect to the appropriate dashboard
-      navigate(`/dashboard/${activeRole}`);
-    } catch (error: any) {
-      console.error('Login error:', error);
-      setError(error.message || "Invalid email or password. Please try again.");
-      
-      // Check if it's a Firebase connection error
-      if (error.code === 'auth/network-request-failed' || 
-          error.message.includes("network") || 
-          error.message.includes("Failed to fetch") || 
-          !navigator.onLine) {
-        setShowFirebaseAlert(true);
+        
+        toast({
+          title: "Login Successful",
+          description: `Welcome back! You've been logged in as a ${activeRole}.`,
+        });
+        
+        // Redirect to the appropriate dashboard
+        navigate(`/dashboard/${activeRole}`);
+      } catch (error: any) {
+        console.error('Login error:', error);
+        
+        // If we have a network error, try to show a more helpful message
+        if (error.message.includes('network') || !navigator.onLine) {
+          setShowFirebaseAlert(true);
+          if (import.meta.env.DEV) {
+            toast({
+              title: "Development Mode",
+              description: "Using mock authentication in development mode due to network issues.",
+            });
+          }
+        }
+        
+        throw error;
       }
+    } catch (error: any) {
+      setError(error.message || "Invalid email or password. Please try again.");
       
       // Show a toast for network errors to make them more visible
       if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {

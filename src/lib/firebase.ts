@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
@@ -91,6 +91,69 @@ if (typeof window !== 'undefined') {
 }
 
 export const getNetworkStatus = () => isOnline;
+
+// Mock Firebase auth methods for development mode if emulators aren't accessible
+// This helps with testing the UI without actual Firebase connection
+let mockUsers: Record<string, {email: string, password: string, displayName?: string}> = {};
+
+export const mockSignUp = async (email: string, password: string, displayName?: string) => {
+  console.log("Using mock signup because Firebase is unavailable");
+  const mockUid = `mock-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  mockUsers[email] = { email, password, displayName };
+  
+  return {
+    user: {
+      uid: mockUid,
+      email,
+      displayName,
+      emailVerified: false
+    }
+  };
+};
+
+export const mockSignIn = async (email: string, password: string) => {
+  console.log("Using mock signin because Firebase is unavailable");
+  const user = mockUsers[email];
+  
+  if (!user || user.password !== password) {
+    throw new Error("Invalid email or password");
+  }
+  
+  return {
+    user: {
+      uid: `mock-${email.replace(/[^a-z0-9]/gi, '')}`,
+      email,
+      displayName: user.displayName,
+      emailVerified: false
+    }
+  };
+};
+
+// Override Firebase auth methods for development if needed
+// We'll attempt real Firebase first, then fall back to mock in development
+export const safeSignUp = async (email: string, password: string, displayName?: string) => {
+  try {
+    return await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error: any) {
+    // Only use mock in development and if it's a network error
+    if (import.meta.env.DEV && error.code === 'auth/network-request-failed') {
+      return mockSignUp(email, password, displayName);
+    }
+    throw error;
+  }
+};
+
+export const safeSignIn = async (email: string, password: string) => {
+  try {
+    return await signInWithEmailAndPassword(auth, email, password);
+  } catch (error: any) {
+    // Only use mock in development and if it's a network error
+    if (import.meta.env.DEV && error.code === 'auth/network-request-failed') {
+      return mockSignIn(email, password);
+    }
+    throw error;
+  }
+};
 
 // Initialize Analytics conditionally (only in browser environments)
 export const initAnalytics = async () => {

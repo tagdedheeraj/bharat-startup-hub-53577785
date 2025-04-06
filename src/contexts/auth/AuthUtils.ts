@@ -27,6 +27,19 @@ export const fetchUserData = async (firebaseUser: FirebaseUser): Promise<User | 
     return null;
   } catch (error) {
     console.error('Error fetching user data:', error);
+    
+    // If we're in development mode and there's a network error, return a mock user
+    if (import.meta.env.DEV && error instanceof Error && 
+        (error.message.includes('network') || !navigator.onLine)) {
+      console.log('Returning mock user data in development mode');
+      return {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || '',
+        email: firebaseUser.email || '',
+        role: 'startup' // Default role
+      };
+    }
+    
     return null;
   }
 };
@@ -37,13 +50,28 @@ export const createUserRecord = async (
   email: string, 
   role: UserRole
 ): Promise<void> => {
-  // Store additional user data in Firestore
-  await setDoc(doc(db, 'users', firebaseUser.uid), {
-    name,
-    email,
-    role,
-    createdAt: serverTimestamp()
-  });
+  try {
+    // Store additional user data in Firestore
+    await setDoc(doc(db, 'users', firebaseUser.uid), {
+      name,
+      email,
+      role,
+      createdAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error creating user record:', error);
+    
+    // If we're in development mode, don't throw the error
+    if (!import.meta.env.DEV) {
+      throw error;
+    }
+    
+    toast({
+      title: "Warning",
+      description: "User profile could not be saved to the database. Some features may be limited in offline mode.",
+      variant: "destructive"
+    });
+  }
 };
 
 export const isNetworkError = (error: any): boolean => {
@@ -65,6 +93,12 @@ export const handleLoginError = (error: any): string => {
     if (!navigator.onLine) {
       return 'You are currently offline. Please connect to the internet to log in.';
     }
+    
+    // For development mode, provide a special message
+    if (import.meta.env.DEV) {
+      return 'Network error. Firebase emulators may not be running. In development mode, mock authentication will be used.';
+    }
+    
     return 'Network error. Please check your internet connection and try again.';
   }
   
@@ -86,6 +120,12 @@ export const handleRegistrationError = (error: any): string => {
     if (!navigator.onLine) {
       return 'You are currently offline. Please connect to the internet to register.';
     }
+    
+    // For development mode, provide a special message
+    if (import.meta.env.DEV) {
+      return 'Network error. Firebase emulators may not be running. In development mode, mock authentication will be used.';
+    }
+    
     return 'Network error. Please check your internet connection and try again.';
   }
   
