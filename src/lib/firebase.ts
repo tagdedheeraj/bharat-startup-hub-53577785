@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -38,7 +38,6 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // Enable offline persistence for Firestore
-// Note: Removing the cacheSizeBytes option as it's causing a TypeScript error
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db)
     .then(() => {
@@ -54,14 +53,17 @@ if (typeof window !== 'undefined') {
     });
 }
 
+// Check if Firebase emulators should be used
+const useEmulators = import.meta.env.DEV;
+
 // Connect to emulators if in development
-if (import.meta.env.DEV) {
+if (useEmulators) {
   try {
-    // Uncomment these lines to use Firebase emulators locally
+    // These lines connect to Firebase emulators
     connectFirestoreEmulator(db, 'localhost', 8080);
     connectStorageEmulator(storage, 'localhost', 9199);
     connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
-    console.log('Connected to Firebase emulators');
+    console.log('Connected to Firebase emulators successfully');
   } catch (error) {
     console.error("Failed to connect to emulators:", error);
   }
