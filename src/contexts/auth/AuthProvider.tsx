@@ -41,23 +41,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               title: "Successfully Signed In",
               description: `Welcome ${session.user.user_metadata?.name || ''}!`,
             });
-          } else if (event === 'USER_UPDATED') {
+          } else if (event === 'SIGNED_UP') {
             toast({
-              title: "Account Updated",
-              description: "Your account has been updated successfully!",
+              title: "Account Created",
+              description: "Your account has been created successfully!",
             });
-          } else if (event === 'SIGNED_OUT') {
-            // Show toast on sign out (except for initial session check)
-            if (!loading) {
-              toast({
-                title: "Signed Out",
-                description: "You have been signed out successfully.",
-              });
-            }
           }
         } else {
           setUser(null);
           setIsAuthenticated(false);
+          
+          // Show toast on sign out (except for initial session check)
+          if (event === 'SIGNED_OUT' && !loading) {
+            toast({
+              title: "Signed Out",
+              description: "You have been signed out successfully.",
+            });
+          }
         }
       }
     );
