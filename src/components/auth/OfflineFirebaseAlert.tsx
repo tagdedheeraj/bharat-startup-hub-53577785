@@ -19,9 +19,6 @@ const OfflineFirebaseAlert: React.FC = () => (
         If you're a developer working locally, please start the Firebase emulators with:
         <code className="bg-amber-100 px-2 py-1 rounded ml-2 text-sm">firebase emulators:start</code>
       </p>
-      <p className="mt-2 text-sm">
-        For testing purposes only: You can also temporarily disable Firebase in development by adding <code className="bg-amber-100 px-2 py-1 rounded text-sm">DISABLE_FIREBASE_AUTH=true</code> to your .env file and restart the app.
-      </p>
     </AlertDescription>
   </Alert>
 );

@@ -1,7 +1,7 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
+import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence, CACHE_SIZE_UNLIMITED } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -16,42 +16,11 @@ const firebaseConfig = {
   measurementId: "G-7MEXQK6P5K"
 };
 
-// Check if we should use Firebase emulators
-const useEmulators = import.meta.env.DEV;
-
-// Check if we should disable Firebase Auth for development testing
-const disableFirebaseAuth = import.meta.env.VITE_DISABLE_FIREBASE_AUTH === 'true';
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Authentication
 export const auth = getAuth(app);
-
-// Mock auth functions for development if disabled
-export const mockSignIn = async (email: string, password: string) => {
-  console.log('Using mock sign in with:', email);
-  // Return a mock user
-  return {
-    user: {
-      uid: 'mock-user-id',
-      email,
-      displayName: 'Mock User',
-    }
-  };
-};
-
-export const mockSignUp = async (email: string, password: string) => {
-  console.log('Using mock sign up with:', email);
-  // Return a mock user
-  return {
-    user: {
-      uid: 'mock-user-id',
-      email,
-      displayName: 'New Mock User',
-    }
-  };
-};
 
 // Set local persistence for better offline support
 setPersistence(auth, browserLocalPersistence)
@@ -69,6 +38,7 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // Enable offline persistence for Firestore
+// Note: Removing the cacheSizeBytes option as it's causing a TypeScript error
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db)
     .then(() => {
@@ -85,9 +55,9 @@ if (typeof window !== 'undefined') {
 }
 
 // Connect to emulators if in development
-if (useEmulators) {
+if (import.meta.env.DEV) {
   try {
-    // Connect to Firebase emulators locally
+    // Uncomment these lines to use Firebase emulators locally
     connectFirestoreEmulator(db, 'localhost', 8080);
     connectStorageEmulator(storage, 'localhost', 9199);
     connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
@@ -119,18 +89,6 @@ if (typeof window !== 'undefined') {
 }
 
 export const getNetworkStatus = () => isOnline;
-
-// Check if Firebase is available by trying a simple operation
-export const isFirebaseAvailable = async () => {
-  try {
-    // Try a simple operation that requires Firebase
-    await auth.authStateReady();
-    return true;
-  } catch (error) {
-    console.error('Firebase availability check failed:', error);
-    return false;
-  }
-};
 
 // Initialize Analytics conditionally (only in browser environments)
 export const initAnalytics = async () => {

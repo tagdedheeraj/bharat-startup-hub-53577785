@@ -3,11 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Info } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { LoginForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
-import { retryOperation, isEmulatorEnvironment } from '@/contexts/auth/AuthUtils';
+import { retryOperation } from '@/contexts/auth/AuthUtils';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +15,6 @@ const Login = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
-  const [isEmulator, setIsEmulator] = useState(isEmulatorEnvironment());
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -67,22 +64,14 @@ const Login = () => {
       
       // Check if it's a Firebase connection error
       if (error.code === 'auth/network-request-failed' || 
-          error.message?.includes("network") || 
-          error.message?.includes("Failed to fetch") || 
+          error.message.includes("network") || 
+          error.message.includes("Failed to fetch") || 
           !navigator.onLine) {
         setShowFirebaseAlert(true);
-        
-        // Show development guidance for emulator setup
-        if (isEmulator) {
-          toast({
-            title: "Developer Note",
-            description: "You need to run Firebase emulators for local development. Run 'firebase emulators:start' in your terminal.",
-          });
-        }
       }
       
       // Show a toast for network errors to make them more visible
-      if (error.message?.includes("Network error") || error.message?.includes("internet connection") || error.message?.includes("offline")) {
+      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
         toast({
           title: "Network Error",
           description: "Could not connect to authentication service. Please check your internet connection and try again.",
@@ -109,16 +98,6 @@ const Login = () => {
           {showFirebaseAlert && <OfflineFirebaseAlert />}
           
           {error && <ErrorAlert message={error} />}
-          
-          {isEmulator && (
-            <Alert className="mb-4 bg-blue-50 border-blue-200">
-              <Info className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-700">
-                You're in development mode. To use Firebase features, start the emulators with:<br/>
-                <code className="bg-blue-100 px-2 py-1 rounded text-sm">firebase emulators:start</code>
-              </AlertDescription>
-            </Alert>
-          )}
           
           <LoginForm
             email={email}
