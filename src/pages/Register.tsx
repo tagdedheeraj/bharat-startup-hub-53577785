@@ -2,14 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { AlertCircle, WifiOff } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import RegisterForm from '@/components/auth/RegisterForm';
+import OfflineAlert from '@/components/auth/OfflineAlert';
+import ErrorAlert from '@/components/auth/ErrorAlert';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -101,23 +99,9 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {!isOnline && (
-            <Alert variant="destructive" className="mb-4">
-              <WifiOff className="h-4 w-4" />
-              <AlertDescription>
-                You are currently offline. Please connect to the internet to register.
-              </AlertDescription>
-            </Alert>
-          )}
+          {!isOnline && <OfflineAlert />}
           
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                {error}
-              </AlertDescription>
-            </Alert>
-          )}
+          {error && <ErrorAlert message={error} />}
           
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -126,101 +110,37 @@ const Register = () => {
             </TabsList>
             
             <TabsContent value="startup">
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="startup-name">Startup Name</Label>
-                  <Input 
-                    id="startup-name" 
-                    placeholder="Your Startup Name" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="startup-email">Email</Label>
-                  <Input 
-                    id="startup-email" 
-                    type="email" 
-                    placeholder="name@company.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="startup-password">Password</Label>
-                  <Input 
-                    id="startup-password" 
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="startup-confirm-password">Confirm Password</Label>
-                  <Input 
-                    id="startup-confirm-password" 
-                    type="password" 
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading || !isOnline}>
-                  {isLoading ? "Creating Account..." : "Register as Startup"}
-                </Button>
-              </form>
+              <RegisterForm
+                role="startup"
+                name={name}
+                email={email}
+                password={password}
+                confirmPassword={confirmPassword}
+                isLoading={isLoading}
+                isOnline={isOnline}
+                setName={setName}
+                setEmail={setEmail}
+                setPassword={setPassword}
+                setConfirmPassword={setConfirmPassword}
+                handleRegister={handleRegister}
+              />
             </TabsContent>
             
             <TabsContent value="investor">
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="investor-name">Investor Name</Label>
-                  <Input 
-                    id="investor-name" 
-                    placeholder="Your Full Name / Firm Name" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="investor-email">Email</Label>
-                  <Input 
-                    id="investor-email" 
-                    type="email" 
-                    placeholder="name@investor.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="investor-password">Password</Label>
-                  <Input 
-                    id="investor-password" 
-                    type="password" 
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="investor-confirm-password">Confirm Password</Label>
-                  <Input 
-                    id="investor-confirm-password" 
-                    type="password" 
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Creating Account..." : "Register as Investor"}
-                </Button>
-              </form>
+              <RegisterForm
+                role="investor"
+                name={name}
+                email={email}
+                password={password}
+                confirmPassword={confirmPassword}
+                isLoading={isLoading}
+                isOnline={isOnline}
+                setName={setName}
+                setEmail={setEmail}
+                setPassword={setPassword}
+                setConfirmPassword={setConfirmPassword}
+                handleRegister={handleRegister}
+              />
             </TabsContent>
           </Tabs>
         </CardContent>
