@@ -1,6 +1,6 @@
 
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, connectAuthEmulator, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword, User } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, isSupported } from "firebase/analytics";
@@ -92,8 +92,55 @@ if (typeof window !== 'undefined') {
 
 export const getNetworkStatus = () => isOnline;
 
-// Mock Firebase auth methods for development mode if emulators aren't accessible
-// This helps with testing the UI without actual Firebase connection
+// Improved mock Firebase auth for development mode
+// Create a more complete mock user that satisfies the Firebase User interface
+const createMockFirebaseUser = (uid: string, email: string, displayName?: string): User => {
+  // Create a mock user object with all required properties of Firebase User
+  return {
+    uid,
+    email,
+    displayName,
+    emailVerified: false,
+    isAnonymous: false,
+    metadata: {
+      creationTime: Date.now().toString(),
+      lastSignInTime: Date.now().toString()
+    },
+    providerData: [
+      {
+        providerId: 'password',
+        uid: email,
+        displayName,
+        email,
+        phoneNumber: null,
+        photoURL: null
+      }
+    ],
+    refreshToken: 'mock-refresh-token',
+    tenantId: null,
+    delete: async () => Promise.resolve(),
+    getIdToken: async () => Promise.resolve('mock-id-token'),
+    getIdTokenResult: async () => Promise.resolve({
+      token: 'mock-token',
+      authTime: new Date().toISOString(),
+      issuedAtTime: new Date().toISOString(),
+      expirationTime: new Date(Date.now() + 3600000).toISOString(),
+      signInProvider: 'password',
+      signInSecondFactor: null,
+      claims: {}
+    }),
+    reload: async () => Promise.resolve(),
+    toJSON: () => ({}),
+    phoneNumber: null,
+    photoURL: null,
+    providerId: 'firebase',
+    multiFactor: {
+      enrolledFactors: []
+    }
+  };
+};
+
+// Store mock users for dev environment
 let mockUsers: Record<string, {email: string, password: string, displayName?: string}> = {};
 
 export const mockSignUp = async (email: string, password: string, displayName?: string) => {
@@ -102,12 +149,7 @@ export const mockSignUp = async (email: string, password: string, displayName?: 
   mockUsers[email] = { email, password, displayName };
   
   return {
-    user: {
-      uid: mockUid,
-      email,
-      displayName,
-      emailVerified: false
-    }
+    user: createMockFirebaseUser(mockUid, email, displayName)
   };
 };
 
@@ -120,12 +162,7 @@ export const mockSignIn = async (email: string, password: string) => {
   }
   
   return {
-    user: {
-      uid: `mock-${email.replace(/[^a-z0-9]/gi, '')}`,
-      email,
-      displayName: user.displayName,
-      emailVerified: false
-    }
+    user: createMockFirebaseUser(`mock-${email.replace(/[^a-z0-9]/gi, '')}`, email, user.displayName)
   };
 };
 

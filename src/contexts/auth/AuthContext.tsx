@@ -1,8 +1,10 @@
+
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import {
   onAuthStateChanged,
   signOut,
-  updateProfile
+  updateProfile,
+  User as FirebaseUser
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db, safeSignIn, safeSignUp } from '@/lib/firebase';
@@ -61,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log(`Attempting to login with email: ${email} and role: ${role}`);
       
       const userCredential = await safeSignIn(email, password);
-      const firebaseUser = userCredential.user;
+      const firebaseUser = userCredential.user as FirebaseUser;
       
       console.log("Login successful with Firebase:", firebaseUser);
       
@@ -141,7 +143,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       // Create user in Firebase Auth
       const userCredential = await safeSignUp(email, password);
-      const firebaseUser = userCredential.user;
+      const firebaseUser = userCredential.user as FirebaseUser;
       
       // Update profile with name
       await updateProfile(firebaseUser, { displayName: name });

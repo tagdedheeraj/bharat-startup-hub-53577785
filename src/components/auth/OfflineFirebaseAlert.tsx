@@ -2,7 +2,6 @@
 import React from 'react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const OfflineFirebaseAlert: React.FC = () => (
   <Alert className="mb-4 bg-amber-50 border-amber-200">
@@ -21,6 +20,7 @@ const OfflineFirebaseAlert: React.FC = () => (
       </p>
       <p className="mt-2 text-sm">
         Note: In development mode, a mock authentication system will be used if Firebase is unavailable.
+        Your login/signup should still work for testing purposes.
       </p>
     </AlertDescription>
   </Alert>
