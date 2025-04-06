@@ -1,44 +1,18 @@
-
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
+import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import {
   onAuthStateChanged,
-  User as FirebaseUser,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
   updateProfile
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { toast } from '@/hooks/use-toast';
+import { UserRole, User, AuthContextType } from './AuthTypes';
+import { fetchUserData, createUserRecord, handleLoginError, handleRegistrationError } from './AuthUtils';
 
-// Define user types
-export type UserRole = 'startup' | 'investor' | null;
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-}
-
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  login: (email: string, password: string, role: UserRole) => Promise<void>;
-  register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
-  logout: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -58,34 +32,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       if (firebaseUser) {
         try {
-          // Get additional user data from Firestore
-          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          const userData = await fetchUserData(firebaseUser);
           
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            
-            const userObject = {
-              id: firebaseUser.uid,
-              name: firebaseUser.displayName || '',
-              email: firebaseUser.email || '',
-              role: userData.role as UserRole
-            };
-            
-            console.log("User document found:", userObject); // Debug user doc
-            
-            setUser(userObject);
+          if (userData) {
+            setUser(userData);
             setIsAuthenticated(true);
           } else {
             // User record in Firestore not found
-            console.error('User Firestore record not found');
             await signOut(auth);
             setUser(null);
             setIsAuthenticated(false);
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
-          // Don't logout here, as it may be a temporary connectivity issue
-          // Just set user to null and isAuthenticated to false
           setUser(null);
           setIsAuthenticated(false);
         }
@@ -176,16 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(true);
       }
     } catch (error: any) {
-      console.error('Login error:', error);
-      
-      // Provide more specific error messages
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        throw new Error('Invalid email or password. Please try again.');
-      } else if (error.code === 'auth/too-many-requests') {
-        throw new Error('Too many failed login attempts. Please try again later or reset your password.');
-      } else {
-        throw error;
-      }
+      throw new Error(handleLoginError(error));
     }
   };
 
@@ -200,12 +150,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       try {
         // Store additional user data in Firestore
-        await setDoc(doc(db, 'users', firebaseUser.uid), {
-          name,
-          email,
-          role,
-          createdAt: serverTimestamp()
-        });
+        await createUserRecord(firebaseUser, name, email, role);
         
         // Update local state
         setUser({
@@ -234,18 +179,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsAuthenticated(true);
       }
     } catch (error: any) {
-      console.error('Registration error:', error);
-      
-      // Provide more specific error messages
-      if (error.code === 'auth/email-already-in-use') {
-        throw new Error('This email is already registered. Please use a different email or try logging in.');
-      } else if (error.code === 'auth/weak-password') {
-        throw new Error('Password is too weak. Please choose a stronger password.');
-      } else if (error.code === 'auth/invalid-email') {
-        throw new Error('Invalid email address. Please check and try again.');
-      } else {
-        throw error;
-      }
+      throw new Error(handleRegistrationError(error));
     }
   };
 
