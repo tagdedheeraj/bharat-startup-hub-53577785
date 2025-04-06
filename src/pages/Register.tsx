@@ -1,12 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Info } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { RegisterForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
-import { retryOperation } from '@/contexts/auth/AuthUtils';
+import { retryOperation, isEmulatorEnvironment } from '@/contexts/auth/AuthUtils';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -18,11 +19,11 @@ const Register = () => {
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
+  const [isEmulator, setIsEmulator] = useState(isEmulatorEnvironment());
   
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  // Monitor online status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -41,7 +42,6 @@ const Register = () => {
     setError(null);
     setShowFirebaseAlert(false);
     
-    // Form validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
       return;
@@ -60,7 +60,6 @@ const Register = () => {
     try {
       setIsLoading(true);
       
-      // Use the retry operation utility for better resilience
       await retryOperation(async () => {
         await register(name, email, password, activeRole);
       }, 3);
@@ -70,22 +69,26 @@ const Register = () => {
         description: `Your ${activeRole} account has been created successfully.`,
       });
       
-      // Redirect to the appropriate dashboard
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
       console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
       
-      // Check if it's a Firebase connection error
       if (error.code === 'auth/network-request-failed' || 
-          error.message.includes("network") || 
-          error.message.includes("Failed to fetch") || 
+          error.message?.includes("network") || 
+          error.message?.includes("Failed to fetch") || 
           !navigator.onLine) {
         setShowFirebaseAlert(true);
+        
+        if (isEmulator) {
+          toast({
+            title: "Developer Note",
+            description: "You need to run Firebase emulators for local development. Run 'firebase emulators:start' in your terminal.",
+          });
+        }
       }
       
-      // Show a toast for network errors to make them more visible
-      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
+      if (error.message?.includes("Network error") || error.message?.includes("internet connection") || error.message?.includes("offline")) {
         toast({
           title: "Network Error",
           description: "Could not connect to authentication service. Please check your internet connection and try again.",
@@ -112,6 +115,16 @@ const Register = () => {
           {showFirebaseAlert && <OfflineFirebaseAlert />}
           
           {error && <ErrorAlert message={error} />}
+          
+          {isEmulator && (
+            <Alert className="mb-4 bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-blue-700">
+                You're in development mode. To use Firebase features, start the emulators with:<br/>
+                <code className="bg-blue-100 px-2 py-1 rounded text-sm">firebase emulators:start</code>
+              </AlertDescription>
+            </Alert>
+          )}
           
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">

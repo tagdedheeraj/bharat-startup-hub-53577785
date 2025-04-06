@@ -3,12 +3,24 @@ import {
   User as FirebaseUser
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+import { auth, db, isFirebaseAvailable } from '@/lib/firebase';
 import { UserRole, User } from './AuthTypes';
 import { toast } from '@/hooks/use-toast';
 
 export const fetchUserData = async (firebaseUser: FirebaseUser): Promise<User | null> => {
   try {
+    // Check if Firebase is available first
+    const firebaseAvailable = await isFirebaseAvailable();
+    if (!firebaseAvailable) {
+      console.warn('Firebase is unavailable, returning mock data');
+      return {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || 'User',
+        email: firebaseUser.email || '',
+        role: 'startup' // Default role
+      };
+    }
+    
     // Get additional user data from Firestore
     const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
     
@@ -65,7 +77,7 @@ export const handleLoginError = (error: any): string => {
     if (!navigator.onLine) {
       return 'You are currently offline. Please connect to the internet to log in.';
     }
-    return 'Network error. Please check your internet connection and try again.';
+    return 'Network error. Please check your internet connection and try again. If running locally, make sure Firebase emulators are running.';
   }
   
   // Provide more specific error messages
@@ -86,7 +98,7 @@ export const handleRegistrationError = (error: any): string => {
     if (!navigator.onLine) {
       return 'You are currently offline. Please connect to the internet to register.';
     }
-    return 'Network error. Please check your internet connection and try again.';
+    return 'Network error. Please check your internet connection and try again. If running locally, make sure Firebase emulators are running.';
   }
   
   // Provide more specific error messages
@@ -128,4 +140,9 @@ export const retryOperation = async <T>(
   }
   
   throw lastError;
+};
+
+// Helper function to check if the environment might be using emulators
+export const isEmulatorEnvironment = (): boolean => {
+  return import.meta.env.DEV;
 };
