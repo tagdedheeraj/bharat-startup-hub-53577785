@@ -26,18 +26,21 @@ const AuthButtons = () => {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
+      <DropdownMenuContent align="end" className="w-56 z-50">
         {isAuthenticated && user ? (
           <>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to={`/dashboard/${user.role}`} className="flex items-center gap-2 cursor-pointer">
+              <Link to={`/dashboard/${user.role}`} className="flex items-center gap-2 cursor-pointer w-full">
                 <LayoutDashboard className="h-4 w-4" />
                 <span>Dashboard</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={logout} className="flex items-center gap-2 cursor-pointer">
+            <DropdownMenuItem 
+              onClick={() => logout()} 
+              className="flex items-center gap-2 cursor-pointer"
+            >
               <LogOut className="h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
@@ -47,13 +50,13 @@ const AuthButtons = () => {
             <DropdownMenuLabel>Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link to="/login" className="flex items-center gap-2 cursor-pointer">
+              <Link to="/login" className="flex items-center gap-2 cursor-pointer w-full">
                 <LogIn className="h-4 w-4" />
                 <span>Login</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/register" className="flex items-center gap-2 cursor-pointer">
+              <Link to="/register" className="flex items-center gap-2 cursor-pointer w-full">
                 <UserPlus className="h-4 w-4" />
                 <span>Sign Up</span>
               </Link>

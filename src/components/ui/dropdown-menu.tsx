@@ -69,6 +69,8 @@ const DropdownMenuContent = React.forwardRef<
       )}
       // Add forceMount to prevent issues with animations and node removal
       forceMount
+      // Disable auto-closing
+      onPointerDownOutside={(e) => e.preventDefault()}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>

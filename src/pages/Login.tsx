@@ -40,11 +40,7 @@ const Login = () => {
       });
       
       // Redirect to the appropriate dashboard
-      if (activeRole === 'startup') {
-        navigate('/dashboard/startup');
-      } else {
-        navigate('/dashboard/investor');
-      }
+      navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
       console.error('Login error:', error);
       setError(error.message || "Invalid email or password. Please try again.");
