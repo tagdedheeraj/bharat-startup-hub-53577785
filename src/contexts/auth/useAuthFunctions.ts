@@ -12,7 +12,7 @@ export const useAuthFunctions = (
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
 ): AuthContextType => {
   
-  const login = async (email: string, password: string, role: UserRole) => {
+  const login = async (email: string, password: string, role: UserRole): Promise<void> => {
     try {
       console.log(`Attempting to login with email: ${email} and role: ${role}`);
       
@@ -22,7 +22,7 @@ export const useAuthFunctions = (
       console.log("Login successful:", firebaseUser);
       
       // The AuthStateChanged listener will update user state
-      return firebaseUser;
+      return;
       
     } catch (error: any) {
       console.error('Login error:', error);
@@ -41,7 +41,7 @@ export const useAuthFunctions = (
     }
   };
 
-  const register = async (name: string, email: string, password: string, role: UserRole) => {
+  const register = async (name: string, email: string, password: string, role: UserRole): Promise<void> => {
     try {
       console.log("Starting registration process");
       
@@ -73,7 +73,7 @@ export const useAuthFunctions = (
       console.log("Registration successful:", firebaseUser);
       
       // The AuthStateChanged listener will update user state
-      return firebaseUser;
+      return;
       
     } catch (error: any) {
       console.error('Registration error:', error);
