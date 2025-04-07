@@ -1,60 +1,27 @@
 
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
-import { RegisterForm } from '@/components/auth';
-import { UserRole, useAuth } from '@/contexts/auth';
-import { toast } from '@/hooks/use-toast';
+import { ErrorAlert } from '@/components/auth';
+import { useRegisterForm } from '@/hooks/useRegisterForm';
+import RegisterTabs from '@/components/auth/RegisterTabs';
 
 const Register = () => {
-  const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  
-  const { register } = useAuth();
-  const navigate = useNavigate();
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    
-    // Validación básica
-    if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
-      return;
-    }
-    
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
-    
-    try {
-      setIsLoading(true);
-      
-      await register(name, email, password, activeRole);
-      
-      toast({
-        title: "Registro exitoso",
-        description: `Tu cuenta de ${activeRole === 'startup' ? 'startup' : 'inversor'} ha sido creada. ¡Bienvenido!`,
-      });
-      
-      // Navegar al dashboard
-      navigate(`/dashboard/${activeRole}`);
-    } catch (error: any) {
-      console.error('Error de registro:', error);
-      setError(error.message || "Error al registrarse. Por favor, inténtalo de nuevo.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    activeRole,
+    isLoading,
+    error,
+    setName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    setActiveRole,
+    handleRegister
+  } = useRegisterForm();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -67,51 +34,22 @@ const Register = () => {
         </CardHeader>
         
         <CardContent>
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+          {error && <ErrorAlert message={error} />}
           
-          <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
-            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="startup">Startup</TabsTrigger>
-              <TabsTrigger value="investor">Inversor</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="startup">
-              <RegisterForm 
-                role="startup" 
-                handleRegister={handleRegister}
-                isLoading={isLoading}
-                name={name}
-                email={email}
-                password={password}
-                confirmPassword={confirmPassword}
-                setName={setName}
-                setEmail={setEmail}
-                setPassword={setPassword}
-                setConfirmPassword={setConfirmPassword}
-              />
-            </TabsContent>
-            
-            <TabsContent value="investor">
-              <RegisterForm 
-                role="investor" 
-                handleRegister={handleRegister}
-                isLoading={isLoading}
-                name={name}
-                email={email}
-                password={password}
-                confirmPassword={confirmPassword}
-                setName={setName}
-                setEmail={setEmail}
-                setPassword={setPassword}
-                setConfirmPassword={setConfirmPassword}
-              />
-            </TabsContent>
-          </Tabs>
+          <RegisterTabs 
+            name={name}
+            email={email}
+            password={password}
+            confirmPassword={confirmPassword}
+            isLoading={isLoading}
+            activeRole={activeRole}
+            setName={setName}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            setConfirmPassword={setConfirmPassword}
+            setActiveRole={setActiveRole}
+            handleRegister={handleRegister}
+          />
         </CardContent>
         
         <CardFooter>

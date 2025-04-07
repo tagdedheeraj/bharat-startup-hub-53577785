@@ -8,6 +8,7 @@ import NetworkStatusAlert from './NetworkStatusAlert';
 import NetworkRetryButton from './NetworkRetryButton';
 import OfflineAlert from './OfflineAlert';
 import OfflineFirebaseAlert from './OfflineFirebaseAlert';
+import RegisterTabs from './RegisterTabs';
 
 export {
   FormField,
@@ -17,5 +18,6 @@ export {
   NetworkStatusAlert,
   NetworkRetryButton,
   OfflineAlert,
-  OfflineFirebaseAlert
+  OfflineFirebaseAlert,
+  RegisterTabs
 };

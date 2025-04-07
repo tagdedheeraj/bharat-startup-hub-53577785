@@ -10,7 +10,6 @@ interface RegisterTabsProps {
   password: string;
   confirmPassword: string;
   isLoading: boolean;
-  isOnline: boolean;
   activeRole: UserRole;
   setName: (value: string) => void;
   setEmail: (value: string) => void;
@@ -26,7 +25,6 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
   password,
   confirmPassword,
   isLoading,
-  isOnline,
   activeRole,
   setName,
   setEmail,
@@ -50,7 +48,6 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
           password={password}
           confirmPassword={confirmPassword}
           isLoading={isLoading}
-          isOnline={isOnline}
           setName={setName}
           setEmail={setEmail}
           setPassword={setPassword}
@@ -67,7 +64,6 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
           password={password}
           confirmPassword={confirmPassword}
           isLoading={isLoading}
-          isOnline={isOnline}
           setName={setName}
           setEmail={setEmail}
           setPassword={setPassword}

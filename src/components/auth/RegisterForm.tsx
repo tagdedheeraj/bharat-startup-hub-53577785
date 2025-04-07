@@ -11,27 +11,24 @@ interface RegisterFormProps {
   handleRegister: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
   // Add the new props to match what's being passed in RegisterTabs
-  name?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  isOnline?: boolean;
-  setName?: (value: string) => void;
-  setEmail?: (value: string) => void;
-  setPassword?: (value: string) => void;
-  setConfirmPassword?: (value: string) => void;
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  setName: (value: string) => void;
+  setEmail: (value: string) => void;
+  setPassword: (value: string) => void;
+  setConfirmPassword: (value: string) => void;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
   role,
   handleRegister,
   isLoading,
-  // Default values for new props
-  name = '',
-  email = '',
-  password = '',
-  confirmPassword = '',
-  isOnline = true, // Default to true
+  name,
+  email,
+  password,
+  confirmPassword,
   setName,
   setEmail,
   setPassword,
@@ -39,23 +36,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 }) => {
   const roleCapitalized = role === 'startup' ? 'Startup' : 'Investor';
   const namePlaceholder = role === 'startup' ? 'Your Startup Name' : 'Your Full Name / Firm Name';
-  
-  // Helper functions to handle controlled inputs if setters are provided
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (setName) setName(e.target.value);
-  };
-  
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (setEmail) setEmail(e.target.value);
-  };
-  
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (setPassword) setPassword(e.target.value);
-  };
-  
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (setConfirmPassword) setConfirmPassword(e.target.value);
-  };
   
   return (
     <form onSubmit={handleRegister} className="space-y-4">
@@ -66,8 +46,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           name="name"
           placeholder={namePlaceholder} 
           required
-          value={setName ? name : undefined}
-          onChange={setName ? handleNameChange : undefined}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       
@@ -79,8 +59,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="email" 
           placeholder="email@example.com" 
           required
-          value={setEmail ? email : undefined}
-          onChange={setEmail ? handleEmailChange : undefined}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       
@@ -93,8 +73,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           placeholder="Create a password (min. 6 characters)" 
           required
           minLength={6}
-          value={setPassword ? password : undefined}
-          onChange={setPassword ? handlePasswordChange : undefined}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       
@@ -106,8 +86,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           type="password" 
           placeholder="Confirm your password" 
           required
-          value={setConfirmPassword ? confirmPassword : undefined}
-          onChange={setConfirmPassword ? handleConfirmPasswordChange : undefined}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </div>
       
