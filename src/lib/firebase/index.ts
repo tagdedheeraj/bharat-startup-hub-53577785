@@ -7,7 +7,8 @@ export {
   safeSignUp, 
   mockSignIn, 
   mockSignUp, 
-  createMockFirebaseUser 
+  createMockFirebaseUser,
+  canConnectToFirebase
 } from './auth';
 export { db } from './firestore';
 export { storage } from './storage';
