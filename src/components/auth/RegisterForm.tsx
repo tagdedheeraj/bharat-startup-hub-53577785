@@ -31,6 +31,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   email = '',
   password = '',
   confirmPassword = '',
+  isOnline = true, // Default to true
   setName,
   setEmail,
   setPassword,

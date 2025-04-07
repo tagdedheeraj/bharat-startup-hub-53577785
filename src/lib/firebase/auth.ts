@@ -6,7 +6,8 @@ import {
   browserLocalPersistence, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  User 
+  User,
+  updateProfile 
 } from "firebase/auth";
 import { app, useEmulators } from "./app";
 
@@ -80,6 +81,21 @@ export const createMockFirebaseUser = (uid: string, email: string, displayName?:
   return mockUser as User;
 };
 
+// Helper function to check if the app can connect to Firebase
+export const canConnectToFirebase = async (): Promise<boolean> => {
+  try {
+    const response = await fetch('https://firebase.googleapis.com/v1beta1/projects', {
+      method: 'HEAD',
+      mode: 'no-cors',
+      cache: 'no-store'
+    });
+    return true;
+  } catch (error) {
+    console.warn("Cannot connect to Firebase:", error);
+    return false;
+  }
+};
+
 // Mock sign up for development mode when Firebase is unavailable
 export const mockSignUp = async (email: string, password: string, displayName?: string) => {
   console.log("Using mock signup because Firebase is unavailable");
@@ -105,52 +121,61 @@ export const mockSignIn = async (email: string, password: string) => {
   };
 };
 
-// Safe sign up with fallback to mock in development
+// Safe sign up with improved error handling and fallbacks
 export const safeSignUp = async (email: string, password: string, displayName?: string) => {
-  // First check if we're offline
-  if (!navigator.onLine) {
-    console.log("Network is offline");
-    if (import.meta.env.DEV) {
-      return mockSignUp(email, password, displayName);
-    }
-    throw new Error("You are currently offline. Please connect to the internet to register.");
-  }
-
+  // First try directly with Firebase - this works in most cases
   try {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  } catch (error: any) {
-    console.error("Sign up error:", error);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
-    // Only use mock in development and if it's a network error
-    if (import.meta.env.DEV && (error.code === 'auth/network-request-failed' || !navigator.onLine)) {
-      console.log("Using mock signup in development mode due to network error");
+    // Update profile with displayName if provided
+    if (displayName && userCredential.user) {
+      await updateProfile(userCredential.user, { displayName });
+    }
+    
+    return userCredential;
+  } catch (error: any) {
+    console.error("Sign up initial attempt error:", error);
+    
+    // If we're in development mode and it's a network error, use mock
+    if (import.meta.env.DEV && 
+        (error.code === 'auth/network-request-failed' || 
+         !navigator.onLine || 
+         error.message?.includes('fetch'))) {
+      console.log("Falling back to mock signup in development mode");
       return mockSignUp(email, password, displayName);
     }
+    
+    // For production, we need to provide better error messages
+    if (error.code === 'auth/network-request-failed' || !navigator.onLine) {
+      throw new Error("Unable to connect to authentication service. Please check your internet connection and try again.");
+    }
+    
     throw error;
   }
 };
 
-// Safe sign in with fallback to mock in development
+// Safe sign in with improved error handling and fallbacks
 export const safeSignIn = async (email: string, password: string) => {
-  // First check if we're offline
-  if (!navigator.onLine) {
-    console.log("Network is offline");
-    if (import.meta.env.DEV) {
-      return mockSignIn(email, password);
-    }
-    throw new Error("You are currently offline. Please connect to the internet to log in.");
-  }
-
+  // First try directly with Firebase - this works in most cases
   try {
     return await signInWithEmailAndPassword(auth, email, password);
   } catch (error: any) {
-    console.error("Sign in error:", error);
+    console.error("Sign in initial attempt error:", error);
     
-    // Only use mock in development and if it's a network error
-    if (import.meta.env.DEV && (error.code === 'auth/network-request-failed' || !navigator.onLine)) {
-      console.log("Using mock signin in development mode due to network error");
+    // If we're in development mode and it's a network error, use mock
+    if (import.meta.env.DEV && 
+        (error.code === 'auth/network-request-failed' || 
+         !navigator.onLine || 
+         error.message?.includes('fetch'))) {
+      console.log("Falling back to mock signin in development mode");
       return mockSignIn(email, password);
     }
+    
+    // For production, we need to provide better error messages
+    if (error.code === 'auth/network-request-failed' || !navigator.onLine) {
+      throw new Error("Unable to connect to authentication service. Please check your internet connection and try again.");
+    }
+    
     throw error;
   }
 };
