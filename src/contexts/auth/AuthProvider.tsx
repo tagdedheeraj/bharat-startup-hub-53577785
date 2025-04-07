@@ -1,12 +1,9 @@
 
 import React, { useState, useEffect, ReactNode } from 'react';
-import { auth, db } from '@/lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { UserRole, User, AuthContextType } from './AuthTypes';
+import { User, UserRole, AuthContextType } from './AuthTypes';
 import { AuthContext } from './AuthContext';
-import { useAuthFunctions } from './useAuthFunctions';
 import { toast } from '@/hooks/use-toast';
+import * as localAuth from '@/lib/localStorage/auth';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -19,79 +16,80 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   console.log("Auth state:", { user, isAuthenticated }); // Debug auth state
 
-  // Listen for auth state changes
+  // Cargar usuario desde localStorage al inicio
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          // Try to get user role from Firestore
-          const userDocRef = doc(db, 'users', firebaseUser.uid);
-          const userDoc = await getDoc(userDocRef);
-          
-          let role: UserRole = 'startup'; // Default role
-          let name = firebaseUser.displayName || '';
-          
-          if (userDoc.exists()) {
-            // Use data from Firestore if available
-            const userData = userDoc.data();
-            role = userData.role as UserRole;
-            name = userData.name || name;
-          } else if (firebaseUser.uid.startsWith('mock-')) {
-            // This is a mock user in development mode
-            console.log("Using mock user data in development mode");
-          } else {
-            // If no doc exists but not a mock user, set it up
-            console.log("User exists in Auth but not in Firestore");
-          }
-          
-          setUser({
-            id: firebaseUser.uid,
-            name: name,
-            email: firebaseUser.email || '',
-            role: role
-          });
-          setIsAuthenticated(true);
-          
-          // Show welcome toast for sign-in (except initial load)
-          if (!loading) {
-            toast({
-              title: "Signed In",
-              description: `Welcome ${name}!`,
-            });
-          }
-          
-        } catch (error) {
-          console.error("Error getting user data:", error);
-          // Still set basic user info even if Firestore fetch fails
-          setUser({
-            id: firebaseUser.uid,
-            name: firebaseUser.displayName || '',
-            email: firebaseUser.email || '',
-            role: 'startup' // Default role
-          });
-          setIsAuthenticated(true);
-        }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-        
-        // Show signout toast (except for initial load)
-        if (!loading && isAuthenticated) {
-          toast({
-            title: "Signed Out",
-            description: "You have been signed out successfully.",
-          });
-        }
-      }
+    const storedUser = localAuth.getCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
+      setIsAuthenticated(true);
+    }
+    setLoading(false);
+  }, []);
+
+  // Funciones de autenticación
+  const login = async (email: string, password: string, role: UserRole): Promise<void> => {
+    try {
+      await localAuth.login(email, password, role);
       
-      setLoading(false);
-    });
+      const loggedInUser = localAuth.getCurrentUser();
+      if (loggedInUser) {
+        setUser(loggedInUser);
+        setIsAuthenticated(true);
+        
+        toast({
+          title: "Inicio de sesión exitoso",
+          description: `¡Bienvenido ${loggedInUser.name}!`,
+        });
+      }
+    } catch (error: any) {
+      console.error('Error de inicio de sesión:', error);
+      throw error;
+    }
+  };
 
-    return () => unsubscribe();
-  }, [loading, isAuthenticated]);
+  const register = async (name: string, email: string, password: string, role: UserRole): Promise<void> => {
+    try {
+      await localAuth.register(name, email, password, role);
+      
+      const registeredUser = localAuth.getCurrentUser();
+      if (registeredUser) {
+        setUser(registeredUser);
+        setIsAuthenticated(true);
+        
+        toast({
+          title: "Registro exitoso",
+          description: `¡Bienvenido ${registeredUser.name}!`,
+        });
+      }
+    } catch (error: any) {
+      console.error('Error de registro:', error);
+      throw error;
+    }
+  };
 
-  // Use our custom hook to get auth functions
-  const authValue = useAuthFunctions(user, setUser, isAuthenticated, setIsAuthenticated);
+  const logout = async (): Promise<void> => {
+    try {
+      await localAuth.logout();
+      setUser(null);
+      setIsAuthenticated(false);
+      
+      toast({
+        title: "Sesión cerrada",
+        description: "Has cerrado sesión correctamente.",
+      });
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      throw error;
+    }
+  };
+
+  const authValue: AuthContextType = {
+    user,
+    isAuthenticated,
+    login,
+    register,
+    logout
+  };
 
   return (
     <AuthContext.Provider value={authValue}>

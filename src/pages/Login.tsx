@@ -32,24 +32,11 @@ const Login = () => {
       
       await login(email, password, activeRole);
       
-      toast({
-        title: "Login Successful",
-        description: `Welcome back! You've been logged in as a ${activeRole}.`,
-      });
-      
-      // Navigate to dashboard
+      // La navegación se hará después de que el login sea exitoso
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
-      console.error('Login error:', error);
-      
-      // Simplify error messages for better user experience
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        setError("Invalid email or password. Please try again.");
-      } else if (error.message.includes("network") || error.message.includes("internet") || !navigator.onLine) {
-        setError("Unable to connect. Please check your internet connection or try again later.");
-      } else {
-        setError(error.message || "Login failed. Please try again.");
-      }
+      console.error('Error de inicio de sesión:', error);
+      setError(error.message || "Error al iniciar sesión. Por favor, inténtalo de nuevo.");
     } finally {
       setIsLoading(false);
     }
@@ -59,9 +46,9 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Iniciar sesión</CardTitle>
           <CardDescription className="text-center">
-            Sign in to access your account
+            Accede a tu cuenta
           </CardDescription>
         </CardHeader>
         
@@ -76,7 +63,7 @@ const Login = () => {
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="startup">Startup</TabsTrigger>
-              <TabsTrigger value="investor">Investor</TabsTrigger>
+              <TabsTrigger value="investor">Inversor</TabsTrigger>
             </TabsList>
             
             <TabsContent value="startup">
@@ -99,9 +86,9 @@ const Login = () => {
         
         <CardFooter>
           <p className="text-sm text-center w-full">
-            Don't have an account?{" "}
+            ¿No tienes una cuenta?{" "}
             <Link to="/register" className="text-blue-600 hover:underline">
-              Register
+              Registrarse
             </Link>
           </p>
         </CardFooter>
