@@ -1,92 +1,54 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth, UserRole } from '@/contexts/auth';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
+import { LoginForm } from '@/components/auth';
+import { UserRole, useAuth } from '@/contexts/auth';
 import { toast } from '@/hooks/use-toast';
-import { LoginForm, ErrorAlert, NetworkStatusAlert, OfflineFirebaseAlert } from '@/components/auth';
-import { retryOperation } from '@/contexts/auth/AuthUtils';
-import { getNetworkStatus } from '@/lib/firebase';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [activeRole, setActiveRole] = useState<UserRole>('startup');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(getNetworkStatus());
-  const [showFirebaseAlert, setShowFirebaseAlert] = useState(false);
   
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Monitor online status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    window.addEventListener('app-online', handleOnline);
-    window.addEventListener('app-offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('app-online', handleOnline);
-      window.removeEventListener('app-offline', handleOffline);
-    };
-  }, []);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setShowFirebaseAlert(false);
     
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     
     try {
       setIsLoading(true);
       
-      try {
-        await login(email, password, activeRole);
-        
-        toast({
-          title: "Login Successful",
-          description: `Welcome back! You've been logged in as a ${activeRole}.`,
-        });
-        
-        // Redirect to the appropriate dashboard
-        navigate(`/dashboard/${activeRole}`);
-      } catch (error: any) {
-        console.error('Login error:', error);
-        
-        // If we have a network error, try to show a more helpful message
-        if (error.message.includes('network') || !navigator.onLine) {
-          setShowFirebaseAlert(true);
-          if (import.meta.env.DEV) {
-            toast({
-              title: "Development Mode",
-              description: "Using mock authentication in development mode due to network issues.",
-            });
-          }
-        }
-        
-        throw error;
-      }
-    } catch (error: any) {
-      setError(error.message || "Invalid email or password. Please try again.");
+      await login(email, password, activeRole);
       
-      // Show a toast for network errors to make them more visible
-      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
-        toast({
-          title: "Network Error",
-          description: "Could not connect to authentication service. Please check your internet connection and try again.",
-          variant: "destructive"
-        });
+      toast({
+        title: "Login Successful",
+        description: `Welcome back! You've been logged in as a ${activeRole}.`,
+      });
+      
+      // Navigate to dashboard
+      navigate(`/dashboard/${activeRole}`);
+    } catch (error: any) {
+      console.error('Login error:', error);
+      
+      // Simplify error messages for better user experience
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        setError("Invalid email or password. Please try again.");
+      } else if (error.message.includes("network") || error.message.includes("internet") || !navigator.onLine) {
+        setError("Unable to connect. Please check your internet connection or try again later.");
+      } else {
+        setError(error.message || "Login failed. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -94,39 +56,54 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription className="text-center">
-            Login to access your dashboard
+            Sign in to access your account
           </CardDescription>
         </CardHeader>
+        
         <CardContent>
-          <NetworkStatusAlert />
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           
-          {showFirebaseAlert && <OfflineFirebaseAlert />}
-          
-          {error && <ErrorAlert message={error} />}
-          
-          <LoginForm
-            email={email}
-            password={password}
-            isLoading={isLoading}
-            activeRole={activeRole}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            setActiveRole={setActiveRole}
-            handleLogin={handleLogin}
-          />
+          <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="startup">Startup</TabsTrigger>
+              <TabsTrigger value="investor">Investor</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="startup">
+              <LoginForm 
+                activeRole="startup"
+                handleLogin={handleLogin}
+                isLoading={isLoading}
+              />
+            </TabsContent>
+            
+            <TabsContent value="investor">
+              <LoginForm 
+                activeRole="investor"
+                handleLogin={handleLogin}
+                isLoading={isLoading}
+              />
+            </TabsContent>
+          </Tabs>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <div className="text-sm text-center">
+        
+        <CardFooter>
+          <p className="text-sm text-center w-full">
             Don't have an account?{" "}
             <Link to="/register" className="text-blue-600 hover:underline">
-              Register now
+              Register
             </Link>
-          </div>
+          </p>
         </CardFooter>
       </Card>
     </div>

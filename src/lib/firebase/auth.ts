@@ -9,7 +9,6 @@ import {
   User 
 } from "firebase/auth";
 import { app, useEmulators } from "./app";
-import { toast } from "@/hooks/use-toast";
 
 // Initialize Authentication
 export const auth = getAuth(app);
@@ -36,9 +35,8 @@ if (useEmulators) {
 // Store mock users for dev environment
 let mockUsers: Record<string, {email: string, password: string, displayName?: string}> = {};
 
-// Create a more complete mock user that satisfies the Firebase User interface
+// Create a mock user that satisfies the Firebase User interface
 export const createMockFirebaseUser = (uid: string, email: string, displayName?: string): User => {
-  // Create a mock user object with all required properties of Firebase User
   const mockUser: any = {
     uid,
     email,
@@ -79,10 +77,10 @@ export const createMockFirebaseUser = (uid: string, email: string, displayName?:
     providerId: 'firebase'
   };
   
-  // Cast the mock user to User type to satisfy TypeScript
   return mockUser as User;
 };
 
+// Mock sign up for development mode when Firebase is unavailable
 export const mockSignUp = async (email: string, password: string, displayName?: string) => {
   console.log("Using mock signup because Firebase is unavailable");
   const mockUid = `mock-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -93,6 +91,7 @@ export const mockSignUp = async (email: string, password: string, displayName?: 
   };
 };
 
+// Mock sign in for development mode when Firebase is unavailable
 export const mockSignIn = async (email: string, password: string) => {
   console.log("Using mock signin because Firebase is unavailable");
   const user = mockUsers[email];
@@ -108,11 +107,23 @@ export const mockSignIn = async (email: string, password: string) => {
 
 // Safe sign up with fallback to mock in development
 export const safeSignUp = async (email: string, password: string, displayName?: string) => {
+  // First check if we're offline
+  if (!navigator.onLine) {
+    console.log("Network is offline");
+    if (import.meta.env.DEV) {
+      return mockSignUp(email, password, displayName);
+    }
+    throw new Error("You are currently offline. Please connect to the internet to register.");
+  }
+
   try {
     return await createUserWithEmailAndPassword(auth, email, password);
   } catch (error: any) {
+    console.error("Sign up error:", error);
+    
     // Only use mock in development and if it's a network error
-    if (import.meta.env.DEV && error.code === 'auth/network-request-failed') {
+    if (import.meta.env.DEV && (error.code === 'auth/network-request-failed' || !navigator.onLine)) {
+      console.log("Using mock signup in development mode due to network error");
       return mockSignUp(email, password, displayName);
     }
     throw error;
@@ -121,11 +132,23 @@ export const safeSignUp = async (email: string, password: string, displayName?: 
 
 // Safe sign in with fallback to mock in development
 export const safeSignIn = async (email: string, password: string) => {
+  // First check if we're offline
+  if (!navigator.onLine) {
+    console.log("Network is offline");
+    if (import.meta.env.DEV) {
+      return mockSignIn(email, password);
+    }
+    throw new Error("You are currently offline. Please connect to the internet to log in.");
+  }
+
   try {
     return await signInWithEmailAndPassword(auth, email, password);
   } catch (error: any) {
+    console.error("Sign in error:", error);
+    
     // Only use mock in development and if it's a network error
-    if (import.meta.env.DEV && error.code === 'auth/network-request-failed') {
+    if (import.meta.env.DEV && (error.code === 'auth/network-request-failed' || !navigator.onLine)) {
+      console.log("Using mock signin in development mode due to network error");
       return mockSignIn(email, password);
     }
     throw error;

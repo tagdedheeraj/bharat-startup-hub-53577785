@@ -1,11 +1,9 @@
 
-import { useState } from 'react';
-import { auth, db, safeSignIn, safeSignUp, getNetworkStatus } from '@/lib/firebase';
+import { auth, db, safeSignIn, safeSignUp } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { toast } from '@/hooks/use-toast';
 import { UserRole, User, AuthContextType } from './AuthTypes';
-import { retryOperation, isNetworkError } from './AuthUtils';
 
 export const useAuthFunctions = (
   user: User | null,
@@ -18,70 +16,39 @@ export const useAuthFunctions = (
     try {
       console.log(`Attempting to login with email: ${email} and role: ${role}`);
       
-      // Check network status before attempting login
-      if (!navigator.onLine) {
-        throw new Error("You're currently offline. Please connect to the internet to log in.");
-      }
-      
+      // Attempt to sign in
       const { user: firebaseUser } = await safeSignIn(email, password);
       
-      // Verify role in Firestore
-      const userDocRef = doc(db, 'users', firebaseUser.uid);
-      const userDoc = await retryOperation(() => firebaseUser.getIdTokenResult());
-      
-      // User state will be updated by onAuthStateChanged listener
       console.log("Login successful:", firebaseUser);
+      
+      // The AuthStateChanged listener will update user state
+      return firebaseUser;
       
     } catch (error: any) {
       console.error('Login error:', error);
       
-      // Check for network errors first
-      if (isNetworkError(error)) {
-        // If we're in development mode with emulators
-        if (import.meta.env.DEV) {
-          toast({
-            title: "Development Mode",
-            description: "Using mock authentication since Firebase is unavailable.",
-          });
-          // The safeSignIn will handle mock auth in development
-        } else {
-          throw new Error("Network connection error. Please check your internet connection and try again.");
-        }
-      } else if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
         throw new Error("Invalid email or password. Please check your credentials and try again.");
       } else if (error.code === 'auth/user-not-found') {
         throw new Error("User not found. Please check your email or register for a new account.");
+      } else if (error.code === 'auth/too-many-requests') {
+        throw new Error("Too many failed login attempts. Please try again later or reset your password.");
+      } else if (!navigator.onLine || error.code === 'auth/network-request-failed') {
+        throw new Error("Network connection issue. Please check your internet connection and try again.");
       } else {
-        throw new Error(error.message || "Failed to login. Please check your credentials.");
+        throw new Error(error.message || "Failed to login. Please try again.");
       }
     }
   };
 
   const register = async (name: string, email: string, password: string, role: UserRole) => {
     try {
-      // Check network connection first
-      if (!navigator.onLine) {
-        if (import.meta.env.DEV) {
-          toast({
-            title: "Development Mode",
-            description: "Using mock registration since you're offline.",
-          });
-          // Continue with mock registration in development
-        } else {
-          throw new Error("You are currently offline. Please connect to the internet to register.");
-        }
-      }
+      console.log("Starting registration process");
       
-      console.log("Starting registration process with Firebase");
+      // Create user in Firebase Auth
+      const { user: firebaseUser } = await safeSignUp(email, password, name);
       
-      // Create user in Firebase Auth with retry logic for better network resilience
-      const { user: firebaseUser } = await retryOperation(
-        () => safeSignUp(email, password, name),
-        3, // 3 retry attempts
-        2000 // 2 second delay between retries
-      );
-      
-      // In development mode, if we got a mock user, we can skip Firestore
+      // In development mode with mock user, we can skip Firestore
       const isMockUser = firebaseUser.uid.startsWith('mock-');
       
       if (!isMockUser || navigator.onLine) {
@@ -96,31 +63,29 @@ export const useAuthFunctions = (
         } catch (firestoreError) {
           console.warn("Could not save user data to Firestore, but account was created", firestoreError);
           // Don't fail registration if Firestore fails but auth succeeded
+          toast({
+            title: "Account Created",
+            description: "Your account was created but some profile data couldn't be saved. This will be fixed when you're back online.",
+          });
         }
       }
       
       console.log("Registration successful:", firebaseUser);
       
-      toast({
-        title: "Registration Successful",
-        description: `Your ${role} account has been created successfully.`,
-      });
+      // The AuthStateChanged listener will update user state
+      return firebaseUser;
       
-      // User state will be updated by onAuthStateChanged listener
     } catch (error: any) {
       console.error('Registration error:', error);
       
-      // Enhanced network error handling
-      if (isNetworkError(error)) {
-        if (import.meta.env.DEV) {
-          throw new Error("Network error. Using mock authentication in development mode.");
-        } else {
-          throw new Error("Network connection error. Please check your internet connection and try again.");
-        }
-      } else if (error.code === 'auth/email-already-in-use') {
+      if (error.code === 'auth/email-already-in-use') {
         throw new Error("This email is already registered. Please try logging in instead.");
       } else if (error.code === 'auth/weak-password') {
         throw new Error("Password is too weak. Please use a stronger password.");
+      } else if (error.code === 'auth/invalid-email') {
+        throw new Error("Invalid email format. Please check your email address.");
+      } else if (!navigator.onLine || error.code === 'auth/network-request-failed') {
+        throw new Error("Network connection issue. Please check your internet connection and try again.");
       } else {
         throw new Error(error.message || "Failed to register. Please try again.");
       }

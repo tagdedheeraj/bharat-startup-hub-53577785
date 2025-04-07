@@ -1,10 +1,21 @@
 
-export { default as FormField } from './FormField';
-export { default as RegisterForm } from './RegisterForm';
-export { default as LoginForm } from './LoginForm';
-export { default as OfflineAlert } from './OfflineAlert';
-export { default as ErrorAlert } from './ErrorAlert';
-export { default as NetworkStatusAlert } from './NetworkStatusAlert';
-export { default as OfflineFirebaseAlert } from './OfflineFirebaseAlert';
-export { default as NetworkRetryButton } from './NetworkRetryButton';
-export { default as RegisterTabs } from './RegisterTabs';
+// Export auth components
+import FormField from './FormField';
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
+import ErrorAlert from './ErrorAlert';
+import NetworkStatusAlert from './NetworkStatusAlert';
+import NetworkRetryButton from './NetworkRetryButton';
+import OfflineAlert from './OfflineAlert';
+import OfflineFirebaseAlert from './OfflineFirebaseAlert';
+
+export {
+  FormField,
+  LoginForm,
+  RegisterForm,
+  ErrorAlert,
+  NetworkStatusAlert,
+  NetworkRetryButton,
+  OfflineAlert,
+  OfflineFirebaseAlert
+};
