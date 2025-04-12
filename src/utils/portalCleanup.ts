@@ -20,7 +20,9 @@ export const cleanupPortals = () => {
     
     hiddenPortals.forEach(portal => {
       try {
-        const style = window.getComputedStyle(portal);
+        // Cast portal to HTMLElement to access style property
+        const portalElement = portal as HTMLElement;
+        const style = window.getComputedStyle(portalElement);
         
         // Only clean up portals that are DEFINITELY not in use
         // Multiple safety checks to ensure we don't remove active dialogs
@@ -82,10 +84,12 @@ export const ensureBottomNavVisibility = () => {
     navItems.forEach(item => {
       if (item && (
         item.classList.contains('hidden') || 
-        window.getComputedStyle(item).display === 'none'
+        (item instanceof HTMLElement && window.getComputedStyle(item).display === 'none')
       )) {
         item.classList.remove('hidden');
-        item.style.display = '';
+        if (item instanceof HTMLElement) {
+          item.style.display = '';
+        }
         console.log("Restored visibility of hidden nav item");
       }
     });
@@ -104,7 +108,9 @@ export const debugPortals = () => {
     console.log(`DEBUG: Found ${portals.length} portals total`);
     
     portals.forEach((portal, index) => {
-      const style = window.getComputedStyle(portal);
+      // Cast portal to HTMLElement to access style property
+      const portalElement = portal as HTMLElement;
+      const style = window.getComputedStyle(portalElement);
       const isVisible = style.display !== 'none';
       const hasDialogContent = portal.querySelector('[data-radix-dialog-content]') !== null;
       const hasDrawerContent = portal.querySelector('[role="dialog"]') !== null;
