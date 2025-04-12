@@ -2,7 +2,13 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { 
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import FundingForm from './FundingForm';
 
 interface ExpertiseCardProps {
@@ -33,7 +39,7 @@ export default function ExpertiseCard({
   variant = 'default',
   index = 0
 }: ExpertiseCardProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -54,27 +60,28 @@ export default function ExpertiseCard({
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+            onClick={() => setOpen(true)}
           >
             <span>Explore</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
               <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Explore {title}</DialogTitle>
-          </DialogHeader>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="sm:max-w-[425px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Explore {title}</AlertDialogTitle>
+          </AlertDialogHeader>
           <FundingForm 
             expertiseTitle={title}
-            onSubmitSuccess={() => setIsDialogOpen(false)}
+            onSubmitSuccess={() => setOpen(false)}
           />
-        </DialogContent>
-      </Dialog>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

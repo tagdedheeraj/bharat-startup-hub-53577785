@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -40,6 +41,7 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
+  const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -59,11 +61,12 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <AlertDialog>
+      <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger asChild>
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+            onClick={() => setOpen(true)}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -82,6 +85,7 @@ export default function FundingCard({
             fundingTitle={title} 
             fundingAmount={amount} 
             onSubmitSuccess={() => {
+              setOpen(false);
               console.log("Form submitted successfully");
             }}
           />
