@@ -11,7 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import FundingForm from './FundingForm';
 
@@ -66,8 +66,8 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
+              <Dialog>
+                <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
                     className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
@@ -77,14 +77,14 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                       <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
                   </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="sm:max-w-[425px]">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Apply for Funding</AlertDialogTitle>
-                    <AlertDialogDescription>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Apply for Funding</DialogTitle>
+                    <DialogDescription>
                       Complete the form below to apply for {title} funding.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
+                    </DialogDescription>
+                  </DialogHeader>
                   <FundingForm 
                     fundingTitle={title} 
                     fundingAmount={amount} 
@@ -92,11 +92,8 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                       console.log("Form submitted successfully");
                     }}
                   />
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
