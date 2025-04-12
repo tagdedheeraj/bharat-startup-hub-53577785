@@ -4,6 +4,7 @@ import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { 
   Carousel,
   CarouselContent,
@@ -36,6 +37,10 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   ];
   
   const variant = colorVariants[index % colorVariants.length];
+  
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
   
   return (
     <Card 
@@ -70,16 +75,17 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <div className="mt-auto pt-4">
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <button 
+                  <Button 
                     type="button"
-                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium"
-                    onClick={() => setIsDialogOpen(true)}
+                    variant="ghost"
+                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+                    onClick={handleOpenDialog}
                   >
                     <span>Avail Now</span>
                     <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
                       <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
-                  </button>
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>

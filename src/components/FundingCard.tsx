@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import FundingForm from './FundingForm';
 
 interface FundingCardProps {
@@ -36,6 +37,10 @@ export default function FundingCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+  
   return (
     <div 
       className={cn(
@@ -55,16 +60,17 @@ export default function FundingCard({
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <button 
+          <Button 
             type="button"
-            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium"
-            onClick={() => setIsDialogOpen(true)}
+            variant="ghost"
+            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+            onClick={handleOpenDialog}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
-          </button>
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
