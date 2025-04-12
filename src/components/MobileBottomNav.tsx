@@ -1,5 +1,5 @@
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Home, Info, Briefcase, Shield, LifeBuoy } from 'lucide-react';
+import { Home, Info, Briefcase, Shield } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
 import { useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
