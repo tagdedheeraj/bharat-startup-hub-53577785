@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -31,7 +30,7 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Create alternating color schemes
   const colorVariants = [
@@ -76,11 +75,12 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog open={open} onOpenChange={setOpen}>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
                     className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+                    onClick={() => setIsDialogOpen(true)}
                   >
                     <span>Avail Now</span>
                     <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
@@ -99,7 +99,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                     fundingTitle={title} 
                     fundingAmount={amount} 
                     onSubmitSuccess={() => {
-                      setOpen(false);
+                      setIsDialogOpen(false);
                       console.log("Form submitted successfully");
                     }}
                   />

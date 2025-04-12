@@ -39,7 +39,7 @@ export default function ExpertiseCard({
   variant = 'default',
   index = 0
 }: ExpertiseCardProps) {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -60,10 +60,11 @@ export default function ExpertiseCard({
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+            onClick={() => setIsDialogOpen(true)}
           >
             <span>Explore</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -77,7 +78,7 @@ export default function ExpertiseCard({
           </DialogHeader>
           <FundingForm 
             expertiseTitle={title}
-            onSubmitSuccess={() => setOpen(false)}
+            onSubmitSuccess={() => setIsDialogOpen(false)}
           />
         </DialogContent>
       </Dialog>
