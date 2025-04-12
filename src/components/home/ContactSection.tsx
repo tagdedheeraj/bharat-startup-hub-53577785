@@ -1,6 +1,7 @@
 
 import SectionHeading from '@/components/SectionHeading';
 import ContactForm from '@/components/ContactForm';
+import ContactSectionWrapper from './ContactSectionWrapper';
 
 const ContactSection = () => {
   return (
@@ -13,12 +14,9 @@ const ContactSection = () => {
             description="Have a question or feedback? Fill out the form below and we'll get back to you as soon as possible."
           />
           
-          <div className="mt-8 relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-india-saffron/20 to-india-green/20 transform rotate-1 rounded-lg"></div>
-            <div className="relative z-10">
-              <ContactForm />
-            </div>
-          </div>
+          <ContactSectionWrapper>
+            <ContactForm />
+          </ContactSectionWrapper>
         </div>
       </div>
     </section>
