@@ -27,9 +27,9 @@ const Register = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Crear una cuenta</CardTitle>
           <CardDescription className="text-center">
-            Sign up as a startup or investor to get started
+            Regístrate como startup o inversor para comenzar
           </CardDescription>
         </CardHeader>
         
@@ -54,9 +54,9 @@ const Register = () => {
         
         <CardFooter>
           <p className="text-sm text-center w-full">
-            Already have an account?{" "}
+            ¿Ya tienes una cuenta?{" "}
             <Link to="/login" className="text-blue-600 hover:underline">
-              Log In
+              Iniciar sesión
             </Link>
           </p>
         </CardFooter>
@@ -66,4 +66,3 @@ const Register = () => {
 };
 
 export default Register;
-
