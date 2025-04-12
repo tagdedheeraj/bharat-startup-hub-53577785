@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import { toast } from "sonner";
 import { Play, Pause } from 'lucide-react';
 import { YouTubeShort } from './types';
