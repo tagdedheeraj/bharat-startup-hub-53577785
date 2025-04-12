@@ -43,7 +43,9 @@ export default function ExpertiseCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     console.log("Opening expertise dialog for:", title);
     setIsDialogOpen(true);
   };
@@ -78,7 +80,13 @@ export default function ExpertiseCard({
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog 
+        open={isDialogOpen} 
+        onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          console.log(`Dialog for ${title} is now ${open ? 'open' : 'closed'}`);
+        }}
+      >
         <DialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
@@ -91,10 +99,18 @@ export default function ExpertiseCard({
           </button>
         </DialogTrigger>
         <DialogContent 
-          className="sm:max-w-[425px]" 
-          onEscapeKeyDown={handleCloseDialog}
+          className="sm:max-w-[425px] bg-white" 
+          onEscapeKeyDown={(e) => {
+            e.preventDefault(); // Prevent default to keep dialog open
+            console.log("Escape key prevented from closing dialog");
+          }}
+          onPointerDownOutside={(e) => {
+            e.preventDefault(); // Prevent outside clicks from closing dialog
+            console.log("Outside click prevented from closing dialog");
+          }}
           onInteractOutside={(e) => {
-            e.preventDefault(); // Prevent closing on outside click
+            e.preventDefault(); // Prevent any interaction from closing
+            console.log("Outside interaction prevented from closing dialog");
           }}
         >
           <DialogHeader>

@@ -47,6 +47,11 @@ export default function FundingCard({
   const handleOpenDialog = () => {
     console.log("Opening funding dialog for:", title);
     setIsDialogOpen(true);
+    
+    // Ensure we don't have any cleanup happen right after opening
+    setTimeout(() => {
+      console.log("Dialog should now be fully open for:", title);
+    }, 100);
   };
   
   const handleCloseDialog = () => {
@@ -78,12 +83,22 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog 
+        open={isDialogOpen} 
+        onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          console.log(`Dialog for ${title} is now ${open ? 'open' : 'closed'}`);
+        }}
+      >
         <DialogTrigger asChild>
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={handleOpenDialog}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleOpenDialog();
+            }}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -91,9 +106,21 @@ export default function FundingCard({
             </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]" onEscapeKeyDown={handleCloseDialog} onInteractOutside={(e) => {
-          e.preventDefault(); // Prevent closing on outside click
-        }}>
+        <DialogContent 
+          className="sm:max-w-[425px] bg-white" 
+          onEscapeKeyDown={(e) => {
+            e.preventDefault(); // Prevent default to keep dialog open
+            console.log("Escape key prevented from closing dialog");
+          }}
+          onPointerDownOutside={(e) => {
+            e.preventDefault(); // Prevent outside clicks from closing dialog
+            console.log("Outside click prevented from closing dialog");
+          }}
+          onInteractOutside={(e) => {
+            e.preventDefault(); // Prevent any interaction from closing
+            console.log("Outside interaction prevented from closing dialog");
+          }}
+        >
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
             <DialogDescription>

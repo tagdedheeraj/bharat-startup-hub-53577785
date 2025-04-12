@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import FundingForm from './FundingForm';
+import { useToast } from '@/hooks/use-toast';
+import { debugPortals } from '@/utils/portalCleanup';
 
 interface FundingServiceProps {
   amount: string;
@@ -32,6 +34,7 @@ interface FundingServiceProps {
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
   
   // Create alternating color schemes
   const colorVariants = [
@@ -45,9 +48,23 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   
   const variant = colorVariants[index % colorVariants.length];
   
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     console.log("Opening funding dialog for:", title);
     setIsDialogOpen(true);
+    
+    // Show a toast to confirm dialog is being opened
+    toast({
+      title: "Opening Form",
+      description: `Preparing application form for ${title}`,
+      duration: 2000,
+    });
+    
+    // Debug portals when opening dialog
+    setTimeout(() => {
+      debugPortals();
+    }, 100);
   };
   
   const handleCloseDialog = () => {
@@ -57,6 +74,12 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   
   const handleFormSuccess = () => {
     console.log("Form submitted successfully for:", title);
+    toast({
+      title: "Application Submitted",
+      description: "Thank you for your interest. We'll contact you soon.",
+      duration: 3000,
+    });
+    
     setTimeout(() => {
       setIsDialogOpen(false);
     }, 500);
@@ -93,7 +116,13 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Dialog 
+                open={isDialogOpen} 
+                onOpenChange={(open) => {
+                  console.log(`Dialog for ${title} change state to: ${open ? 'open' : 'closed'}`);
+                  setIsDialogOpen(open);
+                }}
+              >
                 <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
@@ -107,10 +136,18 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                   </Button>
                 </DialogTrigger>
                 <DialogContent 
-                  className="sm:max-w-[425px]"
-                  onEscapeKeyDown={handleCloseDialog}
+                  className="sm:max-w-[425px] bg-white" 
+                  onEscapeKeyDown={(e) => {
+                    e.preventDefault(); // Prevent default to keep dialog open
+                    console.log("Escape key prevented from closing dialog");
+                  }}
+                  onPointerDownOutside={(e) => {
+                    e.preventDefault(); // Prevent outside clicks from closing dialog
+                    console.log("Outside click prevented from closing dialog");
+                  }}
                   onInteractOutside={(e) => {
-                    e.preventDefault(); // Prevent closing on outside click
+                    e.preventDefault(); // Prevent any interaction from closing
+                    console.log("Outside interaction prevented from closing dialog");
                   }}
                 >
                   <DialogHeader>

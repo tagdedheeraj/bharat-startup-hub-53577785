@@ -1,37 +1,81 @@
-
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Home, Info, Briefcase, Shield, LifeBuoy } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function MobileBottomNav() {
   const isMobile = useIsMobile();
+  const bottomNavRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   
   // Force reload of the bottom nav on component mount to ensure visibility
   useEffect(() => {
-    console.log("MobileBottomNav mounted");
+    console.log("MobileBottomNav mounted - ensuring visibility");
     
-    // Ensure bottom navigation is visible on mount
+    // Run immediately and then periodically to ensure visibility
     const ensureBottomNavVisibility = () => {
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav) {
-        bottomNav.classList.remove('hidden');
-        console.log("Bottom nav visibility ensured");
+      // 1. Ensure the bottom nav container itself is visible
+      if (bottomNavRef.current) {
+        bottomNavRef.current.classList.remove('hidden');
+        bottomNavRef.current.style.display = 'block';
+        console.log("Bottom nav container visibility ensured");
       }
+      
+      // 2. Ensure all bottom nav items are visible
+      const navItems = document.querySelectorAll('.fixed.bottom-0 button, .fixed.bottom-0 a, .support-button');
+      navItems.forEach(item => {
+        if (item instanceof HTMLElement) {
+          item.classList.remove('hidden');
+          item.style.display = '';
+          console.log("Nav item visibility ensured");
+        }
+      });
+      
+      // 3. Specifically check for the support button
+      const supportButtons = document.querySelectorAll('.support-button');
+      supportButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.classList.remove('hidden');
+          button.classList.add('flex');
+          button.style.display = 'flex';
+          console.log("Support button visibility specifically ensured");
+        }
+      });
     };
     
     // Run multiple times to ensure it catches any potential timing issues
     ensureBottomNavVisibility();
-    const timer1 = setTimeout(ensureBottomNavVisibility, 100);
-    const timer2 = setTimeout(ensureBottomNavVisibility, 500);
-    const timer3 = setTimeout(ensureBottomNavVisibility, 1000);
+    
+    // Create an array of timeouts at different intervals
+    const timers = [
+      setTimeout(ensureBottomNavVisibility, 100),
+      setTimeout(ensureBottomNavVisibility, 500),
+      setTimeout(ensureBottomNavVisibility, 1000),
+      setTimeout(ensureBottomNavVisibility, 2000),
+      setTimeout(ensureBottomNavVisibility, 5000)
+    ];
+    
+    // Also set up a regular interval to keep checking
+    const intervalTimer = setInterval(() => {
+      ensureBottomNavVisibility();
+    }, 3000);
+    
+    // Show a toast notification to verify the bottom nav is working
+    setTimeout(() => {
+      toast({
+        title: "Navigation Ready",
+        description: "The bottom navigation is now active and ready to use.",
+        duration: 3000,
+      });
+    }, 1500);
     
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
+      // Clean up all timers on unmount
+      timers.forEach(clearTimeout);
+      clearInterval(intervalTimer);
     };
-  }, []);
+  }, [toast]);
   
   if (!isMobile) return null;
   
@@ -43,7 +87,11 @@ export default function MobileBottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden">
+    <div 
+      ref={bottomNavRef}
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
+      style={{ display: 'block' }} // Inline style to ensure visibility
+    >
       <nav className="flex justify-around items-center h-16">
         {navItems.map((item) => (
           <NavItem 

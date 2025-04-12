@@ -12,31 +12,77 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { debugPortals } from '@/utils/portalCleanup';
 
 export default function SupportDrawer() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  // Use a ref to track drawer mounting
+  const supportButtonRef = useRef<HTMLButtonElement>(null);
+  const isInitialMount = useRef(true);
 
   // This effect ensures the drawer is visible after mount
   useEffect(() => {
-    console.log("SupportDrawer component mounted");
+    console.log("SupportDrawer component mounted - ensuring visibility");
     
-    // Force drawer trigger to be visible
-    const timer = setTimeout(() => {
-      const supportButton = document.querySelector('.support-button');
-      if (supportButton) {
-        supportButton.classList.remove('hidden');
-        console.log("Support button visibility ensured");
+    // Force all support buttons to be visible
+    const forceButtonVisibility = () => {
+      const supportButtons = document.querySelectorAll('.support-button');
+      supportButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.style.display = '';
+          button.classList.remove('hidden');
+          button.classList.add('flex');
+          console.log("Support button visibility forced explicitly");
+        }
+      });
+      
+      // Also force visibility on the button ref
+      if (supportButtonRef.current) {
+        supportButtonRef.current.style.display = '';
+        supportButtonRef.current.classList.remove('hidden');
+        supportButtonRef.current.classList.add('flex');
       }
-    }, 100);
+    };
     
-    return () => clearTimeout(timer);
+    // Run multiple times to catch any timing issues
+    forceButtonVisibility();
+    
+    // Run again after short delays to catch any late CSS or state changes
+    const timers = [
+      setTimeout(forceButtonVisibility, 100),
+      setTimeout(forceButtonVisibility, 500),
+      setTimeout(forceButtonVisibility, 1000),
+      setTimeout(forceButtonVisibility, 2000),
+      setTimeout(forceButtonVisibility, 5000)
+    ];
+    
+    // Set up a recurring check for visibility
+    const intervalTimer = setInterval(forceButtonVisibility, 3000);
+    
+    return () => {
+      timers.forEach(clearTimeout);
+      clearInterval(intervalTimer);
+    };
   }, []);
+
+  // Another effect to debug drawer state changes
+  useEffect(() => {
+    console.log(`Support drawer is now ${isOpen ? 'OPEN' : 'CLOSED'}`);
+    
+    if (isOpen && !isInitialMount.current) {
+      // When opening, ensure we debug portals to see what's happening
+      debugPortals();
+    }
+    
+    isInitialMount.current = false;
+  }, [isOpen]);
 
   // Function to handle support drawer actions
   const handleSupportAction = (action: string) => {
+    console.log(`Support action triggered: ${action}`);
     setIsOpen(false); // Close drawer first
     
     // Delay action slightly to allow drawer to close
@@ -70,6 +116,7 @@ export default function SupportDrawer() {
   };
 
   const handleNavigation = (path: string) => {
+    console.log(`Navigation from support drawer to: ${path}`);
     setIsOpen(false);
     // Delay navigation slightly to allow drawer to close
     setTimeout(() => {
@@ -77,15 +124,27 @@ export default function SupportDrawer() {
     }, 300);
   };
 
+  // Function to explicitly open drawer
+  const handleOpenDrawer = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("Support drawer trigger clicked explicitly");
+    setIsOpen(true);
+    
+    // Debug portals when opening drawer
+    setTimeout(() => {
+      debugPortals();
+    }, 100);
+  };
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <button 
-          className="support-button flex flex-col items-center justify-center w-full h-full relative"
-          onClick={() => {
-            console.log("Support drawer trigger clicked");
-            setIsOpen(true);
-          }}
+          ref={supportButtonRef}
+          className="support-button flex flex-col items-center justify-center w-full h-full relative opacity-100 visible"
+          style={{ display: 'flex' }} // Inline style to force visibility
+          onClick={handleOpenDrawer}
         >
           <LifeBuoy 
             size={24} 
@@ -96,7 +155,7 @@ export default function SupportDrawer() {
           <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
         </button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="bg-white z-50">
         <DrawerHeader>
           <DrawerTitle>Need Help?</DrawerTitle>
           <DrawerDescription>
