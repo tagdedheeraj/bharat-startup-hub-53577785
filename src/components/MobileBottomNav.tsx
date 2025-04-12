@@ -1,6 +1,6 @@
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Info, Briefcase, Phone, Menu, Star, Receipt, FileSpreadsheet, Shield, MessageCircle } from 'lucide-react';
+import { Home, Info, Briefcase, Phone, Menu, Star, Receipt, FileSpreadsheet, Shield } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sheet,
@@ -8,26 +8,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
-import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-
 export default function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { toast } = useToast();
-  const [message, setMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   
   if (!isMobile) return null;
   
@@ -36,34 +20,11 @@ export default function MobileBottomNav() {
     { icon: Info, label: 'About', to: '/about' },
     { icon: Briefcase, label: 'Services', to: '/services' },
     { icon: Shield, label: 'CA Services', to: '/ca-services' },
+    { icon: Phone, label: 'Contact', to: '/contact' },
   ];
 
   const handleNavigation = (path: string) => {
     navigate(path);
-  };
-
-  const handleSubmitMessage = () => {
-    if (!message.trim()) {
-      toast({
-        title: "Message can't be empty",
-        description: "Please enter your message before submitting",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    // Simulate sending the message
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setMessage('');
-      toast({
-        title: "Message sent successfully",
-        description: "Our team will get back to you shortly",
-        variant: "default"
-      });
-    }, 1000);
   };
 
   return (
@@ -84,35 +45,6 @@ export default function MobileBottomNav() {
             </Link>
           );
         })}
-        
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-india-saffron">
-              <MessageCircle size={20} />
-              <span className="text-xs mt-1">Support</span>
-            </button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle className="text-india-saffron">Chat Support</DialogTitle>
-              <DialogDescription>
-                Send us your query and we'll get back to you as soon as possible.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <Textarea 
-                placeholder="Type your message here..." 
-                className="min-h-[120px]" 
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <Button onClick={handleSubmitMessage} disabled={isSubmitting} className="bg-india-saffron hover:bg-india-saffron/90">
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-        
         <Sheet>
           <SheetTrigger asChild>
             <button className="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-brand-500">
