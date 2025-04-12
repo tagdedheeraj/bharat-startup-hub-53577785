@@ -37,10 +37,6 @@ export default function FundingCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
-  };
-  
   return (
     <div 
       className={cn(
@@ -61,10 +57,8 @@ export default function FundingCard({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button 
-            type="button"
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={handleOpenDialog}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
