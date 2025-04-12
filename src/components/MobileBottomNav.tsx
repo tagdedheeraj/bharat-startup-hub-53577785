@@ -18,6 +18,15 @@ import {
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 export default function MobileBottomNav() {
   const location = useLocation();
@@ -32,6 +41,7 @@ export default function MobileBottomNav() {
     { icon: Home, label: 'Home', to: '/' },
     { icon: Info, label: 'About', to: '/about' },
     { icon: Briefcase, label: 'Services', to: '/services' },
+    { icon: Shield, label: 'CA', to: '/ca-services' },
   ];
 
   const handleNavigation = (path: string) => {
@@ -88,17 +98,6 @@ export default function MobileBottomNav() {
           );
         })}
         
-        {/* CA Services link */}
-        <Link
-          to="/ca-services"
-          className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
-            location.pathname.includes('/ca-services') ? 'text-india-saffron' : 'text-gray-500 hover:text-brand-500'
-          }`}
-        >
-          <Shield size={20} className={location.pathname.includes('/ca-services') ? 'text-india-saffron' : ''} />
-          <span className="text-xs mt-1">CA Services</span>
-        </Link>
-        
         {/* Contact Link */}
         <Link
           to="/contact"
@@ -110,22 +109,26 @@ export default function MobileBottomNav() {
           <span className="text-xs mt-1">Contact</span>
         </Link>
         
-        {/* Support Dialog - Made more visible */}
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <button className="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-brand-500">
-              <LifeBuoy size={20} className="text-india-saffron animate-pulse" />
-              <span className="text-xs mt-1 font-medium">Support</span>
+        {/* Support Dialog - Made more visible with Drawer for mobile */}
+        <Drawer>
+          <DrawerTrigger asChild>
+            <button className="flex flex-col items-center justify-center w-full h-full">
+              <LifeBuoy 
+                size={24} 
+                className="text-india-saffron animate-pulse" 
+                strokeWidth={2.5}
+              />
+              <span className="text-xs mt-1 font-semibold text-india-saffron">Support</span>
             </button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Need Help?</DialogTitle>
-              <DialogDescription>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Need Help?</DrawerTitle>
+              <DrawerDescription>
                 Our support team is here to assist you. Choose how you'd like to get in touch.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="p-4 space-y-4">
               <Button 
                 className="w-full flex items-center justify-center gap-2" 
                 onClick={() => handleSupportAction('contact')}
@@ -150,8 +153,17 @@ export default function MobileBottomNav() {
                 <span>Call Support</span>
               </Button>
             </div>
-          </DialogContent>
-        </Dialog>
+            <DrawerFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => handleNavigation('/faqs')}
+                className="w-full"
+              >
+                View FAQs
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
         
         {/* More Menu */}
         <Sheet>
