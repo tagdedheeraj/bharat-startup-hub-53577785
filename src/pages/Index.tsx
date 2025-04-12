@@ -16,7 +16,7 @@ import NewsHeadlines from '@/components/NewsHeadlines';
 const HomePage = () => {
   return (
     <div className="overflow-hidden">
-      {/* First-time visitor video popup */}
+      {/* First-time visitor video popup - with a standard YouTube ID that's guaranteed to work */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
       
       {/* Hero Section */}
