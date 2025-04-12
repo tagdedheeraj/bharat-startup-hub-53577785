@@ -66,7 +66,6 @@ export default function FundingCard({
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={() => setIsDialogOpen(true)}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">

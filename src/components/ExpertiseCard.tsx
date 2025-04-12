@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import FundingForm from './FundingForm';
@@ -64,7 +65,6 @@ export default function ExpertiseCard({
         <DialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
-            onClick={() => setIsDialogOpen(true)}
           >
             <span>Explore</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -75,6 +75,9 @@ export default function ExpertiseCard({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
+            <DialogDescription>
+              Fill out the form below to learn more about our {title} offerings.
+            </DialogDescription>
           </DialogHeader>
           <FundingForm 
             expertiseTitle={title}

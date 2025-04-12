@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -75,7 +76,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Dialog>
                 <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
