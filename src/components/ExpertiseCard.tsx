@@ -43,6 +43,23 @@ export default function ExpertiseCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
+  const handleOpenDialog = () => {
+    console.log("Opening expertise dialog for:", title);
+    setIsDialogOpen(true);
+  };
+  
+  const handleCloseDialog = () => {
+    console.log("Closing expertise dialog for:", title);
+    setIsDialogOpen(false);
+  };
+  
+  const handleFormSuccess = () => {
+    console.log("Form submitted successfully for:", title);
+    setTimeout(() => {
+      setIsDialogOpen(false);
+    }, 500);
+  };
+  
   return (
     <div 
       className={cn(
@@ -65,6 +82,7 @@ export default function ExpertiseCard({
         <DialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+            onClick={handleOpenDialog}
           >
             <span>Explore</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -72,7 +90,13 @@ export default function ExpertiseCard({
             </span>
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent 
+          className="sm:max-w-[425px]" 
+          onEscapeKeyDown={handleCloseDialog}
+          onInteractOutside={(e) => {
+            e.preventDefault(); // Prevent closing on outside click
+          }}
+        >
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>
@@ -81,7 +105,8 @@ export default function ExpertiseCard({
           </DialogHeader>
           <FundingForm 
             expertiseTitle={title}
-            onSubmitSuccess={() => setIsDialogOpen(false)}
+            onSubmitSuccess={handleFormSuccess}
+            formType="expertise"
           />
         </DialogContent>
       </Dialog>

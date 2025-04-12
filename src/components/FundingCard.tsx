@@ -44,6 +44,23 @@ export default function FundingCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
+  const handleOpenDialog = () => {
+    console.log("Opening funding dialog for:", title);
+    setIsDialogOpen(true);
+  };
+  
+  const handleCloseDialog = () => {
+    console.log("Closing funding dialog for:", title);
+    setIsDialogOpen(false);
+  };
+  
+  const handleFormSuccess = () => {
+    console.log("Form submitted successfully for:", title);
+    setTimeout(() => {
+      setIsDialogOpen(false);
+    }, 500);
+  };
+  
   return (
     <div 
       className={cn(
@@ -66,6 +83,7 @@ export default function FundingCard({
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+            onClick={handleOpenDialog}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -73,7 +91,9 @@ export default function FundingCard({
             </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]" onEscapeKeyDown={handleCloseDialog} onInteractOutside={(e) => {
+          e.preventDefault(); // Prevent closing on outside click
+        }}>
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
             <DialogDescription>
@@ -83,10 +103,8 @@ export default function FundingCard({
           <FundingForm 
             fundingTitle={title} 
             fundingAmount={amount} 
-            onSubmitSuccess={() => {
-              setIsDialogOpen(false);
-              console.log("Form submitted successfully");
-            }}
+            onSubmitSuccess={handleFormSuccess}
+            formType="funding"
           />
         </DialogContent>
       </Dialog>

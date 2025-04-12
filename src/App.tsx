@@ -4,21 +4,23 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
-import { cleanupPortals } from "@/utils/portalCleanup";
+import { cleanupPortals, ensureBottomNavVisibility } from "@/utils/portalCleanup";
 
 const App = () => {
-  // Force a clean mount of portals when the app starts
+  // Set up improved portal cleanup and bottom nav visibility
   useEffect(() => {
-    console.log("App mounted - cleaning up portals");
+    console.log("App mounted - initializing portal cleanup and nav visibility");
     
     // Run cleanup initially
     cleanupPortals();
+    ensureBottomNavVisibility();
     
-    // Also set up an interval for periodic cleanup
+    // Also set up an interval for periodic cleanup - but be more gentle
     const interval = setInterval(() => {
       console.log("Periodic portal cleanup");
       cleanupPortals();
-    }, 5000);
+      ensureBottomNavVisibility();
+    }, 5000); // Every 5 seconds should be plenty
     
     return () => {
       clearInterval(interval);

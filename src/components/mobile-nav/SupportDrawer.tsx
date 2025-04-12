@@ -22,6 +22,17 @@ export default function SupportDrawer() {
   // This effect ensures the drawer is visible after mount
   useEffect(() => {
     console.log("SupportDrawer component mounted");
+    
+    // Force drawer trigger to be visible
+    const timer = setTimeout(() => {
+      const supportButton = document.querySelector('.support-button');
+      if (supportButton) {
+        supportButton.classList.remove('hidden');
+        console.log("Support button visibility ensured");
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   // Function to handle support drawer actions
@@ -70,7 +81,7 @@ export default function SupportDrawer() {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
         <button 
-          className="flex flex-col items-center justify-center w-full h-full relative"
+          className="support-button flex flex-col items-center justify-center w-full h-full relative"
           onClick={() => {
             console.log("Support drawer trigger clicked");
             setIsOpen(true);
@@ -82,6 +93,7 @@ export default function SupportDrawer() {
             strokeWidth={2.5}
           />
           <span className="text-xs mt-1 font-semibold text-india-saffron">Support</span>
+          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
         </button>
       </DrawerTrigger>
       <DrawerContent>

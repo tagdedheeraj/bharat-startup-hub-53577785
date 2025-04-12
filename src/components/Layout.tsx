@@ -63,10 +63,11 @@ export default function Layout({ children }: LayoutProps) {
         }
       });
       
-      // Ensure bottom navigation is always visible
+      // Ensure bottom navigation is always visible - BUT DON'T REMOVE HIDDEN MODALS!
       const bottomNav = document.querySelector('.fixed.bottom-0');
       if (bottomNav && bottomNav.classList.contains('hidden')) {
         bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility restored by observer");
       }
     });
     
@@ -78,12 +79,30 @@ export default function Layout({ children }: LayoutProps) {
       attributeFilter: ['style', 'class', 'id']
     });
     
+    // Run an immediate check for bottom nav visibility
+    const checkBottomNav = () => {
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav) {
+        bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility ensured on mount");
+      }
+    };
+    
+    // Run multiple times to ensure it catches any timing issues
+    checkBottomNav();
+    const timer1 = setTimeout(checkBottomNav, 100);
+    const timer2 = setTimeout(checkBottomNav, 500);
+    const timer3 = setTimeout(checkBottomNav, 1000);
+    
     // Cleanup function
     return () => {
       observer.disconnect();
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
       
-      // Final cleanup of portals
-      const portals = document.querySelectorAll('[data-radix-portal]');
+      // Final cleanup of portals - but be careful not to remove active ones
+      const portals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
       portals.forEach((portal) => {
         try {
           if (portal && portal.parentNode) {
@@ -96,10 +115,11 @@ export default function Layout({ children }: LayoutProps) {
     };
   }, []);
 
-  // Cleanup portals on route changes
+  // Cleanup portals on route changes - but be more selective
   useEffect(() => {
     // Small delay to allow animations to complete
     const timeoutId = setTimeout(() => {
+      // Only remove portals that are actually hidden
       const unusedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
       unusedPortals.forEach((portal) => {
         try {
@@ -115,8 +135,15 @@ export default function Layout({ children }: LayoutProps) {
       const bottomNav = document.querySelector('.fixed.bottom-0');
       if (bottomNav) {
         bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility ensured after route change");
       }
     }, 300);
+    
+    // Run an immediate check too
+    const bottomNav = document.querySelector('.fixed.bottom-0');
+    if (bottomNav) {
+      bottomNav.classList.remove('hidden');
+    }
     
     return () => {
       clearTimeout(timeoutId);

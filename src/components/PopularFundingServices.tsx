@@ -45,6 +45,23 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   
   const variant = colorVariants[index % colorVariants.length];
   
+  const handleOpenDialog = () => {
+    console.log("Opening funding dialog for:", title);
+    setIsDialogOpen(true);
+  };
+  
+  const handleCloseDialog = () => {
+    console.log("Closing funding dialog for:", title);
+    setIsDialogOpen(false);
+  };
+  
+  const handleFormSuccess = () => {
+    console.log("Form submitted successfully for:", title);
+    setTimeout(() => {
+      setIsDialogOpen(false);
+    }, 500);
+  };
+  
   return (
     <Card 
       className={cn(
@@ -76,12 +93,12 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
                     className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-                    onClick={() => setIsDialogOpen(true)}
+                    onClick={handleOpenDialog}
                   >
                     <span>Avail Now</span>
                     <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
@@ -89,7 +106,13 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                     </span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent 
+                  className="sm:max-w-[425px]"
+                  onEscapeKeyDown={handleCloseDialog}
+                  onInteractOutside={(e) => {
+                    e.preventDefault(); // Prevent closing on outside click
+                  }}
+                >
                   <DialogHeader>
                     <DialogTitle>Apply for Funding</DialogTitle>
                     <DialogDescription>
@@ -99,10 +122,8 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                   <FundingForm 
                     fundingTitle={title} 
                     fundingAmount={amount} 
-                    onSubmitSuccess={() => {
-                      setIsDialogOpen(false);
-                      console.log("Form submitted successfully");
-                    }}
+                    onSubmitSuccess={handleFormSuccess}
+                    formType="popular-funding"
                   />
                 </DialogContent>
               </Dialog>

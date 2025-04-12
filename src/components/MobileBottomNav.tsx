@@ -11,12 +11,26 @@ export default function MobileBottomNav() {
   useEffect(() => {
     console.log("MobileBottomNav mounted");
     
-    // Force repaint of the bottom nav
-    const bottomNav = document.querySelector('.fixed.bottom-0');
-    if (bottomNav) {
-      bottomNav.classList.remove('hidden');
-      console.log("Bottom nav visibility ensured");
-    }
+    // Ensure bottom navigation is visible on mount
+    const ensureBottomNavVisibility = () => {
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav) {
+        bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility ensured");
+      }
+    };
+    
+    // Run multiple times to ensure it catches any potential timing issues
+    ensureBottomNavVisibility();
+    const timer1 = setTimeout(ensureBottomNavVisibility, 100);
+    const timer2 = setTimeout(ensureBottomNavVisibility, 500);
+    const timer3 = setTimeout(ensureBottomNavVisibility, 1000);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
   }, []);
   
   if (!isMobile) return null;
