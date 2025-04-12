@@ -22,6 +22,7 @@ const SupportPopup = () => {
   useEffect(() => {
     // Listen for the custom event from MobileBottomNav
     const handleOpenSupport = () => {
+      console.log("Support dialog event received");
       setIsOpen(true);
     };
     
@@ -34,16 +35,9 @@ const SupportPopup = () => {
   }, []);
   
   return (
-    <div className={`fixed ${isMobile ? 'bottom-16' : 'bottom-0'} left-0 right-0 z-30 flex justify-center`}>
+    <>
+      {/* Always render the Dialog outside any positioning container for better accessibility */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button 
-            className="bg-india-saffron text-white rounded-t-lg md:rounded-full px-6 py-2 shadow-lg hover:bg-amber-600 transition-all"
-          >
-            <MessageSquare className="mr-2 h-5 w-5" />
-            <span>Get Support</span>
-          </Button>
-        </DialogTrigger>
         <DialogContent className="p-6 sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-display text-india-saffron">How can we help you?</DialogTitle>
@@ -109,7 +103,22 @@ const SupportPopup = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+
+      {/* For non-mobile users, show a fixed button at the bottom */}
+      {!isMobile && (
+        <div className="fixed bottom-4 right-4 z-30">
+          <DialogTrigger asChild>
+            <Button 
+              className="bg-india-saffron text-white rounded-full px-6 py-4 shadow-lg hover:bg-amber-600 transition-all"
+              onClick={() => setIsOpen(true)}
+            >
+              <MessageSquare className="mr-2 h-5 w-5" />
+              <span>Get Support</span>
+            </Button>
+          </DialogTrigger>
+        </div>
+      )}
+    </>
   );
 };
 

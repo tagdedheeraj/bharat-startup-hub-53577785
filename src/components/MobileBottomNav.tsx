@@ -27,6 +27,7 @@ export default function MobileBottomNav() {
   };
 
   const handleSupportClick = () => {
+    console.log("Support button clicked, dispatching event");
     const event = new CustomEvent('open-support-dialog');
     document.dispatchEvent(event);
   };
@@ -148,7 +149,7 @@ export default function MobileBottomNav() {
             return (
               <button
                 key={index}
-                className={`flex flex-col items-center justify-center w-full h-full transition-colors text-india-saffron`}
+                className="flex flex-col items-center justify-center w-full h-full transition-colors text-india-saffron"
                 onClick={handleSupportClick}
               >
                 <item.icon size={20} />
