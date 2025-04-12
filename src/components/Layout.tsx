@@ -62,6 +62,12 @@ export default function Layout({ children }: LayoutProps) {
           }
         }
       });
+      
+      // Ensure bottom navigation is always visible
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav && bottomNav.classList.contains('hidden')) {
+        bottomNav.classList.remove('hidden');
+      }
     });
     
     // Start observing document body for mutations
@@ -104,6 +110,12 @@ export default function Layout({ children }: LayoutProps) {
           console.debug("Route change cleanup error:", e);
         }
       });
+      
+      // Ensure bottom navigation is visible after route change
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav) {
+        bottomNav.classList.remove('hidden');
+      }
     }, 300);
     
     return () => {
