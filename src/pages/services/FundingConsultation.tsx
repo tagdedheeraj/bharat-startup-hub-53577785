@@ -6,6 +6,7 @@ import ProcessSection from '@/components/funding/ProcessSection';
 import BenefitsSection from '@/components/funding/BenefitsSection';
 import FAQSection from '@/components/funding/FAQSection';
 import CTASection from '@/components/funding/CTASection';
+import LegalDisclaimer from '@/components/funding/LegalDisclaimer';
 
 const FundingConsultationPage = () => {
   return (
@@ -17,6 +18,7 @@ const FundingConsultationPage = () => {
       <BenefitsSection />
       <FAQSection />
       <CTASection />
+      <LegalDisclaimer />
     </div>
   );
 };
