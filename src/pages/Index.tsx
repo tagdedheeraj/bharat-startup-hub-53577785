@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -8,6 +9,7 @@ import PopularFundingServices from '@/components/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
 import ContactForm from '@/components/ContactForm';
+import FirstTimeVideoPopup from '@/components/FirstTimeVideoPopup';
 
 const HomePage = () => {
   const fundingOptions = [
@@ -45,6 +47,9 @@ const HomePage = () => {
 
   return (
     <div className="overflow-hidden">
+      {/* First-time visitor video popup */}
+      <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
+      
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-brand-50 to-blue-50 py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
