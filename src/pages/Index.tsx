@@ -58,7 +58,7 @@ const HomePage = () => {
       {/* CTA Section */}
       <CTASection />
       
-      {/* Support Popup */}
+      {/* Support Popup - Make sure it's included here */}
       <SupportPopup />
     </div>
   );
