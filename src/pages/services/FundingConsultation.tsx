@@ -7,33 +7,33 @@ import FundingCard from '@/components/FundingCard';
 const FundingConsultationPage = () => {
   const fundingOptions = [
     {
+      amount: "1 CR",
+      title: "NIDHI SSP Fund",
+      description: "Supports D2C, Healthcare, AgriTech, Manufacturing, Gaming, and GenAI startups with substantial funding.",
+      to: "/contact"
+    },
+    {
       amount: "50 Lac",
-      title: "Micro Business Growth",
-      description: "Ideal for small businesses looking to expand operations or launch new products.",
+      title: "C-CAMP Agriculture Grand Challenge",
+      description: "For Indian startups (≤10 years, 51% Indian owned) and international startups with India collaboration offering deep tech solutions.",
+      to: "/contact"
+    },
+    {
+      amount: "15 Lac",
+      title: "MSME Business Incubation Center",
+      description: "For Indian citizens (18-65) with innovative ideas, UDYAM registered, DPIIT certified startups (Pvt Ltd or LLP).",
       to: "/contact"
     },
     {
       amount: "1 CR",
-      title: "Startup Funding Package",
-      description: "Perfect for new ventures needing capital for market entry and initial growth.",
+      title: "USHUS Powering Marine Startups",
+      description: "For DPIIT recognized startups in fishing, cargo, blockchain, logistics, safety, and port sectors.",
       to: "/contact"
     },
     {
-      amount: "2 CR",
-      title: "Medium Growth Capital",
-      description: "For established businesses looking to scale operations and increase market share.",
-      to: "/contact"
-    },
-    {
-      amount: "3 CR",
-      title: "Expansion Funding",
-      description: "Specialized funding for businesses expanding into new markets or territories.",
-      to: "/contact"
-    },
-    {
-      amount: "5 CR",
-      title: "Major Growth Investment",
-      description: "Comprehensive funding for established businesses with proven models seeking significant expansion.",
+      amount: "25 Lac",
+      title: "PRAGATI Micro Accelerator Program",
+      description: "For agriculture & sustainability startups with solutions in climate-resilient farming, data-driven agri tools, and AI.",
       to: "/contact"
     }
   ];
@@ -74,7 +74,7 @@ const FundingConsultationPage = () => {
             <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Funding Consultation</span>
             <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Secure the Right Funding for Your Business</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Access tailored funding solutions ranging from ₹50 Lacs to ₹5 CR to fuel your business growth and success.
+              Access tailored funding solutions ranging from ₹15 Lacs to ₹1 CR to fuel your business growth and success.
             </p>
             <Link to="/contact" className="btn-primary inline-flex items-center mt-8">
               Get Started
@@ -89,8 +89,8 @@ const FundingConsultationPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="FUNDING OPTIONS"
-            heading="Choose the Right Funding Package"
-            description="We offer various funding solutions tailored to different business stages and requirements."
+            heading="Available Government & Private Funding Programs"
+            description="Apply for various funding schemes tailored for different business sectors and stages."
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -102,6 +102,8 @@ const FundingConsultationPage = () => {
                 description={option.description}
                 to={option.to}
                 delay={index * 100}
+                index={index}
+                variant="gradient"
               />
             ))}
           </div>
