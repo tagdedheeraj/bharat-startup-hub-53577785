@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import FundingForm from './FundingForm';
 
@@ -70,7 +71,9 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <button 
+                    type="button"
                     className="group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+                    onClick={() => setIsDialogOpen(true)}
                   >
                     <span>Avail Now</span>
                     <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
@@ -81,6 +84,9 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Apply for Funding</DialogTitle>
+                    <DialogDescription className="text-sm text-gray-500">
+                      Complete the form below to apply for {title} funding.
+                    </DialogDescription>
                   </DialogHeader>
                   <FundingForm 
                     fundingTitle={title} 

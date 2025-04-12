@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import FundingForm from './FundingForm';
 
 interface FundingCardProps {
@@ -56,7 +56,9 @@ export default function FundingCard({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <button 
+            type="button"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+            onClick={() => setIsDialogOpen(true)}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -67,6 +69,9 @@ export default function FundingCard({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
+            <DialogDescription className="text-sm text-gray-500">
+              Complete the form below to apply for {title} funding.
+            </DialogDescription>
           </DialogHeader>
           <FundingForm 
             fundingTitle={title} 
