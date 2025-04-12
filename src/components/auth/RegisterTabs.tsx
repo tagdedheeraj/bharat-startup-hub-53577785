@@ -76,3 +76,4 @@ const RegisterTabs: React.FC<RegisterTabsProps> = ({
 };
 
 export default RegisterTabs;
+

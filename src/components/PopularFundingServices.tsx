@@ -1,8 +1,10 @@
+
 import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { 
   Carousel,
   CarouselContent,
@@ -10,7 +12,14 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger, 
+  DialogDescription 
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import FundingForm from './FundingForm';
 
@@ -67,25 +76,33 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Dialog>
                 <DialogTrigger asChild>
-                  <button 
-                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+                  <Button 
+                    variant="ghost"
+                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+                    onClick={() => setIsDialogOpen(true)}
                   >
                     <span>Avail Now</span>
                     <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
                       <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
-                  </button>
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader>
                     <DialogTitle>Apply for Funding</DialogTitle>
+                    <DialogDescription>
+                      Complete the form below to apply for {title} funding.
+                    </DialogDescription>
                   </DialogHeader>
                   <FundingForm 
                     fundingTitle={title} 
                     fundingAmount={amount} 
-                    onSubmitSuccess={() => setIsDialogOpen(false)}
+                    onSubmitSuccess={() => {
+                      setIsDialogOpen(false);
+                      console.log("Form submitted successfully");
+                    }}
                   />
                 </DialogContent>
               </Dialog>

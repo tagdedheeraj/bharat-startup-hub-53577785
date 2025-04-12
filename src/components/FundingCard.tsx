@@ -2,8 +2,16 @@
 import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import FundingForm from './FundingForm';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface FundingCardProps {
   amount: string;
@@ -31,7 +39,7 @@ export default function FundingCard({
   to, 
   delay = 0, 
   variant = 'default',
-  index =.0
+  index = 0
 }: FundingCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
@@ -55,23 +63,30 @@ export default function FundingCard({
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <button 
-            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium"
+          <Button 
+            variant="ghost"
+            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
-          </button>
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
+            <DialogDescription>
+              Complete the form below to apply for {title} funding.
+            </DialogDescription>
           </DialogHeader>
           <FundingForm 
             fundingTitle={title} 
             fundingAmount={amount} 
-            onSubmitSuccess={() => setIsDialogOpen(false)}
+            onSubmitSuccess={() => {
+              setIsDialogOpen(false);
+              console.log("Form submitted successfully");
+            }}
           />
         </DialogContent>
       </Dialog>

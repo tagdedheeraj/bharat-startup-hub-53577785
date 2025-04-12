@@ -9,11 +9,16 @@ import { cleanupPortals } from "@/utils/portalCleanup";
 const App = () => {
   // Force a clean mount of portals when the app starts
   useEffect(() => {
+    console.log("App mounted - cleaning up portals");
+    
     // Run cleanup initially
     cleanupPortals();
     
     // Also set up an interval for periodic cleanup
-    const interval = setInterval(cleanupPortals, 5000);
+    const interval = setInterval(() => {
+      console.log("Periodic portal cleanup");
+      cleanupPortals();
+    }, 5000);
     
     return () => {
       clearInterval(interval);

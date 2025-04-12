@@ -1,0 +1,90 @@
+
+import { useState, useEffect, useRef, ReactNode } from 'react';
+import { toast } from "sonner";
+import { Play, Pause } from 'lucide-react';
+import { YouTubeShort } from './types';
+
+export const useYouTubeCarousel = (youtubeShorts: YouTubeShort[]) => {
+  const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+  const intervalRef = useRef<number | null>(null);
+
+  const playVideo = (videoId: string) => {
+    setCurrentVideoId(videoId);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    toast("Playing video", {
+      description: youtubeShorts.find(short => short.id === videoId)?.title,
+      icon: <Play className="h-5 w-5 text-green-500" />
+    });
+  };
+
+  const closeVideo = () => {
+    setCurrentVideoId(null);
+    if (!isPaused) {
+      startAutoSlide();
+    }
+  };
+
+  const togglePause = () => {
+    setIsPaused(!isPaused);
+    toast(isPaused ? "Auto-sliding resumed" : "Auto-sliding paused", {
+      icon: isPaused ? <Play className="h-5 w-5 text-green-500" /> : <Pause className="h-5 w-5 text-orange-500" />
+    });
+    if (!isPaused) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    } else {
+      startAutoSlide();
+    }
+  };
+
+  const startAutoSlide = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = window.setInterval(() => {
+      const carouselEl = document.querySelector('[data-embla-carousel]');
+      if (carouselEl) {
+        const nextButton = carouselEl.querySelector('[data-carousel-next]') as HTMLButtonElement;
+        if (nextButton) {
+          nextButton.click();
+        }
+      }
+    }, 5000);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    if (!isPaused) {
+      startAutoSlide();
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      clearTimeout(timer);
+    };
+  }, [isPaused]);
+
+  return {
+    currentVideoId,
+    isPaused,
+    isLoading,
+    hoveredVideo,
+    setHoveredVideo,
+    playVideo,
+    closeVideo,
+    togglePause
+  };
+};

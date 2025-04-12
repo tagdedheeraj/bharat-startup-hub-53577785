@@ -2,7 +2,14 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import FundingForm from './FundingForm';
 
 interface ExpertiseCardProps {
@@ -68,6 +75,9 @@ export default function ExpertiseCard({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
+            <DialogDescription>
+              Fill out the form below to learn more about our {title} offerings.
+            </DialogDescription>
           </DialogHeader>
           <FundingForm 
             expertiseTitle={title}

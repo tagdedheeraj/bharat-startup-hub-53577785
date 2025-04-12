@@ -46,9 +46,9 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Iniciar sesión</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription className="text-center">
-            Accede a tu cuenta
+            Access your account
           </CardDescription>
         </CardHeader>
         
@@ -63,7 +63,7 @@ const Login = () => {
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
               <TabsTrigger value="startup">Startup</TabsTrigger>
-              <TabsTrigger value="investor">Inversor</TabsTrigger>
+              <TabsTrigger value="investor">Investor</TabsTrigger>
             </TabsList>
             
             <TabsContent value="startup">
@@ -86,9 +86,9 @@ const Login = () => {
         
         <CardFooter>
           <p className="text-sm text-center w-full">
-            ¿No tienes una cuenta?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="text-blue-600 hover:underline">
-              Registrarse
+              Sign Up
             </Link>
           </p>
         </CardFooter>
