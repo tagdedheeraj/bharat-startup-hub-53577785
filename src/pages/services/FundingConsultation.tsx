@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, HelpCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle, HelpCircle, AlertTriangle } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 import FundingCard from '@/components/FundingCard';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const FundingConsultationPage = () => {
   const fundingOptions = [
@@ -90,6 +91,16 @@ const FundingConsultationPage = () => {
 
   return (
     <div>
+      {/* Disclaimer Alert */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <Alert variant="default" className="bg-yellow-50 border-yellow-200">
+          <AlertTriangle className="h-5 w-5 text-yellow-600" />
+          <AlertDescription className="text-yellow-800 font-medium">
+            Please note: We are a startup consultancy service provider and are not affiliated with any government, non-government agencies, institutions, organizations, or departments. We provide consultation services to help businesses navigate funding opportunities.
+          </AlertDescription>
+        </Alert>
+      </div>
+
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
