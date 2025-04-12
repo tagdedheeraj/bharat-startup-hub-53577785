@@ -12,7 +12,6 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
-import SupportPopup from '@/components/SupportPopup';
 
 const HomePage = () => {
   return (
@@ -57,9 +56,6 @@ const HomePage = () => {
 
       {/* CTA Section */}
       <CTASection />
-      
-      {/* Support Popup - Make sure it's included here */}
-      <SupportPopup />
     </div>
   );
 };
