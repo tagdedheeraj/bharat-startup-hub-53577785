@@ -107,15 +107,13 @@ const SupportPopup = () => {
       {/* For non-mobile users, show a fixed button at the bottom */}
       {!isMobile && (
         <div className="fixed bottom-4 right-4 z-30">
-          <DialogTrigger asChild>
-            <Button 
-              className="bg-india-saffron text-white rounded-full px-6 py-4 shadow-lg hover:bg-amber-600 transition-all"
-              onClick={() => setIsOpen(true)}
-            >
-              <MessageSquare className="mr-2 h-5 w-5" />
-              <span>Get Support</span>
-            </Button>
-          </DialogTrigger>
+          <Button 
+            className="bg-india-saffron text-white rounded-full px-6 py-4 shadow-lg hover:bg-amber-600 transition-all"
+            onClick={() => setIsOpen(true)}
+          >
+            <MessageSquare className="mr-2 h-5 w-5" />
+            <span>Get Support</span>
+          </Button>
         </div>
       )}
     </>
