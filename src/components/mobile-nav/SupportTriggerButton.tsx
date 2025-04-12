@@ -1,6 +1,6 @@
 
 import { LifeBuoy } from 'lucide-react';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 type SupportTriggerButtonProps = {
   onClick: (e: React.MouseEvent) => void;
@@ -8,57 +8,35 @@ type SupportTriggerButtonProps = {
 };
 
 export default function SupportTriggerButton({ onClick, buttonRef }: SupportTriggerButtonProps) {
-  const localRef = useRef<HTMLButtonElement>(null);
-  
-  // Combine refs to ensure we have access even if the parent ref fails
-  const setRefs = (element: HTMLButtonElement | null) => {
-    // Set the buttonRef from props
-    if (buttonRef && 'current' in buttonRef) {
-      (buttonRef as React.MutableRefObject<HTMLButtonElement | null>).current = element;
-    }
-    
-    // Also set our local ref
-    if (localRef.current !== element) {
-      localRef.current = element;
-    }
-  };
-  
   // Force button visibility
   useEffect(() => {
-    const enforceVisibility = () => {
-      // Use our local ref as fallback if the main ref isn't working
-      const button = buttonRef?.current || localRef.current;
-      
-      if (button) {
-        button.style.display = 'flex';
-        button.style.visibility = 'visible';
-        button.style.opacity = '1';
-        button.classList.remove('hidden');
-        button.classList.add('flex');
-        console.log("Support button visibility enforced through direct ref");
-      }
-      
-      // Also try to find it by class as a fallback
-      const supportButtons = document.querySelectorAll('.support-button');
-      supportButtons.forEach(btn => {
-        if (btn instanceof HTMLElement) {
-          btn.style.display = 'flex';
-          btn.style.visibility = 'visible';
-          btn.style.opacity = '1';
-          btn.classList.remove('hidden');
-          btn.classList.add('flex');
-          console.log("Support button visibility enforced through class selector");
-        }
-      });
-    };
+    const button = buttonRef?.current;
     
-    // Run immediately and at intervals to ensure visibility
-    enforceVisibility();
+    if (button) {
+      // Make button visible
+      button.style.display = 'flex';
+      button.style.visibility = 'visible';
+      button.style.opacity = '1';
+      button.classList.remove('hidden');
+      button.classList.add('flex');
+    }
+    
+    // Check visibility again after a delay
     const timers = [
-      setTimeout(enforceVisibility, 100),
-      setTimeout(enforceVisibility, 500),
-      setTimeout(enforceVisibility, 1000),
-      setTimeout(enforceVisibility, 2000),
+      setTimeout(() => {
+        if (buttonRef?.current) {
+          buttonRef.current.style.display = 'flex';
+          buttonRef.current.style.visibility = 'visible';
+          buttonRef.current.style.opacity = '1';
+        }
+      }, 500),
+      setTimeout(() => {
+        if (buttonRef?.current) {
+          buttonRef.current.style.display = 'flex';
+          buttonRef.current.style.visibility = 'visible';
+          buttonRef.current.style.opacity = '1';
+        }
+      }, 1000)
     ];
     
     return () => {
@@ -68,7 +46,7 @@ export default function SupportTriggerButton({ onClick, buttonRef }: SupportTrig
 
   return (
     <button 
-      ref={setRefs}
+      ref={buttonRef}
       className="support-button flex flex-col items-center justify-center w-full h-full relative opacity-100 visible"
       style={{ display: 'flex' }} // Inline style to force visibility
       onClick={onClick}

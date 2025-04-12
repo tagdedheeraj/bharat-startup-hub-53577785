@@ -1,9 +1,9 @@
+
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Home, Info, Briefcase, Shield } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
 import { useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { ensureBottomNavVisibility, ensureDialogVisibility } from '@/utils/portalCleanup';
 
 export default function MobileBottomNav() {
   const isMobile = useIsMobile();
@@ -12,7 +12,7 @@ export default function MobileBottomNav() {
   
   // Force reload of the bottom nav on component mount to ensure visibility
   useEffect(() => {
-    console.log("MobileBottomNav mounted - ensuring visibility");
+    console.log("MobileBottomNav mounted");
     
     // Run immediately and then periodically to ensure visibility
     const ensureNavVisibility = () => {
@@ -22,18 +22,16 @@ export default function MobileBottomNav() {
         bottomNavRef.current.style.display = 'block';
         bottomNavRef.current.style.visibility = 'visible';
         bottomNavRef.current.style.opacity = '1';
-        console.log("Bottom nav container visibility ensured");
       }
       
       // 2. Ensure all bottom nav items are visible
-      const navItems = document.querySelectorAll('.fixed.bottom-0 button, .fixed.bottom-0 a, .support-button');
+      const navItems = document.querySelectorAll('.fixed.bottom-0 button, .fixed.bottom-0 a');
       navItems.forEach(item => {
         if (item instanceof HTMLElement) {
           item.classList.remove('hidden');
           item.style.display = '';
           item.style.visibility = 'visible';
           item.style.opacity = '1';
-          console.log("Nav item visibility ensured");
         }
       });
       
@@ -46,12 +44,8 @@ export default function MobileBottomNav() {
           button.style.display = 'flex';
           button.style.visibility = 'visible';
           button.style.opacity = '1';
-          console.log("Support button visibility specifically ensured");
         }
       });
-      
-      // 4. Also ensure any dialogs that might be open are visible
-      ensureDialogVisibility();
     };
     
     // Run multiple times to ensure it catches any potential timing issues
@@ -62,28 +56,13 @@ export default function MobileBottomNav() {
       setTimeout(ensureNavVisibility, 100),
       setTimeout(ensureNavVisibility, 500),
       setTimeout(ensureNavVisibility, 1000),
+      setTimeout(ensureNavVisibility, 2000),
     ];
     
-    // Also set up a regular interval to keep checking
-    const intervalTimer = setInterval(() => {
-      ensureBottomNavVisibility();
-    }, 3000);
-    
-    // Show a toast notification to verify the bottom nav is working
-    setTimeout(() => {
-      toast({
-        title: "Navigation Ready",
-        description: "The bottom navigation is now active and ready to use.",
-        duration: 3000,
-      });
-    }, 1500);
-    
     return () => {
-      // Clean up all timers on unmount
       timers.forEach(clearTimeout);
-      clearInterval(intervalTimer);
     };
-  }, [toast]);
+  }, []);
   
   if (!isMobile) return null;
   

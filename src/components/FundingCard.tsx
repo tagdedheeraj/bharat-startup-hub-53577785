@@ -47,45 +47,22 @@ export default function FundingCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
-  // Force Dialog visiblity on state change
-  useEffect(() => {
-    if (isDialogOpen) {
-      console.log(`FundingCard Dialog for "${title}" opened - ensuring visibility`);
-      
-      // Small delay to allow dialog to render
-      setTimeout(() => {
-        const dialogContent = document.querySelector('[role="dialog"]');
-        if (dialogContent instanceof HTMLElement) {
-          dialogContent.style.display = 'block';
-          dialogContent.style.visibility = 'visible';
-          dialogContent.style.opacity = '1';
-          console.log("Dialog content visibility enforced");
-        }
-        
-        // Also check for any overlay elements
-        const overlay = document.querySelector('[data-radix-popper-content-wrapper]');
-        if (overlay instanceof HTMLElement) {
-          overlay.style.display = 'block';
-          overlay.style.visibility = 'visible';
-          overlay.style.opacity = '1';
-          console.log("Dialog overlay visibility enforced");
-        }
-      }, 100);
-      
-      // Show toast to confirm button is working
-      toast({
-        title: "Form Opening",
-        description: `Preparing application form for ${title}`,
-        duration: 2000,
-      });
-    }
-  }, [isDialogOpen, title, toast]);
-  
   const handleOpenDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     console.log("Opening funding dialog for:", title);
-    setIsDialogOpen(true);
+    
+    // Show toast to confirm button is working
+    toast({
+      title: "Opening Form",
+      description: `Preparing application form for ${title}`,
+      duration: 2000,
+    });
+    
+    // Set state after a tiny delay to ensure DOM is ready
+    setTimeout(() => {
+      setIsDialogOpen(true);
+    }, 50);
   };
   
   const handleFormSuccess = () => {
@@ -114,10 +91,7 @@ export default function FundingCard({
       
       <Dialog 
         open={isDialogOpen} 
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          console.log(`Dialog for ${title} is now ${open ? 'open' : 'closed'}`);
-        }}
+        onOpenChange={setIsDialogOpen}
       >
         <DialogTrigger asChild>
           <Button 
@@ -133,11 +107,7 @@ export default function FundingCard({
         </DialogTrigger>
         <DialogContent 
           ref={dialogRef}
-          className="sm:max-w-[425px] bg-white z-[100]" 
-          onInteractOutside={(e) => {
-            e.preventDefault();
-            console.log("Outside interaction prevented from closing dialog");
-          }}
+          className="sm:max-w-[425px] bg-white z-[100]"
         >
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>

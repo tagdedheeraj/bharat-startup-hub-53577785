@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
@@ -46,45 +46,22 @@ export default function ExpertiseCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
-  // Force Dialog visiblity on state change
-  useEffect(() => {
-    if (isDialogOpen) {
-      console.log(`ExpertiseCard Dialog for "${title}" opened - ensuring visibility`);
-      
-      // Small delay to allow dialog to render
-      setTimeout(() => {
-        const dialogContent = document.querySelector('[role="dialog"]');
-        if (dialogContent instanceof HTMLElement) {
-          dialogContent.style.display = 'block';
-          dialogContent.style.visibility = 'visible';
-          dialogContent.style.opacity = '1';
-          console.log("Dialog content visibility enforced for expertise card");
-        }
-        
-        // Also check for any overlay elements
-        const overlay = document.querySelector('[data-radix-popper-content-wrapper]');
-        if (overlay instanceof HTMLElement) {
-          overlay.style.display = 'block';
-          overlay.style.visibility = 'visible';
-          overlay.style.opacity = '1';
-          console.log("Dialog overlay visibility enforced for expertise card");
-        }
-      }, 100);
-      
-      // Show toast to confirm dialog is opening
-      toast({
-        title: "Form Opening",
-        description: `Preparing information form for ${title}`,
-        duration: 2000,
-      });
-    }
-  }, [isDialogOpen, title, toast]);
-  
   const handleOpenDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     console.log("Opening expertise dialog for:", title);
-    setIsDialogOpen(true);
+    
+    // Show toast to confirm button is working
+    toast({
+      title: "Opening Form",
+      description: `Preparing information form for ${title}`,
+      duration: 2000,
+    });
+    
+    // Set state after a tiny delay to ensure DOM is ready
+    setTimeout(() => {
+      setIsDialogOpen(true);
+    }, 50);
   };
   
   const handleFormSuccess = () => {
@@ -114,10 +91,7 @@ export default function ExpertiseCard({
       
       <Dialog 
         open={isDialogOpen} 
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          console.log(`Dialog for ${title} is now ${open ? 'open' : 'closed'}`);
-        }}
+        onOpenChange={setIsDialogOpen}
       >
         <DialogTrigger asChild>
           <button 
@@ -132,11 +106,7 @@ export default function ExpertiseCard({
         </DialogTrigger>
         <DialogContent 
           ref={dialogRef}
-          className="sm:max-w-[425px] bg-white z-[100]" 
-          onInteractOutside={(e) => {
-            e.preventDefault();
-            console.log("Outside interaction prevented from closing expertise dialog");
-          }}
+          className="sm:max-w-[425px] bg-white z-[100]"
         >
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>

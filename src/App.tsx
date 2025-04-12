@@ -4,27 +4,62 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
-import { cleanupPortals, ensureBottomNavVisibility, ensureDialogVisibility } from "@/utils/portalCleanup";
 
 const App = () => {
   // Set up improved portal cleanup and bottom nav visibility
   useEffect(() => {
-    console.log("App mounted - initializing portal cleanup and nav visibility");
+    console.log("App mounted");
     
-    // Run an initial visibility check
-    ensureBottomNavVisibility();
-    ensureDialogVisibility();
+    // Function to ensure UI elements are visible
+    const ensureUIVisibility = () => {
+      // Check bottom navigation
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav instanceof HTMLElement) {
+        bottomNav.style.display = 'block';
+        bottomNav.style.visibility = 'visible';
+        bottomNav.style.opacity = '1';
+        bottomNav.classList.remove('hidden');
+      }
+      
+      // Check support buttons
+      const supportButtons = document.querySelectorAll('.support-button');
+      supportButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.style.display = 'flex';
+          button.style.visibility = 'visible';
+          button.style.opacity = '1';
+          button.classList.remove('hidden');
+          button.classList.add('flex');
+        }
+      });
+      
+      // Check for any dialogs
+      const dialogs = document.querySelectorAll('[role="dialog"]');
+      dialogs.forEach(dialog => {
+        if (dialog instanceof HTMLElement && dialog.style.display === 'none') {
+          dialog.style.display = 'block';
+          dialog.style.visibility = 'visible';
+          dialog.style.opacity = '1';
+        }
+      });
+    };
     
-    // Set up interval for periodic checks
-    const interval = setInterval(() => {
-      console.log("Periodic portal and nav visibility check");
-      cleanupPortals();
-      ensureBottomNavVisibility();
-      ensureDialogVisibility();
-    }, 10000); // Every 10 seconds is plenty
+    // Run immediately and periodically
+    ensureUIVisibility();
+    
+    // Set interval to check periodically
+    const interval = setInterval(ensureUIVisibility, 3000);
+    
+    // Also run on initial load and after short delays
+    const timers = [
+      setTimeout(ensureUIVisibility, 500),
+      setTimeout(ensureUIVisibility, 1000),
+      setTimeout(ensureUIVisibility, 2000),
+    ];
     
     return () => {
       clearInterval(interval);
+      timers.forEach(clearTimeout);
     };
   }, []);
 

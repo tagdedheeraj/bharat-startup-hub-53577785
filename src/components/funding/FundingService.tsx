@@ -14,7 +14,6 @@ import {
 import { cn } from '@/lib/utils';
 import FundingForm from '../FundingForm';
 import { useToast } from '@/hooks/use-toast';
-import { debugPortals } from '@/utils/portalCleanup';
 
 interface FundingServiceProps {
   amount: string;
@@ -43,7 +42,6 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
     e.preventDefault();
     e.stopPropagation();
     console.log("Opening funding dialog for:", title);
-    setIsDialogOpen(true);
     
     // Show a toast to confirm dialog is being opened
     toast({
@@ -52,15 +50,10 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
       duration: 2000,
     });
     
-    // Debug portals when opening dialog
+    // Set state after a tiny delay to ensure DOM is ready
     setTimeout(() => {
-      debugPortals();
-    }, 100);
-  };
-  
-  const handleCloseDialog = () => {
-    console.log("Closing funding dialog for:", title);
-    setIsDialogOpen(false);
+      setIsDialogOpen(true);
+    }, 50);
   };
   
   const handleFormSuccess = () => {
@@ -109,10 +102,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <div className="mt-auto pt-4">
               <Dialog 
                 open={isDialogOpen} 
-                onOpenChange={(open) => {
-                  console.log(`Dialog for ${title} change state to: ${open ? 'open' : 'closed'}`);
-                  setIsDialogOpen(open);
-                }}
+                onOpenChange={setIsDialogOpen}
               >
                 <DialogTrigger asChild>
                   <Button 
@@ -127,19 +117,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                   </Button>
                 </DialogTrigger>
                 <DialogContent 
-                  className="sm:max-w-[425px] bg-white" 
-                  onEscapeKeyDown={(e) => {
-                    e.preventDefault(); // Prevent default to keep dialog open
-                    console.log("Escape key prevented from closing dialog");
-                  }}
-                  onPointerDownOutside={(e) => {
-                    e.preventDefault(); // Prevent outside clicks from closing dialog
-                    console.log("Outside click prevented from closing dialog");
-                  }}
-                  onInteractOutside={(e) => {
-                    e.preventDefault(); // Prevent any interaction from closing
-                    console.log("Outside interaction prevented from closing dialog");
-                  }}
+                  className="sm:max-w-[425px] bg-white z-[100]"
                 >
                   <DialogHeader>
                     <DialogTitle>Apply for Funding</DialogTitle>
