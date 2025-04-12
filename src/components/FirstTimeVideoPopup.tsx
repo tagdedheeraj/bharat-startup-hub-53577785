@@ -11,9 +11,6 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   
   useEffect(() => {
-    // Clear localStorage for testing purposes (remove in production)
-    localStorage.removeItem('hasSeenIntroVideo');
-    
     // Check if this is the first visit
     const hasSeenVideo = localStorage.getItem('hasSeenIntroVideo');
     
