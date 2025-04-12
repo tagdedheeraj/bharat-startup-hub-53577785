@@ -1,5 +1,4 @@
 
-import DisclaimerAlert from '@/components/funding/DisclaimerAlert';
 import HeroSection from '@/components/funding/HeroSection';
 import FundingOptionsSection from '@/components/funding/FundingOptionsSection';
 import ProcessSection from '@/components/funding/ProcessSection';
@@ -11,7 +10,6 @@ import LegalDisclaimer from '@/components/funding/LegalDisclaimer';
 const FundingConsultationPage = () => {
   return (
     <div>
-      <DisclaimerAlert />
       <HeroSection />
       <FundingOptionsSection />
       <ProcessSection />
