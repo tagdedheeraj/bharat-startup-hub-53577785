@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
@@ -24,9 +23,6 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  // Remove the state management from here
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
   // Create alternating color schemes
   const colorVariants = [
     "from-brand-50 to-brand-100 border-brand-200",
@@ -94,7 +90,6 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                     fundingAmount={amount} 
                     onSubmitSuccess={() => {
                       console.log("Form submitted successfully");
-                      // The Dialog will close automatically since we're not controlling it with state
                     }}
                   />
                 </DialogContent>

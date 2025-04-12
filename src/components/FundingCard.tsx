@@ -33,8 +33,6 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  // Remove the state management from here
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -78,7 +76,6 @@ export default function FundingCard({
             fundingAmount={amount} 
             onSubmitSuccess={() => {
               console.log("Form submitted successfully");
-              // The Dialog will close automatically since we're not controlling it with state
             }}
           />
         </DialogContent>
