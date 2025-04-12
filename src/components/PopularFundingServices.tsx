@@ -24,7 +24,8 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Remove the state management from here
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Create alternating color schemes
   const colorVariants = [
@@ -69,7 +70,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Dialog>
                 <DialogTrigger asChild>
                   <Button 
                     variant="ghost"
@@ -91,7 +92,10 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                   <FundingForm 
                     fundingTitle={title} 
                     fundingAmount={amount} 
-                    onSubmitSuccess={() => setIsDialogOpen(false)}
+                    onSubmitSuccess={() => {
+                      console.log("Form submitted successfully");
+                      // The Dialog will close automatically since we're not controlling it with state
+                    }}
                   />
                 </DialogContent>
               </Dialog>
@@ -177,4 +181,3 @@ export default function PopularFundingServices() {
     </section>
   );
 }
-

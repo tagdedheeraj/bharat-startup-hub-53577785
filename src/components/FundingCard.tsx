@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
@@ -34,7 +33,8 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Remove the state management from here
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   
   return (
@@ -54,7 +54,7 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog>
         <DialogTrigger asChild>
           <Button 
             variant="ghost"
@@ -76,7 +76,10 @@ export default function FundingCard({
           <FundingForm 
             fundingTitle={title} 
             fundingAmount={amount} 
-            onSubmitSuccess={() => setIsDialogOpen(false)}
+            onSubmitSuccess={() => {
+              console.log("Form submitted successfully");
+              // The Dialog will close automatically since we're not controlling it with state
+            }}
           />
         </DialogContent>
       </Dialog>
