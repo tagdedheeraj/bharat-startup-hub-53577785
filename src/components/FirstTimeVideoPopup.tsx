@@ -30,12 +30,40 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
     setIsOpen(false);
   };
   
+  // Extract video ID from full YouTube URL if needed
+  const extractVideoId = (videoParam: string): string => {
+    // If it's already just an ID (no slashes or dots), return it as is
+    if (!/[\/\.]/.test(videoParam)) {
+      return videoParam;
+    }
+    
+    // Try to extract from various YouTube URL formats
+    const regexPatterns = [
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/watch\?.*v=)([^&\?\/#]+)/i,
+      /youtube\.com\/watch\?.*v=([^&\?\/#]+)/i,
+      /youtu\.be\/([^&\?\/#]+)/i
+    ];
+    
+    for (const regex of regexPatterns) {
+      const match = videoParam.match(regex);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    
+    // Fallback to the original value if no pattern matches
+    console.warn('Could not extract YouTube video ID, using original value');
+    return videoParam;
+  };
+  
+  const processedVideoId = extractVideoId(videoId);
+  
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-3xl p-0 bg-transparent border-none" onInteractOutside={handleClose}>
         <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+            src={`https://www.youtube.com/embed/${processedVideoId}?autoplay=1&rel=0`}
             title="Welcome to Bharat Startup Solution"
             className="w-full h-full"
             frameBorder="0"
