@@ -2,9 +2,22 @@
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Home, Info, Briefcase, Shield } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
+import { useEffect } from 'react';
 
 export default function MobileBottomNav() {
   const isMobile = useIsMobile();
+  
+  // Force reload of the bottom nav on component mount to ensure visibility
+  useEffect(() => {
+    console.log("MobileBottomNav mounted");
+    
+    // Force repaint of the bottom nav
+    const bottomNav = document.querySelector('.fixed.bottom-0');
+    if (bottomNav) {
+      bottomNav.classList.remove('hidden');
+      console.log("Bottom nav visibility ensured");
+    }
+  }, []);
   
   if (!isMobile) return null;
   
@@ -30,8 +43,11 @@ export default function MobileBottomNav() {
         {/* Contact Link */}
         <ContactNavItem />
         
-        {/* Support Drawer */}
-        <SupportDrawer />
+        {/* Support Drawer - Make it more visible */}
+        <div className="relative">
+          <SupportDrawer />
+          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
+        </div>
         
         {/* More Menu */}
         <MoreMenuSheet />

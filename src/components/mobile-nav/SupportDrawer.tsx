@@ -12,48 +12,70 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 export default function SupportDrawer() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // This effect ensures the drawer is visible after mount
+  useEffect(() => {
+    console.log("SupportDrawer component mounted");
+  }, []);
 
   // Function to handle support drawer actions
   const handleSupportAction = (action: string) => {
-    switch(action) {
-      case 'contact':
-        navigate('/contact');
-        toast({
-          title: "Navigating to contact page",
-          description: "You'll be able to reach our team through the contact form."
-        });
-        break;
-      case 'email':
-        window.open('mailto:support@bharatstartup.com', '_blank');
-        toast({
-          title: "Opening email client",
-          description: "Your default email client should open shortly."
-        });
-        break;
-      case 'call':
-        window.open('https://wa.me/919876543210', '_blank');
-        toast({
-          title: "Opening WhatsApp",
-          description: "You'll be connected with our support team."
-        });
-        break;
-      default:
-        break;
-    }
+    setIsOpen(false); // Close drawer first
+    
+    // Delay action slightly to allow drawer to close
+    setTimeout(() => {
+      switch(action) {
+        case 'contact':
+          navigate('/contact');
+          toast({
+            title: "Navigating to contact page",
+            description: "You'll be able to reach our team through the contact form."
+          });
+          break;
+        case 'email':
+          window.open('mailto:support@bharatstartup.com', '_blank');
+          toast({
+            title: "Opening email client",
+            description: "Your default email client should open shortly."
+          });
+          break;
+        case 'call':
+          window.open('https://wa.me/919876543210', '_blank');
+          toast({
+            title: "Opening WhatsApp",
+            description: "You'll be connected with our support team."
+          });
+          break;
+        default:
+          break;
+      }
+    }, 300);
   };
 
   const handleNavigation = (path: string) => {
-    navigate(path);
+    setIsOpen(false);
+    // Delay navigation slightly to allow drawer to close
+    setTimeout(() => {
+      navigate(path);
+    }, 300);
   };
 
   return (
-    <Drawer>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <button className="flex flex-col items-center justify-center w-full h-full">
+        <button 
+          className="flex flex-col items-center justify-center w-full h-full relative"
+          onClick={() => {
+            console.log("Support drawer trigger clicked");
+            setIsOpen(true);
+          }}
+        >
           <LifeBuoy 
             size={24} 
             className="text-india-saffron animate-pulse" 

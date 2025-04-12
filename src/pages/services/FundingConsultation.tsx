@@ -11,19 +11,28 @@ import { useEffect } from 'react';
 const FundingConsultationPage = () => {
   // Force rerender of any portals when mounting this page
   useEffect(() => {
-    // This helps ensure bottom navigation is visible
+    console.log("FundingConsultationPage mounted - ensuring bottom nav visibility");
+    
+    // Function to ensure bottom navigation is visible
     const refreshBottomNav = () => {
       const bottomNav = document.querySelector('.fixed.bottom-0');
       if (bottomNav) {
         bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility forced");
       }
     };
     
+    // Run multiple times to ensure it catches any potential timing issues
     refreshBottomNav();
-    // Small delay to ensure DOM is fully loaded
-    const timer = setTimeout(refreshBottomNav, 100);
+    const timer1 = setTimeout(refreshBottomNav, 100);
+    const timer2 = setTimeout(refreshBottomNav, 500);
+    const timer3 = setTimeout(refreshBottomNav, 1000);
     
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
   }, []);
 
   return (
