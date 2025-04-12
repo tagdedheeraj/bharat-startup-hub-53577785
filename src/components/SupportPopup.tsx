@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react';
 import { Mail, Phone, MessageSquare, X } from 'lucide-react';
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -25,31 +25,32 @@ const SupportPopup = () => {
       setIsOpen(true);
     };
     
-    document.addEventListener('open-support-drawer', handleOpenSupport);
+    // Using a named function for addEventListener so we can remove it properly
+    document.addEventListener('open-support-dialog', handleOpenSupport);
     
     return () => {
-      document.removeEventListener('open-support-drawer', handleOpenSupport);
+      document.removeEventListener('open-support-dialog', handleOpenSupport);
     };
   }, []);
   
   return (
     <div className={`fixed ${isMobile ? 'bottom-16' : 'bottom-0'} left-0 right-0 z-30 flex justify-center`}>
-      <Drawer open={isOpen} onOpenChange={setIsOpen}>
-        <DrawerTrigger asChild>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
           <Button 
             className="bg-india-saffron text-white rounded-t-lg md:rounded-full px-6 py-2 shadow-lg hover:bg-amber-600 transition-all"
           >
             <MessageSquare className="mr-2 h-5 w-5" />
             <span>Get Support</span>
           </Button>
-        </DrawerTrigger>
-        <DrawerContent className="p-6">
-          <DrawerHeader>
-            <DrawerTitle className="text-2xl font-display text-india-saffron">How can we help you?</DrawerTitle>
-            <DrawerDescription>
+        </DialogTrigger>
+        <DialogContent className="p-6 sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-display text-india-saffron">How can we help you?</DialogTitle>
+            <DialogDescription>
               Choose your preferred way to connect with our support team.
-            </DrawerDescription>
-          </DrawerHeader>
+            </DialogDescription>
+          </DialogHeader>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6">
             <a 
@@ -98,16 +99,16 @@ const SupportPopup = () => {
             </Popover>
           </div>
           
-          <DrawerFooter>
+          <DialogFooter>
             <p className="text-xs text-gray-500 text-center mb-2">
               We typically respond within 2-3 hours during business hours
             </p>
-            <DrawerClose asChild>
+            <DialogClose asChild>
               <Button variant="outline">Close</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

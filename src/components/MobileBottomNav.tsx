@@ -26,6 +26,11 @@ export default function MobileBottomNav() {
     navigate(path);
   };
 
+  const handleSupportClick = () => {
+    const event = new CustomEvent('open-support-dialog');
+    document.dispatchEvent(event);
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden">
       <nav className="flex justify-around items-center h-16">
@@ -144,9 +149,7 @@ export default function MobileBottomNav() {
               <button
                 key={index}
                 className={`flex flex-col items-center justify-center w-full h-full transition-colors text-india-saffron`}
-                onClick={() => {
-                  document.dispatchEvent(new Event('open-support-drawer'));
-                }}
+                onClick={handleSupportClick}
               >
                 <item.icon size={20} />
                 <span className="text-xs mt-1">{item.label}</span>
