@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, HelpCircle } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -7,15 +6,39 @@ import FundingCard from '@/components/FundingCard';
 const FundingConsultationPage = () => {
   const fundingOptions = [
     {
+      amount: "1 CR",
+      title: "NIDHI SSP FUND",
+      description: "For D2C, Healthcare, Agritech, Manufacturing, Gaming, and GenAI sectors.",
+      to: "/contact"
+    },
+    {
       amount: "50 Lac",
-      title: "Micro Business Growth",
-      description: "Ideal for small businesses looking to expand operations or launch new products.",
+      title: "C-CAMP Agriculture Grand Challenge",
+      description: "For Indian startups (10 years old) that are 51% Indian owned or international startups with India collaboration.",
+      to: "/contact"
+    },
+    {
+      amount: "15 Lac",
+      title: "MSME Business Incubation Center",
+      description: "For Indian citizens aged 18-65 with innovative ideas, UDYAM registered and DPIIT certified startups.",
       to: "/contact"
     },
     {
       amount: "1 CR",
-      title: "Startup Funding Package",
-      description: "Perfect for new ventures needing capital for market entry and initial growth.",
+      title: "USHUS Powering Marine Startups",
+      description: "For DPIIT recognized startups in fishing, cargo, blockchain, logistics, safety, and port sectors.",
+      to: "/contact"
+    },
+    {
+      amount: "25 Lac",
+      title: "PRAGATI Micro Accelerator Program",
+      description: "For agriculture & sustainability solutions in climate-resilient farming, data-driven agri tools, and AI.",
+      to: "/contact"
+    },
+    {
+      amount: "50 Lac",
+      title: "Micro Business Growth",
+      description: "Ideal for small businesses looking to expand operations or launch new products.",
       to: "/contact"
     },
     {
@@ -74,7 +97,7 @@ const FundingConsultationPage = () => {
             <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Funding Consultation</span>
             <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Secure the Right Funding for Your Business</h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Access tailored funding solutions ranging from ₹50 Lacs to ₹5 CR to fuel your business growth and success.
+              Access tailored funding solutions ranging from ₹15 Lacs to ₹5 CR to fuel your business growth and success.
             </p>
             <Link to="/contact" className="btn-primary inline-flex items-center mt-8">
               Get Started
@@ -102,6 +125,7 @@ const FundingConsultationPage = () => {
                 description={option.description}
                 to={option.to}
                 delay={index * 100}
+                index={index}
               />
             ))}
           </div>

@@ -8,32 +8,32 @@ const FundingOptionsSection = () => {
   const fundingOptions = [
     {
       amount: "1 CR",
-      title: "Startup Funding Package",
-      description: "Ideal for new ventures looking to get off the ground with substantial initial capital.",
+      title: "NIDHI SSP FUND",
+      description: "For D2C, Healthcare, Agritech, Manufacturing, Gaming, and GenAI sectors.",
       to: "/services/funding-consultation"
     },
     {
       amount: "50 Lac",
-      title: "Small Business Growth",
-      description: "Perfect for small businesses looking to expand operations and reach new markets.",
+      title: "C-CAMP Agriculture Grand Challenge",
+      description: "For Indian startups (10 years old) that are 51% Indian owned or international startups with India collaboration.",
       to: "/services/funding-consultation"
     },
     {
-      amount: "5 CR",
-      title: "Major Expansion Funding",
-      description: "For established businesses ready to scale significantly and enter new territories.",
+      amount: "15 Lac",
+      title: "MSME Business Incubation Center",
+      description: "For Indian citizens aged 18-65 with innovative ideas, UDYAM registered and DPIIT certified startups.",
       to: "/services/funding-consultation"
     },
     {
-      amount: "2 CR",
-      title: "Technology Upgrade",
-      description: "Focused on businesses needing capital for technological modernization and digital transformation.",
+      amount: "1 CR",
+      title: "USHUS Powering Marine Startups",
+      description: "For DPIIT recognized startups in fishing, cargo, blockchain, logistics, safety, and port sectors.",
       to: "/services/funding-consultation"
     },
     {
-      amount: "3 CR",
-      title: "Manufacturing & Production",
-      description: "Specialized funding for manufacturing units looking to increase production capacity.",
+      amount: "25 Lac",
+      title: "PRAGATI Micro Accelerator Program",
+      description: "For agriculture & sustainability solutions in climate-resilient farming, data-driven agri tools, and AI.",
       to: "/services/funding-consultation"
     }
   ];
@@ -56,6 +56,7 @@ const FundingOptionsSection = () => {
               description={option.description}
               to={option.to}
               delay={index * 100}
+              index={index}
             />
           ))}
         </div>
