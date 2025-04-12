@@ -1,6 +1,6 @@
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Info, Briefcase, Phone, Menu, Star, Receipt, FileSpreadsheet, Shield, HelpCircle } from 'lucide-react';
+import { Home, Info, Briefcase, Phone, Menu, Star, Receipt, FileSpreadsheet, Shield, HelpCircle, LifeBuoy } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Sheet,
@@ -15,14 +15,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export default function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
   
   if (!isMobile) return null;
   
@@ -30,11 +32,41 @@ export default function MobileBottomNav() {
     { icon: Home, label: 'Home', to: '/' },
     { icon: Info, label: 'About', to: '/about' },
     { icon: Briefcase, label: 'Services', to: '/services' },
-    { icon: Shield, label: 'CA Services', to: '/ca-services' },
   ];
 
   const handleNavigation = (path: string) => {
     navigate(path);
+  };
+
+  // Function to handle support dialog actions
+  const handleSupportAction = (action: string) => {
+    setIsDialogOpen(false);
+    
+    switch(action) {
+      case 'contact':
+        navigate('/contact');
+        toast({
+          title: "Navigating to contact page",
+          description: "You'll be able to reach our team through the contact form."
+        });
+        break;
+      case 'email':
+        window.open('mailto:support@bharatstartup.com', '_blank');
+        toast({
+          title: "Opening email client",
+          description: "Your default email client should open shortly."
+        });
+        break;
+      case 'call':
+        window.open('https://wa.me/919876543210', '_blank');
+        toast({
+          title: "Opening WhatsApp",
+          description: "You'll be connected with our support team."
+        });
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -56,6 +88,17 @@ export default function MobileBottomNav() {
           );
         })}
         
+        {/* CA Services link */}
+        <Link
+          to="/ca-services"
+          className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
+            location.pathname.includes('/ca-services') ? 'text-india-saffron' : 'text-gray-500 hover:text-brand-500'
+          }`}
+        >
+          <Shield size={20} className={location.pathname.includes('/ca-services') ? 'text-india-saffron' : ''} />
+          <span className="text-xs mt-1">CA Services</span>
+        </Link>
+        
         {/* Contact Link */}
         <Link
           to="/contact"
@@ -67,12 +110,12 @@ export default function MobileBottomNav() {
           <span className="text-xs mt-1">Contact</span>
         </Link>
         
-        {/* Support Dialog */}
+        {/* Support Dialog - Made more visible */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <button className="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-brand-500">
-              <HelpCircle size={20} />
-              <span className="text-xs mt-1">Support</span>
+              <LifeBuoy size={20} className="text-india-saffron animate-pulse" />
+              <span className="text-xs mt-1 font-medium">Support</span>
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
@@ -85,10 +128,7 @@ export default function MobileBottomNav() {
             <div className="grid gap-4 py-4">
               <Button 
                 className="w-full flex items-center justify-center gap-2" 
-                onClick={() => {
-                  setIsDialogOpen(false);
-                  navigate('/contact');
-                }}
+                onClick={() => handleSupportAction('contact')}
               >
                 <Phone size={16} />
                 <span>Contact Us</span>
@@ -96,10 +136,7 @@ export default function MobileBottomNav() {
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2"
-                onClick={() => {
-                  window.open('mailto:support@bharatstartup.com', '_blank');
-                  setIsDialogOpen(false);
-                }}
+                onClick={() => handleSupportAction('email')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 <span>Email Support</span>
@@ -107,10 +144,7 @@ export default function MobileBottomNav() {
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center gap-2"
-                onClick={() => {
-                  window.open('https://wa.me/919876543210', '_blank');
-                  setIsDialogOpen(false);
-                }}
+                onClick={() => handleSupportAction('call')}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 <span>Call Support</span>
