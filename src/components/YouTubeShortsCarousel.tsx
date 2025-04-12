@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Youtube, Play, Pause, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -107,10 +108,11 @@ const YouTubeShortsCarousel = () => {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
           <div className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10 animate-scaleIn">
             <iframe
-              src={`https://www.youtube.com/embed/${currentVideoId}?autoplay=1`}
+              src={`https://www.youtube.com/embed/${currentVideoId}?autoplay=1&rel=0`}
               title="YouTube video player"
               className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             ></iframe>
             <button
