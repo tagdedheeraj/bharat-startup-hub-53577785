@@ -1,17 +1,8 @@
 
 import { useState } from 'react';
-import { ArrowRight, IndianRupee, ArrowUpRight, Award } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import SectionHeading from '@/components/SectionHeading';
+import { ArrowUpRight, IndianRupee, Award } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from "@/components/ui/carousel";
 import { 
   Dialog, 
   DialogContent, 
@@ -21,7 +12,7 @@ import {
   DialogDescription 
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import FundingForm from './FundingForm';
+import FundingForm from '../FundingForm';
 import { useToast } from '@/hooks/use-toast';
 import { debugPortals } from '@/utils/portalCleanup';
 
@@ -172,77 +163,4 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   );
 };
 
-export default function PopularFundingServices() {
-  const services = [
-    { amount: "1 CR", title: "Seed Support Scheme" },
-    { amount: "50 Lac", title: "Grant for Textile" },
-    { amount: "5 CR", title: "MSME Loans" },
-    { amount: "1 CR", title: "NBFC Loans" },
-    { amount: "2 CR", title: "NAIFF Loans" },
-    { amount: "3 CR", title: "Funds for SC ST & OBC Entrepreneurs" }
-  ];
-
-  return (
-    <section className="py-20 bg-gradient-to-br from-white to-gray-50 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          subheading="MOST POPULAR SERVICES"
-          heading="Funding Options For Your Business"
-          description="Explore our most sought-after funding services designed to meet the diverse needs of businesses across various sectors."
-        />
-        
-        <div className="hidden lg:grid lg:grid-cols-3 gap-6 mb-12">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="animate-fadeIn" 
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              <FundingService
-                amount={service.amount}
-                title={service.title}
-                index={index}
-              />
-            </div>
-          ))}
-        </div>
-        
-        <div className="lg:hidden mb-12">
-          <Carousel 
-            opts={{ 
-              align: "start",
-              loop: true
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {services.map((service, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 pl-4 pr-2">
-                  <FundingService
-                    amount={service.amount}
-                    title={service.title}
-                    index={index}
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex justify-center gap-4 mt-6">
-              <CarouselPrevious className="relative static transform-none mx-0" />
-              <CarouselNext className="relative static transform-none mx-0" />
-            </div>
-          </Carousel>
-        </div>
-        
-        <div className="text-center animate-fadeIn" style={{ animationDelay: "800ms" }}>
-          <Link 
-            to="/services/funding-consultation" 
-            className="btn-primary inline-flex items-center hover:scale-105 transition-transform duration-300"
-          >
-            View All Funding Options
-            <ArrowRight size={18} className="ml-2" />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
+export default FundingService;

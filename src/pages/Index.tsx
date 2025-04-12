@@ -9,7 +9,7 @@ import ContactSection from '@/components/home/ContactSection';
 import CTASection from '@/components/home/CTASection';
 import YouTubeShortsCarousel from '@/components/YouTubeShortsCarousel';
 import StatisticsSlider from '@/components/StatisticsSlider';
-import PopularFundingServices from '@/components/PopularFundingServices';
+import PopularFundingServices from '@/components/funding/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
 
