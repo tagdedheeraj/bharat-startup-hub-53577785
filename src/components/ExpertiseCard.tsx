@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import FundingForm from './FundingForm';
 
 interface ExpertiseCardProps {
@@ -60,28 +60,27 @@ export default function ExpertiseCard({
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger asChild>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
           <button 
             className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
-            onClick={() => setOpen(true)}
           >
             <span>Explore</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
               <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="sm:max-w-[425px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Explore {title}</AlertDialogTitle>
-          </AlertDialogHeader>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Explore {title}</DialogTitle>
+          </DialogHeader>
           <FundingForm 
             expertiseTitle={title}
             onSubmitSuccess={() => setOpen(false)}
           />
-        </AlertDialogContent>
-      </AlertDialog>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

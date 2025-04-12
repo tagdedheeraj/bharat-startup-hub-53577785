@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import FundingForm from './FundingForm';
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface FundingCardProps {
   amount: string;
@@ -61,26 +61,25 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger asChild>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={() => setOpen(true)}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="sm:max-w-[425px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Apply for Funding</AlertDialogTitle>
-            <AlertDialogDescription>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Apply for Funding</DialogTitle>
+            <DialogDescription>
               Complete the form below to apply for {title} funding.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+            </DialogDescription>
+          </DialogHeader>
           <FundingForm 
             fundingTitle={title} 
             fundingAmount={amount} 
@@ -89,8 +88,8 @@ export default function FundingCard({
               console.log("Form submitted successfully");
             }}
           />
-        </AlertDialogContent>
-      </AlertDialog>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
