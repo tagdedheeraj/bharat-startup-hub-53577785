@@ -31,7 +31,7 @@ export default function FundingCard({
   to, 
   delay = 0, 
   variant = 'default',
-  index =.0
+  index = 0
 }: FundingCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
