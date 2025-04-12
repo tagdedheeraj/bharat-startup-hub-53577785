@@ -4,13 +4,13 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import FundingForm from './FundingForm';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface FundingCardProps {
   amount: string;
@@ -59,8 +59,8 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <Dialog>
-        <DialogTrigger asChild>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
@@ -70,14 +70,14 @@ export default function FundingCard({
               <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Apply for Funding</DialogTitle>
-            <DialogDescription>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="sm:max-w-[425px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apply for Funding</AlertDialogTitle>
+            <AlertDialogDescription>
               Complete the form below to apply for {title} funding.
-            </DialogDescription>
-          </DialogHeader>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <FundingForm 
             fundingTitle={title} 
             fundingAmount={amount} 
@@ -85,8 +85,8 @@ export default function FundingCard({
               console.log("Form submitted successfully");
             }}
           />
-        </DialogContent>
-      </Dialog>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
