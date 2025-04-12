@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import FundingForm from './FundingForm';
+import { useToast } from '@/hooks/use-toast';
 
 interface ExpertiseCardProps {
   title: string;
@@ -41,18 +42,49 @@ export default function ExpertiseCard({
   index = 0
 }: ExpertiseCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const colorVariant = colorVariants[index % colorVariants.length];
+  const { toast } = useToast();
+  
+  // Force Dialog visiblity on state change
+  useEffect(() => {
+    if (isDialogOpen) {
+      console.log(`ExpertiseCard Dialog for "${title}" opened - ensuring visibility`);
+      
+      // Small delay to allow dialog to render
+      setTimeout(() => {
+        const dialogContent = document.querySelector('[role="dialog"]');
+        if (dialogContent instanceof HTMLElement) {
+          dialogContent.style.display = 'block';
+          dialogContent.style.visibility = 'visible';
+          dialogContent.style.opacity = '1';
+          console.log("Dialog content visibility enforced for expertise card");
+        }
+        
+        // Also check for any overlay elements
+        const overlay = document.querySelector('[data-radix-popper-content-wrapper]');
+        if (overlay instanceof HTMLElement) {
+          overlay.style.display = 'block';
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+          console.log("Dialog overlay visibility enforced for expertise card");
+        }
+      }, 100);
+      
+      // Show toast to confirm dialog is opening
+      toast({
+        title: "Form Opening",
+        description: `Preparing information form for ${title}`,
+        duration: 2000,
+      });
+    }
+  }, [isDialogOpen, title, toast]);
   
   const handleOpenDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     console.log("Opening expertise dialog for:", title);
     setIsDialogOpen(true);
-  };
-  
-  const handleCloseDialog = () => {
-    console.log("Closing expertise dialog for:", title);
-    setIsDialogOpen(false);
   };
   
   const handleFormSuccess = () => {
@@ -99,18 +131,11 @@ export default function ExpertiseCard({
           </button>
         </DialogTrigger>
         <DialogContent 
-          className="sm:max-w-[425px] bg-white" 
-          onEscapeKeyDown={(e) => {
-            e.preventDefault(); // Prevent default to keep dialog open
-            console.log("Escape key prevented from closing dialog");
-          }}
-          onPointerDownOutside={(e) => {
-            e.preventDefault(); // Prevent outside clicks from closing dialog
-            console.log("Outside click prevented from closing dialog");
-          }}
+          ref={dialogRef}
+          className="sm:max-w-[425px] bg-white z-[100]" 
           onInteractOutside={(e) => {
-            e.preventDefault(); // Prevent any interaction from closing
-            console.log("Outside interaction prevented from closing dialog");
+            e.preventDefault();
+            console.log("Outside interaction prevented from closing expertise dialog");
           }}
         >
           <DialogHeader>

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useToast } from '@/hooks/use-toast';
 
 interface FundingCardProps {
   amount: string;
@@ -42,21 +43,49 @@ export default function FundingCard({
   index = 0
 }: FundingCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const colorVariant = colorVariants[index % colorVariants.length];
+  const { toast } = useToast();
   
-  const handleOpenDialog = () => {
+  // Force Dialog visiblity on state change
+  useEffect(() => {
+    if (isDialogOpen) {
+      console.log(`FundingCard Dialog for "${title}" opened - ensuring visibility`);
+      
+      // Small delay to allow dialog to render
+      setTimeout(() => {
+        const dialogContent = document.querySelector('[role="dialog"]');
+        if (dialogContent instanceof HTMLElement) {
+          dialogContent.style.display = 'block';
+          dialogContent.style.visibility = 'visible';
+          dialogContent.style.opacity = '1';
+          console.log("Dialog content visibility enforced");
+        }
+        
+        // Also check for any overlay elements
+        const overlay = document.querySelector('[data-radix-popper-content-wrapper]');
+        if (overlay instanceof HTMLElement) {
+          overlay.style.display = 'block';
+          overlay.style.visibility = 'visible';
+          overlay.style.opacity = '1';
+          console.log("Dialog overlay visibility enforced");
+        }
+      }, 100);
+      
+      // Show toast to confirm button is working
+      toast({
+        title: "Form Opening",
+        description: `Preparing application form for ${title}`,
+        duration: 2000,
+      });
+    }
+  }, [isDialogOpen, title, toast]);
+  
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     console.log("Opening funding dialog for:", title);
     setIsDialogOpen(true);
-    
-    // Ensure we don't have any cleanup happen right after opening
-    setTimeout(() => {
-      console.log("Dialog should now be fully open for:", title);
-    }, 100);
-  };
-  
-  const handleCloseDialog = () => {
-    console.log("Closing funding dialog for:", title);
-    setIsDialogOpen(false);
   };
   
   const handleFormSuccess = () => {
@@ -94,11 +123,7 @@ export default function FundingCard({
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleOpenDialog();
-            }}
+            onClick={handleOpenDialog}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
@@ -107,17 +132,10 @@ export default function FundingCard({
           </Button>
         </DialogTrigger>
         <DialogContent 
-          className="sm:max-w-[425px] bg-white" 
-          onEscapeKeyDown={(e) => {
-            e.preventDefault(); // Prevent default to keep dialog open
-            console.log("Escape key prevented from closing dialog");
-          }}
-          onPointerDownOutside={(e) => {
-            e.preventDefault(); // Prevent outside clicks from closing dialog
-            console.log("Outside click prevented from closing dialog");
-          }}
+          ref={dialogRef}
+          className="sm:max-w-[425px] bg-white z-[100]" 
           onInteractOutside={(e) => {
-            e.preventDefault(); // Prevent any interaction from closing
+            e.preventDefault();
             console.log("Outside interaction prevented from closing dialog");
           }}
         >

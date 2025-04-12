@@ -18,41 +18,56 @@ export function useSupportDrawer() {
       const supportButtons = document.querySelectorAll('.support-button');
       supportButtons.forEach(button => {
         if (button instanceof HTMLElement) {
-          button.style.display = '';
+          button.style.display = 'flex';
           button.classList.remove('hidden');
           button.classList.add('flex');
+          button.style.visibility = 'visible';
+          button.style.opacity = '1';
           console.log("Support button visibility forced explicitly");
         }
       });
       
       // Also force visibility on the button ref
       if (supportButtonRef.current) {
-        supportButtonRef.current.style.display = '';
+        supportButtonRef.current.style.display = 'flex';
         supportButtonRef.current.classList.remove('hidden');
         supportButtonRef.current.classList.add('flex');
+        supportButtonRef.current.style.visibility = 'visible';
+        supportButtonRef.current.style.opacity = '1';
+      }
+      
+      // Also ensure bottom nav is visible
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav instanceof HTMLElement) {
+        bottomNav.style.display = 'block';
+        bottomNav.classList.remove('hidden');
+        console.log("Bottom nav visibility forced");
       }
     };
     
-    // Run multiple times to catch any timing issues
+    // Initial check
     forceButtonVisibility();
     
-    // Run again after short delays to catch any late CSS or state changes
+    // Run again after short delays to catch any timing issues
     const timers = [
       setTimeout(forceButtonVisibility, 100),
       setTimeout(forceButtonVisibility, 500),
       setTimeout(forceButtonVisibility, 1000),
-      setTimeout(forceButtonVisibility, 2000),
-      setTimeout(forceButtonVisibility, 5000)
     ];
     
-    // Set up a recurring check for visibility
-    const intervalTimer = setInterval(forceButtonVisibility, 3000);
+    // Also notify user via toast that support is available
+    setTimeout(() => {
+      toast({
+        title: "Support Available",
+        description: "Click the Support button in the bottom navigation if you need help.",
+        duration: 3000,
+      });
+    }, 2000);
     
     return () => {
       timers.forEach(clearTimeout);
-      clearInterval(intervalTimer);
     };
-  }, []);
+  }, [toast]);
 
   // Another effect to debug drawer state changes
   useEffect(() => {
@@ -61,6 +76,17 @@ export function useSupportDrawer() {
     if (isOpen && !isInitialMount.current) {
       // When opening, ensure we debug portals to see what's happening
       debugPortals();
+      
+      // Also ensure the drawer content is visible after a small delay
+      setTimeout(() => {
+        const drawerContent = document.querySelector('[role="dialog"]');
+        if (drawerContent instanceof HTMLElement) {
+          drawerContent.style.display = 'block';
+          drawerContent.style.visibility = 'visible';
+          drawerContent.style.opacity = '1';
+          console.log("Drawer content visibility manually enforced");
+        }
+      }, 100);
     }
     
     isInitialMount.current = false;
@@ -71,6 +97,15 @@ export function useSupportDrawer() {
     e.preventDefault();
     e.stopPropagation();
     console.log("Support drawer trigger clicked explicitly");
+    
+    // Show toast to confirm button click was recognized
+    toast({
+      title: "Opening Support",
+      description: "Loading support options...",
+      duration: 2000,
+    });
+    
+    // Set state to open drawer
     setIsOpen(true);
     
     // Debug portals when opening drawer
