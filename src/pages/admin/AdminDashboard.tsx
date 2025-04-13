@@ -19,10 +19,11 @@ import {
   Calendar
 } from 'lucide-react';
 
-// Import new admin components
+// Import admin components
 import UserManagement from '@/components/admin/UserManagement';
 import ApplicationManagement from '@/components/admin/ApplicationManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
+import ContentManagement from '@/components/admin/ContentManagement';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -118,24 +119,7 @@ const AdminDashboard = () => {
         
         {/* Content Management Tab */}
         <TabsContent value="content">
-          <Card>
-            <CardHeader>
-              <CardTitle>Content Management</CardTitle>
-              <CardDescription>Manage your website content, pages, and files</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <Button className="flex items-center justify-start">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Edit Pages
-                </Button>
-                <Button className="flex items-center justify-start">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Upload Files
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <ContentManagement />
         </TabsContent>
         
         {/* Settings Tab */}
