@@ -1,5 +1,5 @@
-
 import { YouTubeShort } from './types';
+import { queryDocuments } from '@/services/firebaseDataService';
 
 // Initial YouTube shorts data
 export const youtubeShorts: YouTubeShort[] = [
@@ -20,13 +20,22 @@ export const youtubeShorts: YouTubeShort[] = [
   }
 ];
 
-// In a production application, this would fetch from Firebase
-// For now, we'll just return the static data
+// Get YouTube shorts from Firebase
 export const getYoutubeShorts = async (): Promise<YouTubeShort[]> => {
-  // In a real application, this would fetch from Firebase
-  // Example:
-  // const shorts = await queryDocuments<YouTubeShort>('youtubeShorts');
-  // return shorts;
-  
-  return youtubeShorts;
+  try {
+    // Attempt to fetch from Firebase
+    const shorts = await queryDocuments<YouTubeShort>('youtubeShorts');
+    
+    // If there are shorts in Firebase, return them
+    if (shorts && shorts.length > 0) {
+      return shorts;
+    } 
+    
+    // Otherwise return the initial data
+    return youtubeShorts;
+  } catch (error) {
+    console.error("Error fetching YouTube shorts:", error);
+    // Fall back to initial data if there's an error
+    return youtubeShorts;
+  }
 };

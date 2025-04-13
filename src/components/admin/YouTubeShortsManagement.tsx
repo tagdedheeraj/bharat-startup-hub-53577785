@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Youtube } from 'lucide-react';
-import { DialogTrigger } from '@/components/ui/dialog';
 import { YouTubeShort } from '../youtube-shorts/types';
 
 // Import refactored components
@@ -17,6 +16,7 @@ import YouTubeShortDialog from './youtube-shorts/YouTubeShortDialog';
 import DeleteConfirmationDialog from './youtube-shorts/DeleteConfirmationDialog';
 import YouTubeShortsTable from './youtube-shorts/YouTubeShortsTable';
 import { useYouTubeShortsManager } from './youtube-shorts/useYouTubeShortsManager';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const YouTubeShortsManagement: React.FC = () => {
   const {
@@ -28,6 +28,7 @@ const YouTubeShortsManagement: React.FC = () => {
     setIsEditDialogOpen,
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
+    isLoading,
     handleAddShort,
     handleEditShort,
     prepareEditShort,
@@ -58,17 +59,26 @@ const YouTubeShortsManagement: React.FC = () => {
           <Button 
             className="flex items-center gap-2"
             onClick={() => setIsAddDialogOpen(true)}
+            disabled={isLoading}
           >
             <Plus className="h-4 w-4" />
             Add New Short
           </Button>
         </div>
 
-        <YouTubeShortsTable 
-          shorts={youtubeShorts}
-          onEdit={prepareEditShort}
-          onDelete={prepareDeleteShort}
-        />
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
+        ) : (
+          <YouTubeShortsTable 
+            shorts={youtubeShorts}
+            onEdit={prepareEditShort}
+            onDelete={prepareDeleteShort}
+          />
+        )}
 
         {/* Add Dialog */}
         <YouTubeShortDialog
