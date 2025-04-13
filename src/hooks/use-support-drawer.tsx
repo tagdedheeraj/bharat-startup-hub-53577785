@@ -25,8 +25,6 @@ export function useSupportDrawer() {
     const bottomNav = document.querySelector('.fixed.bottom-0');
     if (bottomNav instanceof HTMLElement) {
       bottomNav.style.display = 'block';
-      bottomNav.style.visibility = 'visible';
-      bottomNav.style.opacity = '1';
       bottomNav.classList.remove('hidden');
     }
     
@@ -35,8 +33,6 @@ export function useSupportDrawer() {
     supportButtons.forEach(button => {
       if (button instanceof HTMLElement) {
         button.style.display = 'flex';
-        button.style.visibility = 'visible';
-        button.style.opacity = '1';
       }
     });
     
@@ -51,8 +47,6 @@ export function useSupportDrawer() {
       const bottomNav = document.querySelector('.fixed.bottom-0');
       if (bottomNav instanceof HTMLElement) {
         bottomNav.style.display = 'block';
-        bottomNav.style.visibility = 'visible';
-        bottomNav.style.opacity = '1';
         bottomNav.classList.remove('hidden');
       }
       
@@ -60,8 +54,6 @@ export function useSupportDrawer() {
       supportButtons.forEach(button => {
         if (button instanceof HTMLElement) {
           button.style.display = 'flex';
-          button.style.visibility = 'visible';
-          button.style.opacity = '1';
         }
       });
     };

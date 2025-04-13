@@ -8,8 +8,6 @@ export const ensureBottomNavVisibility = () => {
     const bottomNav = document.querySelector('.fixed.bottom-0');
     if (bottomNav instanceof HTMLElement) {
       bottomNav.style.display = 'block';
-      bottomNav.style.visibility = 'visible';
-      bottomNav.style.opacity = '1';
       bottomNav.classList.remove('hidden');
       bottomNav.style.zIndex = '40'; // Make sure z-index is set
       console.log("Bottom nav visibility ensured");
@@ -20,8 +18,6 @@ export const ensureBottomNavVisibility = () => {
     supportButtons.forEach(button => {
       if (button instanceof HTMLElement) {
         button.style.display = 'flex';
-        button.style.visibility = 'visible';
-        button.style.opacity = '1';
         button.classList.remove('hidden');
         button.classList.add('flex');
         button.style.zIndex = '20'; // Set z-index
@@ -33,8 +29,6 @@ export const ensureBottomNavVisibility = () => {
     const supportSection = document.querySelector('.relative.support-section');
     if (supportSection instanceof HTMLElement) {
       supportSection.style.display = 'block';
-      supportSection.style.visibility = 'visible';
-      supportSection.style.opacity = '1';
       supportSection.classList.remove('hidden');
       console.log("Support section visibility ensured");
     }
@@ -77,8 +71,6 @@ export const ensureDialogVisibility = () => {
     dialogs.forEach((dialog) => {
       if (dialog instanceof HTMLElement) {
         dialog.style.display = 'block';
-        dialog.style.visibility = 'visible';
-        dialog.style.opacity = '1';
         dialog.style.zIndex = '200'; // Set high z-index
         console.log("Dialog visibility ensured");
       }
@@ -89,8 +81,6 @@ export const ensureDialogVisibility = () => {
     dialogContents.forEach((content) => {
       if (content instanceof HTMLElement) {
         content.style.display = 'block';
-        content.style.visibility = 'visible';
-        content.style.opacity = '1';
         content.style.zIndex = '200'; // Set high z-index
         console.log("Dialog content visibility ensured");
       }
