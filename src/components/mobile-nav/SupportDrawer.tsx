@@ -28,6 +28,24 @@ export default function SupportDrawer() {
         description: "Choose how you'd like to connect with our team.",
         duration: 2000,
       });
+      
+      // Force visibility of mobile nav and support button
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav instanceof HTMLElement) {
+        bottomNav.style.display = 'block';
+        bottomNav.style.visibility = 'visible';
+        bottomNav.style.opacity = '1';
+        bottomNav.classList.remove('hidden');
+      }
+      
+      const supportButtons = document.querySelectorAll('.support-button');
+      supportButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.style.display = 'flex';
+          button.style.visibility = 'visible';
+          button.style.opacity = '1';
+        }
+      });
     }
   }, [isOpen, toast]);
 
@@ -41,7 +59,7 @@ export default function SupportDrawer() {
           />
         </div>
       </DrawerTrigger>
-      <DrawerContent className="bg-white z-50">
+      <DrawerContent className="bg-white" style={{ zIndex: 100 }}>
         <DrawerHeader>
           <DrawerTitle>Need Help?</DrawerTitle>
           <DrawerDescription>

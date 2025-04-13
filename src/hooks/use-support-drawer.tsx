@@ -21,8 +21,24 @@ export function useSupportDrawer() {
       duration: 2000,
     });
     
-    // Ensure the bottom nav and support button remain visible
-    ensureBottomNavVisibility();
+    // Force ensure the bottom nav and support button remain visible
+    const bottomNav = document.querySelector('.fixed.bottom-0');
+    if (bottomNav instanceof HTMLElement) {
+      bottomNav.style.display = 'block';
+      bottomNav.style.visibility = 'visible';
+      bottomNav.style.opacity = '1';
+      bottomNav.classList.remove('hidden');
+    }
+    
+    // Force ensure support button visibility
+    const supportButtons = document.querySelectorAll('.support-button');
+    supportButtons.forEach(button => {
+      if (button instanceof HTMLElement) {
+        button.style.display = 'flex';
+        button.style.visibility = 'visible';
+        button.style.opacity = '1';
+      }
+    });
     
     // Set state to open drawer
     setIsOpen(true);
@@ -30,15 +46,37 @@ export function useSupportDrawer() {
   
   // Add effect to ensure visibility when drawer opens or closes
   useEffect(() => {
-    // When drawer state changes, ensure visibility
-    ensureBottomNavVisibility();
+    // Ensure visibility when drawer state changes
+    const ensureVisibility = () => {
+      const bottomNav = document.querySelector('.fixed.bottom-0');
+      if (bottomNav instanceof HTMLElement) {
+        bottomNav.style.display = 'block';
+        bottomNav.style.visibility = 'visible';
+        bottomNav.style.opacity = '1';
+        bottomNav.classList.remove('hidden');
+      }
+      
+      const supportButtons = document.querySelectorAll('.support-button');
+      supportButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          button.style.display = 'flex';
+          button.style.visibility = 'visible';
+          button.style.opacity = '1';
+        }
+      });
+    };
     
-    // Additional check with slight delay to catch any post-animation issues
-    const timer = setTimeout(() => {
-      ensureBottomNavVisibility();
-    }, 300);
+    // Run visibility checks with multiple timings to catch any issues
+    ensureVisibility();
+    const timers = [
+      setTimeout(ensureVisibility, 100),
+      setTimeout(ensureVisibility, 300),
+      setTimeout(ensureVisibility, 500)
+    ];
     
-    return () => clearTimeout(timer);
+    return () => {
+      timers.forEach(clearTimeout);
+    };
   }, [isOpen]);
 
   return {

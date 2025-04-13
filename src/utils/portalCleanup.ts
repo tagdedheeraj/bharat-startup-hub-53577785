@@ -12,6 +12,7 @@ export const ensureBottomNavVisibility = () => {
       bottomNav.style.opacity = '1';
       bottomNav.classList.remove('hidden');
       bottomNav.style.zIndex = '40'; // Make sure z-index is set
+      console.log("Bottom nav visibility ensured");
     }
     
     // Also ensure support button is visible
@@ -24,6 +25,7 @@ export const ensureBottomNavVisibility = () => {
         button.classList.remove('hidden');
         button.classList.add('flex');
         button.style.zIndex = '20'; // Set z-index
+        console.log("Support button visibility ensured");
       }
     });
     
@@ -34,6 +36,7 @@ export const ensureBottomNavVisibility = () => {
       supportSection.style.visibility = 'visible';
       supportSection.style.opacity = '1';
       supportSection.classList.remove('hidden');
+      console.log("Support section visibility ensured");
     }
   } catch (e) {
     console.debug("Bottom nav visibility error:", e);
@@ -70,30 +73,26 @@ export const debugPortals = () => {
 export const ensureDialogVisibility = () => {
   try {
     // Find any open dialogs that might be hidden
-    const dialogs = document.querySelectorAll('[role="dialog"]');
+    const dialogs = document.querySelectorAll('[role="dialog"][data-state="open"]');
     dialogs.forEach((dialog) => {
       if (dialog instanceof HTMLElement) {
-        const isVisible = window.getComputedStyle(dialog).display !== 'none';
-        if (!isVisible) {
-          dialog.style.display = 'block';
-          dialog.style.visibility = 'visible';
-          dialog.style.opacity = '1';
-          dialog.style.zIndex = '200'; // Set high z-index
-        }
+        dialog.style.display = 'block';
+        dialog.style.visibility = 'visible';
+        dialog.style.opacity = '1';
+        dialog.style.zIndex = '200'; // Set high z-index
+        console.log("Dialog visibility ensured");
       }
     });
     
     // Also check dialog content elements
-    const dialogContents = document.querySelectorAll('.dialog-content, [data-radix-dialog-content]');
+    const dialogContents = document.querySelectorAll('[data-radix-dialog-content]');
     dialogContents.forEach((content) => {
       if (content instanceof HTMLElement) {
-        const isVisible = window.getComputedStyle(content).display !== 'none';
-        if (!isVisible) {
-          content.style.display = 'block';
-          content.style.visibility = 'visible';
-          content.style.opacity = '1';
-          content.style.zIndex = '200'; // Set high z-index
-        }
+        content.style.display = 'block';
+        content.style.visibility = 'visible';
+        content.style.opacity = '1';
+        content.style.zIndex = '200'; // Set high z-index
+        console.log("Dialog content visibility ensured");
       }
     });
   } catch (e) {
@@ -102,19 +101,36 @@ export const ensureDialogVisibility = () => {
 };
 
 /**
- * Cleanup function specifically for orphaned portals
+ * Cleanup function specifically for orphaned portals - VERY CAUTIOUS VERSION
+ * that only removes portals that are definitely no longer in use
  */
 export const cleanupOrphanedPortals = () => {
   try {
-    // Find any portals that are no longer in use (display: none)
-    const orphanedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
+    // ONLY find 100% orphaned portals with display:none AND data-state="closed"
+    const orphanedPortals = document.querySelectorAll(
+      '[data-radix-portal][style*="display: none"][data-state="closed"]'
+    );
     console.log(`Found ${orphanedPortals.length} orphaned portals to clean up`);
     
     orphanedPortals.forEach((portal) => {
-      try {
-        portal.remove();
-      } catch (e) {
-        console.debug("Failed to remove orphaned portal:", e);
+      // Double check this isn't something important
+      const isImportantPortal = (
+        portal.contains(document.querySelector('.support-button')) ||
+        portal.contains(document.querySelector('[class*="drawer"]')) ||
+        portal.contains(document.querySelector('[class*="dialog-content"]')) ||
+        portal.contains(document.querySelector('[class*="popover-content"]'))
+      );
+      
+      // Only remove if we're sure it's truly orphaned
+      if (!isImportantPortal) {
+        try {
+          portal.remove();
+          console.log("Removed confirmed orphaned portal");
+        } catch (e) {
+          console.debug("Failed to remove orphaned portal:", e);
+        }
+      } else {
+        console.log("Skipped important portal during cleanup");
       }
     });
   } catch (e) {

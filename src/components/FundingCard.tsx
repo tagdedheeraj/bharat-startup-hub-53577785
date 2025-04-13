@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from '@/hooks/use-toast';
+import { ensureBottomNavVisibility } from '@/utils/portalCleanup';
 
 interface FundingCardProps {
   amount: string;
@@ -46,6 +47,35 @@ export default function FundingCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
+  // Ensure bottom nav visibility whenever dialog state changes
+  useEffect(() => {
+    if (!isDialogOpen) {
+      // When dialog closes, ensure visibility
+      setTimeout(() => {
+        ensureBottomNavVisibility();
+        
+        // Directly ensure bottom nav visibility
+        const bottomNav = document.querySelector('.fixed.bottom-0');
+        if (bottomNav instanceof HTMLElement) {
+          bottomNav.style.display = 'block';
+          bottomNav.style.visibility = 'visible';
+          bottomNav.style.opacity = '1';
+          bottomNav.classList.remove('hidden');
+        }
+        
+        // Directly ensure support button visibility
+        const supportButtons = document.querySelectorAll('.support-button');
+        supportButtons.forEach(button => {
+          if (button instanceof HTMLElement) {
+            button.style.display = 'flex';
+            button.style.visibility = 'visible';
+            button.style.opacity = '1';
+          }
+        });
+      }, 100);
+    }
+  }, [isDialogOpen]);
+  
   const handleOpenDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -58,21 +88,18 @@ export default function FundingCard({
     });
     
     // Ensure bottom nav and support button are visible
-    const bottomNav = document.querySelector('.fixed.bottom-0');
-    if (bottomNav instanceof HTMLElement) {
-      bottomNav.style.display = 'block';
-      bottomNav.style.visibility = 'visible';
-      bottomNav.style.opacity = '1';
-      bottomNav.classList.remove('hidden');
-    }
+    ensureBottomNavVisibility();
     
-    // Set directly without timeout to avoid timing issues
+    // Set dialog state
     setIsDialogOpen(true);
   };
   
   const handleFormSuccess = () => {
     console.log("Form submitted successfully for:", title);
     setIsDialogOpen(false);
+    
+    // Ensure bottom nav and support button are visible after dialog closes
+    setTimeout(ensureBottomNavVisibility, 100);
   };
   
   return (
@@ -96,24 +123,10 @@ export default function FundingCard({
         open={isDialogOpen} 
         onOpenChange={(open) => {
           setIsDialogOpen(open);
-          // Ensure bottom nav and support button are visible when dialog closes
+          
+          // When dialog closes, ensure visibility
           if (!open) {
-            const bottomNav = document.querySelector('.fixed.bottom-0');
-            if (bottomNav instanceof HTMLElement) {
-              bottomNav.style.display = 'block';
-              bottomNav.style.visibility = 'visible';
-              bottomNav.style.opacity = '1';
-              bottomNav.classList.remove('hidden');
-            }
-
-            const supportButtons = document.querySelectorAll('.support-button');
-            supportButtons.forEach(button => {
-              if (button instanceof HTMLElement) {
-                button.style.display = 'flex';
-                button.style.visibility = 'visible';
-                button.style.opacity = '1';
-              }
-            });
+            setTimeout(ensureBottomNavVisibility, 100);
           }
         }}
       >
