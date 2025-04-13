@@ -8,8 +8,9 @@ import {
   CardTitle 
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Youtube } from 'lucide-react';
+import { Plus, Youtube, WifiOff } from 'lucide-react';
 import { YouTubeShort } from '../youtube-shorts/types';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 // Import refactored components
 import YouTubeShortDialog from './youtube-shorts/YouTubeShortDialog';
@@ -29,6 +30,7 @@ const YouTubeShortsManagement: React.FC = () => {
     isDeleteDialogOpen,
     setIsDeleteDialogOpen,
     isLoading,
+    isOffline,
     handleAddShort,
     handleEditShort,
     prepareEditShort,
@@ -54,6 +56,15 @@ const YouTubeShortsManagement: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {isOffline && (
+          <Alert variant="destructive" className="mb-4">
+            <WifiOff className="h-4 w-4 mr-2" />
+            <AlertDescription>
+              You are currently offline. Changes will only be saved locally and won't sync with the database until you're back online.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <div className="flex justify-between mb-6">
           <h3 className="text-lg font-medium">Current YouTube Shorts</h3>
           <Button 

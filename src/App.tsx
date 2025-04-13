@@ -1,8 +1,7 @@
 
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
 import { ensureBottomNavVisibility } from "@/utils/portalCleanup";
@@ -24,8 +23,7 @@ const App = () => {
       <BrowserRouter>
         <NavigationObserver />
         <AppRoutes />
-        <Toaster />
-        <Sonner />
+        <Toaster position="top-right" richColors closeButton />
       </BrowserRouter>
     </AppProviders>
   );

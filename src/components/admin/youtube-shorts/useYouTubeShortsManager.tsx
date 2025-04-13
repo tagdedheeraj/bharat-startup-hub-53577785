@@ -2,10 +2,17 @@
 import { useState, useEffect } from 'react';
 import { YouTubeShort } from '@/components/youtube-shorts/types';
 import { toast } from 'sonner';
-import { youtubeShorts as initialYoutubeShorts } from '@/components/youtube-shorts/data';
-import { createDocument, updateDocument, deleteDocument, queryDocuments } from '@/services/firebaseDataService';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { youtubeShorts as initialYoutubeShorts, getYoutubeShorts } from '@/components/youtube-shorts/data';
+import { 
+  collection, 
+  doc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc,
+  getDocs,
+  serverTimestamp 
+} from 'firebase/firestore';
+import { db, isFirestoreAvailable } from '@/lib/firebase';
 
 export const useYouTubeShortsManager = () => {
   const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>([]);
@@ -15,26 +22,21 @@ export const useYouTubeShortsManager = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
-  // Load YouTube shorts from Firebase on component mount
+  // Load YouTube shorts on component mount
   useEffect(() => {
     const fetchShorts = async () => {
       setIsLoading(true);
       try {
-        // Try to fetch from Firebase first
-        const shorts = await queryDocuments<YouTubeShort>('youtubeShorts');
+        const firestoreAvailable = await isFirestoreAvailable();
+        setIsOffline(!firestoreAvailable);
         
-        if (shorts && shorts.length > 0) {
-          setYoutubeShorts(shorts);
-        } else {
-          // If no data in Firebase, use the initial data
-          console.log('No shorts found in Firebase, using initial data');
-          setYoutubeShorts(initialYoutubeShorts);
-          
-          // Initialize Firebase with initial data if empty
-          initialYoutubeShorts.forEach(async (short) => {
-            await createDocument('youtubeShorts', short);
-          });
+        const shorts = await getYoutubeShorts();
+        setYoutubeShorts(shorts);
+        
+        if (!firestoreAvailable) {
+          toast.warning("Operating in offline mode. Changes won't be saved to the database.");
         }
       } catch (error) {
         console.error("Error fetching YouTube shorts:", error);
@@ -46,29 +48,68 @@ export const useYouTubeShortsManager = () => {
     };
     
     fetchShorts();
+    
+    // Add online/offline event listeners
+    const handleOnline = () => {
+      toast.success("You're back online");
+      setIsOffline(false);
+      fetchShorts(); // Refresh data when coming back online
+    };
+    
+    const handleOffline = () => {
+      toast.warning("You're offline. Changes won't be saved.");
+      setIsOffline(true);
+    };
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   const handleAddShort = async (data: YouTubeShort) => {
     try {
       setIsLoading(true);
+      
+      // Check for duplicate
       if (youtubeShorts.some(short => short.id === data.id)) {
         toast.error("A video with this YouTube ID already exists!");
         return;
       }
 
+      // Set thumbnail if not provided
       if (!data.thumbnail) {
         data.thumbnail = `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`;
       }
 
-      // Save to Firebase
-      const docId = await createDocument('youtubeShorts', data);
+      let newShort = { ...data };
       
-      // Update local state with the new short and its document ID
-      const newShort = { ...data, docId };
-      const updatedShorts = [...youtubeShorts, newShort];
-      setYoutubeShorts(updatedShorts);
+      if (!isOffline) {
+        try {
+          // Add to Firestore
+          const shortsCollection = collection(db, 'youtubeShorts');
+          const docRef = await addDoc(shortsCollection, {
+            ...data,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          
+          // Store the document ID
+          newShort.docId = docRef.id;
+          toast.success("YouTube short added successfully!");
+        } catch (error) {
+          console.error("Error adding to Firestore:", error);
+          toast.error("Failed to save to database, but added locally");
+        }
+      } else {
+        toast.warning("Added locally only (offline mode)");
+      }
       
-      toast.success("YouTube short added successfully!");
+      // Update local state
+      setYoutubeShorts(prev => [...prev, newShort]);
       setIsAddDialogOpen(false);
     } catch (error) {
       console.error("Error adding YouTube short:", error);
@@ -81,29 +122,48 @@ export const useYouTubeShortsManager = () => {
   const handleEditShort = async (data: YouTubeShort) => {
     try {
       setIsLoading(true);
+      
+      // Set thumbnail if not provided
       if (!data.thumbnail) {
         data.thumbnail = `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`;
       }
 
-      // Find the document ID from the existing short
-      const existingShort = youtubeShorts.find(short => short.id === editingShort?.id);
-      const docId = existingShort?.docId || editingShort?.id;
+      // Find the existing short
+      const existingShortIndex = youtubeShorts.findIndex(
+        short => short.id === editingShort?.id
+      );
       
-      if (!docId) {
-        toast.error("Cannot identify the video to update");
+      if (existingShortIndex === -1) {
+        toast.error("Cannot find the short to update");
         return;
       }
-
-      // Update in Firebase
-      await updateDocument('youtubeShorts', docId, data);
       
-      // Update local state
-      const updatedShorts = youtubeShorts.map(short => 
-        short.id === editingShort?.id ? { ...data, docId } : short
-      );
+      const existingShort = youtubeShorts[existingShortIndex];
+      const docId = existingShort.docId;
+      
+      // Update in Firestore if we have a document ID and we're online
+      if (docId && !isOffline) {
+        try {
+          const shortRef = doc(db, 'youtubeShorts', docId);
+          await updateDoc(shortRef, {
+            ...data,
+            updatedAt: serverTimestamp()
+          });
+          toast.success("YouTube short updated in database!");
+        } catch (error) {
+          console.error("Error updating in Firestore:", error);
+          toast.error("Failed to update in database, but updated locally");
+        }
+      } else if (isOffline) {
+        toast.warning("Updated locally only (offline mode)");
+      }
+      
+      // Update local state (preserve docId if it exists)
+      const updatedShort = { ...data, docId: existingShort.docId };
+      const updatedShorts = [...youtubeShorts];
+      updatedShorts[existingShortIndex] = updatedShort;
+      
       setYoutubeShorts(updatedShorts);
-      
-      toast.success("YouTube short updated successfully!");
       setIsEditDialogOpen(false);
       setEditingShort(null);
     } catch (error) {
@@ -127,25 +187,41 @@ export const useYouTubeShortsManager = () => {
   const handleDeleteShort = async () => {
     try {
       setIsLoading(true);
-      if (!pendingDeleteId) return;
-      
-      // Find the document ID from the existing short
-      const existingShort = youtubeShorts.find(short => short.id === pendingDeleteId);
-      const docId = existingShort?.docId || pendingDeleteId;
-      
-      if (!docId) {
-        toast.error("Cannot identify the video to delete");
+      if (!pendingDeleteId) {
+        toast.error("No short selected for deletion");
         return;
       }
-
-      // Delete from Firebase
-      await deleteDocument('youtubeShorts', docId);
+      
+      // Find the short to delete
+      const shortToDelete = youtubeShorts.find(
+        short => short.id === pendingDeleteId
+      );
+      
+      if (!shortToDelete) {
+        toast.error("Cannot find the short to delete");
+        return;
+      }
+      
+      const docId = shortToDelete.docId;
+      
+      // Delete from Firestore if we have a document ID and we're online
+      if (docId && !isOffline) {
+        try {
+          await deleteDoc(doc(db, 'youtubeShorts', docId));
+          toast.success("YouTube short deleted from database!");
+        } catch (error) {
+          console.error("Error deleting from Firestore:", error);
+          toast.error("Failed to delete from database, but removed locally");
+        }
+      } else if (isOffline) {
+        toast.warning("Removed locally only (offline mode)");
+      }
       
       // Update local state
-      const updatedShorts = youtubeShorts.filter(short => short.id !== pendingDeleteId);
-      setYoutubeShorts(updatedShorts);
+      setYoutubeShorts(youtubeShorts.filter(
+        short => short.id !== pendingDeleteId
+      ));
       
-      toast.success("YouTube short deleted successfully!");
       setIsDeleteDialogOpen(false);
       setPendingDeleteId(null);
     } catch (error) {
@@ -167,6 +243,7 @@ export const useYouTubeShortsManager = () => {
     setIsDeleteDialogOpen,
     pendingDeleteId,
     isLoading,
+    isOffline,
     handleAddShort,
     handleEditShort,
     prepareEditShort,

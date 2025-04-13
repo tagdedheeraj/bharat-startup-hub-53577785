@@ -1,10 +1,50 @@
 
 /**
+ * Utility module for handling portal-related cleanup and visibility
+ */
+
+// Safely remove DOM elements that match a selector
+export const safelyRemoveElements = (selector: string) => {
+  try {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+      try {
+        if (element.parentNode) {
+          element.parentNode.removeChild(element);
+        }
+      } catch (e) {
+        console.debug(`Error removing element ${selector}:`, e);
+      }
+    });
+    return elements.length; // Return count of removed elements
+  } catch (e) {
+    console.debug(`Error selecting elements ${selector}:`, e);
+    return 0;
+  }
+};
+
+/**
+ * Clean up all portals (use sparingly, mostly for navigation)
+ */
+export const cleanupAllPortals = () => {
+  const portalsRemoved = safelyRemoveElements('[data-radix-portal]');
+  const menuPortalsRemoved = safelyRemoveElements('[data-radix-dropdown-menu-content]');
+  const toastPortalsRemoved = safelyRemoveElements('[role="status"]');
+  
+  const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved;
+  if (total > 0) {
+    console.debug(`Cleaned up ${total} portal elements`);
+  }
+  
+  return total;
+};
+
+/**
  * Utility to ensure bottom navigation visibility
  */
 export const ensureBottomNavVisibility = () => {
   const bottomNav = document.querySelector('.fixed.bottom-0');
-  if (bottomNav && bottomNav.classList.contains('hidden')) {
+  if (bottomNav instanceof HTMLElement && bottomNav.classList.contains('hidden')) {
     bottomNav.classList.remove('hidden');
     console.log("Bottom nav visibility restored");
   }
@@ -29,7 +69,6 @@ export const debugPortals = () => {
 
 /**
  * Function to reset z-index stacking and ensure proper display order
- * This is now safe to use with dialogs
  */
 export const resetZIndexStacking = () => {
   // Only target specific elements, not dialogs or portals
@@ -39,4 +78,11 @@ export const resetZIndexStacking = () => {
   }
   
   console.log("Z-index stacking adjusted safely");
+};
+
+/**
+ * Check if the device is currently offline
+ */
+export const isOffline = (): boolean => {
+  return typeof navigator !== 'undefined' && !navigator.onLine;
 };
