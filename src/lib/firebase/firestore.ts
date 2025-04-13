@@ -3,8 +3,9 @@ import {
   getFirestore, 
   connectFirestoreEmulator, 
   enableIndexedDbPersistence,
-  setPersistence,
-  CACHE_SIZE_UNLIMITED
+  CACHE_SIZE_UNLIMITED,
+  doc,
+  getDoc
 } from "firebase/firestore";
 import { app, useEmulators } from "./app";
 import { toast } from "sonner";
@@ -27,7 +28,7 @@ if (useEmulators) {
 
 // Enable offline persistence for Firestore with better error handling
 if (typeof window !== 'undefined') {
-  enableIndexedDbPersistence(db, {cacheSizeBytes: CACHE_SIZE_UNLIMITED})
+  enableIndexedDbPersistence(db)
     .then(() => {
       console.log("Firestore offline persistence enabled");
     })

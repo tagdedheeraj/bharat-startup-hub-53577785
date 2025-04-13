@@ -10,7 +10,7 @@ export {
   createMockFirebaseUser,
   canConnectToFirebase
 } from './auth';
-export { db } from './firestore';
+export { db, isFirestoreAvailable } from './firestore';
 export { storage } from './storage';
 export { getNetworkStatus } from './network';
 
