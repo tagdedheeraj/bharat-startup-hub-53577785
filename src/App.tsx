@@ -9,17 +9,7 @@ import { ensureBottomNavVisibility } from "@/utils/portalCleanup";
 const App = () => {
   useEffect(() => {
     // Simple function to ensure bottom nav is visible
-    const ensureUI = () => {
-      console.log("Ensuring bottom nav visibility");
-      ensureBottomNavVisibility();
-    };
-    
-    // Run once on mount
-    ensureUI();
-    
-    return () => {
-      // No cleanup needed
-    };
+    ensureBottomNavVisibility();
   }, []);
 
   return (

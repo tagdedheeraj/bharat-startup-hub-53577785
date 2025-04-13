@@ -46,23 +46,7 @@ export default function FundingCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
-  const handleOpenDialog = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Opening funding dialog for:", title);
-    
-    toast({
-      title: "Opening Form",
-      description: `Preparing application form for ${title}`,
-      duration: 2000,
-    });
-    
-    // Set dialog state
-    setIsDialogOpen(true);
-  };
-  
   const handleFormSuccess = () => {
-    console.log("Form submitted successfully for:", title);
     setIsDialogOpen(false);
   };
   
@@ -91,7 +75,13 @@ export default function FundingCard({
           <Button 
             variant="ghost"
             className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={handleOpenDialog}
+            onClick={() => {
+              toast({
+                title: "Opening Form",
+                description: `Preparing application form for ${title}`,
+                duration: 2000,
+              });
+            }}
           >
             <span>Avail Now</span>
             <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">

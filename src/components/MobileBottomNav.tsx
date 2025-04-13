@@ -33,7 +33,6 @@ export default function MobileBottomNav() {
         {/* Support Drawer */}
         <div className="relative support-section">
           <SupportDrawer />
-          <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
         </div>
         
         {/* More Menu */}

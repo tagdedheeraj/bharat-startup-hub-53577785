@@ -1,5 +1,4 @@
 
-import { useEffect } from 'react';
 import { 
   Drawer,
   DrawerContent,
@@ -12,23 +11,9 @@ import {
 import { useSupportDrawer } from '@/hooks/use-support-drawer';
 import SupportTriggerButton from './SupportTriggerButton';
 import SupportActions from './SupportActions';
-import { useToast } from '@/hooks/use-toast';
 
 export default function SupportDrawer() {
   const { isOpen, setIsOpen, supportButtonRef, handleOpenDrawer } = useSupportDrawer();
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    if (isOpen) {
-      console.log("Support drawer opened");
-      
-      toast({
-        title: "Support Options",
-        description: "Choose how you'd like to connect with our team.",
-        duration: 2000,
-      });
-    }
-  }, [isOpen, toast]);
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>

@@ -10,7 +10,6 @@ export function useSupportDrawer() {
   const handleOpenDrawer = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Support drawer trigger clicked");
     
     toast({
       title: "Opening Support",

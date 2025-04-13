@@ -17,7 +17,7 @@ export default function SupportTriggerButton({ onClick, buttonRef }: SupportTrig
     >
       <LifeBuoy 
         size={24} 
-        className="text-india-saffron animate-pulse" 
+        className="text-india-saffron" 
         strokeWidth={2.5}
       />
       <span className="text-xs mt-1 font-semibold text-india-saffron">Support</span>
