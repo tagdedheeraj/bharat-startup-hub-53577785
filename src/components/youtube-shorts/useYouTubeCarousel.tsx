@@ -12,19 +12,33 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
   const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>(initialShorts);
   const intervalRef = useRef<number | null>(null);
+  
+  // Use ref to prevent unnecessary effect dependencies
+  const isPausedRef = useRef(isPaused);
+  
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   useEffect(() => {
     // Load the latest shorts data when the component mounts
+    let isMounted = true;
     const loadShorts = async () => {
       try {
         const shorts = await getYoutubeShorts();
-        setYoutubeShorts(shorts);
+        if (isMounted) {
+          setYoutubeShorts(shorts);
+        }
       } catch (error) {
         console.error("Error loading YouTube shorts:", error);
       }
     };
     
     loadShorts();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const playVideo = (videoId: string) => {
@@ -41,7 +55,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
 
   const closeVideo = () => {
     setCurrentVideoId(null);
-    if (!isPaused) {
+    if (!isPausedRef.current) {
       startAutoSlide();
     }
   };
@@ -77,21 +91,23 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   };
 
   useEffect(() => {
+    // Use setTimeout for loading state to avoid jank
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
-    if (!isPaused) {
+    if (!isPausedRef.current) {
       startAutoSlide();
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
       clearTimeout(timer);
     };
-  }, [isPaused]);
+  }, []);
 
   return {
     currentVideoId,

@@ -6,7 +6,6 @@ import Footer from './Footer';
 import SideDrawerNavigation from './SideDrawerNavigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { debugPortals } from '@/utils/portalCleanup';
 
 interface LayoutProps {
   children?: ReactNode;
@@ -19,14 +18,9 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Simpler debug logging
+  // Simpler mounting/unmounting without expensive operations
   useEffect(() => {
     console.log("Layout mounted");
-    
-    // Debug portals for information only, not cleaning up here anymore
-    if (process.env.NODE_ENV === 'development') {
-      debugPortals();
-    }
     
     return () => {
       console.log("Layout unmounted");
