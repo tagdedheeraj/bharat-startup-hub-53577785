@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Card, 
@@ -26,7 +25,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { YouTube, Plus, Pencil, Trash2, Save, X } from 'lucide-react';
+import { Youtube, Plus, Pencil, Trash2, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -58,7 +57,6 @@ const YouTubeShortsManagement: React.FC = () => {
     }
   });
 
-  // Load form values when editing a short
   useEffect(() => {
     if (editingShort) {
       editForm.reset({
@@ -70,25 +68,18 @@ const YouTubeShortsManagement: React.FC = () => {
   }, [editingShort, editForm]);
 
   const handleAddShort = (data: YouTubeShort) => {
-    // In a real app, we would save to Firebase here
     try {
-      // Check if YouTube ID already exists
       if (youtubeShorts.some(short => short.id === data.id)) {
         toast.error("A video with this YouTube ID already exists!");
         return;
       }
 
-      // Create a thumbnail URL if not provided
       if (!data.thumbnail) {
         data.thumbnail = `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`;
       }
 
-      // Add the new short to the list
       const updatedShorts = [...youtubeShorts, data];
       setYoutubeShorts(updatedShorts);
-      
-      // In a production app, save to firebase
-      // createDocument('youtubeShorts', data);
       
       toast.success("YouTube short added successfully!");
       addForm.reset();
@@ -101,19 +92,14 @@ const YouTubeShortsManagement: React.FC = () => {
 
   const handleEditShort = (data: YouTubeShort) => {
     try {
-      // Create a thumbnail URL if not provided
       if (!data.thumbnail) {
         data.thumbnail = `https://i3.ytimg.com/vi/${data.id}/maxresdefault.jpg`;
       }
 
-      // Update the short in the list
       const updatedShorts = youtubeShorts.map(short => 
         short.id === editingShort?.id ? data : short
       );
       setYoutubeShorts(updatedShorts);
-      
-      // In a production app, save to firebase
-      // updateDocument('youtubeShorts', data.id, data);
       
       toast.success("YouTube short updated successfully!");
       setIsEditDialogOpen(false);
@@ -126,12 +112,8 @@ const YouTubeShortsManagement: React.FC = () => {
 
   const handleDeleteShort = (id: string) => {
     try {
-      // Remove the short from the list
       const updatedShorts = youtubeShorts.filter(short => short.id !== id);
       setYoutubeShorts(updatedShorts);
-      
-      // In a production app, delete from firebase
-      // deleteDocument('youtubeShorts', id);
       
       toast.success("YouTube short deleted successfully!");
       setIsDeleteDialogOpen(false);
@@ -146,7 +128,7 @@ const YouTubeShortsManagement: React.FC = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <YouTube className="h-5 w-5 text-red-600" />
+          <Youtube className="h-5 w-5 text-red-600" />
           YouTube Shorts Management
         </CardTitle>
         <CardDescription>
@@ -285,7 +267,6 @@ const YouTubeShortsManagement: React.FC = () => {
           </TableBody>
         </Table>
 
-        {/* Edit Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
           <DialogContent>
             <DialogHeader>
@@ -356,7 +337,6 @@ const YouTubeShortsManagement: React.FC = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogContent>
             <DialogHeader>
