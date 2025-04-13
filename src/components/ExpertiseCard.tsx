@@ -56,16 +56,6 @@ export default function ExpertiseCard({
       duration: 2000,
     });
     
-    // Ensure bottom nav and support button are visible
-    const bottomNav = document.querySelector('.fixed.bottom-0');
-    if (bottomNav instanceof HTMLElement) {
-      bottomNav.style.display = 'block';
-      bottomNav.style.visibility = 'visible';
-      bottomNav.style.opacity = '1';
-      bottomNav.classList.remove('hidden');
-    }
-    
-    // Set directly without timeout to avoid timing issues
     setIsDialogOpen(true);
   };
   
@@ -94,28 +84,7 @@ export default function ExpertiseCard({
       
       <Dialog 
         open={isDialogOpen} 
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          // Ensure bottom nav and support button are visible when dialog closes
-          if (!open) {
-            const bottomNav = document.querySelector('.fixed.bottom-0');
-            if (bottomNav instanceof HTMLElement) {
-              bottomNav.style.display = 'block';
-              bottomNav.style.visibility = 'visible';
-              bottomNav.style.opacity = '1';
-              bottomNav.classList.remove('hidden');
-            }
-
-            const supportButtons = document.querySelectorAll('.support-button');
-            supportButtons.forEach(button => {
-              if (button instanceof HTMLElement) {
-                button.style.display = 'flex';
-                button.style.visibility = 'visible';
-                button.style.opacity = '1';
-              }
-            });
-          }
-        }}
+        onOpenChange={setIsDialogOpen}
       >
         <DialogTrigger asChild>
           <button 
@@ -128,7 +97,7 @@ export default function ExpertiseCard({
             </span>
           </button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-white" style={{ zIndex: 200 }}>
+        <DialogContent className="sm:max-w-[425px] bg-white">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>

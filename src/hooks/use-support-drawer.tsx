@@ -7,7 +7,6 @@ export function useSupportDrawer() {
   const { toast } = useToast();
   const supportButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Function to explicitly open drawer - सरलीकृत
   const handleOpenDrawer = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -19,7 +18,6 @@ export function useSupportDrawer() {
       duration: 2000,
     });
     
-    // Set state to open drawer
     setIsOpen(true);
   };
   

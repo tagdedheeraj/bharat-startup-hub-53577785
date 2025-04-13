@@ -16,13 +16,7 @@ export default function MobileBottomNav() {
   ];
 
   return (
-    <div 
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
-      style={{ 
-        display: 'block',
-        zIndex: 40 
-      }} 
-    >
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden">
       <nav className="flex justify-around items-center h-16">
         {navItems.map((item) => (
           <NavItem 
@@ -36,14 +30,8 @@ export default function MobileBottomNav() {
         {/* Contact Link */}
         <ContactNavItem />
         
-        {/* Support Drawer with improved visibility */}
-        <div 
-          className="relative support-section"
-          style={{ 
-            display: 'block',
-            zIndex: 30 
-          }}
-        >
+        {/* Support Drawer */}
+        <div className="relative support-section">
           <SupportDrawer />
           <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
         </div>

@@ -10,15 +10,6 @@ export const ensureBottomNavVisibility = () => {
       bottomNav.style.display = 'block';
       console.log("Bottom nav visibility ensured");
     }
-    
-    // Also ensure support button is visible
-    const supportButtons = document.querySelectorAll('.support-button');
-    supportButtons.forEach(button => {
-      if (button instanceof HTMLElement) {
-        button.style.display = 'flex';
-        console.log("Support button visibility ensured");
-      }
-    });
   } catch (e) {
     console.debug("Bottom nav visibility error:", e);
   }
@@ -68,38 +59,6 @@ export const resetZIndexStacking = () => {
     if (bottomNav instanceof HTMLElement) {
       bottomNav.style.zIndex = '40';
     }
-    
-    // Set z-index for dialog overlays
-    const dialogOverlays = document.querySelectorAll('[data-radix-dialog-overlay]');
-    dialogOverlays.forEach(overlay => {
-      if (overlay instanceof HTMLElement) {
-        overlay.style.zIndex = '150';
-      }
-    });
-    
-    // Set z-index for dialog contents
-    const dialogContents = document.querySelectorAll('[data-radix-dialog-content]');
-    dialogContents.forEach(content => {
-      if (content instanceof HTMLElement) {
-        content.style.zIndex = '200';
-      }
-    });
-    
-    // Set z-index for drawer overlays
-    const drawerOverlays = document.querySelectorAll('[data-vaul-drawer-overlay]');
-    drawerOverlays.forEach(overlay => {
-      if (overlay instanceof HTMLElement) {
-        overlay.style.zIndex = '80';
-      }
-    });
-    
-    // Set z-index for drawer contents
-    const drawerContents = document.querySelectorAll('[data-vaul-drawer-content]');
-    drawerContents.forEach(content => {
-      if (content instanceof HTMLElement) {
-        content.style.zIndex = '100';
-      }
-    });
   } catch (e) {
     console.debug("Z-index reset error:", e);
   }
