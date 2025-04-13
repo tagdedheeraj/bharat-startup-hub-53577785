@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { debugPortals, ensureBottomNavVisibility } from '@/utils/portalCleanup';
 
 interface LayoutProps {
-  children?: ReactNode;
+  children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {

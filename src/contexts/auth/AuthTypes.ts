@@ -1,6 +1,6 @@
 
 // Define user types
-export type UserRole = 'startup' | 'investor' | 'admin' | null;
+export type UserRole = 'startup' | 'investor' | null;
 
 export interface User {
   id: string;

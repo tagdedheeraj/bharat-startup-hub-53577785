@@ -4,8 +4,6 @@ import { User, UserRole } from "@/contexts/auth/AuthTypes";
 // Claves para el almacenamiento local
 const USERS_KEY = 'bharat_startup_users';
 const CURRENT_USER_KEY = 'bharat_startup_current_user';
-const ADMIN_EMAIL = 'admin@bharatstartupsolution.com';
-const ADMIN_PASSWORD = 'Bharat@123';
 
 // Interfaz para el usuario almacenado
 interface StoredUser {
@@ -20,35 +18,7 @@ interface StoredUser {
 // Inicializar el almacenamiento si está vacío
 const initializeStorage = (): void => {
   if (!localStorage.getItem(USERS_KEY)) {
-    // Initialize with admin user
-    const adminUser: StoredUser = {
-      id: 'admin-001',
-      name: 'Admin',
-      email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
-      role: 'admin',
-      createdAt: new Date().toISOString()
-    };
-    
-    localStorage.setItem(USERS_KEY, JSON.stringify([adminUser]));
-  } else {
-    // Check if admin user exists, if not add it
-    const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
-    const adminExists = users.some((user: StoredUser) => user.email === ADMIN_EMAIL);
-    
-    if (!adminExists) {
-      const adminUser: StoredUser = {
-        id: 'admin-001',
-        name: 'Admin',
-        email: ADMIN_EMAIL,
-        password: ADMIN_PASSWORD,
-        role: 'admin',
-        createdAt: new Date().toISOString()
-      };
-      
-      users.push(adminUser);
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
+    localStorage.setItem(USERS_KEY, JSON.stringify([]));
   }
 };
 
@@ -115,36 +85,19 @@ export const login = async (
 ): Promise<void> => {
   const users = getUsers();
   
-  // Special case for admin login
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    const adminUser = users.find(u => u.email === ADMIN_EMAIL);
-    
-    if (adminUser) {
-      const userWithoutPassword: User = {
-        id: adminUser.id,
-        name: adminUser.name,
-        email: adminUser.email,
-        role: 'admin'
-      };
-      
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userWithoutPassword));
-      return;
-    }
-  }
-  
-  // Regular user login
+  // Buscar usuario por email y contraseña
   const user = users.find(u => u.email === email && u.password === password);
   
   if (!user) {
     throw new Error("Correo electrónico o contraseña incorrectos");
   }
   
-  // Verify role if specified
-  if (role && user.role !== role && role !== 'admin') {
+  // Verificar rol si se especifica
+  if (role && user.role !== role) {
     throw new Error(`Esta cuenta no está registrada como ${role === 'startup' ? 'startup' : 'inversor'}`);
   }
   
-  // Save user session (without password)
+  // Guardar sesión del usuario (sin la contraseña)
   const userWithoutPassword: User = {
     id: user.id,
     name: user.name,
