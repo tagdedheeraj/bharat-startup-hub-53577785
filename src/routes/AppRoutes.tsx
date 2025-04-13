@@ -52,25 +52,25 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Main Layout Routes */}
-      <Route element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
-        <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
-        <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
-        <Route path="/it-solutions" element={<ITSolutionsPage />} />
-        <Route path="/success-stories" element={<SuccessStoriesPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/faqs" element={<FAQsPage />} />
+      <Route path="/" element={<Layout>{<Outlet />}</Layout>}>
+        <Route index element={<HomePage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="services" element={<ServicesPage />} />
+        <Route path="services/funding-consultation" element={<FundingConsultationPage />} />
+        <Route path="services/certificate-marketing" element={<CertificateMarketingPage />} />
+        <Route path="services/legal-consultation" element={<LegalConsultationPage />} />
+        <Route path="it-solutions" element={<ITSolutionsPage />} />
+        <Route path="success-stories" element={<SuccessStoriesPage />} />
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="faqs" element={<FAQsPage />} />
         
         {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         
         {/* Dashboard Routes */}
         <Route 
-          path="/dashboard/startup" 
+          path="dashboard/startup" 
           element={
             <ProtectedRoute allowedRoles={['startup']}>
               <StartupDashboard />
@@ -78,7 +78,7 @@ const AppRoutes = () => {
           } 
         />
         <Route 
-          path="/dashboard/investor" 
+          path="dashboard/investor" 
           element={
             <ProtectedRoute allowedRoles={['investor']}>
               <InvestorDashboard />
@@ -87,35 +87,35 @@ const AppRoutes = () => {
         />
 
         {/* Legal Pages */}
-        <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-        <Route path="/disclaimer" element={<DisclaimerPage />} />
-        <Route path="/client-service-agreement" element={<ClientServiceAgreementPage />} />
+        <Route path="terms-and-conditions" element={<TermsAndConditionsPage />} />
+        <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="disclaimer" element={<DisclaimerPage />} />
+        <Route path="client-service-agreement" element={<ClientServiceAgreementPage />} />
         
         {/* CA Services Routes */}
-        <Route path="/ca-services" element={<CAServicesPage />} />
-        <Route path="/ca-services/certifications" element={<CertificationsPage />} />
-        <Route path="/ca-services/trademark" element={<TrademarkPage />} />
-        <Route path="/ca-services/income-tax" element={<IncomeTaxPage />} />
-        <Route path="/ca-services/accounting" element={<AccountingPage />} />
-        <Route path="/ca-services/gst" element={<GSTPage />} />
-        <Route path="/ca-services/payroll" element={<PayrollPage />} />
-        <Route path="/ca-services/compliance" element={<CACompliancePage />} />
+        <Route path="ca-services" element={<CAServicesPage />} />
+        <Route path="ca-services/certifications" element={<CertificationsPage />} />
+        <Route path="ca-services/trademark" element={<TrademarkPage />} />
+        <Route path="ca-services/income-tax" element={<IncomeTaxPage />} />
+        <Route path="ca-services/accounting" element={<AccountingPage />} />
+        <Route path="ca-services/gst" element={<GSTPage />} />
+        <Route path="ca-services/payroll" element={<PayrollPage />} />
+        <Route path="ca-services/compliance" element={<CACompliancePage />} />
         
         {/* More Routes */}
-        <Route path="/more/experts" element={<ExpertsPage />} />
-        <Route path="/more/msme-events" element={<MSMEEventsPage />} />
-        <Route path="/more/reviews" element={<ReviewsPage />} />
-        <Route path="/more/blogs" element={<BlogsPage />} />
-        <Route path="/more/compliance" element={<CompliancePage />} />
-        <Route path="/404" element={<NotFound />} />
+        <Route path="more/experts" element={<ExpertsPage />} />
+        <Route path="more/msme-events" element={<MSMEEventsPage />} />
+        <Route path="more/reviews" element={<ReviewsPage />} />
+        <Route path="more/blogs" element={<BlogsPage />} />
+        <Route path="more/compliance" element={<CompliancePage />} />
+        <Route path="404" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Route>
       
       {/* Admin Routes - outside of main Layout */}
-      <Route path="/admin" element={<AdminLogin />} />
+      <Route path="admin" element={<AdminLogin />} />
       <Route 
-        path="/admin/dashboard" 
+        path="admin/dashboard" 
         element={
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminLayout>
@@ -125,7 +125,7 @@ const AppRoutes = () => {
         } 
       />
       <Route 
-        path="/admin/users" 
+        path="admin/users" 
         element={
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminLayout>
