@@ -4,8 +4,15 @@ import { ArrowUpRight, IndianRupee, Award } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import FundingApplicationModal from './FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import FundingApplicationForm from './FundingApplicationForm';
 
 interface FundingServiceProps {
   amount: string;
@@ -15,7 +22,6 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  // Use local state instead of useDialog to ensure the modal works correctly
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   
@@ -41,6 +47,10 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
     });
     
     setOpen(true);
+  };
+  
+  const handleSuccess = () => {
+    setOpen(false);
   };
   
   return (
@@ -84,17 +94,26 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                   <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </Button>
-              
-              <FundingApplicationModal
-                open={open}
-                onOpenChange={setOpen}
-                fundingTitle={title}
-                fundingAmount={amount}
-              />
             </div>
           </div>
         </div>
       </CardContent>
+      
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px] z-[9999]">
+          <DialogHeader>
+            <DialogTitle>Apply for Funding</DialogTitle>
+            <DialogDescription>
+              Complete the form below to apply for funding.
+            </DialogDescription>
+          </DialogHeader>
+          <FundingApplicationForm 
+            fundingTitle={title}
+            fundingAmount={amount}
+            onSuccess={handleSuccess}
+          />
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

@@ -3,8 +3,15 @@ import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import FundingApplicationModal from './funding/FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import FundingApplicationForm from './funding/FundingApplicationForm';
 
 interface FundingCardProps {
   amount: string;
@@ -34,7 +41,6 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  // Use local state instead of useDialog to ensure the modal works correctly
   const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
@@ -48,8 +54,11 @@ export default function FundingCard({
       duration: 2000,
     });
     
-    // Directly update the local state
     setOpen(true);
+  };
+  
+  const handleSuccess = () => {
+    setOpen(false);
   };
   
   return (
@@ -80,12 +89,21 @@ export default function FundingCard({
         </span>
       </Button>
       
-      <FundingApplicationModal
-        open={open}
-        onOpenChange={setOpen}
-        fundingTitle={title}
-        fundingAmount={amount}
-      />
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-[425px] z-[9999]">
+          <DialogHeader>
+            <DialogTitle>Apply for Funding</DialogTitle>
+            <DialogDescription>
+              Complete the form below to apply for funding.
+            </DialogDescription>
+          </DialogHeader>
+          <FundingApplicationForm 
+            fundingTitle={title}
+            fundingAmount={amount}
+            onSuccess={handleSuccess}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

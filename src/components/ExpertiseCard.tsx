@@ -40,7 +40,6 @@ export default function ExpertiseCard({
   variant = 'default',
   index = 0
 }: ExpertiseCardProps) {
-  // Use local state instead of useDialog to ensure the modal works correctly
   const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
@@ -90,7 +89,7 @@ export default function ExpertiseCard({
       </button>
       
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] z-[200]">
+        <DialogContent className="sm:max-w-[425px] z-[9999]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>

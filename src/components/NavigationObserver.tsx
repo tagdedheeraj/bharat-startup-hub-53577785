@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { cleanupAllPortals, debugPortals } from "@/utils/portalCleanup";
+import { debugPortals } from "@/utils/portalCleanup";
 import { useDialog } from "@/contexts/dialog/DialogProvider";
 
 const NavigationObserver = () => {
