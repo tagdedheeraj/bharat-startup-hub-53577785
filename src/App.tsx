@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
 import NavigationObserver from "@/components/NavigationObserver";
+import TestPopup from "@/components/TestPopup";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <NavigationObserver />
         <AppRoutes />
         <Toaster position="top-right" richColors closeButton />
+        <TestPopup />
       </BrowserRouter>
     </AppProviders>
   );

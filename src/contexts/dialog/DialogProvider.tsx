@@ -18,10 +18,12 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
   const [openDialogs, setOpenDialogs] = useState<Record<string, boolean>>({});
 
   const registerDialog = (id: string, isOpen: boolean) => {
+    console.log("Dialog registered:", id, isOpen);
     setOpenDialogs(prev => ({ ...prev, [id]: isOpen }));
   };
 
   const unregisterDialog = (id: string) => {
+    console.log("Dialog unregistered:", id);
     setOpenDialogs(prev => {
       const newState = { ...prev };
       delete newState[id];
@@ -30,11 +32,12 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
   };
 
   const updateDialogState = (id: string, isOpen: boolean) => {
+    console.log("Dialog state updated:", id, isOpen);
     setOpenDialogs(prev => ({ ...prev, [id]: isOpen }));
   };
 
   const isAnyDialogOpen = Object.values(openDialogs).some(isOpen => isOpen);
-
+  
   return (
     <DialogContext.Provider value={{ 
       isAnyDialogOpen, 

@@ -17,9 +17,12 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
         // Only remove if no stateFilter provided OR element state matches the filter (e.g., 'closed')
         if (!stateFilter || state === stateFilter) {
           if (element.parentNode) {
+            console.log(`Removing element with selector ${selector} and state ${state}`);
             element.parentNode.removeChild(element);
             removedCount++;
           }
+        } else {
+          console.log(`Skipping element with selector ${selector} because state ${state} doesn't match ${stateFilter}`);
         }
       } catch (e) {
         console.debug(`Error removing element ${selector}:`, e);
@@ -37,6 +40,7 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
  * Clean up only closed/inactive portals (much safer than removing all)
  */
 export const cleanupAllPortals = () => {
+  console.log("Cleaning up closed portals only");
   // Only clean up portals that are explicitly marked as closed
   const portalsRemoved = safelyRemoveElements('[data-radix-portal]', 'closed');
   const menuPortalsRemoved = safelyRemoveElements('[data-radix-dropdown-menu-content]', 'closed');
@@ -52,8 +56,14 @@ export const cleanupAllPortals = () => {
 
 /**
  * Force cleanup all portals (use with caution, mainly for development or emergency)
+ * This function is DISABLED to prevent accidentally closing active dialogs
  */
 export const forceCleanupAllPortals = () => {
+  console.warn("Force cleanup is disabled to prevent accidental closing of active dialogs");
+  return 0;
+  
+  // This code is intentionally disabled
+  /*
   const portalsRemoved = safelyRemoveElements('[data-radix-portal]');
   const menuPortalsRemoved = safelyRemoveElements('[data-radix-dropdown-menu-content]');
   const toastPortalsRemoved = safelyRemoveElements('[role="status"]');
@@ -64,15 +74,7 @@ export const forceCleanupAllPortals = () => {
   }
   
   return total;
-};
-
-/**
- * Utility to ensure bottom navigation visibility
- * Keeping this for backward compatibility but it's no longer used
- */
-export const ensureBottomNavVisibility = () => {
-  // This function is kept for backward compatibility but does nothing now
-  return;
+  */
 };
 
 /**
@@ -85,7 +87,8 @@ export const debugPortals = () => {
     
     // Only log details, don't modify portals
     portals.forEach((portal, index) => {
-      console.log(`Portal ${index + 1} state:`, portal.getAttribute('data-state'));
+      const state = portal.getAttribute('data-state');
+      console.log(`Portal ${index + 1} state:`, state);
     });
     
     // Log dialog portals specifically
@@ -98,13 +101,6 @@ export const debugPortals = () => {
   } catch (e) {
     console.debug("Portal debug error:", e);
   }
-};
-
-/**
- * Function to reset z-index stacking and ensure proper display order
- */
-export const resetZIndexStacking = () => {
-  console.log("Z-index stacking adjusted safely");
 };
 
 /**

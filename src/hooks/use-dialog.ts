@@ -16,12 +16,17 @@ export function useDialog(options: UseDialogOptions = {}) {
   
   // Register dialog with context when component mounts
   useEffect(() => {
+    console.log("Registering dialog:", dialogId, open);
     registerDialog(dialogId, open);
-    return () => unregisterDialog(dialogId);
+    return () => {
+      console.log("Unregistering dialog:", dialogId);
+      unregisterDialog(dialogId);
+    };
   }, [dialogId, registerDialog, unregisterDialog]);
   
   // Update context when open state changes
   useEffect(() => {
+    console.log("Dialog state changed:", dialogId, open);
     updateDialogState(dialogId, open);
     if (onOpenChange) {
       onOpenChange(open);
@@ -30,12 +35,9 @@ export function useDialog(options: UseDialogOptions = {}) {
   
   // Handler for changing open state
   const handleOpenChange = useCallback((newOpen: boolean) => {
+    console.log("Setting dialog state:", dialogId, newOpen);
     setOpen(newOpen);
-    updateDialogState(dialogId, newOpen);
-    if (onOpenChange) {
-      onOpenChange(newOpen);
-    }
-  }, [dialogId, updateDialogState, onOpenChange]);
+  }, [dialogId]);
   
   return {
     open,

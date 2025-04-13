@@ -19,14 +19,11 @@ const NavigationObserver = () => {
     
     // Only clean up portals if no dialogs are open
     if (!isAnyDialogOpen) {
+      console.log("No dialogs open, scheduling cleanup");
       // Schedule cleanup on next tick to avoid React rendering issues
-      // But use a longer delay to give animations time to complete
       setTimeout(() => {
         // Only clean up CLOSED portals when navigation happens
-        const count = cleanupAllPortals();
-        if (count > 0) {
-          console.log(`Cleaned up ${count} inactive portals during navigation`);
-        }
+        cleanupAllPortals();
       }, 300); // Increased delay to allow animations to finish
     } else {
       console.log("Skipping portal cleanup because a dialog is open");
