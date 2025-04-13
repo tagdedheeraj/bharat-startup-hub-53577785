@@ -1,8 +1,7 @@
 
-import React, { useEffect, useState, useId } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { useDialog } from '@/contexts/dialog/DialogProvider';
 
 interface FirstTimeVideoPopupProps {
   videoId: string;
@@ -10,13 +9,8 @@ interface FirstTimeVideoPopupProps {
 
 const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dialogId = useId();
-  const { registerDialog, unregisterDialog, updateDialogState } = useDialog();
   
   useEffect(() => {
-    // Register this dialog with the dialog context
-    registerDialog(dialogId, isOpen);
-    
     // Create a session-based flag instead of localStorage
     const hasSeenVideo = sessionStorage.getItem('hasSeenIntroVideo');
     
@@ -24,37 +18,22 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
       // Show the video popup after a short delay
       const timer = setTimeout(() => {
         setIsOpen(true);
-        updateDialogState(dialogId, true);
         // Mark that the user has seen the video for this session only
         sessionStorage.setItem('hasSeenIntroVideo', 'true');
-      }, 1500); // Increased delay for reliability
+      }, 1000); // Reduced delay for faster appearance
       
-      return () => {
-        clearTimeout(timer);
-        unregisterDialog(dialogId);
-      };
+      return () => clearTimeout(timer);
     }
-    
-    return () => {
-      unregisterDialog(dialogId);
-    };
-  }, [dialogId, registerDialog, unregisterDialog, updateDialogState]);
-  
-  useEffect(() => {
-    // Update dialog state when open state changes
-    updateDialogState(dialogId, isOpen);
-  }, [dialogId, isOpen, updateDialogState]);
+  }, []);
   
   const handleClose = () => {
     setIsOpen(false);
-    updateDialogState(dialogId, false);
   };
   
   // Force open for testing (remove this in production)
   const forceOpen = () => {
     sessionStorage.removeItem('hasSeenIntroVideo');
     setIsOpen(true);
-    updateDialogState(dialogId, true);
   };
   
   // Extract video ID from full YouTube URL if needed
@@ -87,19 +66,8 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
   
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={(open) => {
-        setIsOpen(open);
-        updateDialogState(dialogId, open);
-      }}>
-        <DialogContent 
-          className="sm:max-w-3xl p-0 bg-transparent border-none z-[200]" 
-          onInteractOutside={(e) => {
-            e.preventDefault(); // Prevent closing on outside click for video popup
-          }}
-          onEscapeKeyDown={(e) => {
-            e.preventDefault(); // Prevent closing on escape key
-          }}
-        >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-3xl p-0 bg-transparent border-none" onInteractOutside={handleClose}>
           <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
             <iframe
               src={`https://www.youtube.com/embed/${processedVideoId}?autoplay=1&rel=0`}
@@ -124,7 +92,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
       {process.env.NODE_ENV === 'development' && (
         <button 
           onClick={forceOpen}
-          className="fixed bottom-16 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
+          className="fixed bottom-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
         >
           Show Video Popup
         </button>

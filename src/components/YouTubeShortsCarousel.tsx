@@ -13,7 +13,6 @@ const YouTubeShortsCarousel = () => {
     isPaused,
     isLoading,
     hoveredVideo,
-    youtubeShorts: displayedShorts,
     setHoveredVideo,
     playVideo,
     closeVideo,
@@ -50,7 +49,7 @@ const YouTubeShortsCarousel = () => {
           ) : (
             <Carousel className="w-full" opts={{ loop: true }}>
               <CarouselContent>
-                {displayedShorts.map((short, index) => (
+                {youtubeShorts.map((short, index) => (
                   <CarouselItem key={short.id} className="md:basis-1/2 lg:basis-1/3 pl-4 transform transition-all duration-500">
                     <ShortCard 
                       short={short}

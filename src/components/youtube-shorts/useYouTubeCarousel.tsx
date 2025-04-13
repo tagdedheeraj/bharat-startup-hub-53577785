@@ -3,43 +3,13 @@ import { useState, useEffect, useRef, ReactNode } from 'react';
 import { toast } from "sonner";
 import { Play, Pause } from 'lucide-react';
 import { YouTubeShort } from './types';
-import { getYoutubeShorts } from './data';
 
-export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
+export const useYouTubeCarousel = (youtubeShorts: YouTubeShort[]) => {
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
-  const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>(initialShorts);
   const intervalRef = useRef<number | null>(null);
-  
-  // Use ref to prevent unnecessary effect dependencies
-  const isPausedRef = useRef(isPaused);
-  
-  useEffect(() => {
-    isPausedRef.current = isPaused;
-  }, [isPaused]);
-
-  useEffect(() => {
-    // Load the latest shorts data when the component mounts
-    let isMounted = true;
-    const loadShorts = async () => {
-      try {
-        const shorts = await getYoutubeShorts();
-        if (isMounted) {
-          setYoutubeShorts(shorts);
-        }
-      } catch (error) {
-        console.error("Error loading YouTube shorts:", error);
-      }
-    };
-    
-    loadShorts();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   const playVideo = (videoId: string) => {
     setCurrentVideoId(videoId);
@@ -55,7 +25,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
 
   const closeVideo = () => {
     setCurrentVideoId(null);
-    if (!isPausedRef.current) {
+    if (!isPaused) {
       startAutoSlide();
     }
   };
@@ -91,30 +61,27 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   };
 
   useEffect(() => {
-    // Use setTimeout for loading state to avoid jank
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
-    if (!isPausedRef.current) {
+    if (!isPaused) {
       startAutoSlide();
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        intervalRef.current = null;
       }
       clearTimeout(timer);
     };
-  }, []);
+  }, [isPaused]);
 
   return {
     currentVideoId,
     isPaused,
     isLoading,
     hoveredVideo,
-    youtubeShorts,
     setHoveredVideo,
     playVideo,
     closeVideo,

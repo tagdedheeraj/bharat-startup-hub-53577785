@@ -3,8 +3,9 @@ import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter } from "react-router-dom";
+import NavigationObserver from "./NavigationObserver";
 import ErrorBoundary from "./ErrorBoundary";
-import { DialogProvider } from "@/contexts/dialog/DialogProvider";
 
 // Create a query client
 const queryClient = new QueryClient({
@@ -25,13 +26,14 @@ const AppProviders = ({ children }: AppProvidersProps) => {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <DialogProvider>
-            <TooltipProvider>
+          <TooltipProvider>
+            <BrowserRouter>
+              <NavigationObserver />
               <ErrorBoundary>
                 {children}
               </ErrorBoundary>
-            </TooltipProvider>
-          </DialogProvider>
+            </BrowserRouter>
+          </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>

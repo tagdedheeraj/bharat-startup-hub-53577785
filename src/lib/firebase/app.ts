@@ -7,7 +7,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAb0wpqDwPPG-oepTYi97BUQtW80-SlW2Y",
   authDomain: "bharat-startup.firebaseapp.com",
   projectId: "bharat-startup",
-  storageBucket: "bharat-startup.appspot.com", 
+  storageBucket: "bharat-startup.appspot.com", // Fixed the storageBucket URL
   messagingSenderId: "483893755966",
   appId: "1:483893755966:web:8ab88e30679c35e7d8116f",
   measurementId: "G-7MEXQK6P5K"
@@ -16,9 +16,8 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
-// Use emulators only if specifically enabled via env var
-export const useEmulators = import.meta.env.DEV && 
-  import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true';
+// Check if Firebase emulators should be used
+export const useEmulators = import.meta.env.DEV;
 
 // Initialize Analytics conditionally (only in browser environments)
 export const initAnalytics = async () => {

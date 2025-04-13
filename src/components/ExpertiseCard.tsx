@@ -2,15 +2,8 @@
 import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { 
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import FundingApplicationForm from './funding/FundingApplicationForm';
-import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import FundingForm from './FundingForm';
 
 interface ExpertiseCardProps {
   title: string;
@@ -40,71 +33,48 @@ export default function ExpertiseCard({
   variant = 'default',
   index = 0
 }: ExpertiseCardProps) {
-  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
-  const { toast } = useToast();
-  
-  const handleExploreClick = () => {
-    console.log("Opening expertise dialog for:", title);
-    
-    toast({
-      title: "Opening Form",
-      description: `Preparing information form for ${title}`,
-      duration: 2000,
-    });
-    
-    setOpen(true);
-  };
-  
-  const handleFormSuccess = () => {
-    setOpen(false);
-  };
   
   return (
-    <>
-      <div 
-        className={cn(
-          "expertise-card flex flex-col h-full animate-fadeIn rounded-xl p-5 shadow-sm transition-all duration-300",
-          variant === 'default' && "bg-white border border-gray-100 hover:border-india-saffron/50 hover:shadow-lg",
-          variant === 'gradient' && `bg-gradient-to-tr ${colorVariant} border`,
-          variant === 'outlined' && "bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-india-saffron/50 hover:shadow-lg"
-        )}
-        style={{ animationDelay: `${delay}ms` }}
-      >
-        {icon && (
-          <div className="mb-3 text-brand-600">
-            {icon}
-          </div>
-        )}
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
-        
-        <button 
-          className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
-          onClick={handleExploreClick}
-        >
-          <span>Explore</span>
-          <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
-            <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </span>
-        </button>
-      </div>
+    <div 
+      className={cn(
+        "expertise-card flex flex-col h-full animate-fadeIn rounded-xl p-5 shadow-sm transition-all duration-300",
+        variant === 'default' && "bg-white border border-gray-100 hover:border-india-saffron/50 hover:shadow-lg",
+        variant === 'gradient' && `bg-gradient-to-tr ${colorVariant} border`,
+        variant === 'outlined' && "bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-india-saffron/50 hover:shadow-lg"
+      )}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      {icon && (
+        <div className="mb-3 text-brand-600">
+          {icon}
+        </div>
+      )}
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <button 
+            className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+          >
+            <span>Explore</span>
+            <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
+              <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </span>
+          </button>
+        </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
-            <DialogDescription>
-              Fill out the form below to learn more about our {title} offerings.
-            </DialogDescription>
           </DialogHeader>
-          <FundingApplicationForm 
-            fundingTitle={title}
-            fundingAmount="Contact for pricing"
-            onSuccess={handleFormSuccess}
+          <FundingForm 
+            expertiseTitle={title}
+            onSubmitSuccess={() => setIsDialogOpen(false)}
           />
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
