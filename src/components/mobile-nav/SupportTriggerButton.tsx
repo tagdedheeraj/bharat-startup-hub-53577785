@@ -12,9 +12,14 @@ export default function SupportTriggerButton({ onClick, buttonRef }: SupportTrig
     <button 
       ref={buttonRef}
       className="support-button flex flex-col items-center justify-center w-full h-full relative opacity-100 visible"
-      style={{ display: 'flex' }} // Inline style to force visibility
       onClick={onClick}
       aria-label="Support"
+      style={{ 
+        display: 'flex',
+        visibility: 'visible',
+        opacity: 1,
+        zIndex: 20
+      }}
     >
       <LifeBuoy 
         size={24} 

@@ -34,10 +34,12 @@ export default function SupportDrawer() {
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <SupportTriggerButton 
-          onClick={handleOpenDrawer} 
-          buttonRef={supportButtonRef} 
-        />
+        <div className="flex items-center justify-center w-full h-full" style={{ zIndex: 30 }}>
+          <SupportTriggerButton 
+            onClick={handleOpenDrawer} 
+            buttonRef={supportButtonRef} 
+          />
+        </div>
       </DrawerTrigger>
       <DrawerContent className="bg-white z-50">
         <DrawerHeader>
