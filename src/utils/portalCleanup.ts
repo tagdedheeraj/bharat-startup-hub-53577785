@@ -1,6 +1,6 @@
 
 /**
- * Utility module for handling portal-related cleanup and visibility
+ * Utility module for handling portal-related cleanup
  */
 
 // Safely remove DOM elements that match a selector
@@ -41,13 +41,11 @@ export const cleanupAllPortals = () => {
 
 /**
  * Utility to ensure bottom navigation visibility
+ * Keeping this for backward compatibility but it's no longer used
  */
 export const ensureBottomNavVisibility = () => {
-  const bottomNav = document.querySelector('.fixed.bottom-0');
-  if (bottomNav instanceof HTMLElement && bottomNav.classList.contains('hidden')) {
-    bottomNav.classList.remove('hidden');
-    console.log("Bottom nav visibility restored");
-  }
+  // This function is kept for backward compatibility but does nothing now
+  return;
 };
 
 /**
@@ -71,12 +69,6 @@ export const debugPortals = () => {
  * Function to reset z-index stacking and ensure proper display order
  */
 export const resetZIndexStacking = () => {
-  // Only target specific elements, not dialogs or portals
-  const bottomNav = document.querySelector('.fixed.bottom-0');
-  if (bottomNav instanceof HTMLElement) {
-    bottomNav.style.zIndex = '50';
-  }
-  
   console.log("Z-index stacking adjusted safely");
 };
 

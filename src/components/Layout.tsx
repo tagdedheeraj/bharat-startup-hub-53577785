@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
-import MobileBottomNav from './MobileBottomNav';
+import SideDrawerNavigation from './SideDrawerNavigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { debugPortals, ensureBottomNavVisibility } from '@/utils/portalCleanup';
@@ -23,22 +23,10 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     console.log("Layout mounted");
     
-    // Ensure bottom nav is visible
-    const checkBottomNav = () => {
-      ensureBottomNavVisibility();
-    };
-    
-    // Run a few times to ensure it catches any timing issues
-    checkBottomNav();
-    const timer1 = setTimeout(checkBottomNav, 500);
-    const timer2 = setTimeout(checkBottomNav, 1000);
-    
     // Debug portals for information only
     debugPortals();
     
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
       console.log("Layout unmounted");
     };
   }, []);
@@ -46,15 +34,6 @@ export default function Layout({ children }: LayoutProps) {
   // Much simpler cleanup on route changes
   useEffect(() => {
     console.log("Route changed to:", location.pathname);
-    
-    // Just ensure bottom nav is visible after route change
-    const timeoutId = setTimeout(() => {
-      ensureBottomNavVisibility();
-    }, 300);
-    
-    return () => {
-      clearTimeout(timeoutId);
-    };
   }, [location]);
   
   return (
@@ -63,10 +42,9 @@ export default function Layout({ children }: LayoutProps) {
       <main className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8">
         {children || <Outlet />}
       </main>
-      {/* Add padding to the bottom on mobile to prevent content from being hidden behind the nav bar */}
-      {isMobile && <div className="h-16"></div>}
       <Footer />
-      <MobileBottomNav />
+      {/* Use our new side drawer navigation */}
+      <SideDrawerNavigation />
     </div>
   );
 }

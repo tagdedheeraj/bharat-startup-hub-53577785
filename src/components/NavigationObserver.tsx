@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { cleanupAllPortals, ensureBottomNavVisibility } from "@/utils/portalCleanup";
+import { cleanupAllPortals } from "@/utils/portalCleanup";
 
 const NavigationObserver = () => {
   const location = useLocation();
@@ -16,15 +16,7 @@ const NavigationObserver = () => {
       if (count > 0) {
         console.log(`Cleaned up ${count} portals during navigation`);
       }
-      
-      // Ensure bottom nav is visible
-      ensureBottomNavVisibility();
     }, 0);
-    
-    return () => {
-      // Additional cleanup when component unmounts or before next render
-      ensureBottomNavVisibility();
-    };
   }, [location]);
   
   return null;
