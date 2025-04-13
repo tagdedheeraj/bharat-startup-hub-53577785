@@ -45,6 +45,8 @@ export default function ExpertiseCard({
   const { toast } = useToast();
   
   const handleExploreClick = () => {
+    console.log("Opening expertise dialog for:", title);
+    
     toast({
       title: "Opening Form",
       description: `Preparing information form for ${title}`,

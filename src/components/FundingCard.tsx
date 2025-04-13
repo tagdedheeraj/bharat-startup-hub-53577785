@@ -39,6 +39,8 @@ export default function FundingCard({
   const { toast } = useToast();
   
   const handleAvailNowClick = () => {
+    console.log("Opening funding modal for:", title);
+    
     toast({
       title: "Opening Application Form",
       description: `Preparing application for ${title}`,

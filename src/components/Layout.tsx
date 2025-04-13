@@ -5,6 +5,7 @@ import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
+import { debugPortals, ensureBottomNavVisibility } from '@/utils/portalCleanup';
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,133 +18,38 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Cleanup for any dynamically added elements and portals
+  // Simpler cleanup that doesn't interfere with dialog functionality
   useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      // Check for any orphaned portals when DOM changes
-      const orphanedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-      orphanedPortals.forEach((portal) => {
-        if (portal && portal.parentNode) {
-          try {
-            portal.parentNode.removeChild(portal);
-          } catch (e) {
-            console.debug("Failed to remove orphaned portal:", e);
-          }
-        }
-      });
-      
-      // Remove any Lovable badges or branding that might be dynamically added
-      const lovableBadges = document.querySelectorAll('[class*="lovable-"], [id*="lovable-"], .lovable-badge, [class*="badge"], [class*="love"]');
-      lovableBadges.forEach((badge) => {
-        if (badge && badge.parentNode) {
-          try {
-            badge.parentNode.removeChild(badge);
-          } catch (e) {
-            console.debug("Failed to remove lovable badge:", e);
-          }
-        }
-      });
-      
-      // Check for iframes that might be added dynamically
-      const iframes = document.querySelectorAll('iframe:not([src*="youtube"]):not([src*="vimeo"])');
-      iframes.forEach((iframe) => {
-        // Type cast the element to HTMLIFrameElement to access src property
-        const iframeElement = iframe as HTMLIFrameElement;
-        if (iframeElement && iframeElement.parentNode && (
-          !iframeElement.src || 
-          iframeElement.src.includes('lovable') || 
-          iframeElement.src.includes('gptengineer') ||
-          iframeElement.hasAttribute('style')
-        )) {
-          try {
-            iframeElement.parentNode.removeChild(iframeElement);
-          } catch (e) {
-            console.debug("Failed to remove suspicious iframe:", e);
-          }
-        }
-      });
-      
-      // Ensure bottom navigation is always visible - BUT DON'T REMOVE HIDDEN MODALS!
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav && bottomNav.classList.contains('hidden')) {
-        bottomNav.classList.remove('hidden');
-        console.log("Bottom nav visibility restored by observer");
-      }
-    });
+    console.log("Layout mounted");
     
-    // Start observing document body for mutations
-    observer.observe(document.body, { 
-      childList: true, 
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class', 'id']
-    });
-    
-    // Run an immediate check for bottom nav visibility
+    // Ensure bottom nav is visible
     const checkBottomNav = () => {
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav) {
-        bottomNav.classList.remove('hidden');
-        console.log("Bottom nav visibility ensured on mount");
-      }
+      ensureBottomNavVisibility();
     };
     
-    // Run multiple times to ensure it catches any timing issues
+    // Run a few times to ensure it catches any timing issues
     checkBottomNav();
-    const timer1 = setTimeout(checkBottomNav, 100);
-    const timer2 = setTimeout(checkBottomNav, 500);
-    const timer3 = setTimeout(checkBottomNav, 1000);
+    const timer1 = setTimeout(checkBottomNav, 500);
+    const timer2 = setTimeout(checkBottomNav, 1000);
     
-    // Cleanup function
+    // Debug portals for information only
+    debugPortals();
+    
     return () => {
-      observer.disconnect();
       clearTimeout(timer1);
       clearTimeout(timer2);
-      clearTimeout(timer3);
-      
-      // Final cleanup of portals - but be careful not to remove active ones
-      const portals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-      portals.forEach((portal) => {
-        try {
-          if (portal && portal.parentNode) {
-            portal.parentNode.removeChild(portal);
-          }
-        } catch (e) {
-          console.debug("Cleanup portal error:", e);
-        }
-      });
+      console.log("Layout unmounted");
     };
   }, []);
 
-  // Cleanup portals on route changes - but be more selective
+  // Much simpler cleanup on route changes
   useEffect(() => {
-    // Small delay to allow animations to complete
-    const timeoutId = setTimeout(() => {
-      // Only remove portals that are actually hidden
-      const unusedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-      unusedPortals.forEach((portal) => {
-        try {
-          if (portal && portal.parentNode) {
-            portal.parentNode.removeChild(portal);
-          }
-        } catch (e) {
-          console.debug("Route change cleanup error:", e);
-        }
-      });
-      
-      // Ensure bottom navigation is visible after route change
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav) {
-        bottomNav.classList.remove('hidden');
-        console.log("Bottom nav visibility ensured after route change");
-      }
-    }, 300);
+    console.log("Route changed to:", location.pathname);
     
-    // Run an immediate check too
-    const bottomNav = document.querySelector('.fixed.bottom-0');
-    if (bottomNav) {
-      bottomNav.classList.remove('hidden');
-    }
+    // Just ensure bottom nav is visible after route change
+    const timeoutId = setTimeout(() => {
+      ensureBottomNavVisibility();
+    }, 300);
     
     return () => {
       clearTimeout(timeoutId);
