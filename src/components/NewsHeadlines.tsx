@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -113,7 +114,7 @@ export default function NewsHeadlines() {
                       <FundingApplicationForm 
                         fundingTitle="News Subscription" 
                         fundingAmount="" 
-                        onSubmitSuccess={() => setIsDialogOpen(false)}
+                        onSuccess={() => setIsDialogOpen(false)}
                         formType="newsletter"
                       />
                     </div>
