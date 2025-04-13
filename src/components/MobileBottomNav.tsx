@@ -15,8 +15,6 @@ export default function MobileBottomNav() {
       const bottomNav = document.querySelector('.fixed.bottom-0');
       if (bottomNav instanceof HTMLElement) {
         bottomNav.style.display = 'block';
-        bottomNav.style.visibility = 'visible';
-        bottomNav.style.opacity = '1';
         bottomNav.classList.remove('hidden');
         console.log("MobileBottomNav: Forcing visibility");
       }
@@ -25,9 +23,8 @@ export default function MobileBottomNav() {
       const supportButtons = document.querySelectorAll('.support-button');
       supportButtons.forEach(button => {
         if (button instanceof HTMLElement) {
-          button.style.display = 'flex';
-          button.style.visibility = 'visible';
-          button.style.opacity = '1';
+          button.style.display = 'block';
+          button.classList.remove('hidden');
           console.log("MobileBottomNav: Support button visibility enforced");
         }
       });
@@ -64,12 +61,9 @@ export default function MobileBottomNav() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden block" // Added 'block'
       style={{ 
-        display: 'block !important', 
-        visibility: 'visible !important', 
-        opacity: '1 !important',
-        zIndex: '40' 
+        zIndex: 40 
       }} 
     >
       <nav className="flex justify-around items-center h-16">
@@ -87,12 +81,9 @@ export default function MobileBottomNav() {
         
         {/* Support Drawer with improved visibility */}
         <div 
-          className="relative support-section" 
+          className="relative support-section block" // Added 'block'
           style={{ 
-            display: 'block !important', 
-            visibility: 'visible !important', 
-            opacity: '1 !important', 
-            zIndex: '30' 
+            zIndex: 30 
           }}
         >
           <SupportDrawer />
@@ -105,3 +96,4 @@ export default function MobileBottomNav() {
     </div>
   );
 }
+
