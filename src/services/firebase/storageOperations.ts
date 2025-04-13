@@ -45,3 +45,22 @@ export const deleteFile = async (path: string): Promise<void> => {
     throw error;
   }
 };
+
+/**
+ * Upload site assets like logo or favicon
+ * @param type 'logo' or 'favicon'
+ * @param file File to upload
+ * @returns URL of the uploaded file
+ */
+export const uploadSiteAsset = async (
+  type: 'logo' | 'favicon',
+  file: File
+): Promise<string> => {
+  // Generate a unique path for the asset
+  const timestamp = Date.now();
+  const extension = file.name.split('.').pop();
+  const path = `site-assets/${type}_${timestamp}.${extension}`;
+  
+  // Upload the file and return the URL
+  return uploadFile(path, file);
+};
