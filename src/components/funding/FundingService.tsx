@@ -54,53 +54,56 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   };
   
   return (
-    <Card 
-      className={cn(
-        "h-full shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden rounded-xl border-2",
-        `bg-gradient-to-br ${variant}`
-      )}
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <CardContent className="p-0">
-        <div className="relative h-full">
-          {/* Decorative elements */}
-          <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
-          <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/5 to-transparent"></div>
-          
-          <div className="p-6 relative z-10 h-full flex flex-col">
-            <div className="flex justify-between items-start mb-4">
-              <div className="bg-white/80 backdrop-blur-sm rounded-full p-2.5 shadow-md">
-                {index % 2 === 0 ? (
-                  <IndianRupee className="h-6 w-6 text-brand-700" />
-                ) : (
-                  <Award className="h-6 w-6 text-brand-700" />
-                )}
-              </div>
-              <div className="text-brand-700 font-bold rounded-full px-3 py-1 bg-white/80 backdrop-blur-sm inline-block text-sm shadow-sm">
-                ₹{amount}
-              </div>
-            </div>
+    <>
+      <Card 
+        className={cn(
+          "h-full shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden rounded-xl border-2",
+          `bg-gradient-to-br ${variant}`
+        )}
+        style={{ animationDelay: `${delay}ms` }}
+      >
+        <CardContent className="p-0">
+          <div className="relative h-full">
+            {/* Decorative elements */}
+            <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/20 rounded-full blur-xl"></div>
+            <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/5 to-transparent"></div>
             
-            <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
-            
-            <div className="mt-auto pt-4">
-              <Button 
-                variant="ghost"
-                className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-                onClick={handleOpenModal}
-              >
-                <span>Avail Now</span>
-                <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
-                  <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </span>
-              </Button>
+            <div className="p-6 relative z-10 h-full flex flex-col">
+              <div className="flex justify-between items-start mb-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-full p-2.5 shadow-md">
+                  {index % 2 === 0 ? (
+                    <IndianRupee className="h-6 w-6 text-brand-700" />
+                  ) : (
+                    <Award className="h-6 w-6 text-brand-700" />
+                  )}
+                </div>
+                <div className="text-brand-700 font-bold rounded-full px-3 py-1 bg-white/80 backdrop-blur-sm inline-block text-sm shadow-sm">
+                  ₹{amount}
+                </div>
+              </div>
+              
+              <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
+              
+              <div className="mt-auto pt-4">
+                <Button 
+                  variant="ghost"
+                  className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+                  onClick={handleOpenModal}
+                >
+                  <span>Avail Now</span>
+                  <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
+                    <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </CardContent>
+        </CardContent>
+      </Card>
       
+      {/* Separate dialog component outside the card */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] z-[9999]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
             <DialogDescription>
@@ -114,7 +117,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
           />
         </DialogContent>
       </Dialog>
-    </Card>
+    </>
   );
 };
 

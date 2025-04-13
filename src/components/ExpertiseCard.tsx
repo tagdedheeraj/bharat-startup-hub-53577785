@@ -61,35 +61,38 @@ export default function ExpertiseCard({
   };
   
   return (
-    <div 
-      className={cn(
-        "expertise-card flex flex-col h-full animate-fadeIn rounded-xl p-5 shadow-sm transition-all duration-300",
-        variant === 'default' && "bg-white border border-gray-100 hover:border-india-saffron/50 hover:shadow-lg",
-        variant === 'gradient' && `bg-gradient-to-tr ${colorVariant} border`,
-        variant === 'outlined' && "bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-india-saffron/50 hover:shadow-lg"
-      )}
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      {icon && (
-        <div className="mb-3 text-brand-600">
-          {icon}
-        </div>
-      )}
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
-      
-      <button 
-        className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
-        onClick={handleExploreClick}
+    <>
+      <div 
+        className={cn(
+          "expertise-card flex flex-col h-full animate-fadeIn rounded-xl p-5 shadow-sm transition-all duration-300",
+          variant === 'default' && "bg-white border border-gray-100 hover:border-india-saffron/50 hover:shadow-lg",
+          variant === 'gradient' && `bg-gradient-to-tr ${colorVariant} border`,
+          variant === 'outlined' && "bg-white/80 backdrop-blur-sm border border-gray-200 hover:border-india-saffron/50 hover:shadow-lg"
+        )}
+        style={{ animationDelay: `${delay}ms` }}
       >
-        <span>Explore</span>
-        <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
-          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </span>
-      </button>
+        {icon && (
+          <div className="mb-3 text-brand-600">
+            {icon}
+          </div>
+        )}
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
+        
+        <button 
+          className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+          onClick={handleExploreClick}
+        >
+          <span>Explore</span>
+          <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
+            <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
+        </button>
+      </div>
       
+      {/* Separate dialog component outside the card */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px] z-[9999]">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>
@@ -103,6 +106,6 @@ export default function ExpertiseCard({
           />
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

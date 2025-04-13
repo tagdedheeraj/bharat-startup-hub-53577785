@@ -12,14 +12,14 @@ const NavigationObserver = () => {
     console.log("Navigation changed to:", location.pathname);
     console.log("Any dialog open:", isAnyDialogOpen);
     
-    // Debug the portals before cleanup
+    // Debug the portals but never clean them up or modify them
     if (process.env.NODE_ENV === 'development') {
       debugPortals();
     }
     
-    // Never close portals during navigation - let components handle their own popup state
-    // This solves the popup visibility issues
-    console.log("Skipping portal cleanup during navigation to prevent popup issues");
+    // IMPORTANT: Never attempt to close or clean up portals
+    // This ensures popups will remain visible when triggered
+    console.log("Preventing any portal cleanup to ensure popups work correctly");
     
   }, [location, isAnyDialogOpen]);
   
