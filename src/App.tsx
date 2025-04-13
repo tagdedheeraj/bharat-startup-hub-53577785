@@ -22,7 +22,9 @@ const App = () => {
     <AppProviders>
       <BrowserRouter>
         <NavigationObserver />
-        <AppRoutes />
+        <div id="app-container" className="app-container">
+          <AppRoutes />
+        </div>
         {/* Higher z-index for toaster to appear above dialogs */}
         <Toaster position="top-right" richColors closeButton />
       </BrowserRouter>
