@@ -3,16 +3,8 @@ import { useState } from 'react';
 import { ArrowUpRight, IndianRupee, Award } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger, 
-  DialogDescription 
-} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import FundingForm from '../FundingForm';
+import FundingApplicationModal from './FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface FundingServiceProps {
@@ -23,7 +15,7 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
   
   // Create alternating color schemes
@@ -38,39 +30,16 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
   
   const variant = colorVariants[index % colorVariants.length];
   
-  const handleOpenDialog = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("Opening funding dialog for:", title);
+  const handleOpenModal = () => {
+    console.log("Opening funding modal for:", title);
     
     toast({
-      title: "Opening Form",
-      description: `Preparing application form for ${title}`,
+      title: "Opening Application Form",
+      description: `Preparing application for ${title}`,
       duration: 2000,
     });
     
-    // Ensure bottom nav and support button are visible
-    const bottomNav = document.querySelector('.fixed.bottom-0');
-    if (bottomNav instanceof HTMLElement) {
-      bottomNav.style.display = 'block';
-      bottomNav.style.visibility = 'visible';
-      bottomNav.style.opacity = '1';
-      bottomNav.classList.remove('hidden');
-    }
-    
-    // Set directly without timeout
-    setIsDialogOpen(true);
-  };
-  
-  const handleFormSuccess = () => {
-    console.log("Form submitted successfully for:", title);
-    toast({
-      title: "Application Submitted",
-      description: "Thank you for your interest. We'll contact you soon.",
-      duration: 3000,
-    });
-    
-    setIsDialogOpen(false);
+    setIsModalOpen(true);
   };
   
   return (
@@ -104,58 +73,23 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
             <h3 className="text-xl font-bold mb-4 tracking-tight">{title}</h3>
             
             <div className="mt-auto pt-4">
-              <Dialog 
-                open={isDialogOpen} 
-                onOpenChange={(open) => {
-                  setIsDialogOpen(open);
-                  // Ensure bottom nav and support button are visible when dialog closes
-                  if (!open) {
-                    const bottomNav = document.querySelector('.fixed.bottom-0');
-                    if (bottomNav instanceof HTMLElement) {
-                      bottomNav.style.display = 'block';
-                      bottomNav.style.visibility = 'visible';
-                      bottomNav.style.opacity = '1';
-                      bottomNav.classList.remove('hidden');
-                    }
-
-                    const supportButtons = document.querySelectorAll('.support-button');
-                    supportButtons.forEach(button => {
-                      if (button instanceof HTMLElement) {
-                        button.style.display = 'flex';
-                        button.style.visibility = 'visible';
-                        button.style.opacity = '1';
-                      }
-                    });
-                  }
-                }}
+              <Button 
+                variant="ghost"
+                className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+                onClick={handleOpenModal}
               >
-                <DialogTrigger asChild>
-                  <Button 
-                    variant="ghost"
-                    className="group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-                    onClick={handleOpenDialog}
-                  >
-                    <span>Avail Now</span>
-                    <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
-                      <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </span>
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] bg-white" style={{ zIndex: 200 }}>
-                  <DialogHeader>
-                    <DialogTitle>Apply for Funding</DialogTitle>
-                    <DialogDescription>
-                      Complete the form below to apply for {title} funding.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <FundingForm 
-                    fundingTitle={title} 
-                    fundingAmount={amount} 
-                    onSubmitSuccess={handleFormSuccess}
-                    formType="popular-funding"
-                  />
-                </DialogContent>
-              </Dialog>
+                <span>Avail Now</span>
+                <span className="flex items-center justify-center bg-white/80 backdrop-blur-sm shadow-sm rounded-full h-8 w-8 transition-transform group-hover:scale-110">
+                  <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
+              </Button>
+              
+              <FundingApplicationModal
+                open={isModalOpen}
+                onOpenChange={setIsModalOpen}
+                fundingTitle={title}
+                fundingAmount={amount}
+              />
             </div>
           </div>
         </div>

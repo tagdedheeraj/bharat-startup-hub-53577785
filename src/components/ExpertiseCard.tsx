@@ -8,9 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import FundingForm from './FundingForm';
+import FundingApplicationForm from './funding/FundingApplicationForm';
 import { useToast } from '@/hooks/use-toast';
 
 interface ExpertiseCardProps {
@@ -45,6 +44,16 @@ export default function ExpertiseCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
+  const handleExploreClick = () => {
+    toast({
+      title: "Opening Form",
+      description: `Preparing information form for ${title}`,
+      duration: 2000,
+    });
+    
+    setIsDialogOpen(true);
+  };
+  
   const handleFormSuccess = () => {
     setIsDialogOpen(false);
   };
@@ -67,38 +76,28 @@ export default function ExpertiseCard({
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
       
-      <Dialog 
-        open={isDialogOpen} 
-        onOpenChange={setIsDialogOpen}
+      <button 
+        className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
+        onClick={handleExploreClick}
       >
-        <DialogTrigger asChild>
-          <button 
-            className="mt-auto group inline-flex items-center text-sm justify-between w-full text-brand-700 font-medium"
-            onClick={() => {
-              toast({
-                title: "Opening Form",
-                description: `Preparing information form for ${title}`,
-                duration: 2000,
-              });
-            }}
-          >
-            <span>Explore</span>
-            <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
-              <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </span>
-          </button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-white">
+        <span>Explore</span>
+        <span className="flex items-center justify-center bg-gray-100 rounded-full h-7 w-7 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
+          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
+      </button>
+      
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>
               Fill out the form below to learn more about our {title} offerings.
             </DialogDescription>
           </DialogHeader>
-          <FundingForm 
-            expertiseTitle={title}
-            onSubmitSuccess={handleFormSuccess}
-            formType="expertise"
+          <FundingApplicationForm 
+            fundingTitle={title}
+            fundingAmount="Contact for pricing"
+            onSuccess={handleFormSuccess}
           />
         </DialogContent>
       </Dialog>

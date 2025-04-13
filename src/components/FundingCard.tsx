@@ -3,15 +3,7 @@ import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import FundingForm from './FundingForm';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import FundingApplicationModal from './funding/FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
 
 interface FundingCardProps {
@@ -42,12 +34,18 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
-  const handleFormSuccess = () => {
-    setIsDialogOpen(false);
+  const handleAvailNowClick = () => {
+    toast({
+      title: "Opening Application Form",
+      description: `Preparing application for ${title}`,
+      duration: 2000,
+    });
+    
+    setIsModalOpen(true);
   };
   
   return (
@@ -67,43 +65,23 @@ export default function FundingCard({
       <h3 className="text-xl font-bold mb-3">{title}</h3>
       <p className="text-gray-600 mb-6 flex-grow">{description}</p>
       
-      <Dialog 
-        open={isDialogOpen} 
-        onOpenChange={setIsDialogOpen}
+      <Button 
+        variant="ghost"
+        className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
+        onClick={handleAvailNowClick}
       >
-        <DialogTrigger asChild>
-          <Button 
-            variant="ghost"
-            className="mt-auto group inline-flex items-center justify-between w-full text-brand-700 font-medium p-0 h-auto hover:bg-transparent"
-            onClick={() => {
-              toast({
-                title: "Opening Form",
-                description: `Preparing application form for ${title}`,
-                duration: 2000,
-              });
-            }}
-          >
-            <span>Avail Now</span>
-            <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
-              <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </span>
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-white">
-          <DialogHeader>
-            <DialogTitle>Apply for Funding</DialogTitle>
-            <DialogDescription>
-              Complete the form below to apply for {title} funding.
-            </DialogDescription>
-          </DialogHeader>
-          <FundingForm 
-            fundingTitle={title} 
-            fundingAmount={amount} 
-            onSubmitSuccess={handleFormSuccess}
-            formType="funding"
-          />
-        </DialogContent>
-      </Dialog>
+        <span>Avail Now</span>
+        <span className="flex items-center justify-center bg-gray-100 rounded-full h-8 w-8 transition-transform group-hover:scale-110 group-hover:bg-brand-50">
+          <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
+      </Button>
+      
+      <FundingApplicationModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        fundingTitle={title}
+        fundingAmount={amount}
+      />
     </div>
   );
 }
