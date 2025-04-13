@@ -1,5 +1,5 @@
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { Suspense } from "react";
 import Layout from "@/components/Layout";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -46,10 +46,12 @@ import InvestorDashboard from "@/pages/dashboard/InvestorDashboard";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/admin/Dashboard";
 import UsersPage from "@/pages/admin/UsersPage";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Main Layout Routes */}
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -116,7 +118,9 @@ const AppRoutes = () => {
         path="/admin/dashboard" 
         element={
           <ProtectedRoute allowedRoles={['admin']}>
-            <AdminDashboard />
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
           </ProtectedRoute>
         } 
       />
@@ -124,7 +128,9 @@ const AppRoutes = () => {
         path="/admin/users" 
         element={
           <ProtectedRoute allowedRoles={['admin']}>
-            <UsersPage />
+            <AdminLayout>
+              <UsersPage />
+            </AdminLayout>
           </ProtectedRoute>
         } 
       />
