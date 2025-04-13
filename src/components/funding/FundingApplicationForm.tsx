@@ -28,12 +28,14 @@ interface FundingApplicationFormProps {
   fundingTitle: string;
   fundingAmount: string;
   onSuccess: () => void;
+  formType?: string; // Added formType as an optional prop
 }
 
 export default function FundingApplicationForm({
   fundingTitle,
   fundingAmount,
   onSuccess,
+  formType = "funding", // Default value is "funding"
 }: FundingApplicationFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,14 +59,15 @@ export default function FundingApplicationForm({
         ...data,
         fundingTitle,
         fundingAmount,
+        formType, // Include formType in the submission data
       });
       
       // Wait for 1 second to simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
       toast({
-        title: "Application Submitted",
-        description: "We will contact you shortly.",
+        title: formType === "newsletter" ? "Subscription Successful" : "Application Submitted",
+        description: formType === "newsletter" ? "You are now subscribed to our newsletter." : "We will contact you shortly.",
       });
       
       form.reset();
@@ -85,7 +88,7 @@ export default function FundingApplicationForm({
     <div className="space-y-4 p-2">
       <div className="bg-gray-50 p-4 rounded-lg mb-4">
         <h3 className="text-lg font-semibold">{fundingTitle}</h3>
-        <p className="text-sm text-gray-600">Up to ₹{fundingAmount}</p>
+        {fundingAmount && <p className="text-sm text-gray-600">Up to ₹{fundingAmount}</p>}
       </div>
       
       <Form {...form}>
@@ -151,7 +154,7 @@ export default function FundingApplicationForm({
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Apply Now"}
+            {isSubmitting ? "Submitting..." : formType === "newsletter" ? "Subscribe" : "Apply Now"}
           </Button>
         </form>
       </Form>
