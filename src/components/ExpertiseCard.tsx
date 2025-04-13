@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import FundingApplicationForm from './funding/FundingApplicationForm';
 import { useToast } from '@/hooks/use-toast';
-import { useDialog } from '@/hooks/use-dialog';
 
 interface ExpertiseCardProps {
   title: string;
@@ -41,7 +40,7 @@ export default function ExpertiseCard({
   variant = 'default',
   index = 0
 }: ExpertiseCardProps) {
-  const { open, setOpen } = useDialog();
+  const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
