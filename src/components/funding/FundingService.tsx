@@ -101,7 +101,6 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
         </CardContent>
       </Card>
       
-      {/* Separate dialog component outside the card */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

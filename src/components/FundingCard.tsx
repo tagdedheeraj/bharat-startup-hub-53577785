@@ -54,7 +54,6 @@ export default function FundingCard({
       duration: 2000,
     });
     
-    // Set dialog state to open
     setOpen(true);
   };
   
@@ -92,7 +91,6 @@ export default function FundingCard({
         </Button>
       </div>
       
-      {/* Separate dialog component outside the funding card */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

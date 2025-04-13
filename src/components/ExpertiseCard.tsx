@@ -90,7 +90,6 @@ export default function ExpertiseCard({
         </button>
       </div>
       
-      {/* Separate dialog component outside the card */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
