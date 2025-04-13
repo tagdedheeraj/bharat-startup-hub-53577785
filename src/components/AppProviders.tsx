@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import NavigationObserver from "./NavigationObserver";
 import ErrorBoundary from "./ErrorBoundary";
 
 // Create a query client
@@ -26,7 +25,6 @@ const AppProviders = ({ children }: AppProvidersProps) => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
-            <NavigationObserver />
             <ErrorBoundary>
               {children}
             </ErrorBoundary>

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
+import NavigationObserver from "@/components/NavigationObserver";
 import { ensureBottomNavVisibility } from "@/utils/portalCleanup";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
   return (
     <AppProviders>
       <BrowserRouter>
+        <NavigationObserver />
         <AppRoutes />
         <Toaster />
         <Sonner />
