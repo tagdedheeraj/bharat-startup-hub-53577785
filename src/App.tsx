@@ -1,10 +1,12 @@
 
 import { useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
 import { ensureBottomNavVisibility } from "@/utils/portalCleanup";
+import NavigationObserver from "@/components/NavigationObserver";
 
 const App = () => {
   // Ensure nav visibility on app initialization
@@ -19,9 +21,12 @@ const App = () => {
 
   return (
     <AppProviders>
-      <AppRoutes />
-      <Toaster />
-      <Sonner />
+      <BrowserRouter>
+        <NavigationObserver />
+        <AppRoutes />
+        <Toaster />
+        <Sonner />
+      </BrowserRouter>
     </AppProviders>
   );
 };

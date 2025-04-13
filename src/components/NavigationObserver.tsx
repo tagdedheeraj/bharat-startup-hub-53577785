@@ -1,13 +1,13 @@
 
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const NavigationObserver = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
+    // Clean up portals when navigation happens
     return () => {
-      // Clean up portals when navigation happens
       try {
         const portals = document.querySelectorAll('[data-radix-portal]');
         portals.forEach(portal => {
@@ -21,7 +21,7 @@ const NavigationObserver = () => {
         // Silent fail
       }
     };
-  }, [navigate]);
+  }, [location]);
   
   return null;
 };

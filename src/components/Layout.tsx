@@ -1,5 +1,6 @@
 
 import { ReactNode, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
@@ -8,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { debugPortals, ensureBottomNavVisibility } from '@/utils/portalCleanup';
 
 interface LayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
@@ -60,7 +61,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>
       <OvalHeader />
       <main className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8">
-        {children}
+        {children || <Outlet />}
       </main>
       {/* Add padding to the bottom on mobile to prevent content from being hidden behind the nav bar */}
       {isMobile && <div className="h-16"></div>}

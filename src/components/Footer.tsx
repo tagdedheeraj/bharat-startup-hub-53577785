@@ -1,5 +1,6 @@
+
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -69,6 +70,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/faqs" className="text-gray-300 hover:text-white transition-colors">FAQs</Link>
+              </li>
+              <li>
+                <Link to="/admin" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <Lock className="w-4 h-4 mr-2 text-brand-400" />
+                  Admin Panel
+                </Link>
               </li>
             </ul>
           </div>
@@ -170,6 +177,11 @@ export default function Footer() {
               <span className="text-gray-600">|</span>
               <Link to="/client-service-agreement" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Client Service Agreement
+              </Link>
+              <span className="text-gray-600">|</span>
+              <Link to="/admin" className="text-gray-400 hover:text-white transition-colors text-sm flex items-center">
+                <Lock className="w-3 h-3 mr-1" />
+                Admin
               </Link>
             </div>
           </div>
