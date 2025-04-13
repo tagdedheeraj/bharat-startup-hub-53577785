@@ -24,7 +24,7 @@ import FAQsPage from "@/pages/FAQs";
 import TermsAndConditionsPage from "@/pages/TermsAndConditions";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicy";
 import DisclaimerPage from "@/pages/Disclaimer";
-import ServiceAgreementPage from "@/pages/ServiceAgreement";
+import ClientServiceAgreementPage from "@/pages/ClientServiceAgreement";
 
 // CA Services Pages
 import CAServicesPage from "@/pages/CAServices";
@@ -84,7 +84,7 @@ const AppRoutes = () => {
           <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/disclaimer" element={<DisclaimerPage />} />
-          <Route path="/service-agreement" element={<ServiceAgreementPage />} />
+          <Route path="/client-service-agreement" element={<ClientServiceAgreementPage />} />
           
           {/* CA Services Routes */}
           <Route path="/ca-services" element={<CAServicesPage />} />
