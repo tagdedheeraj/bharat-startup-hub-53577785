@@ -1,13 +1,32 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Users, FileText, Settings, Shield, AlertCircle, Layers, Upload, Database } from 'lucide-react';
+import { 
+  BarChart, 
+  Users, 
+  FileText, 
+  Settings, 
+  Shield, 
+  AlertCircle, 
+  Layers, 
+  Upload, 
+  Database,
+  Building,
+  Mail,
+  Calendar
+} from 'lucide-react';
+
+// Import new admin components
+import UserManagement from '@/components/admin/UserManagement';
+import ApplicationManagement from '@/components/admin/ApplicationManagement';
+import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('analytics');
   
   // Check if admin is logged in
   useEffect(() => {
@@ -25,9 +44,9 @@ const AdminDashboard = () => {
   // Stats data for the dashboard
   const stats = [
     { title: 'Total Users', value: '1,248', icon: Users, color: 'bg-blue-100 text-blue-700' },
-    { title: 'Page Views', value: '54,321', icon: FileText, color: 'bg-green-100 text-green-700' },
-    { title: 'Applications', value: '243', icon: Layers, color: 'bg-purple-100 text-purple-700' },
-    { title: 'Inquiries', value: '78', icon: AlertCircle, color: 'bg-yellow-100 text-yellow-700' },
+    { title: 'Pending Applications', value: '43', icon: FileText, color: 'bg-yellow-100 text-yellow-700' },
+    { title: 'Active Startups', value: '782', icon: Building, color: 'bg-green-100 text-green-700' },
+    { title: 'Active Investors', value: '466', icon: BarChart, color: 'bg-purple-100 text-purple-700' },
   ];
 
   return (
@@ -35,7 +54,7 @@ const AdminDashboard = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your website and content</p>
+          <p className="text-muted-foreground">Manage your website, users, and applications</p>
         </div>
         <Button variant="outline" onClick={handleLogout}>Logout</Button>
       </div>
@@ -58,26 +77,46 @@ const AdminDashboard = () => {
       </div>
       
       {/* Admin tabs */}
-      <Tabs defaultValue="content" className="w-full">
-        <TabsList className="grid grid-cols-1 md:grid-cols-4 mb-8">
-          <TabsTrigger value="content">
-            <FileText className="w-4 h-4 mr-2" />
-            Content Management
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid grid-cols-1 md:grid-cols-5 mb-8">
+          <TabsTrigger value="analytics">
+            <BarChart className="w-4 h-4 mr-2" />
+            Analytics
           </TabsTrigger>
           <TabsTrigger value="users">
             <Users className="w-4 h-4 mr-2" />
             User Management
           </TabsTrigger>
-          <TabsTrigger value="data">
-            <Database className="w-4 h-4 mr-2" />
-            Data & Analytics
+          <TabsTrigger value="applications">
+            <FileText className="w-4 h-4 mr-2" />
+            Applications
+          </TabsTrigger>
+          <TabsTrigger value="content">
+            <Layers className="w-4 h-4 mr-2" />
+            Content
           </TabsTrigger>
           <TabsTrigger value="settings">
             <Settings className="w-4 h-4 mr-2" />
-            Site Settings
+            Settings
           </TabsTrigger>
         </TabsList>
         
+        {/* Analytics Tab */}
+        <TabsContent value="analytics">
+          <AnalyticsDashboard />
+        </TabsContent>
+        
+        {/* User Management Tab */}
+        <TabsContent value="users">
+          <UserManagement />
+        </TabsContent>
+        
+        {/* Applications Tab */}
+        <TabsContent value="applications">
+          <ApplicationManagement />
+        </TabsContent>
+        
+        {/* Content Management Tab */}
         <TabsContent value="content">
           <Card>
             <CardHeader>
@@ -94,39 +133,12 @@ const AdminDashboard = () => {
                   <Upload className="mr-2 h-4 w-4" />
                   Upload Files
                 </Button>
-                {/* More content management buttons would go here */}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="users">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Management</CardTitle>
-              <CardDescription>Manage user accounts, permissions and roles</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>User management tools will appear here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="data">
-          <Card>
-            <CardHeader>
-              <CardTitle>Data & Analytics</CardTitle>
-              <CardDescription>View website statistics and analytics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80 flex items-center justify-center border rounded">
-                <BarChart className="h-16 w-16 text-muted-foreground" />
-                <p className="ml-4 text-muted-foreground">Analytics dashboard will appear here</p>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
+        {/* Settings Tab */}
         <TabsContent value="settings">
           <Card>
             <CardHeader>
