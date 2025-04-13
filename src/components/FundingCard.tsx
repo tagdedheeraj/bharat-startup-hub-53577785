@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import FundingApplicationModal from './funding/FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
-import { useDialog } from '@/hooks/use-dialog';
 
 interface FundingCardProps {
   amount: string;
@@ -35,7 +34,8 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  const { open, setOpen } = useDialog();
+  // Use local state instead of useDialog to ensure the modal works correctly
+  const [open, setOpen] = useState(false);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
@@ -48,7 +48,7 @@ export default function FundingCard({
       duration: 2000,
     });
     
-    // Use the setOpen from useDialog
+    // Directly update the local state
     setOpen(true);
   };
   
