@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/auth/AuthProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "./ErrorBoundary";
+import { DialogProvider } from "@/contexts/dialog/DialogProvider";
 
 // Create a query client
 const queryClient = new QueryClient({

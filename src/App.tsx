@@ -5,15 +5,18 @@ import { Toaster } from "sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
 import NavigationObserver from "@/components/NavigationObserver";
+import { DialogProvider } from "@/contexts/dialog/DialogProvider";
 
 const App = () => {
   return (
     <AppProviders>
-      <BrowserRouter>
-        <NavigationObserver />
-        <AppRoutes />
-        <Toaster position="top-right" richColors closeButton />
-      </BrowserRouter>
+      <DialogProvider>
+        <BrowserRouter>
+          <NavigationObserver />
+          <AppRoutes />
+          <Toaster position="top-right" richColors closeButton />
+        </BrowserRouter>
+      </DialogProvider>
     </AppProviders>
   );
 };
