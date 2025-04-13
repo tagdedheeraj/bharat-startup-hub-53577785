@@ -58,7 +58,11 @@ const AddPageDialog: React.FC<AddPageDialogProps> = ({
   });
 
   const onSubmit = (data: FormValues) => {
-    onAddPage(data);
+    // Since data is validated by zod schema, we know that title and path are defined
+    onAddPage({
+      title: data.title,
+      path: data.path
+    });
     form.reset();
     onOpenChange(false);
     toast.success("New page created successfully!");
