@@ -10,11 +10,15 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
-  allowedRoles = ['startup', 'investor'] 
+  allowedRoles = ['startup', 'investor', 'admin'] 
 }) => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
+    // Redirect to appropriate login page based on the requested route
+    if (allowedRoles.includes('admin') && allowedRoles.length === 1) {
+      return <Navigate to="/admin" replace />;
+    }
     return <Navigate to="/login" replace />;
   }
 
@@ -25,6 +29,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/dashboard/startup" replace />;
     } else if (user.role === 'investor') {
       return <Navigate to="/dashboard/investor" replace />;
+    } else if (user.role === 'admin') {
+      return <Navigate to="/admin/dashboard" replace />;
     }
   }
 
