@@ -1,4 +1,3 @@
-
 // Mock data for available pages
 export const websitePages = [
   { id: 1, title: 'Home Page', path: '/' },
@@ -13,6 +12,21 @@ export const websitePages = [
   { id: 10, title: 'Legal Consultation', path: '/services/legal-consultation' },
 ];
 
+// Keep track of the next available ID
+let nextPageId = websitePages.length + 1;
+
+// Function to add a new page
+export const addNewPage = (title: string, path: string) => {
+  const newPage = {
+    id: nextPageId++,
+    title,
+    path
+  };
+  
+  // In a real application, this would save to a database
+  return newPage;
+};
+
 // Mock data for page sections
 export const pageSections: Record<string, Array<{ id: number; name: string; content: string }>> = {
   '/': [
@@ -26,4 +40,20 @@ export const pageSections: Record<string, Array<{ id: number; name: string; cont
     { id: 3, name: 'Team Members', content: 'Our dedicated team...' },
   ],
   // Add more page sections as needed
+};
+
+// Function to add new sections for a page
+export const addPageSections = (path: string, sections: Array<{ name: string; content: string }>) => {
+  if (!pageSections[path]) {
+    pageSections[path] = [];
+  }
+  
+  const newSections = sections.map((section, index) => ({
+    id: pageSections[path].length + index + 1,
+    name: section.name,
+    content: section.content
+  }));
+  
+  pageSections[path] = [...pageSections[path], ...newSections];
+  return pageSections[path];
 };

@@ -12,16 +12,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import PageSelector from './content-management/PageSelector';
 import PageEditor from './content-management/PageEditor';
-import { websitePages, pageSections } from './content-management/data';
+import AddPageDialog from './content-management/AddPageDialog';
+import { websitePages, pageSections, addNewPage } from './content-management/data';
 
 const ContentManagement: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<number | null>(null);
   const [pagePath, setPagePath] = useState<string>('');
   const [sections, setSections] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('pages');
+  const [pages, setPages] = useState(websitePages);
+  const [addPageDialogOpen, setAddPageDialogOpen] = useState(false);
 
   const handlePageSelect = (pageId: number) => {
-    const page = websitePages.find(p => p.id === pageId);
+    const page = pages.find(p => p.id === pageId);
     setSelectedPage(pageId);
     
     if (page) {
@@ -37,8 +40,22 @@ const ContentManagement: React.FC = () => {
     toast.success('Page content saved successfully!');
   };
 
+  const handleAddNewPage = (pageData: { title: string; path: string }) => {
+    // Add the new page to our pages array
+    const newPage = addNewPage(pageData.title, pageData.path);
+    setPages(prevPages => [...prevPages, newPage]);
+    
+    // Select the newly created page
+    setSelectedPage(newPage.id);
+    setPagePath(newPage.path);
+    setSections([]);
+    
+    // Switch to editor tab
+    setActiveTab('editor');
+  };
+
   const selectedPageObj = selectedPage 
-    ? websitePages.find(p => p.id === selectedPage) || null 
+    ? pages.find(p => p.id === selectedPage) || null 
     : null;
 
   return (
@@ -61,9 +78,10 @@ const ContentManagement: React.FC = () => {
           
           <TabsContent value="pages">
             <PageSelector 
-              pages={websitePages} 
+              pages={pages} 
               selectedPage={selectedPage} 
               onPageSelect={handlePageSelect} 
+              onAddNewPage={() => setAddPageDialogOpen(true)}
             />
           </TabsContent>
           
@@ -75,6 +93,13 @@ const ContentManagement: React.FC = () => {
             />
           </TabsContent>
         </Tabs>
+
+        {/* Add Page Dialog */}
+        <AddPageDialog 
+          open={addPageDialogOpen}
+          onOpenChange={setAddPageDialogOpen}
+          onAddPage={handleAddNewPage}
+        />
       </CardContent>
     </Card>
   );
