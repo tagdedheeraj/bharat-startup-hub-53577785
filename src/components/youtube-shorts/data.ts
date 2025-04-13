@@ -8,7 +8,8 @@ import {
   orderBy, 
   DocumentData 
 } from 'firebase/firestore';
-import { db, isFirestoreAvailable } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
+import { isFirestoreAvailable } from '@/lib/firebase/firestore';
 import { toast } from 'sonner';
 
 // Initial YouTube shorts data as fallback
