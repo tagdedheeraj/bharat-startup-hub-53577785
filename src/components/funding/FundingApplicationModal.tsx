@@ -21,7 +21,10 @@ export default function FundingApplicationModal({
   fundingTitle,
   fundingAmount,
 }: FundingApplicationModalProps) {
+  console.log("FundingApplicationModal rendered with open:", open);
+  
   const handleSuccess = () => {
+    console.log("Form submission successful, closing modal");
     onOpenChange(false);
   };
 

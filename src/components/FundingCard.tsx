@@ -47,8 +47,12 @@ export default function FundingCard({
       duration: 2000,
     });
     
+    // Force it to be true to ensure modal opens
     setIsModalOpen(true);
   };
+
+  // Add debug console log to check if modal state is changing
+  console.log(`Funding card "${title}" modal state:`, isModalOpen);
   
   return (
     <div 
@@ -78,9 +82,13 @@ export default function FundingCard({
         </span>
       </Button>
       
+      {/* Make sure modal is always rendered to the DOM */}
       <FundingApplicationModal
         open={isModalOpen}
-        onOpenChange={setIsModalOpen}
+        onOpenChange={(open) => {
+          console.log("Modal open state changing to:", open);
+          setIsModalOpen(open);
+        }}
         fundingTitle={title}
         fundingAmount={amount}
       />
