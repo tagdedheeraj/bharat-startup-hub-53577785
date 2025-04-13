@@ -16,7 +16,8 @@ import {
   Database,
   Building,
   Mail,
-  Calendar
+  Calendar,
+  Youtube
 } from 'lucide-react';
 
 // Import admin components
@@ -24,6 +25,7 @@ import UserManagement from '@/components/admin/UserManagement';
 import ApplicationManagement from '@/components/admin/ApplicationManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import ContentManagement from '@/components/admin/ContentManagement';
+import YouTubeShortsManagement from '@/components/admin/YouTubeShortsManagement';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -119,7 +121,10 @@ const AdminDashboard = () => {
         
         {/* Content Management Tab */}
         <TabsContent value="content">
-          <ContentManagement />
+          <div className="grid grid-cols-1 gap-6">
+            <ContentManagement />
+            <YouTubeShortsManagement />
+          </div>
         </TabsContent>
         
         {/* Settings Tab */}
