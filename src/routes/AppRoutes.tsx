@@ -1,5 +1,5 @@
 
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 import Layout from "@/components/Layout";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -51,8 +51,31 @@ import AdminLayout from "@/components/admin/AdminLayout";
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Admin Routes - Must be defined BEFORE main layout routes */}
+      <Route path="/admin" element={<AdminLogin />} />
+      <Route 
+        path="/admin/dashboard" 
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin/users" 
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminLayout>
+              <UsersPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        } 
+      />
+      
       {/* Main Layout Routes */}
-      <Route path="/" element={<Layout>{<Outlet />}</Layout>}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="services" element={<ServicesPage />} />
@@ -108,32 +131,10 @@ const AppRoutes = () => {
         <Route path="more/reviews" element={<ReviewsPage />} />
         <Route path="more/blogs" element={<BlogsPage />} />
         <Route path="more/compliance" element={<CompliancePage />} />
-        <Route path="404" element={<NotFound />} />
-        <Route path="*" element={<NotFound />} />
       </Route>
       
-      {/* Admin Routes - outside of main Layout */}
-      <Route path="admin" element={<AdminLogin />} />
-      <Route 
-        path="admin/dashboard" 
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminLayout>
-              <AdminDashboard />
-            </AdminLayout>
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="admin/users" 
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminLayout>
-              <UsersPage />
-            </AdminLayout>
-          </ProtectedRoute>
-        } 
-      />
+      {/* Not Found Route - Must be at the end */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

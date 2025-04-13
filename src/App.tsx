@@ -1,5 +1,6 @@
 
 import { useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import AppProviders from "@/components/AppProviders";
@@ -19,9 +20,11 @@ const App = () => {
 
   return (
     <AppProviders>
-      <AppRoutes />
-      <Toaster />
-      <Sonner />
+      <BrowserRouter>
+        <AppRoutes />
+        <Toaster />
+        <Sonner />
+      </BrowserRouter>
     </AppProviders>
   );
 };
