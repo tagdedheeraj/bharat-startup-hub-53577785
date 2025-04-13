@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import FundingApplicationModal from './FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
+import { useDialog } from '@/hooks/use-dialog';
 
 interface FundingServiceProps {
   amount: string;
@@ -15,7 +16,7 @@ interface FundingServiceProps {
 }
 
 const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps) => {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useDialog();
   const { toast } = useToast();
   
   // Create alternating color schemes
