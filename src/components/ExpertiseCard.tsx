@@ -1,5 +1,5 @@
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { 
@@ -42,7 +42,6 @@ export default function ExpertiseCard({
   index = 0
 }: ExpertiseCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const dialogRef = useRef<HTMLDivElement>(null);
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
@@ -51,24 +50,19 @@ export default function ExpertiseCard({
     e.stopPropagation();
     console.log("Opening expertise dialog for:", title);
     
-    // Show toast to confirm button is working
     toast({
       title: "Opening Form",
       description: `Preparing information form for ${title}`,
       duration: 2000,
     });
     
-    // Set state after a tiny delay to ensure DOM is ready
-    setTimeout(() => {
-      setIsDialogOpen(true);
-    }, 50);
+    // Set directly without timeout to avoid timing issues
+    setIsDialogOpen(true);
   };
   
   const handleFormSuccess = () => {
     console.log("Form submitted successfully for:", title);
-    setTimeout(() => {
-      setIsDialogOpen(false);
-    }, 500);
+    setIsDialogOpen(false);
   };
   
   return (
@@ -104,10 +98,7 @@ export default function ExpertiseCard({
             </span>
           </button>
         </DialogTrigger>
-        <DialogContent 
-          ref={dialogRef}
-          className="sm:max-w-[425px] bg-white z-[100]"
-        >
+        <DialogContent className="sm:max-w-[425px] bg-white z-[160]">
           <DialogHeader>
             <DialogTitle>Explore {title}</DialogTitle>
             <DialogDescription>

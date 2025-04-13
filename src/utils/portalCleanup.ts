@@ -1,33 +1,6 @@
 
 /**
- * Utility to clean up Radix UI portals to prevent memory leaks and fix visibility issues
- */
-export const cleanupPortals = () => {
-  try {
-    // Only remove portals that are DEFINITELY unused and have been hidden for a while
-    const hiddenPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-    
-    hiddenPortals.forEach(portal => {
-      try {
-        // Don't remove anything that might be dialog related or recently interacted with
-        const hasDialogContent = portal.querySelectorAll('[role="dialog"], .dialog-content, [data-state]').length > 0;
-        
-        // Only clean up portals that are DEFINITELY not in use and NOT dialog related
-        if (!hasDialogContent) {
-          console.log("Removing confirmed inactive portal");
-          portal.remove();
-        }
-      } catch (e) {
-        console.debug("Failed to check portal:", e);
-      }
-    });
-  } catch (e) {
-    console.debug("Portal cleanup error:", e);
-  }
-};
-
-/**
- * Force visibility of the mobile bottom navigation
+ * Utility to ensure bottom navigation visibility
  */
 export const ensureBottomNavVisibility = () => {
   try {
@@ -107,24 +80,6 @@ export const ensureDialogVisibility = () => {
           content.style.display = 'block';
           content.style.visibility = 'visible';
           content.style.opacity = '1';
-        }
-      }
-    });
-    
-    // Check for dialogs with state="open" that might not be visible
-    const openDialogs = document.querySelectorAll('[data-state="open"]');
-    openDialogs.forEach(dialog => {
-      if (dialog instanceof HTMLElement) {
-        dialog.style.display = 'block';
-        dialog.style.visibility = 'visible';
-        dialog.style.opacity = '1';
-        
-        // Force parent portal visibility too
-        const portal = dialog.closest('[data-radix-portal]');
-        if (portal instanceof HTMLElement) {
-          portal.style.display = 'block';
-          portal.style.visibility = 'visible';
-          portal.style.opacity = '1';
         }
       }
     });

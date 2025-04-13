@@ -43,17 +43,14 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
     e.stopPropagation();
     console.log("Opening funding dialog for:", title);
     
-    // Show a toast to confirm dialog is being opened
     toast({
       title: "Opening Form",
       description: `Preparing application form for ${title}`,
       duration: 2000,
     });
     
-    // Set state after a tiny delay to ensure DOM is ready
-    setTimeout(() => {
-      setIsDialogOpen(true);
-    }, 50);
+    // Set directly without timeout
+    setIsDialogOpen(true);
   };
   
   const handleFormSuccess = () => {
@@ -64,9 +61,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
       duration: 3000,
     });
     
-    setTimeout(() => {
-      setIsDialogOpen(false);
-    }, 500);
+    setIsDialogOpen(false);
   };
   
   return (
@@ -116,9 +111,7 @@ const FundingService = ({ amount, title, delay = 0, index }: FundingServiceProps
                     </span>
                   </Button>
                 </DialogTrigger>
-                <DialogContent 
-                  className="sm:max-w-[425px] bg-white z-[100]"
-                >
+                <DialogContent className="sm:max-w-[425px] bg-white z-[160]">
                   <DialogHeader>
                     <DialogTitle>Apply for Funding</DialogTitle>
                     <DialogDescription>

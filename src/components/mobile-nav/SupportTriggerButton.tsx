@@ -1,6 +1,6 @@
 
 import { LifeBuoy } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 type SupportTriggerButtonProps = {
   onClick: (e: React.MouseEvent) => void;
@@ -8,42 +8,6 @@ type SupportTriggerButtonProps = {
 };
 
 export default function SupportTriggerButton({ onClick, buttonRef }: SupportTriggerButtonProps) {
-  // Force button visibility
-  useEffect(() => {
-    const button = buttonRef?.current;
-    
-    if (button) {
-      // Make button visible
-      button.style.display = 'flex';
-      button.style.visibility = 'visible';
-      button.style.opacity = '1';
-      button.classList.remove('hidden');
-      button.classList.add('flex');
-    }
-    
-    // Check visibility again after a delay
-    const timers = [
-      setTimeout(() => {
-        if (buttonRef?.current) {
-          buttonRef.current.style.display = 'flex';
-          buttonRef.current.style.visibility = 'visible';
-          buttonRef.current.style.opacity = '1';
-        }
-      }, 500),
-      setTimeout(() => {
-        if (buttonRef?.current) {
-          buttonRef.current.style.display = 'flex';
-          buttonRef.current.style.visibility = 'visible';
-          buttonRef.current.style.opacity = '1';
-        }
-      }, 1000)
-    ];
-    
-    return () => {
-      timers.forEach(clearTimeout);
-    };
-  }, [buttonRef]);
-
   return (
     <button 
       ref={buttonRef}
