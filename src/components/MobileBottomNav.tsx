@@ -1,6 +1,6 @@
 
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Home, Info, Briefcase, Shield } from 'lucide-react';
+import { Home, Info, Briefcase, Shield, LifeBuoy } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
 
 export default function MobileBottomNav() {
@@ -13,6 +13,7 @@ export default function MobileBottomNav() {
     { icon: Info, label: 'About', to: '/about' },
     { icon: Briefcase, label: 'Services', to: '/services' },
     { icon: Shield, label: 'CA', to: '/ca-services' },
+    { icon: LifeBuoy, label: 'Support', to: '/support' }, // Added support nav item
   ];
 
   return (
