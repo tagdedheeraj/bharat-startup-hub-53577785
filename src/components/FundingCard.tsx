@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import FundingApplicationModal from './funding/FundingApplicationModal';
 import { useToast } from '@/hooks/use-toast';
+import { useDialog } from '@/hooks/use-dialog';
 
 interface FundingCardProps {
   amount: string;
@@ -34,7 +35,7 @@ export default function FundingCard({
   variant = 'default',
   index = 0
 }: FundingCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { open, setOpen } = useDialog();
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
@@ -47,12 +48,9 @@ export default function FundingCard({
       duration: 2000,
     });
     
-    // Force it to be true to ensure modal opens
-    setIsModalOpen(true);
+    // Use the setOpen from useDialog
+    setOpen(true);
   };
-
-  // Add debug console log to check if modal state is changing
-  console.log(`Funding card "${title}" modal state:`, isModalOpen);
   
   return (
     <div 
@@ -82,13 +80,9 @@ export default function FundingCard({
         </span>
       </Button>
       
-      {/* Make sure modal is always rendered to the DOM */}
       <FundingApplicationModal
-        open={isModalOpen}
-        onOpenChange={(open) => {
-          console.log("Modal open state changing to:", open);
-          setIsModalOpen(open);
-        }}
+        open={open}
+        onOpenChange={setOpen}
         fundingTitle={title}
         fundingAmount={amount}
       />

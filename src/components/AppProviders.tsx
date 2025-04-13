@@ -25,11 +25,13 @@ const AppProviders = ({ children }: AppProvidersProps) => {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TooltipProvider>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
-          </TooltipProvider>
+          <DialogProvider>
+            <TooltipProvider>
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
+            </TooltipProvider>
+          </DialogProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
