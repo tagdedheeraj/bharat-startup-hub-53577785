@@ -11,9 +11,10 @@ export default function SupportTriggerButton({ onClick, buttonRef }: SupportTrig
   return (
     <button 
       ref={buttonRef}
-      className="support-button flex flex-col items-center justify-center w-full h-full relative block" // Added 'block' to ensure visibility
+      className="support-button flex flex-col items-center justify-center w-full h-full relative"
       onClick={onClick}
       aria-label="Support"
+      style={{ display: 'flex' }}
     >
       <LifeBuoy 
         size={24} 
@@ -25,4 +26,3 @@ export default function SupportTriggerButton({ onClick, buttonRef }: SupportTrig
     </button>
   );
 }
-

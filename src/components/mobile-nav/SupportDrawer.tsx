@@ -18,7 +18,7 @@ export default function SupportDrawer() {
   const { isOpen, setIsOpen, supportButtonRef, handleOpenDrawer } = useSupportDrawer();
   const { toast } = useToast();
   
-  // Handle drawer open state changes
+  // Handle drawer open state changes - सरलीकृत
   useEffect(() => {
     if (isOpen) {
       console.log("Support drawer opened");
@@ -28,34 +28,20 @@ export default function SupportDrawer() {
         description: "Choose how you'd like to connect with our team.",
         duration: 2000,
       });
-      
-      // Force visibility of mobile nav and support button
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav instanceof HTMLElement) {
-        bottomNav.style.display = 'block';
-        bottomNav.classList.remove('hidden');
-      }
-      
-      const supportButtons = document.querySelectorAll('.support-button');
-      supportButtons.forEach(button => {
-        if (button instanceof HTMLElement) {
-          button.style.display = 'flex';
-        }
-      });
     }
   }, [isOpen, toast]);
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <div className="flex items-center justify-center w-full h-full" style={{ zIndex: 30 }}>
+        <div className="flex items-center justify-center w-full h-full">
           <SupportTriggerButton 
             onClick={handleOpenDrawer} 
             buttonRef={supportButtonRef} 
           />
         </div>
       </DrawerTrigger>
-      <DrawerContent className="bg-white" style={{ zIndex: 100 }}>
+      <DrawerContent className="bg-white">
         <DrawerHeader>
           <DrawerTitle>Need Help?</DrawerTitle>
           <DrawerDescription>

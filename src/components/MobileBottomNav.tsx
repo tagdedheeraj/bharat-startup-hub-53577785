@@ -1,54 +1,10 @@
 
-import { useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Home, Info, Briefcase, Shield } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
-import { ensureBottomNavVisibility, resetZIndexStacking } from '@/utils/portalCleanup';
 
 export default function MobileBottomNav() {
   const isMobile = useIsMobile();
-  
-  // Add useEffect to constantly ensure proper visibility
-  useEffect(() => {
-    // Ensure visibility when component mounts
-    const ensureNavVisibility = () => {
-      const bottomNav = document.querySelector('.fixed.bottom-0');
-      if (bottomNav instanceof HTMLElement) {
-        bottomNav.style.display = 'block';
-        bottomNav.classList.remove('hidden');
-        console.log("MobileBottomNav: Forcing visibility");
-      }
-      
-      // Also check for any hidden support buttons
-      const supportButtons = document.querySelectorAll('.support-button');
-      supportButtons.forEach(button => {
-        if (button instanceof HTMLElement) {
-          button.style.display = 'block';
-          button.classList.remove('hidden');
-          console.log("MobileBottomNav: Support button visibility enforced");
-        }
-      });
-      
-      resetZIndexStacking();
-    };
-    
-    ensureNavVisibility();
-    
-    // Set up checks at different intervals to ensure visibility is maintained
-    const timers = [
-      setTimeout(ensureNavVisibility, 100),
-      setTimeout(ensureNavVisibility, 500),
-      setTimeout(ensureNavVisibility, 1000),
-      setTimeout(ensureNavVisibility, 2000),
-    ];
-    
-    const intervalId = setInterval(ensureNavVisibility, 5000);
-    
-    return () => {
-      clearInterval(intervalId);
-      timers.forEach(clearTimeout);
-    };
-  }, []);
   
   if (!isMobile) return null;
   
@@ -61,8 +17,9 @@ export default function MobileBottomNav() {
 
   return (
     <div 
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden block" // Added 'block'
+      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
       style={{ 
+        display: 'block',
         zIndex: 40 
       }} 
     >
@@ -81,8 +38,9 @@ export default function MobileBottomNav() {
         
         {/* Support Drawer with improved visibility */}
         <div 
-          className="relative support-section block" // Added 'block'
+          className="relative support-section"
           style={{ 
+            display: 'block',
             zIndex: 30 
           }}
         >
@@ -96,4 +54,3 @@ export default function MobileBottomNav() {
     </div>
   );
 }
-

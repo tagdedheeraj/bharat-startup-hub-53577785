@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from '@/hooks/use-toast';
-import { ensureBottomNavVisibility } from '@/utils/portalCleanup';
 
 interface FundingCardProps {
   amount: string;
@@ -47,32 +46,6 @@ export default function FundingCard({
   const colorVariant = colorVariants[index % colorVariants.length];
   const { toast } = useToast();
   
-  // Ensure bottom nav visibility whenever dialog state changes
-  useEffect(() => {
-    if (!isDialogOpen) {
-      // When dialog closes, ensure visibility
-      setTimeout(() => {
-        ensureBottomNavVisibility();
-        
-        // Directly ensure bottom nav visibility
-        const bottomNav = document.querySelector('.fixed.bottom-0');
-        if (bottomNav instanceof HTMLElement) {
-          bottomNav.style.display = 'block';
-          bottomNav.classList.remove('hidden');
-        }
-        
-        // Directly ensure support button visibility
-        const supportButtons = document.querySelectorAll('.support-button');
-        supportButtons.forEach(button => {
-          if (button instanceof HTMLElement) {
-            button.style.display = 'flex';
-            button.classList.remove('hidden');
-          }
-        });
-      }, 100);
-    }
-  }, [isDialogOpen]);
-  
   const handleOpenDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -84,9 +57,6 @@ export default function FundingCard({
       duration: 2000,
     });
     
-    // Ensure bottom nav and support button are visible
-    ensureBottomNavVisibility();
-    
     // Set dialog state
     setIsDialogOpen(true);
   };
@@ -94,9 +64,6 @@ export default function FundingCard({
   const handleFormSuccess = () => {
     console.log("Form submitted successfully for:", title);
     setIsDialogOpen(false);
-    
-    // Ensure bottom nav and support button are visible after dialog closes
-    setTimeout(ensureBottomNavVisibility, 100);
   };
   
   return (
@@ -118,14 +85,7 @@ export default function FundingCard({
       
       <Dialog 
         open={isDialogOpen} 
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          
-          // When dialog closes, ensure visibility
-          if (!open) {
-            setTimeout(ensureBottomNavVisibility, 100);
-          }
-        }}
+        onOpenChange={setIsDialogOpen}
       >
         <DialogTrigger asChild>
           <Button 
@@ -139,7 +99,7 @@ export default function FundingCard({
             </span>
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-white" style={{ zIndex: 200 }}>
+        <DialogContent className="sm:max-w-[425px] bg-white">
           <DialogHeader>
             <DialogTitle>Apply for Funding</DialogTitle>
             <DialogDescription>
