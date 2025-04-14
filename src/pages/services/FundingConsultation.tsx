@@ -20,8 +20,8 @@ const FundingConsultationPage = () => {
     setTimeout(() => {
       toast({
         title: "Page Ready",
-        description: "Funding consultation options are now available.",
-        duration: 3000,
+        description: "Funding consultation options are now available. Click the Support button if you need assistance.",
+        duration: 5000,
       });
     }, 1000);
     
