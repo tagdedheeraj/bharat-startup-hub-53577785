@@ -18,7 +18,14 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
     isLoading,
     loadError,
     isMuted,
+    volume,
+    playbackSpeed,
+    videoQuality,
+    playerReady,
     toggleMute,
+    updateVolume,
+    updatePlaybackSpeed,
+    updateVideoQuality,
     retryLoading
   } = useYouTubePlayer(videoId, onClose);
   
@@ -54,12 +61,19 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
           </div>
         )}
         
-        {/* Video controls */}
+        {/* Enhanced Video controls */}
         <VideoControls 
           isMuted={isMuted}
           toggleMute={toggleMute}
           onClose={onClose}
           videoTitle={videoTitle}
+          volume={volume}
+          updateVolume={updateVolume}
+          playbackSpeed={playbackSpeed}
+          updatePlaybackSpeed={updatePlaybackSpeed}
+          videoQuality={videoQuality}
+          updateVideoQuality={updateVideoQuality}
+          playerReady={playerReady}
         />
       </div>
     </div>

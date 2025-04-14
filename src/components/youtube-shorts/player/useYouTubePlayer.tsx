@@ -75,7 +75,14 @@ export const useYouTubePlayer = (videoId: string, onClose: () => void) => {
     isLoading: core.isLoading,
     loadError: core.loadError,
     isMuted: core.isMuted,
+    volume: core.volume,
+    playbackSpeed: core.playbackSpeed,
+    videoQuality: core.videoQuality,
+    playerReady: core.playerReady,
     toggleMute: core.toggleMute,
+    updateVolume: core.updateVolume,
+    updatePlaybackSpeed: core.updatePlaybackSpeed,
+    updateVideoQuality: core.updateVideoQuality,
     retryLoading
   };
 };

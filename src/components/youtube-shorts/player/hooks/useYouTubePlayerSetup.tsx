@@ -9,7 +9,13 @@ export const useYouTubePlayerSetup = (
     youtubePlayer,
     setIsLoading,
     setPlayerReady,
-    setLoadError
+    setLoadError,
+    setPlaybackSpeed,
+    setVolume,
+    setVideoQuality,
+    playbackSpeed,
+    volume,
+    isMuted
   }: any,
   onClose: () => void
 ) => {
@@ -29,17 +35,56 @@ export const useYouTubePlayerSetup = (
               console.log('YouTube player ready');
               setIsLoading(false);
               setPlayerReady(true);
-              event.target.playVideo();
+              
+              // Apply initial settings once player is ready
+              try {
+                const player = event.target;
+                
+                // Set playback speed
+                if (playbackSpeed !== 1) {
+                  player.setPlaybackRate(playbackSpeed);
+                }
+                
+                // Set volume
+                player.setVolume(volume);
+                
+                // Set mute state
+                if (isMuted) {
+                  player.mute();
+                }
+                
+                player.playVideo();
+              } catch (e) {
+                console.error('Error applying initial player settings:', e);
+              }
             },
             'onStateChange': (event: any) => {
               if (event.data === window.YT?.PlayerState.PLAYING) {
                 console.log('Video is now playing');
                 setIsLoading(false);
+                
+                // Get available quality levels when video starts playing
+                try {
+                  const qualities = event.target.getAvailableQualityLevels();
+                  console.log('Available quality levels:', qualities);
+                } catch (e) {
+                  console.error('Error getting quality levels:', e);
+                }
               } else if (event.data === window.YT?.PlayerState.ENDED) {
                 console.log('Video ended');
                 onClose();
               } else if (event.data === window.YT?.PlayerState.PAUSED) {
                 console.log('Video paused');
+              }
+            },
+            'onPlaybackQualityChange': (event: any) => {
+              // Update the quality state when it changes
+              try {
+                const quality = event.data;
+                console.log('Quality changed to:', quality);
+                setVideoQuality(quality);
+              } catch (e) {
+                console.error('Error handling quality change:', e);
               }
             },
             'onError': (event: any) => {
