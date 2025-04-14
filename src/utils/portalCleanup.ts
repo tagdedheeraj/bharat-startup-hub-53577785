@@ -1,7 +1,7 @@
 
 /**
  * Utility module for handling portal-related cleanup
- * Optimized for better mobile performance with YouTube safety
+ * Optimized for better performance with YouTube safety
  */
 
 // Check if we're in a browser environment
@@ -9,7 +9,6 @@ const isBrowser = typeof window !== 'undefined';
 
 /**
  * Safely remove DOM elements that match a selector and state
- * Now includes protection for YouTube players
  */
 export const safelyRemoveElements = (selector: string, stateFilter?: string) => {
   if (!isBrowser) return 0;
@@ -23,6 +22,7 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
         // Skip YouTube iframes or their containers
         if (element.querySelector('[data-youtube-iframe="true"]') || 
             element.closest('[data-youtube-player-container="true"]')) {
+          console.log("Skipping cleanup for YouTube player element");
           return;
         }
         
@@ -52,13 +52,12 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
 
 /**
  * Clean up only closed/inactive portals (much safer than removing all)
- * Now has protection for YouTube players
  */
 export const cleanupAllPortals = () => {
   if (!isBrowser) return 0;
   
-  // Check if YouTube player is active - if so, skip cleanup
-  const hasActiveYouTubePlayer = document.querySelector('[data-youtube-iframe="true"]') !== null;
+  // Check if YouTube player is active - if so, skip cleanup completely
+  const hasActiveYouTubePlayer = document.querySelector('[data-youtube-player-container="true"]') !== null;
   if (hasActiveYouTubePlayer) {
     console.log("Skipping portal cleanup due to active YouTube player");
     return 0;
@@ -71,98 +70,7 @@ export const cleanupAllPortals = () => {
   const dialogsRemoved = safelyRemoveElements('[role="dialog"][data-state="closed"]');
   const alertsRemoved = safelyRemoveElements('[role="alertdialog"][data-state="closed"]');
   
-  const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved + dialogsRemoved + alertsRemoved;
-  
-  // Also clean up any elements that should be removed but don't have proper states
-  if (isBrowser && !hasActiveYouTubePlayer) {
-    // Check for stale portals (over 30 seconds old with no interactions)
-    const now = Date.now();
-    document.querySelectorAll('[data-radix-portal]').forEach(portal => {
-      // Skip any portal that contains a YouTube player
-      if (portal.querySelector('[data-youtube-iframe="true"]')) return;
-      
-      const lastInteraction = portal.getAttribute('data-last-interaction');
-      if (lastInteraction) {
-        const time = parseInt(lastInteraction, 10);
-        if (!isNaN(time) && (now - time > 30000)) {
-          // Portal is stale, remove it
-          if (portal.parentNode) {
-            portal.parentNode.removeChild(portal);
-          }
-        }
-      }
-    });
-    
-    // Only clean touch ghosts if no YouTube player is active
-    cleanupTouchGhosts();
-  }
-  
-  return total;
-};
-
-/**
- * Clean up elements that might be interfering with touch/scroll events
- * Now with protection for YouTube players
- */
-const cleanupTouchGhosts = () => {
-  if (!isBrowser) return;
-  
-  // Skip if YouTube player is active
-  if (document.querySelector('[data-youtube-iframe="true"]')) {
-    return;
-  }
-  
-  try {
-    // Remove invisible touch overlays that can block scrolling
-    const ghostSelectors = [
-      'div[style*="position: fixed"][style*="inset: 0"]',
-      'div[style*="position: fixed"][style*="opacity: 0"]',
-      'div[style*="position: absolute"][style*="opacity: 0"][style*="pointer-events"]',
-      'div[style*="touch-action: none"]',
-      '.overlay:not([data-state="open"])',
-      '.modal-overlay:not(.active)'
-    ];
-    
-    let removed = 0;
-    
-    ghostSelectors.forEach(selector => {
-      document.querySelectorAll(selector).forEach(element => {
-        // Skip if element is part of a YouTube player
-        if (element.closest('[data-youtube-player-container="true"]') || 
-            element.querySelector('[data-youtube-iframe="true"]')) {
-          return;
-        }
-        
-        // Only remove if it doesn't have important attributes
-        if (!element.hasAttribute('data-state') || 
-            element.getAttribute('data-state') === 'closed') {
-          if (element.parentNode) {
-            element.parentNode.removeChild(element);
-            removed++;
-          }
-        }
-      });
-    });
-    
-    // Find any elements with pointer-events: none that are full screen
-    document.querySelectorAll('div[style*="pointer-events: none"]').forEach(element => {
-      // Skip if element is part of a YouTube player
-      if (element.closest('[data-youtube-player-container="true"]')) {
-        return;
-      }
-      
-      const rect = element.getBoundingClientRect();
-      // If it's a large overlay-like element, remove it
-      if (rect.width > window.innerWidth * 0.5 && rect.height > window.innerHeight * 0.5) {
-        if (element.parentNode) {
-          element.parentNode.removeChild(element);
-          removed++;
-        }
-      }
-    });
-  } catch (e) {
-    console.warn('Error cleaning up touch ghosts', e);
-  }
+  return portalsRemoved + menuPortalsRemoved + toastPortalsRemoved + dialogsRemoved + alertsRemoved;
 };
 
 /**

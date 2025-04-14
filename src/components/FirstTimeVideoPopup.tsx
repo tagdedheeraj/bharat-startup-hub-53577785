@@ -27,7 +27,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         updateDialogState(dialogId, true);
         // Mark that the user has seen the video for this session only
         sessionStorage.setItem('hasSeenIntroVideo', 'true');
-      }, 1500); // Increased delay for reliability
+      }, 2000); // Increased delay for better reliability
       
       return () => {
         clearTimeout(timer);
@@ -92,7 +92,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         updateDialogState(dialogId, open);
       }}>
         <DialogContent 
-          className="sm:max-w-3xl p-0 bg-transparent border-none z-[200]" 
+          className="sm:max-w-3xl p-0 bg-transparent border-none z-[999]" 
           onInteractOutside={(e) => {
             e.preventDefault(); // Prevent closing on outside click for video popup
           }}
@@ -103,7 +103,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
           <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
             <iframe
               src={`https://www.youtube.com/embed/${processedVideoId}?autoplay=1&rel=0`}
-              title="Welcome to Bharat Startup Solution"
+              title="Welcome Video"
               className="w-full h-full"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

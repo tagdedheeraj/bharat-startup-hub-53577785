@@ -9,7 +9,7 @@ interface UseLoadingTimeoutProps {
 }
 
 /**
- * Hook for handling loading timeouts
+ * Hook for handling loading timeouts with improved reliability
  */
 export const useLoadingTimeout = ({
   isLoading,
@@ -28,12 +28,12 @@ export const useLoadingTimeout = ({
     
     // Only set timeout if we're still loading and don't have an error
     if (isLoading && !loadError) {
+      console.log(`Setting YouTube video load timeout: ${timeoutMs}ms`);
+      
       timeoutRef.current = window.setTimeout(() => {
         console.log('YouTube video load timeout exceeded, trying alternative method');
         retryFunction();
       }, timeoutMs) as unknown as number;
-      
-      console.log(`Loading YouTube video with ${timeoutMs}ms timeout`);
     }
     
     // Cleanup

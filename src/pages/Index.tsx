@@ -16,7 +16,7 @@ import NewsHeadlines from '@/components/NewsHeadlines';
 const HomePage = () => {
   return (
     <div className="overflow-hidden">
-      {/* First-time visitor video popup - with a standard YouTube ID that's guaranteed to work */}
+      {/* First-time visitor video popup - with a standard YouTube ID */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
       
       {/* Hero Section */}
@@ -36,7 +36,7 @@ const HomePage = () => {
       {/* Features Section */}
       <FeaturesSection />
 
-      {/* Expertise Section - Moved below WHY CHOOSE US */}
+      {/* Expertise Section */}
       <ExpertiseSection />
 
       {/* Funding Options Section */}

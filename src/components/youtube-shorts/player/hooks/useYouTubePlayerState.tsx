@@ -2,22 +2,23 @@
 import { useState } from 'react';
 
 /**
- * Hook for managing YouTube player state
+ * Hook for managing YouTube player state with improved error handling
  */
 export const useYouTubePlayerState = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   
   // Function to toggle mute state
   const toggleMute = () => {
-    try {
-      // We don't directly modify the player here, just track state
-      // The parent hook will use this state to send commands
-      setIsMuted(!isMuted);
-    } catch (error) {
-      console.error("Error toggling mute state:", error);
-    }
+    setIsMuted(!isMuted);
+  };
+  
+  // Reset state for clean retries
+  const resetState = () => {
+    setIsLoading(true);
+    setLoadError(false);
   };
   
   return {
@@ -27,6 +28,9 @@ export const useYouTubePlayerState = () => {
     setLoadError,
     isMuted,
     setIsMuted,
-    toggleMute
+    isPlaying,
+    setIsPlaying,
+    toggleMute,
+    resetState
   };
 };
