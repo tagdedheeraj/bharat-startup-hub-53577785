@@ -1,5 +1,5 @@
 
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef } from 'react';
 
 interface YouTubeIframeProps {
   videoId: string;
@@ -8,18 +8,8 @@ interface YouTubeIframeProps {
 
 const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
   ({ videoId, isLoading }, ref) => {
-    // Get the current origin for proper API communication
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
     
-    // Enhanced YouTube URL with additional parameters for better controls
-    // Adding enablejsapi=1 is crucial for API functionality
-    const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(origin)}&controls=1&mute=0&iv_load_policy=3&fs=1&cc_load_policy=0&cc_lang_pref=en`;
-    
-    // Log the iframe creation for debugging
-    useEffect(() => {
-      console.log(`Creating YouTube iframe for video: ${videoId} with origin: ${origin}`);
-    }, [videoId, origin]);
-
     return (
       <iframe
         ref={ref}
