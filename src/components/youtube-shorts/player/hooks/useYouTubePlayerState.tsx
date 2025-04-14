@@ -1,21 +1,26 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
-/**
- * Hook for managing YouTube player state with improved error handling
- */
 export const useYouTubePlayerState = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   
-  // Function to toggle mute state
+  // Reset loading state after a timeout if it's stuck
+  useEffect(() => {
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
+
   const toggleMute = useCallback(() => {
     setIsMuted(prevMuted => !prevMuted);
   }, []);
   
-  // Reset state for clean retries
   const resetState = useCallback(() => {
     setIsLoading(true);
     setLoadError(false);

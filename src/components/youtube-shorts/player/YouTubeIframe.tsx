@@ -6,15 +6,9 @@ interface YouTubeIframeProps {
   isLoading: boolean;
 }
 
-/**
- * YouTube iframe component with improved origin configuration and styling
- */
 const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
   ({ videoId, isLoading }, ref) => {
-    // Create a safe, properly encoded origin parameter
     const encodedOrigin = encodeURIComponent(window.location.origin);
-    
-    // Build URL with optimized parameters that work consistently
     const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&playsinline=1&origin=${encodedOrigin}&controls=1&fs=1&modestbranding=1&rel=0&showinfo=1`;
     
     return (
@@ -28,8 +22,9 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
         allowFullScreen
         loading="eager"
         style={{
-          visibility: isLoading ? 'hidden' : 'visible',
-          zIndex: 1004 // Ensure proper z-index
+          opacity: isLoading ? 0 : 1,
+          visibility: 'visible',
+          zIndex: 9500
         }}
         data-youtube-iframe="true"
         aria-label="YouTube video player"
