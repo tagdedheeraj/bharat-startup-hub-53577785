@@ -18,12 +18,15 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       onMouseEnter={() => onHover(short.id)}
       onMouseLeave={() => onHover(null)}
       style={{animationDelay: `${index * 100}ms`}}
+      aria-label={`Play ${short.title} video`}
+      role="button"
     >
       {/* Thumbnail image with zoom effect */}
       <img
         src={short.thumbnail}
         alt={short.title}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:opacity-80"
+        loading="lazy"
       />
       
       {/* Gradient overlay */}
@@ -39,18 +42,25 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
         </div>
       )}
       
+      {/* Play button - made more prominent */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-3 opacity-90 group-hover:opacity-100 transform group-hover:scale-125 transition-all duration-300 shadow-lg">
+          <Play fill="white" size={24} className="animate-pulse" />
+        </div>
+        
+        {/* Play hint text */}
+        <div className="absolute bottom-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <p className="text-white text-sm font-bold bg-black/50 px-3 py-1 rounded-full">
+            Click to play
+          </p>
+        </div>
+      </div>
+      
       {/* Content overlay */}
       <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
         {/* Title card with blur effect */}
         <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
           <h3 className="font-bold text-lg">{short.title}</h3>
-        </div>
-        
-        {/* Play button */}
-        <div className="flex justify-center items-center">
-          <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-3 opacity-90 group-hover:opacity-100 transform group-hover:scale-110 transition-all duration-300 shadow-lg">
-            <Play fill="white" size={24} className="animate-pulse" />
-          </div>
         </div>
       </div>
       
