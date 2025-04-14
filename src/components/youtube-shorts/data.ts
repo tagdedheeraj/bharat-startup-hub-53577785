@@ -22,6 +22,11 @@ export const youtubeShorts: YouTubeShort[] = [
     thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
   },
   {
+    id: "xkLNpYiwak8",
+    title: "Business Model Innovation",
+    thumbnail: "https://i3.ytimg.com/vi/xkLNpYiwak8/maxresdefault.jpg"
+  },
+  {
     id: "k6t0Fivw0EQ",
     title: "Entrepreneurship Success Factors",
     thumbnail: "https://i3.ytimg.com/vi/k6t0Fivw0EQ/maxresdefault.jpg"
@@ -30,11 +35,6 @@ export const youtubeShorts: YouTubeShort[] = [
     id: "pq22sadiXqQ", // Added from FirstTimeVideoPopup for guaranteed working video
     title: "Startup Funding Guide",
     thumbnail: "https://i3.ytimg.com/vi/pq22sadiXqQ/maxresdefault.jpg"
-  },
-  {
-    id: "sEKYtxnpAP4", // New video added per user request
-    title: "Startup Growth Strategies",
-    thumbnail: "https://i3.ytimg.com/vi/sEKYtxnpAP4/maxresdefault.jpg"
   }
 ];
 
