@@ -1,45 +1,65 @@
 
 import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { isFirestoreAvailable } from '@/lib/firebase';
+import { isFirestoreAvailable } from '@/lib/firebase/firestore';
 
 export const useNetworkStatus = () => {
   const [isOffline, setIsOffline] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [lastChecked, setLastChecked] = useState<Date | null>(null);
 
   useEffect(() => {
     const checkNetworkStatus = async () => {
-      const firestoreAvailable = await isFirestoreAvailable();
-      setIsOffline(!firestoreAvailable);
-      
-      if (!firestoreAvailable) {
-        toast.warning("Operating in offline mode. Changes won't be saved to the database.");
+      setIsLoading(true);
+      try {
+        // Check Firebase availability
+        const available = await isFirestoreAvailable();
+        setIsOffline(!available);
+        setLastChecked(new Date());
+      } catch (error) {
+        console.error("Error checking network status:", error);
+        setIsOffline(true);
+      } finally {
+        setIsLoading(false);
       }
-      
-      setIsLoading(false);
     };
-    
+
+    // Check on mount
     checkNetworkStatus();
-    
-    // Add online/offline event listeners
+
+    // Set up event listeners for online/offline status
     const handleOnline = () => {
-      toast.success("You're back online");
-      setIsOffline(false);
+      checkNetworkStatus();
     };
-    
+
     const handleOffline = () => {
-      toast.warning("You're offline. Changes won't be saved.");
       setIsOffline(true);
+      setLastChecked(new Date());
     };
-    
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
-    
+
+    // Clean up
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
-  return { isOffline, isLoading };
+  // Function to manually check network status
+  const checkStatus = async () => {
+    setIsLoading(true);
+    try {
+      const available = await isFirestoreAvailable();
+      setIsOffline(!available);
+      setLastChecked(new Date());
+    } catch (error) {
+      console.error("Error checking network status:", error);
+      setIsOffline(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { isOffline, isLoading, lastChecked, checkStatus };
 };

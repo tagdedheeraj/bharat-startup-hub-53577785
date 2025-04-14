@@ -1,123 +1,88 @@
 
 import React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Youtube, WifiOff } from 'lucide-react';
-import { YouTubeShort } from '../youtube-shorts/types';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-
-// Import refactored components
+import { Plus, WifiOff } from 'lucide-react';
+import YouTubeShortsTable from './youtube-shorts/YouTubeShortsTable';
 import YouTubeShortDialog from './youtube-shorts/YouTubeShortDialog';
 import DeleteConfirmationDialog from './youtube-shorts/DeleteConfirmationDialog';
-import YouTubeShortsTable from './youtube-shorts/YouTubeShortsTable';
 import { useYouTubeShortsManager } from './youtube-shorts/useYouTubeShortsManager';
-import { Skeleton } from '@/components/ui/skeleton';
 
-const YouTubeShortsManagement: React.FC = () => {
+interface YouTubeShortsManagementProps {
+  isOffline?: boolean;
+}
+
+const YouTubeShortsManagement: React.FC<YouTubeShortsManagementProps> = ({ isOffline = false }) => {
   const {
     youtubeShorts,
-    editingShort,
+    isLoading,
     isAddDialogOpen,
     setIsAddDialogOpen,
     isEditDialogOpen,
-    setIsEditDialogOpen,
     isDeleteDialogOpen,
-    setIsDeleteDialogOpen,
-    isLoading,
-    isOffline,
+    isOffline: hookIsOffline,
+    editingShort,
+    pendingDeleteId,
     handleAddShort,
     handleEditShort,
+    handleDeleteShort,
     prepareEditShort,
-    prepareDeleteShort,
-    handleDeleteShort
+    prepareDeleteShort
   } = useYouTubeShortsManager();
-
-  const emptyShort: YouTubeShort = {
-    id: '',
-    title: '',
-    thumbnail: ''
-  };
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Youtube className="h-5 w-5 text-red-600" />
-          YouTube Shorts Management
-        </CardTitle>
-        <CardDescription>
-          Manage the YouTube Shorts videos displayed on the homepage
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {isOffline && (
-          <Alert variant="destructive" className="mb-4">
-            <WifiOff className="h-4 w-4 mr-2" />
-            <AlertDescription>
-              You are currently offline. Changes will only be saved locally and won't sync with the database until you're back online.
-            </AlertDescription>
-          </Alert>
-        )}
-        
-        <div className="flex justify-between mb-6">
-          <h3 className="text-lg font-medium">Current YouTube Shorts</h3>
-          <Button 
-            className="flex items-center gap-2"
-            onClick={() => setIsAddDialogOpen(true)}
-            disabled={isLoading}
-          >
-            <Plus className="h-4 w-4" />
-            Add New Short
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>YouTube Shorts</CardTitle>
+          <CardDescription>Manage YouTube shorts displayed on the website</CardDescription>
+        </div>
+        <div className="flex items-center gap-2">
+          {(isOffline || hookIsOffline) && (
+            <div className="flex items-center gap-1 text-amber-600 bg-amber-50 px-3 py-1 rounded-full text-sm">
+              <WifiOff size={14} />
+              <span>Offline Mode</span>
+            </div>
+          )}
+          <Button size="sm" onClick={() => setIsAddDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Short
           </Button>
         </div>
-
-        {isLoading ? (
-          <div className="space-y-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-12 w-full" />
-          </div>
-        ) : (
-          <YouTubeShortsTable 
-            shorts={youtubeShorts}
-            onEdit={prepareEditShort}
-            onDelete={prepareDeleteShort}
-          />
-        )}
-
-        {/* Add Dialog */}
+      </CardHeader>
+      <CardContent>
+        <YouTubeShortsTable 
+          youtubeShorts={youtubeShorts}
+          isLoading={isLoading}
+          onEdit={prepareEditShort}
+          onDelete={prepareDeleteShort}
+        />
+        
+        {/* Add YouTube Short Dialog */}
         <YouTubeShortDialog
-          isOpen={isAddDialogOpen}
+          open={isAddDialogOpen}
           onOpenChange={setIsAddDialogOpen}
           onSubmit={handleAddShort}
-          defaultValues={emptyShort}
-          title="Add New YouTube Short"
-          description="Enter the details of the YouTube short to add to the homepage."
-          submitLabel="Add Short"
+          title="Add YouTube Short"
+          isOfflineMode={isOffline || hookIsOffline}
         />
-
-        {/* Edit Dialog */}
+        
+        {/* Edit YouTube Short Dialog */}
         <YouTubeShortDialog
-          isOpen={isEditDialogOpen}
-          onOpenChange={setIsEditDialogOpen}
+          open={isEditDialogOpen}
+          onOpenChange={(open) => !open && editingShort && prepareEditShort(null)}
           onSubmit={handleEditShort}
-          defaultValues={editingShort || emptyShort}
           title="Edit YouTube Short"
-          description="Update the details of this YouTube short video."
-          submitLabel="Save Changes"
+          initialData={editingShort}
+          isOfflineMode={isOffline || hookIsOffline}
         />
-
+        
         {/* Delete Confirmation Dialog */}
         <DeleteConfirmationDialog
-          isOpen={isDeleteDialogOpen}
-          onOpenChange={setIsDeleteDialogOpen}
+          open={isDeleteDialogOpen}
+          onOpenChange={(open) => !open && pendingDeleteId && prepareDeleteShort(null)}
           onConfirm={handleDeleteShort}
+          isOfflineMode={isOffline || hookIsOffline}
         />
       </CardContent>
     </Card>

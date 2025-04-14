@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,46 +7,81 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db, isFirestoreAvailable } from '@/lib/firebase';
+import OfflineFirebaseAlert from '@/components/auth/OfflineFirebaseAlert';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
   
   const navigate = useNavigate();
+
+  // Check if Firebase is available on component mount
+  useEffect(() => {
+    const checkFirebaseConnection = async () => {
+      const available = await isFirestoreAvailable();
+      setIsOffline(!available);
+    };
+    
+    checkFirebaseConnection();
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     
-    // For demonstration, using hardcoded admin credentials
-    // In a real app, you would validate against a secure backend
-    const ADMIN_USERNAME = 'admin';
-    const ADMIN_PASSWORD = 'admin123';
-    
     try {
       setIsLoading(true);
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        // Store admin session in localStorage
-        localStorage.setItem('adminAuth', 'true');
-        
-        toast({
-          title: "Login successful",
-          description: "Welcome to the admin panel",
-        });
-        
-        navigate('/admin/dashboard');
+      if (isOffline) {
+        // Fallback to mock admin login for offline mode
+        if (email === 'admin@example.com' && password === 'admin123') {
+          localStorage.setItem('adminAuth', 'true');
+          localStorage.setItem('adminEmail', email);
+          
+          toast.success("Admin login successful");
+          navigate('/admin/dashboard');
+        } else {
+          setError('Invalid admin credentials');
+        }
       } else {
-        setError('Invalid username or password');
+        // Use Firebase authentication
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Check if user has admin role in Firestore
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+        
+        if (userData && userData.role === 'admin') {
+          localStorage.setItem('adminAuth', 'true');
+          localStorage.setItem('adminEmail', email);
+          localStorage.setItem('adminUid', user.uid);
+          
+          toast.success("Admin login successful");
+          navigate('/admin/dashboard');
+        } else {
+          // User exists but is not an admin
+          setError('You do not have admin privileges');
+          await auth.signOut();
+        }
       }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+    } catch (error: any) {
+      console.error("Login error:", error);
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        setError('Invalid email or password');
+      } else if (error.code === 'auth/network-request-failed') {
+        setError('Network error. Please check your connection');
+        setIsOffline(true);
+      } else {
+        setError(error.message || 'Login failed. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +98,18 @@ const AdminLogin = () => {
         </CardHeader>
         
         <CardContent>
+          {isOffline && (
+            <div className="mb-4">
+              <OfflineFirebaseAlert />
+              <Alert variant="warning" className="mt-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  Using offline mode. Default admin: admin@example.com / admin123
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
+          
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertCircle className="h-4 w-4" />
@@ -72,13 +119,13 @@ const AdminLogin = () => {
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Email</Label>
               <Input 
-                id="username" 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username" 
+                id="email" 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email" 
                 required
               />
             </div>

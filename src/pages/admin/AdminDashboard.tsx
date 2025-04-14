@@ -18,8 +18,13 @@ import {
   Mail,
   Calendar,
   Youtube,
-  Globe
+  Globe,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
+import { toast } from 'sonner';
+import { auth, isFirestoreAvailable } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 
 // Import admin components
 import UserManagement from '@/components/admin/UserManagement';
@@ -32,37 +37,96 @@ import SiteSettingsManager from '@/components/admin/site-settings/SiteSettingsMa
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('analytics');
+  const [adminEmail, setAdminEmail] = useState<string>('');
+  const [isOffline, setIsOffline] = useState(false);
+  const [stats, setStats] = useState([
+    { title: 'Total Users', value: '--', icon: Users, color: 'bg-blue-100 text-blue-700' },
+    { title: 'Pending Applications', value: '--', icon: FileText, color: 'bg-yellow-100 text-yellow-700' },
+    { title: 'Active Startups', value: '--', icon: Building, color: 'bg-green-100 text-green-700' },
+    { title: 'Active Investors', value: '--', icon: BarChart, color: 'bg-purple-100 text-purple-700' },
+  ]);
   
-  // Check if admin is logged in
+  // Check if admin is logged in and Firebase connection
   useEffect(() => {
-    const isAdmin = localStorage.getItem('adminAuth') === 'true';
-    if (!isAdmin) {
-      navigate('/admin');
+    // Get admin email from localStorage
+    const email = localStorage.getItem('adminEmail');
+    if (email) {
+      setAdminEmail(email);
     }
-  }, [navigate]);
+
+    // Check Firebase connection
+    const checkFirestoreStatus = async () => {
+      const available = await isFirestoreAvailable();
+      setIsOffline(!available);
+      
+      if (!available) {
+        toast.warning("Running in offline mode. Some features may be limited.");
+      }
+    };
+    
+    checkFirestoreStatus();
+    
+    // Load mock stats for now
+    // In a real application, you would fetch these from Firestore
+    setTimeout(() => {
+      setStats([
+        { title: 'Total Users', value: '1,248', icon: Users, color: 'bg-blue-100 text-blue-700' },
+        { title: 'Pending Applications', value: '43', icon: FileText, color: 'bg-yellow-100 text-yellow-700' },
+        { title: 'Active Startups', value: '782', icon: Building, color: 'bg-green-100 text-green-700' },
+        { title: 'Active Investors', value: '466', icon: BarChart, color: 'bg-purple-100 text-purple-700' },
+      ]);
+    }, 1000);
+  }, []);
   
-  const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
-    navigate('/admin');
+  const handleLogout = async () => {
+    try {
+      // Sign out from Firebase
+      if (!isOffline) {
+        await signOut(auth);
+      }
+      
+      // Clear local storage
+      localStorage.removeItem('adminAuth');
+      localStorage.removeItem('adminEmail');
+      localStorage.removeItem('adminUid');
+      
+      toast.success("Successfully logged out");
+      navigate('/admin');
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Error during logout");
+    }
   };
-  
-  // Stats data for the dashboard
-  const stats = [
-    { title: 'Total Users', value: '1,248', icon: Users, color: 'bg-blue-100 text-blue-700' },
-    { title: 'Pending Applications', value: '43', icon: FileText, color: 'bg-yellow-100 text-yellow-700' },
-    { title: 'Active Startups', value: '782', icon: Building, color: 'bg-green-100 text-green-700' },
-    { title: 'Active Investors', value: '466', icon: BarChart, color: 'bg-purple-100 text-purple-700' },
-  ];
 
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage your website, users, and applications</p>
+          <p className="text-muted-foreground">
+            Welcome, {adminEmail || 'Admin'}
+            {isOffline && <span className="ml-2 text-amber-500 flex items-center gap-1 text-sm">
+              <WifiOff size={16} /> Offline Mode
+            </span>}
+          </p>
         </div>
         <Button variant="outline" onClick={handleLogout}>Logout</Button>
       </div>
+      
+      {/* Network status alert */}
+      {isOffline && (
+        <Card className="mb-6 border-amber-200 bg-amber-50">
+          <CardContent className="p-4">
+            <div className="flex gap-2 items-center text-amber-700">
+              <AlertCircle className="h-5 w-5" />
+              <p>
+                You are in offline mode. Changes to YouTube shorts and other content will be stored locally 
+                until a connection to Firebase is established.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       
       {/* Stats section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -129,7 +193,7 @@ const AdminDashboard = () => {
         <TabsContent value="content">
           <div className="grid grid-cols-1 gap-6">
             <ContentManagement />
-            <YouTubeShortsManagement />
+            <YouTubeShortsManagement isOffline={isOffline} />
           </div>
         </TabsContent>
         
@@ -147,6 +211,10 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <p>Site configuration options will appear here.</p>
+              <div className="mt-4 flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${isOffline ? 'bg-red-500' : 'bg-green-500'}`}></div>
+                <span>{isOffline ? 'Firebase Offline' : 'Firebase Connected'}</span>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
