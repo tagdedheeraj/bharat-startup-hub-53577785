@@ -1,4 +1,3 @@
-import { cleanupAllPortals } from '../portalCleanup';
 
 export const cleanupDOM = (): void => {
   try {
@@ -10,7 +9,18 @@ export const cleanupDOM = (): void => {
       return;
     }
     
-    const elementsRemoved = cleanupAllPortals();
+    // No more dependency on portalCleanup, using direct DOM cleanup
+    const cleanupPortals = () => {
+      const portals = document.querySelectorAll('[data-radix-portal][data-state="closed"]');
+      portals.forEach(portal => {
+        if (portal.parentNode) {
+          portal.parentNode.removeChild(portal);
+        }
+      });
+      return portals.length;
+    };
+    
+    const elementsRemoved = cleanupPortals();
     
     if (elementsRemoved > 0) {
       window.scrollBy(0, 0);

@@ -7,12 +7,13 @@ export const useYouTubePlayerState = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   
-  // Reset loading state after a timeout if it's stuck
+  // Reset loading state after a shorter timeout to prevent infinite loading
   useEffect(() => {
     if (isLoading) {
       const timer = setTimeout(() => {
+        console.log("Force setting isLoading to false after timeout");
         setIsLoading(false);
-      }, 3000);
+      }, 1500); // Reduced from 3000 to 1500
       return () => clearTimeout(timer);
     }
   }, [isLoading]);

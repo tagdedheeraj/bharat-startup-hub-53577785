@@ -22,9 +22,9 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
         allowFullScreen
         loading="eager"
         style={{
-          opacity: isLoading ? 0 : 1,
-          visibility: 'visible',
-          zIndex: 9500
+          opacity: 1, // Always visible
+          visibility: 'visible', // Always visible
+          zIndex: 10000 // Higher z-index
         }}
         data-youtube-iframe="true"
         aria-label="YouTube video player"
