@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from 'react';
 import { YouTubeShort } from '../types';
 import { useCarouselState } from './carousel/useCarouselState';
 import { useCarouselControls } from './carousel/useCarouselControls';
@@ -33,7 +32,8 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   } = useCarouselLoading(youtubeShorts, setCurrentVideoId);
 
   const { 
-    isLowPerformanceDevice 
+    isLowPerformanceDevice,
+    isMobileDevice
   } = useDeviceDetection();
 
   // Return a consolidated API from all the specialized hooks
@@ -49,6 +49,6 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     closeVideo,
     togglePause,
     retryLoading,
-    isLowPerformanceDevice
+    isLowPerformanceDevice: isLowPerformanceDevice || isMobileDevice
   };
 };

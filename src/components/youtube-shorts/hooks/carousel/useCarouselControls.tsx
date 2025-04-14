@@ -47,7 +47,7 @@ export const useCarouselControls = (setCurrentVideoId: (id: string | null) => vo
     if (!isPausedRef.current && isCarouselMounted.current && !isLowPerformanceDevice && !isMobileDevice) {
       startAutoSlide();
     }
-  }, [isLowPerformanceDevice, isMobileDevice]);
+  }, [isLowPerformanceDevice, isMobileDevice, setCurrentVideoId]);
 
   // Toggle the pause state
   const togglePause = useCallback(() => {

@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { YouTubeShort } from '../../types';
 import { getYoutubeShorts } from '../../data';
+import { toast } from "sonner";
+import { AlertCircle } from 'lucide-react';
 
 /**
  * Hook responsible for managing the carousel's state
@@ -35,6 +37,10 @@ export const useCarouselState = (initialShorts: YouTubeShort[]) => {
         if (isMounted) {
           // On error, use initial data
           setYoutubeShorts(initialShorts);
+          toast.error("Failed to load YouTube shorts", {
+            description: "Using backup videos instead",
+            icon: <AlertCircle className="h-5 w-5 text-red-500" />
+          });
         }
       }
     };
