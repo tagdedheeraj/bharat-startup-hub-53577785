@@ -27,11 +27,10 @@ const Layout = ({ children }: LayoutProps) => {
   useEffect(() => {
     setIsLowPerformance(isLowPerformanceDevice());
     
-    // Add specific mobile scrolling optimizations
+    // Apply scroll optimization styles directly to the main element
     if (isMobile) {
-      // Apply scroll optimization styles directly to the main element
+      // Use proper casing for webkit properties and type assertion
       if (mainRef.current) {
-        // Use proper casing for webkit properties
         (mainRef.current.style as any).WebkitOverflowScrolling = 'touch';
         mainRef.current.style.overscrollBehavior = 'none';
       }
@@ -40,7 +39,7 @@ const Layout = ({ children }: LayoutProps) => {
       const fixScrollingStyles = () => {
         // Find all scrollable containers and ensure they have touch scrolling
         document.querySelectorAll('.overflow-auto, .overflow-y-auto, [style*="overflow"]').forEach((el) => {
-          // Use proper casing for webkit properties
+          // Use proper casing for webkit properties and type assertion
           (el as HTMLElement).style.WebkitOverflowScrolling = 'touch';
         });
       };
@@ -108,3 +107,4 @@ const Layout = ({ children }: LayoutProps) => {
 
 // Memoize the component to prevent unnecessary re-renders
 export default memo(Layout);
+
