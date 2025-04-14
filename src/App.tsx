@@ -6,7 +6,7 @@ import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
 import NavigationObserver from "@/components/NavigationObserver";
 import TestPopup from "@/components/TestPopup";
-import { applyMobileOptimizations, setupPeriodicCleanup } from "@/utils/mobilePerformance";
+import { applyMobileOptimizations, setupPeriodicCleanup } from "@/utils/mobile/optimization";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const App = () => {

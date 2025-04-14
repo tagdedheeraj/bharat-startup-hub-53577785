@@ -1,7 +1,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import { cleanupDOM } from "@/utils/mobilePerformance";
+import { cleanupDOM } from "@/utils/mobile/cleanup";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const NavigationObserver = () => {

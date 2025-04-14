@@ -6,7 +6,7 @@ import Footer from './Footer';
 import SideDrawerNavigation from './SideDrawerNavigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { isLowPerformanceDevice } from '@/utils/mobilePerformance';
+import { isLowPerformanceDevice } from '@/utils/mobile/detection';
 import MobileOptimizer from './layout/MobileOptimizer';
 import SimpleHeader from './layout/SimpleHeader';
 import MainContent from './layout/MainContent';
