@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -12,12 +11,10 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Function to handle support drawer actions
   const handleSupportAction = (action: string) => {
     console.log(`Support action triggered: ${action}`);
-    onActionComplete(); // Close drawer first
+    onActionComplete(); 
     
-    // Delay action slightly to allow drawer to close
     setTimeout(() => {
       switch(action) {
         case 'contact':
@@ -28,14 +25,14 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
           });
           break;
         case 'email':
-          window.open('mailto:support@bharatstartup.com', '_blank');
+          window.open('mailto:support@bharatstartupsolution.com', '_blank');
           toast({
             title: "Opening email client",
             description: "Your default email client should open shortly."
           });
           break;
         case 'call':
-          window.open('https://wa.me/919876543210', '_blank');
+          window.open('https://wa.me/917046396020', '_blank');
           toast({
             title: "Opening WhatsApp",
             description: "You'll be connected with our support team."

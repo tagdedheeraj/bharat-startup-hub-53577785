@@ -24,7 +24,7 @@ export default function SupportSection() {
             className="w-full justify-start gap-2"
             asChild
           >
-            <a href="mailto:support@bharatstartup.com">
+            <a href="mailto:support@bharatstartupsolution.com">
               <Mail size={16} />
               <span>Email Support</span>
             </a>
@@ -34,7 +34,7 @@ export default function SupportSection() {
             className="w-full justify-start gap-2"
             asChild
           >
-            <a href="https://wa.me/919876543210">
+            <a href="https://wa.me/917046396020">
               <LifeBuoy size={16} />
               <span>Call Support</span>
             </a>

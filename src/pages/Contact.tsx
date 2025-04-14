@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -202,8 +201,8 @@ const ContactPage = () => {
                         <a href="mailto:info@bharatstartup.com" className="hover:text-brand-600">
                           info@bharatstartup.com
                         </a><br />
-                        <a href="mailto:support@bharatstartup.com" className="hover:text-brand-600">
-                          support@bharatstartup.com
+                        <a href="mailto:support@bharatstartupsolution.com" className="hover:text-brand-600">
+                          support@bharatstartupsolution.com
                         </a>
                       </p>
                     </div>

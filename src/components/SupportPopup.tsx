@@ -15,18 +15,17 @@ export default function SupportPopup() {
   const [open, setOpen] = useState(false);
   
   const handleOpenMail = () => {
-    window.open('mailto:support@bharatstartup.com');
+    window.open('mailto:support@bharatstartupsolution.com');
     setOpen(false);
   };
   
   const handleOpenPhone = () => {
-    window.open('tel:+919876543210');
+    window.open('tel:+917046396020');
     setOpen(false);
   };
   
   const handleOpenChat = () => {
-    // This could be replaced with actual chat functionality
-    window.open('https://wa.me/919876543210');
+    window.open('https://wa.me/917046396020');
     setOpen(false);
   };
   
@@ -55,7 +54,7 @@ export default function SupportPopup() {
               onClick={handleOpenMail}
             >
               <Mail className="h-5 w-5" />
-              <span>Email: support@bharatstartup.com</span>
+              <span>Email: support@bharatstartupsolution.com</span>
             </Button>
             
             <Button 
@@ -64,7 +63,7 @@ export default function SupportPopup() {
               onClick={handleOpenPhone}
             >
               <Phone className="h-5 w-5" />
-              <span>Call: +91 9876 543210</span>
+              <span>Call: +91 7046 396020</span>
             </Button>
             
             <Button 
