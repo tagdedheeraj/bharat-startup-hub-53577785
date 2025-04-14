@@ -15,41 +15,57 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface YouTubeShortDialogProps {
-  isOpen: boolean;
+  open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: YouTubeShort) => void;
-  defaultValues: YouTubeShort;
   title: string;
-  description: string;
-  submitLabel: string;
+  isOfflineMode?: boolean;
+  initialData?: YouTubeShort | null;
 }
 
 const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
-  isOpen,
+  open,
   onOpenChange,
   onSubmit,
-  defaultValues,
   title,
-  description,
-  submitLabel
+  isOfflineMode = false,
+  initialData = null
 }) => {
+  const defaultValues: YouTubeShort = initialData || {
+    id: '',
+    title: '',
+    thumbnail: ''
+  };
+
   const form = useForm<YouTubeShort>({
     defaultValues
   });
 
+  // Reset form when dialog opens or initialData changes
   React.useEffect(() => {
-    if (isOpen) {
+    if (open) {
       form.reset(defaultValues);
     }
-  }, [isOpen, defaultValues, form]);
+  }, [open, initialData, form, defaultValues]);
+
+  const description = initialData ? 
+    "Edit the YouTube short details below." : 
+    "Enter the details of the YouTube short to add.";
+
+  const submitLabel = initialData ? "Update" : "Add";
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {description}
+            {isOfflineMode && (
+              <span className="block mt-2 text-amber-600 text-xs">
+                Running in offline mode. Changes will be saved locally.
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

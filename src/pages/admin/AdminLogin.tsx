@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +21,6 @@ const AdminLogin = () => {
   
   const navigate = useNavigate();
 
-  // Check if Firebase is available on component mount
   useEffect(() => {
     const checkFirebaseConnection = async () => {
       const available = await isFirestoreAvailable();
@@ -40,7 +38,6 @@ const AdminLogin = () => {
       setIsLoading(true);
       
       if (isOffline) {
-        // Fallback to mock admin login for offline mode
         if (email === 'admin@example.com' && password === 'admin123') {
           localStorage.setItem('adminAuth', 'true');
           localStorage.setItem('adminEmail', email);
@@ -51,11 +48,9 @@ const AdminLogin = () => {
           setError('Invalid admin credentials');
         }
       } else {
-        // Use Firebase authentication
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         
-        // Check if user has admin role in Firestore
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         const userData = userDoc.data();
         
@@ -67,7 +62,6 @@ const AdminLogin = () => {
           toast.success("Admin login successful");
           navigate('/admin/dashboard');
         } else {
-          // User exists but is not an admin
           setError('You do not have admin privileges');
           await auth.signOut();
         }
@@ -101,7 +95,7 @@ const AdminLogin = () => {
           {isOffline && (
             <div className="mb-4">
               <OfflineFirebaseAlert />
-              <Alert variant="warning" className="mt-2">
+              <Alert className="mt-2">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
                   Using offline mode. Default admin: admin@example.com / admin123

@@ -13,16 +13,35 @@ import { Button } from '@/components/ui/button';
 import { Pencil, Trash2 } from 'lucide-react';
 
 interface YouTubeShortsTableProps {
-  shorts: YouTubeShort[];
+  youtubeShorts: YouTubeShort[];
+  isLoading: boolean;
   onEdit: (short: YouTubeShort) => void;
   onDelete: (id: string) => void;
 }
 
 const YouTubeShortsTable: React.FC<YouTubeShortsTableProps> = ({ 
-  shorts, 
+  youtubeShorts, 
+  isLoading, 
   onEdit, 
   onDelete 
 }) => {
+  if (isLoading) {
+    return (
+      <div className="py-8 text-center">
+        <div className="inline-block animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+        <p className="mt-2 text-muted-foreground">Loading YouTube shorts...</p>
+      </div>
+    );
+  }
+
+  if (youtubeShorts.length === 0) {
+    return (
+      <div className="py-8 text-center">
+        <p className="text-muted-foreground">No YouTube shorts found. Add your first short above.</p>
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -34,7 +53,7 @@ const YouTubeShortsTable: React.FC<YouTubeShortsTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {shorts.map((short) => (
+        {youtubeShorts.map((short) => (
           <TableRow key={short.id}>
             <TableCell>
               <img 
