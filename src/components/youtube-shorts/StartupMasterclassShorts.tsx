@@ -28,10 +28,12 @@ const StartupMasterclassShorts = () => {
   const [hoveredShort, setHoveredShort] = useState<string | null>(null);
 
   const playVideo = (id: string) => {
+    console.log("Playing video with ID:", id);
     setCurrentVideoId(id);
   };
 
   const closeVideo = () => {
+    console.log("Closing video player");
     setCurrentVideoId(null);
   };
 

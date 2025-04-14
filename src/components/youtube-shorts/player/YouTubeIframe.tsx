@@ -8,6 +8,7 @@ interface YouTubeIframeProps {
 
 const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
   ({ videoId, isLoading }, ref) => {
+    // Update YouTube URL with better configuration parameters
     const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
     
     return (

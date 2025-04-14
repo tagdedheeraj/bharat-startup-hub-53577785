@@ -1,13 +1,27 @@
 
+import { YouTubeShort } from "../types";
+
+// Import demo shorts data to get video titles
+const demoShorts: YouTubeShort[] = [
+  {
+    id: "pq22sadiXqQ",
+    title: "Startup Funding Essentials",
+    thumbnail: "https://i3.ytimg.com/vi/pq22sadiXqQ/maxresdefault.jpg"
+  },
+  {
+    id: "lM3Tswmx8zM",
+    title: "Market Validation Strategy",
+    thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
+  },
+  {
+    id: "xkLNpYiwak8",
+    title: "Pitch Deck Secrets",
+    thumbnail: "https://i3.ytimg.com/vi/xkLNpYiwak8/maxresdefault.jpg"
+  }
+];
+
+// Get video title by ID
 export const getVideoTitle = (videoId: string): string => {
-  // Map of known video IDs to their titles
-  const titleMap: Record<string, string> = {
-    "pq22sadiXqQ": "Startup Funding Guide",
-    "lM3Tswmx8zM": "Business Strategy Secrets",
-    "xkLNpYiwak8": "Business Model Innovation",
-    "k6t0Fivw0EQ": "Entrepreneurship Success Factors",
-  };
-  
-  // Return the mapped title or a default one
-  return titleMap[videoId] || "Startup Masterclass";
+  const foundVideo = demoShorts.find(short => short.id === videoId);
+  return foundVideo?.title || "YouTube Short";
 };
