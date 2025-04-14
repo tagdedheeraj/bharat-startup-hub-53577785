@@ -8,14 +8,8 @@ interface YouTubeIframeProps {
 
 const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
   ({ videoId, isLoading }, ref) => {
-    // Ensure video ID is properly sanitized
-    const sanitizedVideoId = videoId.trim();
-    const currentOrigin = window.location.origin || "https://lovable.dev";
-    
-    // Create a YouTube URL with parameters optimized for both mobile and desktop
-    const youtubeUrl = `https://www.youtube.com/embed/${sanitizedVideoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(currentOrigin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
-    
-    console.log("Creating YouTube iframe with URL:", youtubeUrl);
+    // Create a more comprehensive YouTube URL with optimized parameters for mobile
+    const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
     
     return (
       <iframe
