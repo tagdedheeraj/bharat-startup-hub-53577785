@@ -69,6 +69,33 @@ const App = () => {
     
     resetInactivityTimer();
     
+    // Additional cleanup function to remove any "Edit with Lovable" elements
+    const removeLovableElements = () => {
+      const selectors = [
+        '[class*="lovable-"]',
+        '[id*="lovable-"]',
+        '[data-lovable]',
+        '.gpt-engineer-container',
+        '.gpt-engineer-button',
+        '[class*="gpt-engineer"]',
+        '[id*="gpt-engineer"]',
+        'div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"]:not([class])'
+      ];
+      
+      selectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        });
+      });
+    };
+    
+    // Run cleanup immediately and on interval
+    removeLovableElements();
+    const cleanupInterval = setInterval(removeLovableElements, 1000);
+    
     return () => {
       if (inactivityTimer) {
         clearTimeout(inactivityTimer);
@@ -79,6 +106,8 @@ const App = () => {
       });
       
       document.head.removeChild(style);
+      
+      clearInterval(cleanupInterval);
     };
   }, [isMobile]);
 

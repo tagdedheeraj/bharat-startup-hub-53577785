@@ -6,6 +6,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bharat Startup Hub</title>
+    <!-- Adding a style to hide any Lovable-related elements -->
+    <style>
+      [class*="lovable-"], 
+      [id*="lovable-"], 
+      [data-lovable], 
+      .gpt-engineer-container, 
+      .gpt-engineer-button,
+      [class*="gpt-engineer"],
+      [id*="gpt-engineer"],
+      div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"]:not([class]) {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

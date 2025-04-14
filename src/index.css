@@ -217,3 +217,18 @@
   animation: gradient-x 15s ease infinite;
   background-size: 200% auto;
 }
+
+/* Hide Lovable-related elements */
+[class*="lovable-"], 
+[id*="lovable-"], 
+[data-lovable], 
+.gpt-engineer-container, 
+.gpt-engineer-button,
+[class*="gpt-engineer"],
+[id*="gpt-engineer"],
+div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"]:not([class]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
