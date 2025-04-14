@@ -1,6 +1,6 @@
-
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock, RefreshCcw } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -129,6 +129,12 @@ export default function Footer() {
                 <Link to="/client-service-agreement" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <FileSignature className="w-4 h-4 mr-2 text-brand-400" />
                   Client Service Agreement
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <RefreshCcw className="w-4 h-4 mr-2 text-brand-400" />
+                  Refund Policy
                 </Link>
               </li>
             </ul>

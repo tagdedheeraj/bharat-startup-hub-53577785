@@ -1,4 +1,3 @@
-
 import { Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 import Layout from "@/components/Layout";
@@ -26,6 +25,7 @@ import TermsAndConditionsPage from "@/pages/TermsAndConditions";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicy";
 import DisclaimerPage from "@/pages/Disclaimer";
 import ClientServiceAgreementPage from "@/pages/ClientServiceAgreement";
+import RefundPolicyPage from "@/pages/RefundPolicy";
 
 // CA Services Pages
 import CAServicesPage from "@/pages/CAServices";
@@ -90,6 +90,7 @@ const AppRoutes = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/client-service-agreement" element={<ClientServiceAgreementPage />} />
+        <Route path="/refund-policy" element={<RefundPolicyPage />} />
         
         {/* CA Services Routes */}
         <Route path="/ca-services" element={<CAServicesPage />} />
