@@ -8,9 +8,19 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import { useEffect } from "react"
 
 export function Toaster() {
   const { toasts } = useToast()
+
+  // Remove automatic cleanup as it's causing issues with other popups
+  // Let the NavigationObserver handle this instead
+  useEffect(() => {
+    return () => {
+      // Empty cleanup function - popups will be managed by the NavigationObserver
+      console.debug("Toaster unmounted, cleanup delegated to NavigationObserver");
+    };
+  }, []);
 
   return (
     <ToastProvider>

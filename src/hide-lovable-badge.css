@@ -94,3 +94,20 @@ script[src*="gptengineer"],
 script[src*="gpteng"] {
   display: none !important;
 }
+
+/* Block any powered by text that might contain lovable mentions */
+[class*="powered"],
+[id*="powered"],
+div:has(> span:contains("powered")),
+small:contains("powered"),
+p:contains("powered by"),
+div:contains("made with"),
+span:contains("built with"),
+a[href*="lovable"],
+a[href*="gptengineer"],
+img[src*="lovable"],
+img[src*="gptengineer"],
+source[src*="lovable"],
+source[src*="gptengineer"] {
+  display: none !important;
+}

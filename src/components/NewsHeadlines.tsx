@@ -4,7 +4,7 @@ import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import FundingForm from './FundingForm';
+import FundingApplicationForm from '@/components/funding/FundingApplicationForm';
 
 interface NewsItem {
   title: string;
@@ -53,7 +53,6 @@ export default function NewsHeadlines() {
 
   return (
     <section className="py-16 md:py-24 curved-section-both relative">
-      {/* Top decorative curve */}
       <div className="curved-wave-top text-white">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-12 w-full opacity-10">
           <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
@@ -112,10 +111,10 @@ export default function NewsHeadlines() {
                     </DialogHeader>
                     <div className="py-4">
                       <p className="text-center mb-4">Enter your details to read the full article and stay updated with our latest news.</p>
-                      <FundingForm 
+                      <FundingApplicationForm 
                         fundingTitle="News Subscription" 
                         fundingAmount="" 
-                        onSubmitSuccess={() => setIsDialogOpen(false)}
+                        onSuccess={() => setIsDialogOpen(false)}
                         formType="newsletter"
                       />
                     </div>
@@ -134,7 +133,6 @@ export default function NewsHeadlines() {
         </div>
       </div>
       
-      {/* Bottom decorative curve */}
       <div className="curved-wave-bottom text-white">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="h-12 w-full opacity-10">
           <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" transform="rotate(180)"></path>
@@ -143,7 +141,6 @@ export default function NewsHeadlines() {
         </svg>
       </div>
       
-      {/* Decorative blob shapes */}
       <div className="blob-shape bg-purple-500/10 w-64 h-64 -left-24 top-1/3"></div>
       <div className="blob-shape bg-blue-500/10 w-96 h-96 right-0 bottom-0"></div>
     </section>
