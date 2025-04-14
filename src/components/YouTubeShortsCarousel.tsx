@@ -1,12 +1,14 @@
 
 import { memo } from 'react';
-import { Youtube, Play, Pause } from 'lucide-react';
+import { Youtube, Play, Pause, RefreshCw } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useYouTubeCarousel } from './youtube-shorts/useYouTubeCarousel';
 import { youtubeShorts } from './youtube-shorts/data';
 import VideoPlayer from './youtube-shorts/VideoPlayer';
 import ShortCard from './youtube-shorts/ShortCard';
 import LoadingSkeleton from './youtube-shorts/LoadingSkeleton';
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const YouTubeShortsCarousel = () => {
   const {
@@ -15,15 +17,20 @@ const YouTubeShortsCarousel = () => {
     isLoading,
     hoveredVideo,
     youtubeShorts: displayedShorts,
+    loadError,
     setHoveredVideo,
     playVideo,
     closeVideo,
     togglePause,
+    retryLoading,
     isLowPerformanceDevice
   } = useYouTubeCarousel(youtubeShorts);
 
   // For low performance devices, limit to 3 items maximum
   const optimizedShorts = isLowPerformanceDevice ? displayedShorts.slice(0, 3) : displayedShorts;
+  
+  // Early debug log to check what shorts are available
+  console.log("YouTube Shorts to display:", optimizedShorts);
 
   return (
     <div className="relative py-16 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-slate-900">
@@ -49,9 +56,30 @@ const YouTubeShortsCarousel = () => {
           </p>
         </div>
 
+        {loadError && (
+          <Alert variant="destructive" className="mb-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+            <AlertDescription className="flex justify-between items-center">
+              <span>{loadError}</span>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={retryLoading}
+                className="flex items-center gap-1"
+              >
+                <RefreshCw className="h-4 w-4" /> Retry
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="relative overflow-hidden rounded-xl shadow-xl border border-purple-100 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm p-6 animate-fadeIn">
           {isLoading ? (
             <LoadingSkeleton />
+          ) : optimizedShorts.length === 0 ? (
+            <div className="py-12 text-center">
+              <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300">No YouTube shorts available</h3>
+              <p className="mt-2 text-gray-500 dark:text-gray-400">Check back later for new content</p>
+            </div>
           ) : (
             <Carousel className="w-full" opts={{ loop: true }}>
               <CarouselContent>
