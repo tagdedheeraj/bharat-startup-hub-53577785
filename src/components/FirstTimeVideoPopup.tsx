@@ -66,7 +66,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
     
     // Try to extract from various YouTube URL formats
     const regexPatterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/watch\?.*v=)([^&\?\/#]+)/i,
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/watch\?.*v=)([^&\?\/#]+)/i,
       /youtube\.com\/watch\?.*v=([^&\?\/#]+)/i,
       /youtu\.be\/([^&\?\/#]+)/i
     ];
