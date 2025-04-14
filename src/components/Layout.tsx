@@ -1,4 +1,3 @@
-
 import { ReactNode, useEffect, memo, useState, useRef, CSSProperties } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
@@ -8,59 +7,46 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { isLowPerformanceDevice } from '@/utils/mobilePerformance';
 
-interface LayoutProps {
-  children?: ReactNode;
-}
-
-// Define a custom type that includes webkit properties
 interface ExtendedCSSProperties extends CSSProperties {
   WebkitOverflowScrolling?: 'touch' | 'auto';
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }: { children?: ReactNode }) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isLowPerformance, setIsLowPerformance] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
   
-  // Check for low performance device on mount
   useEffect(() => {
     setIsLowPerformance(isLowPerformanceDevice());
     
-    // Apply scroll optimization styles directly to the main element
     if (isMobile) {
-      // Use proper casing for webkit properties and type assertion
       if (mainRef.current) {
-        (mainRef.current.style as any).WebkitOverflowScrolling = 'touch';
+        const style = mainRef.current.style as unknown as ExtendedCSSProperties;
+        style.WebkitOverflowScrolling = 'touch';
         mainRef.current.style.overscrollBehavior = 'none';
       }
       
-      // Fix mobile scrolling jank by removing overflow:hidden where not needed
       const fixScrollingStyles = () => {
-        // Find all scrollable containers and ensure they have touch scrolling
         document.querySelectorAll('.overflow-auto, .overflow-y-auto, [style*="overflow"]').forEach((el) => {
-          // Use proper casing for webkit properties and type assertion
-          (el as HTMLElement).style.WebkitOverflowScrolling = 'touch';
+          const style = (el as HTMLElement).style as unknown as ExtendedCSSProperties;
+          style.WebkitOverflowScrolling = 'touch';
         });
       };
       
-      // Run immediately and after a short delay to catch dynamically rendered elements
       fixScrollingStyles();
       setTimeout(fixScrollingStyles, 500);
     }
   }, [isMobile]);
   
-  // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
 
-  // Use simpler background for low performance devices
   const bgClass = isLowPerformance 
     ? 'bg-white' 
     : isNotFoundPage 
       ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' 
       : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green';
 
-  // Create mobile styles with proper casing
   const mobileStyles: ExtendedCSSProperties = isMobile ? {
     WebkitOverflowScrolling: 'touch',
     overscrollBehavior: 'none'
@@ -69,12 +55,13 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div 
       className={`flex flex-col min-h-screen ${bgClass}`}
-      style={mobileStyles}
+      style={isMobile ? {
+        WebkitOverflowScrolling: 'touch',
+        overscrollBehavior: 'none'
+      } as ExtendedCSSProperties : undefined}
     >
-      {/* Only render 3D header on non-low-performance devices */}
       {!isLowPerformance && <OvalHeader />}
       
-      {/* Simple header for low performance devices */}
       {isLowPerformance && (
         <header className="py-4 bg-white border-b border-gray-200">
           <div className="container mx-auto px-4">
@@ -99,12 +86,9 @@ const Layout = ({ children }: LayoutProps) => {
       </main>
       <Footer />
       
-      {/* Use our side drawer navigation */}
       <SideDrawerNavigation />
     </div>
   );
 };
 
-// Memoize the component to prevent unnecessary re-renders
 export default memo(Layout);
-
