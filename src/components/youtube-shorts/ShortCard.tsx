@@ -1,5 +1,6 @@
 
-import { Play } from 'lucide-react';
+import React from 'react';
+import { Play, Youtube } from 'lucide-react';
 import { YouTubeShort } from './types';
 
 interface ShortCardProps {
@@ -10,23 +11,30 @@ interface ShortCardProps {
   onHover: (id: string | null) => void;
 }
 
-const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps) => {
+const ShortCard: React.FC<ShortCardProps> = ({
+  short,
+  index,
+  isHovered,
+  onPlay,
+  onHover
+}) => {
+  // Handler to ensure video plays on both mobile and desktop
   const handlePlay = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("ShortCard play clicked for video ID:", short.id);
+    console.log("ShortCard: Play clicked for video ID:", short.id);
     onPlay(short.id);
   };
   
   return (
     <div 
-      className={`relative group aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-gray-900 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:z-10 ${isHovered ? 'ring-2 ring-red-500' : ''}`}
-      onClick={handlePlay}
+      className={`group relative overflow-hidden rounded-lg shadow-lg h-full transform transition-transform duration-300
+        ${isHovered ? 'scale-[1.03] shadow-xl ring-2 ring-purple-500' : 'hover:scale-[1.02]'}`}
       onMouseEnter={() => onHover(short.id)}
       onMouseLeave={() => onHover(null)}
-      style={{animationDelay: `${index * 100}ms`}}
-      aria-label={`Play ${short.title} video`}
+      onClick={handlePlay}
       role="button"
+      aria-label={`Play ${short.title} video`}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -34,60 +42,39 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
         }
       }}
     >
-      {/* Thumbnail image with optimized loading */}
-      <img
-        src={short.thumbnail}
-        alt={short.title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:opacity-80"
-        loading="lazy"
-        decoding="async"
-        fetchPriority="high"
-      />
-      
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
-      
-      {/* Hover effects with improved visibility */}
-      {isHovered && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-full h-full pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 animate-pulse"></div>
-            <div className="absolute h-1.5 bottom-0 left-0 right-0 bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 animate-[width_5s_linear_infinite]"></div>
-          </div>
-        </div>
-      )}
-      
-      {/* Play button - more prominent for better visibility */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <button 
-          onClick={handlePlay}
-          className={`bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform transition-all duration-300 shadow-lg ${isHovered ? 'scale-125 animate-pulse' : ''}`}
-          aria-label="Play video"
-        >
-          <Play fill="white" size={32} className={isHovered ? 'animate-pulse' : ''} />
-        </button>
+      {/* Thumbnail container */}
+      <div className="aspect-video bg-gray-900 overflow-hidden relative">
+        {/* Thumbnail image */}
+        <img
+          src={short.thumbnail}
+          alt={short.title}
+          className={`w-full h-full object-cover transition-all duration-500
+            ${isHovered ? 'scale-110 blur-[1px]' : 'group-hover:scale-105'}`}
+          loading="lazy"
+          onError={(e) => {
+            // Fallback for thumbnail load errors
+            (e.target as HTMLImageElement).src = "https://placehold.co/1280x720/gray/white?text=Thumbnail+Error";
+          }}
+        />
         
-        {/* Play hint text - more visible */}
-        <div className="absolute bottom-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <p className="text-white text-sm font-bold bg-black/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
-            Click to play
-          </p>
+        {/* Dark overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-70 group-hover:opacity-90"></div>
+        
+        {/* Play button (shown on hover/focus) */}
+        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform 
+          transition-all duration-300 bg-purple-600/90 rounded-full p-4
+          ${isHovered ? 'scale-110 opacity-100' : 'scale-90 opacity-0 group-hover:scale-100 group-hover:opacity-100'}`}>
+          <Play className="h-5 w-5 text-white" fill="white" />
         </div>
       </div>
       
-      {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-between p-4 text-white pointer-events-none">
-        {/* Title card with enhanced blur effect */}
-        <div className="bg-black/70 backdrop-blur-sm p-3 rounded-lg shadow-lg transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <h3 className="font-bold text-lg line-clamp-2">{short.title}</h3>
+      {/* Video info */}
+      <div className="p-3 bg-white dark:bg-gray-800">
+        <h3 className="font-medium text-gray-900 dark:text-white text-base truncate">{short.title}</h3>
+        <div className="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+          <Youtube className="h-3.5 w-3.5 mr-1 text-red-600" />
+          <span>Startup Masterclass</span>
         </div>
-      </div>
-      
-      {/* "SHORTS" badge */}
-      <div className="absolute top-2 right-2 bg-gradient-to-r from-red-600 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
-        <span className="w-2 h-2 bg-white rounded-full animate-ping absolute"></span>
-        <span className="w-2 h-2 bg-white rounded-full relative"></span>
-        <span>SHORTS</span>
       </div>
     </div>
   );

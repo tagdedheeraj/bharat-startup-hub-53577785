@@ -7,38 +7,48 @@ import { useEffect, useRef } from 'react';
  */
 export const useYouTubeAPI = () => {
   const apiLoaded = useRef(false);
+  const apiLoadStarted = useRef(false);
 
   useEffect(() => {
-    // Load the YouTube IFrame API script if not already loaded
-    if (!window.YT && !apiLoaded.current) {
-      apiLoaded.current = true;
-      console.log('Attempting to load YouTube IFrame API script');
+    // Load the YouTube IFrame API script if not already loaded or loading
+    if (!window.YT && !apiLoaded.current && !apiLoadStarted.current) {
+      apiLoadStarted.current = true;
+      console.log('Loading YouTube IFrame API script');
+      
+      // Define global callback for when API is ready
+      window.onYouTubeIframeAPIReady = () => {
+        console.log('YouTube IFrame API is ready');
+        apiLoaded.current = true;
+        
+        // Dispatch custom event that other components can listen for
+        const event = new CustomEvent('youtube-api-ready');
+        window.dispatchEvent(event);
+      };
       
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
       
-      // Add event listeners to log success or failure
       tag.onload = () => console.log('YouTube IFrame API script loaded successfully');
       tag.onerror = (e) => console.error('Failed to load YouTube IFrame API script:', e);
       
+      // Check if there's a script tag and insert before it, otherwise append to head
       const firstScriptTag = document.getElementsByTagName('script')[0];
       if (firstScriptTag && firstScriptTag.parentNode) {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        console.log('YouTube IFrame API script tag inserted into DOM');
       } else {
         document.head.appendChild(tag);
-        console.log('YouTube IFrame API script tag appended to head');
       }
-    } else if (window.YT) {
-      console.log('YouTube IFrame API already loaded');
     }
   }, []);
 
+  // Function to check if the API is available
+  const isAPIAvailable = () => {
+    const available = Boolean(window.YT && window.YT.Player);
+    return available;
+  };
+
   return {
-    isAPIAvailable: () => {
-      const available = Boolean(window.YT && window.YT.Player);
-      console.log('YouTube API available:', available);
-      return available;
-    }
+    isAPIAvailable,
+    isLoaded: apiLoaded.current
   };
 };

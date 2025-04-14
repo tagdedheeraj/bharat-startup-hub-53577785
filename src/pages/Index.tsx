@@ -12,7 +12,6 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/funding/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
-import StartupMasterclassShorts from '@/components/youtube-shorts/StartupMasterclassShorts';
 
 const HomePage = () => {
   return (
@@ -27,9 +26,6 @@ const HomePage = () => {
       <section className="py-16">
         <YouTubeShortsCarousel />
       </section>
-
-      {/* New Startup Masterclass Shorts Section */}
-      <StartupMasterclassShorts />
 
       {/* Statistics Slider Section */}
       <StatisticsSlider />
