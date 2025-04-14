@@ -7,7 +7,7 @@ export const getVideoTitle = (videoId: string): string => {
   const titleMap: Record<string, string> = {
     "pq22sadiXqQ": "Startup Funding Guide",
     "lM3Tswmx8zM": "Business Strategy Secrets",
-    "xkLNpYiwak8": "Business Model Innovation",
+    "sEKYtxnpAP4": "Startup Growth Strategies",
     "k6t0Fivw0EQ": "Entrepreneurship Success Factors",
   };
   
