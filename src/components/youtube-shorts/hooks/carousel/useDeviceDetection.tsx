@@ -1,13 +1,17 @@
 
 import { useRef } from 'react';
-import { isLowPerformanceDevice as checkLowPerformance } from '@/utils/mobilePerformance';
+import { isLowPerformanceDevice as detectLowPerformance } from '@/utils/mobilePerformance';
 
 /**
- * Hook for device detection and performance optimization
+ * Hook for detecting device capabilities
  */
 export const useDeviceDetection = () => {
-  const lowPerformanceDevice = useRef(checkLowPerformance());
-  const isMobileDevice = useRef(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  // Device capability detection - only compute once
+  const lowPerformanceDevice = useRef(detectLowPerformance());
+  const isMobileDevice = useRef(
+    typeof navigator !== 'undefined' && 
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  );
   
   return {
     isLowPerformanceDevice: lowPerformanceDevice.current,

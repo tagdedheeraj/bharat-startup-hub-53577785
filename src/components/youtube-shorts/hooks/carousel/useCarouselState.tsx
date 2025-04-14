@@ -8,7 +8,6 @@ import { getYoutubeShorts } from '../../data';
  */
 export const useCarouselState = (initialShorts: YouTubeShort[]) => {
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
-  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
   const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>(initialShorts);
 
   // Load shorts data on mount
@@ -49,8 +48,6 @@ export const useCarouselState = (initialShorts: YouTubeShort[]) => {
   return {
     currentVideoId,
     setCurrentVideoId,
-    hoveredVideo,
-    setHoveredVideo,
     youtubeShorts,
     setYoutubeShorts
   };
