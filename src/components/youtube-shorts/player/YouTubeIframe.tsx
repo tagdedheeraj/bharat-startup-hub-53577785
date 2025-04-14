@@ -28,7 +28,8 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
           height: '100%',
           objectFit: 'cover'
         }}
-        playsInline // Add playsinline attribute for iOS
+        // Use the HTML attribute format for playsinline instead of React property
+        playsInline={true}
       ></iframe>
     );
   }
