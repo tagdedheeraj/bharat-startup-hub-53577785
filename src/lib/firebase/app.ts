@@ -4,13 +4,13 @@ import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAb0wpqDwPPG-oepTYi97BUQtW80-SlW2Y",
-  authDomain: "bharat-startup.firebaseapp.com",
-  projectId: "bharat-startup",
-  storageBucket: "bharat-startup.appspot.com", 
-  messagingSenderId: "483893755966",
-  appId: "1:483893755966:web:8ab88e30679c35e7d8116f",
-  measurementId: "G-7MEXQK6P5K"
+  apiKey: "AIzaSyAu5HXUQrhPnlKXCSOkMrWFzF4dY8CaGTQ",
+  authDomain: "bharat-6c047.firebaseapp.com",
+  projectId: "bharat-6c047",
+  storageBucket: "bharat-6c047.firebasestorage.app",
+  messagingSenderId: "847090887386",
+  appId: "1:847090887386:web:d4ec3bebd0305ae65313e3",
+  measurementId: "G-NRBMXPBVB0"
 };
 
 // Initialize Firebase
