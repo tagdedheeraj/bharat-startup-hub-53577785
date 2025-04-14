@@ -8,7 +8,7 @@ interface YouTubeIframeProps {
 
 const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
   ({ videoId, isLoading }, ref) => {
-    // Update YouTube URL with better configuration parameters
+    // Create a more comprehensive YouTube URL with optimized parameters for mobile
     const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
     
     return (
@@ -21,8 +21,14 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
         allowFullScreen
         style={{
-          visibility: isLoading ? 'hidden' : 'visible'
+          visibility: isLoading ? 'hidden' : 'visible',
+          zIndex: 1004, // Ensure video is above other elements
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
         }}
+        playsInline // Add playsinline attribute for iOS
       ></iframe>
     );
   }
