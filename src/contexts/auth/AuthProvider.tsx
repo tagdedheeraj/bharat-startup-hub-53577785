@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, ReactNode } from 'react';
-import { User, UserRole, AuthContextType } from './AuthTypes';
+import { supabase } from '@/integrations/supabase/client';
+import { UserRole, User, AuthContextType } from './AuthTypes';
 import { AuthContext } from './AuthContext';
-import { toast } from '@/hooks/use-toast';
-import * as localAuth from '@/lib/localStorage/auth';
+import { useAuthFunctions } from './useAuthFunctions';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -16,80 +16,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   console.log("Auth state:", { user, isAuthenticated }); // Debug auth state
 
-  // Cargar usuario desde localStorage al inicio
+  // Listen for auth state changes
   useEffect(() => {
-    const storedUser = localAuth.getCurrentUser();
-    if (storedUser) {
-      setUser(storedUser);
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
+    // Set up auth state listener first
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log("Supabase auth state changed:", event, session);
+        if (session) {
+          // Get user's role from metadata
+          const role = session.user?.user_metadata?.role as UserRole || 'startup';
+
+          setUser({
+            id: session.user.id,
+            name: session.user.user_metadata?.name || '',
+            email: session.user.email || '',
+            role: role
+          });
+          setIsAuthenticated(true);
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+      }
+    );
+
+    // Then check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Retrieved session:", session);
+      if (session) {
+        // Get user's role from metadata
+        const role = session.user?.user_metadata?.role as UserRole || 'startup';
+
+        setUser({
+          id: session.user.id,
+          name: session.user.user_metadata?.name || '',
+          email: session.user.email || '',
+          role: role
+        });
+        setIsAuthenticated(true);
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  // Funciones de autenticación
-  const login = async (email: string, password: string, role: UserRole): Promise<void> => {
-    try {
-      await localAuth.login(email, password, role);
-      
-      const loggedInUser = localAuth.getCurrentUser();
-      if (loggedInUser) {
-        setUser(loggedInUser);
-        setIsAuthenticated(true);
-        
-        toast({
-          title: "Inicio de sesión exitoso",
-          description: `¡Bienvenido ${loggedInUser.name}!`,
-        });
-      }
-    } catch (error: any) {
-      console.error('Error de inicio de sesión:', error);
-      throw error;
-    }
-  };
-
-  const register = async (name: string, email: string, password: string, role: UserRole): Promise<void> => {
-    try {
-      await localAuth.register(name, email, password, role);
-      
-      const registeredUser = localAuth.getCurrentUser();
-      if (registeredUser) {
-        setUser(registeredUser);
-        setIsAuthenticated(true);
-        
-        toast({
-          title: "Registro exitoso",
-          description: `¡Bienvenido ${registeredUser.name}!`,
-        });
-      }
-    } catch (error: any) {
-      console.error('Error de registro:', error);
-      throw error;
-    }
-  };
-
-  const logout = async (): Promise<void> => {
-    try {
-      await localAuth.logout();
-      setUser(null);
-      setIsAuthenticated(false);
-      
-      toast({
-        title: "Sesión cerrada",
-        description: "Has cerrado sesión correctamente.",
-      });
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      throw error;
-    }
-  };
-
-  const authValue: AuthContextType = {
-    user,
-    isAuthenticated,
-    login,
-    register,
-    logout
-  };
+  const authValue = useAuthFunctions(user, setUser, isAuthenticated, setIsAuthenticated);
 
   return (
     <AuthContext.Provider value={authValue}>

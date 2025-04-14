@@ -1,15 +1,8 @@
 
-// Export auth components
-import FormField from './FormField';
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
-import ErrorAlert from './ErrorAlert';
-import RegisterTabs from './RegisterTabs';
-
-export {
-  FormField,
-  LoginForm,
-  RegisterForm,
-  ErrorAlert,
-  RegisterTabs
-};
+export { default as FormField } from './FormField';
+export { default as RegisterForm } from './RegisterForm';
+export { default as LoginForm } from './LoginForm';
+export { default as OfflineAlert } from './OfflineAlert';
+export { default as ErrorAlert } from './ErrorAlert';
+export { default as NetworkStatusAlert } from './NetworkStatusAlert';
+export { default as OfflineFirebaseAlert } from './OfflineFirebaseAlert';

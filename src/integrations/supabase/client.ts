@@ -14,7 +14,5 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-    debug: true, // Enable debug mode for authentication issues
-    detectSessionInUrl: true, // Automatically detects OAuth session in URL
   }
 });
