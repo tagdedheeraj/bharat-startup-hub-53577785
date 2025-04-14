@@ -4,6 +4,11 @@ import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 
 import { cn } from "@/lib/utils"
 
+// Define extended CSS properties interface
+interface ExtendedCSSProperties extends React.CSSProperties {
+  WebkitOverflowScrolling?: 'touch' | 'auto';
+}
+
 const ScrollArea = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
@@ -16,8 +21,8 @@ const ScrollArea = React.forwardRef<
     <ScrollAreaPrimitive.Viewport 
       className="h-full w-full rounded-[inherit]"
       style={{
-        WebkitOverflowScrolling: 'touch', // Better iOS scrolling
-      }}
+        WebkitOverflowScrolling: 'touch', // Use correct casing
+      } as ExtendedCSSProperties}
     >
       {children}
     </ScrollAreaPrimitive.Viewport>

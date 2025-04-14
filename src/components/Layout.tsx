@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, memo, useState, useRef } from 'react';
+
+import { ReactNode, useEffect, memo, useState, useRef, CSSProperties } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
@@ -9,6 +10,11 @@ import { isLowPerformanceDevice } from '@/utils/mobilePerformance';
 
 interface LayoutProps {
   children?: ReactNode;
+}
+
+// Define a custom type that includes webkit properties
+interface ExtendedCSSProperties extends CSSProperties {
+  WebkitOverflowScrolling?: 'touch' | 'auto';
 }
 
 const Layout = ({ children }: LayoutProps) => {
@@ -25,8 +31,8 @@ const Layout = ({ children }: LayoutProps) => {
     if (isMobile) {
       // Apply scroll optimization styles directly to the main element
       if (mainRef.current) {
-        // Use type assertion to bypass TypeScript type checking
-        (mainRef.current.style as any).webkitOverflowScrolling = 'touch';
+        // Use proper casing for webkit properties
+        (mainRef.current.style as any).WebkitOverflowScrolling = 'touch';
         mainRef.current.style.overscrollBehavior = 'none';
       }
       
@@ -34,8 +40,8 @@ const Layout = ({ children }: LayoutProps) => {
       const fixScrollingStyles = () => {
         // Find all scrollable containers and ensure they have touch scrolling
         document.querySelectorAll('.overflow-auto, .overflow-y-auto, [style*="overflow"]').forEach((el) => {
-          // Use type assertion here as well
-          (el as HTMLElement).style.webkitOverflowScrolling = 'touch';
+          // Use proper casing for webkit properties
+          (el as HTMLElement).style.WebkitOverflowScrolling = 'touch';
         });
       };
       
@@ -55,11 +61,16 @@ const Layout = ({ children }: LayoutProps) => {
       ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' 
       : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green';
 
+  // Create mobile styles with proper casing
+  const mobileStyles: ExtendedCSSProperties = isMobile ? {
+    WebkitOverflowScrolling: 'touch',
+    overscrollBehavior: 'none'
+  } : {};
+
   return (
     <div 
       className={`flex flex-col min-h-screen ${bgClass}`}
-      // Use type assertion for styles
-      style={isMobile ? { webkitOverflowScrolling: 'touch', overscrollBehavior: 'none' } as React.CSSProperties : undefined}
+      style={mobileStyles}
     >
       {/* Only render 3D header on non-low-performance devices */}
       {!isLowPerformance && <OvalHeader />}
@@ -80,10 +91,10 @@ const Layout = ({ children }: LayoutProps) => {
       <main 
         ref={mainRef}
         className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8"
-        style={isMobile ? { 
-          webkitOverflowScrolling: 'touch',
+        style={isMobile ? {
+          WebkitOverflowScrolling: 'touch',
           scrollBehavior: 'auto'
-        } : undefined}
+        } as ExtendedCSSProperties : undefined}
       >
         {children || <Outlet />}
       </main>
