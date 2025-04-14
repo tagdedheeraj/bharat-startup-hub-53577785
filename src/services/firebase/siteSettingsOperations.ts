@@ -83,3 +83,31 @@ export const updateSiteFavicon = async (file: File): Promise<string> => {
     throw error;
   }
 };
+
+/**
+ * Get navigation settings
+ */
+export const getNavigation = async () => {
+  return getDocument('siteNavigation', 'main');
+};
+
+/**
+ * Update navigation settings
+ */
+export const updateNavigation = async (data: any) => {
+  return updateDocument('siteNavigation', 'main', data);
+};
+
+/**
+ * Get home page settings
+ */
+export const getHomeSettings = async () => {
+  return getDocument('homePageSettings', 'main');
+};
+
+/**
+ * Update home page settings
+ */
+export const updateHomeSettings = async (data: any) => {
+  return updateDocument('homePageSettings', 'main', data);
+};

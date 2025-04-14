@@ -1,30 +1,42 @@
 
 // Re-export all firebase service operations
 import * as FirebaseOperations from './firebase';
+import { FirebaseData } from './firebase/coreOperations';
+import { SiteSettings } from './firebase/siteSettingsOperations';
 
-// Use a more efficient export approach
+// Export types
+export type { FirebaseData, SiteSettings };
+
+// Re-export core operations
 export const {
-  // Re-export core operations
-  addDocument,
+  createDocument,
+  createDocumentWithId,
   getDocument,
-  getDocuments,
   updateDocument,
   deleteDocument,
-  
-  // Re-export storage operations
+  queryDocuments
+} = FirebaseOperations;
+
+// Re-export storage operations
+export const {
   uploadFile,
-  getFileUrl,
   deleteFile,
-  
-  // Re-export investor operations
+  uploadSiteAsset
+} = FirebaseOperations;
+
+// Re-export investor operations
+export const {
   getInvestorProfile,
   updateInvestorProfile,
   getInvestorPortfolio,
   addPortfolioItem,
   updatePortfolioItem,
   removePortfolioItem,
-  
-  // Re-export startup operations
+  saveInvestment
+} = FirebaseOperations;
+
+// Re-export startup operations
+export const {
   getStartupProfile,
   updateStartupProfile,
   getStartupMetrics,
@@ -33,10 +45,15 @@ export const {
   addStartupDocument,
   updateStartupDocument,
   removeStartupDocument,
-  
-  // Re-export site settings operations
+  saveStartupFundingRequest
+} = FirebaseOperations;
+
+// Re-export site settings operations
+export const {
   getSiteSettings,
   updateSiteSettings,
+  updateSiteLogo,
+  updateSiteFavicon,
   getNavigation,
   updateNavigation,
   getHomeSettings,
