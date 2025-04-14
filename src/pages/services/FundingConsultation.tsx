@@ -8,7 +8,6 @@ import BenefitsSection from '@/components/funding/BenefitsSection';
 import FAQSection from '@/components/funding/FAQSection';
 import CTASection from '@/components/funding/CTASection';
 import LegalDisclaimer from '@/components/funding/LegalDisclaimer';
-import { debugPortals } from '@/utils/portalCleanup';
 
 const FundingConsultationPage = () => {
   const { toast } = useToast();
@@ -16,9 +15,6 @@ const FundingConsultationPage = () => {
   // Simpler cleanup that doesn't interfere with dialog functionality
   useEffect(() => {
     console.log("FundingConsultationPage mounted");
-    
-    // Debug portals on mount without modifying them
-    debugPortals();
     
     // Only show a toast notification
     setTimeout(() => {
