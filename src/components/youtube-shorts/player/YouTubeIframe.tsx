@@ -28,9 +28,8 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
           height: '100%',
           objectFit: 'cover'
         }}
-        // Use the HTML attribute name directly instead of React property
-        // This is added as an HTML attribute directly, not a React prop
-        playsinline={1}
+        // Use the proper camelCase React attribute
+        playsInline={true}
       ></iframe>
     );
   }
