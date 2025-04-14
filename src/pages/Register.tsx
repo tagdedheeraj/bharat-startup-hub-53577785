@@ -1,11 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, UserRole } from '@/contexts/auth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from '@/hooks/use-toast';
-import { RegisterForm, ErrorAlert, NetworkStatusAlert } from '@/components/auth';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -15,33 +19,14 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<UserRole>('startup');
-  const [isOnline, setIsOnline] = useState(true);
   
   const { register } = useAuth();
   const navigate = useNavigate();
-
-  // Monitor online status
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    // Set initial status
-    setIsOnline(navigator.onLine);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     
-    // Form validation
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
       return;
@@ -59,23 +44,18 @@ const Register = () => {
     
     try {
       setIsLoading(true);
-      
       await register(name, email, password, activeRole);
+      
+      toast({
+        title: "Registration Successful",
+        description: `Your ${activeRole} account has been created successfully.`,
+      });
       
       // Redirect to the appropriate dashboard
       navigate(`/dashboard/${activeRole}`);
     } catch (error: any) {
       console.error('Registration error:', error);
       setError(error.message || "Unable to create your account. Please try again.");
-      
-      // Show a toast for network errors to make them more visible
-      if (error.message.includes("Network error") || error.message.includes("internet connection") || error.message.includes("offline")) {
-        toast({
-          title: "Network Error",
-          description: "Could not connect to authentication service. Please check your internet connection and try again.",
-          variant: "destructive"
-        });
-      }
     } finally {
       setIsLoading(false);
     }
@@ -91,9 +71,14 @@ const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <NetworkStatusAlert />
-          
-          {error && <ErrorAlert message={error} />}
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
           
           <Tabs defaultValue="startup" onValueChange={(value) => setActiveRole(value as UserRole)}>
             <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -102,37 +87,101 @@ const Register = () => {
             </TabsList>
             
             <TabsContent value="startup">
-              <RegisterForm
-                role="startup"
-                name={name}
-                email={email}
-                password={password}
-                confirmPassword={confirmPassword}
-                isLoading={isLoading}
-                isOnline={isOnline}
-                setName={setName}
-                setEmail={setEmail}
-                setPassword={setPassword}
-                setConfirmPassword={setConfirmPassword}
-                handleRegister={handleRegister}
-              />
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="startup-name">Startup Name</Label>
+                  <Input 
+                    id="startup-name" 
+                    placeholder="Your Startup Name" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="startup-email">Email</Label>
+                  <Input 
+                    id="startup-email" 
+                    type="email" 
+                    placeholder="name@company.com" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="startup-password">Password</Label>
+                  <Input 
+                    id="startup-password" 
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="startup-confirm-password">Confirm Password</Label>
+                  <Input 
+                    id="startup-confirm-password" 
+                    type="password" 
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating Account..." : "Register as Startup"}
+                </Button>
+              </form>
             </TabsContent>
             
             <TabsContent value="investor">
-              <RegisterForm
-                role="investor"
-                name={name}
-                email={email}
-                password={password}
-                confirmPassword={confirmPassword}
-                isLoading={isLoading}
-                isOnline={isOnline}
-                setName={setName}
-                setEmail={setEmail}
-                setPassword={setPassword}
-                setConfirmPassword={setConfirmPassword}
-                handleRegister={handleRegister}
-              />
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="investor-name">Investor Name</Label>
+                  <Input 
+                    id="investor-name" 
+                    placeholder="Your Full Name / Firm Name" 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="investor-email">Email</Label>
+                  <Input 
+                    id="investor-email" 
+                    type="email" 
+                    placeholder="name@investor.com" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="investor-password">Password</Label>
+                  <Input 
+                    id="investor-password" 
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="investor-confirm-password">Confirm Password</Label>
+                  <Input 
+                    id="investor-confirm-password" 
+                    type="password" 
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating Account..." : "Register as Investor"}
+                </Button>
+              </form>
             </TabsContent>
           </Tabs>
         </CardContent>

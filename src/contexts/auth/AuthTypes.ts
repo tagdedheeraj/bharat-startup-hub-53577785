@@ -1,4 +1,6 @@
 
+import { User as FirebaseUser } from 'firebase/auth';
+
 // Define user types
 export type UserRole = 'startup' | 'investor' | null;
 
