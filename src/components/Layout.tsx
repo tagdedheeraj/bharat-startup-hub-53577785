@@ -1,10 +1,11 @@
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
 import MobileBottomNav from './MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,99 +18,41 @@ export default function Layout({ children }: LayoutProps) {
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
   
-  // Cleanup for any dynamically added elements and portals
+  // Run once on component mount to remove any dynamically added badges
   useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      // Check for any orphaned portals when DOM changes
-      const orphanedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-      orphanedPortals.forEach((portal) => {
-        if (portal && portal.parentNode) {
+    const removeBadges = () => {
+      try {
+        // Find and remove any badges that might have been injected
+        const badges = document.querySelectorAll(
+          '[class*="lovable"],[id*="lovable"],[class*="gptengineer"],[id*="gptengineer"],div[style*="position: fixed"]'
+        );
+        
+        badges.forEach((badge) => {
           try {
-            portal.parentNode.removeChild(portal);
+            if (badge && badge.parentNode) {
+              badge.parentNode.removeChild(badge);
+            }
           } catch (e) {
-            console.debug("Failed to remove orphaned portal:", e);
+            // Silently handle any errors during individual node removal
+            console.debug("Could not remove badge element:", e);
           }
-        }
-      });
-      
-      // Remove any Lovable badges or branding that might be dynamically added
-      const lovableBadges = document.querySelectorAll('[class*="lovable-"], [id*="lovable-"], .lovable-badge, [class*="badge"], [class*="love"]');
-      lovableBadges.forEach((badge) => {
-        if (badge && badge.parentNode) {
-          try {
-            badge.parentNode.removeChild(badge);
-          } catch (e) {
-            console.debug("Failed to remove lovable badge:", e);
-          }
-        }
-      });
-      
-      // Check for iframes that might be added dynamically
-      const iframes = document.querySelectorAll('iframe:not([src*="youtube"]):not([src*="vimeo"])');
-      iframes.forEach((iframe) => {
-        // Type cast the element to HTMLIFrameElement to access src property
-        const iframeElement = iframe as HTMLIFrameElement;
-        if (iframeElement && iframeElement.parentNode && (
-          !iframeElement.src || 
-          iframeElement.src.includes('lovable') || 
-          iframeElement.src.includes('gptengineer') ||
-          iframeElement.hasAttribute('style')
-        )) {
-          try {
-            iframeElement.parentNode.removeChild(iframeElement);
-          } catch (e) {
-            console.debug("Failed to remove suspicious iframe:", e);
-          }
-        }
-      });
-    });
-    
-    // Start observing document body for mutations
-    observer.observe(document.body, { 
-      childList: true, 
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style', 'class', 'id']
-    });
-    
-    // Cleanup function
-    return () => {
-      observer.disconnect();
-      
-      // Final cleanup of portals
-      const portals = document.querySelectorAll('[data-radix-portal]');
-      portals.forEach((portal) => {
-        try {
-          if (portal && portal.parentNode) {
-            portal.parentNode.removeChild(portal);
-          }
-        } catch (e) {
-          console.debug("Cleanup portal error:", e);
-        }
-      });
+        });
+      } catch (error) {
+        // Catch any errors that might occur during the badge removal process
+        console.debug("Error in badge removal:", error);
+      }
     };
+    
+    // Run immediately
+    removeBadges();
+    
+    // Also set up an interval to continuously check and remove, but with a longer interval
+    // to reduce potential performance impact
+    const interval = setInterval(removeBadges, 2000);
+    
+    // Clean up
+    return () => clearInterval(interval);
   }, []);
-
-  // Cleanup portals on route changes
-  useEffect(() => {
-    // Small delay to allow animations to complete
-    const timeoutId = setTimeout(() => {
-      const unusedPortals = document.querySelectorAll('[data-radix-portal][style*="display: none"]');
-      unusedPortals.forEach((portal) => {
-        try {
-          if (portal && portal.parentNode) {
-            portal.parentNode.removeChild(portal);
-          }
-        } catch (e) {
-          console.debug("Route change cleanup error:", e);
-        }
-      });
-    }, 300);
-    
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [location]);
   
   return (
     <div className={`flex flex-col min-h-screen ${isNotFoundPage ? 'bg-gradient-to-b from-white via-india-white to-india-white/50' : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green'}`}>

@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, TrendingUp, Briefcase, Shield, Award } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -346,11 +347,8 @@ const HomePage = () => {
               description="Have a question or feedback? Fill out the form below and we'll get back to you as soon as possible."
             />
             
-            <div className="mt-8 relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-india-saffron/20 to-india-green/20 transform rotate-1 rounded-lg"></div>
-              <div className="relative z-10">
-                <ContactForm />
-              </div>
+            <div className="mt-8 bg-white p-8 rounded-lg shadow-md">
+              <ContactForm />
             </div>
           </div>
         </div>

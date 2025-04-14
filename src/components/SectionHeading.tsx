@@ -1,53 +1,33 @@
 
-import { cn } from "@/lib/utils";
+import { ReactNode } from 'react';
 
-export interface SectionHeadingProps {
+interface SectionHeadingProps {
+  subheading?: string;
   heading: string;
   description?: string;
-  centered?: boolean;
-  subheading?: string;
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
+  children?: ReactNode;
 }
 
-export default function SectionHeading({
-  heading,
-  description,
-  centered = false,
-  subheading,
-  align,
+export default function SectionHeading({ 
+  subheading, 
+  heading, 
+  description, 
+  align = 'center',
+  children 
 }: SectionHeadingProps) {
-  // Determine alignment based on either centered or align props
-  // (for backward compatibility)
-  const alignment = align 
-    ? align === "center" 
-      ? "text-center mx-auto"
-      : align === "right" 
-        ? "text-right ml-auto" 
-        : "text-left"
-    : centered 
-      ? "text-center mx-auto" 
-      : "text-left";
-
+  const alignmentClasses = {
+    left: 'text-left',
+    center: 'text-center mx-auto',
+    right: 'text-right ml-auto',
+  };
+  
   return (
-    <div
-      className={cn(
-        "max-w-3xl",
-        alignment
-      )}
-    >
-      {subheading && (
-        <span className="text-sm text-brand-600 font-medium uppercase tracking-wider block mb-2">
-          {subheading}
-        </span>
-      )}
-      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-        {heading}
-      </h2>
-      {description && (
-        <p className="text-lg text-muted-foreground max-w-3xl">
-          {description}
-        </p>
-      )}
+    <div className={`max-w-3xl mb-12 ${alignmentClasses[align]}`}>
+      {subheading && <p className="sub-heading">{subheading}</p>}
+      <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">{heading}</h2>
+      {description && <p className="text-lg text-gray-600">{description}</p>}
+      {children}
     </div>
   );
 }
