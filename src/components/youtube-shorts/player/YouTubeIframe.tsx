@@ -18,7 +18,7 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
         title="YouTube video player"
         className="w-full h-full absolute inset-0 border-0 bg-black"
         frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen; playsinline"
         allowFullScreen
         style={{
           visibility: isLoading ? 'hidden' : 'visible',
@@ -28,8 +28,6 @@ const YouTubeIframe = forwardRef<HTMLIFrameElement, YouTubeIframeProps>(
           height: '100%',
           objectFit: 'cover'
         }}
-        // Use the proper camelCase React attribute
-        playsInline={true}
       ></iframe>
     );
   }
