@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 export const useYouTubePlayerSetup = (
   videoId: string,
@@ -20,7 +20,7 @@ export const useYouTubePlayerSetup = (
   onClose: () => void
 ) => {
   // Setup the YouTube player once the API is ready
-  const setupYouTubePlayer = () => {
+  const setupYouTubePlayer = useCallback(() => {
     if (!iframeRef.current || playerInitAttempted.current) return;
     
     playerInitAttempted.current = true;
@@ -29,10 +29,11 @@ export const useYouTubePlayerSetup = (
     try {
       // Try to use the YouTube IFrame API directly
       if (window.YT && window.YT.Player) {
+        console.log('Creating new YT.Player instance');
         youtubePlayer.current = new window.YT.Player(iframeRef.current, {
           events: {
             'onReady': (event: any) => {
-              console.log('YouTube player ready');
+              console.log('YouTube player ready event fired');
               setIsLoading(false);
               setPlayerReady(true);
               
@@ -51,14 +52,20 @@ export const useYouTubePlayerSetup = (
                 // Set mute state
                 if (isMuted) {
                   player.mute();
+                } else {
+                  player.unMute();
                 }
                 
+                // Start playing
                 player.playVideo();
+                console.log('Video playback initiated');
               } catch (e) {
                 console.error('Error applying initial player settings:', e);
               }
             },
             'onStateChange': (event: any) => {
+              console.log('Player state changed:', event.data);
+              
               if (event.data === window.YT?.PlayerState.PLAYING) {
                 console.log('Video is now playing');
                 setIsLoading(false);
@@ -75,6 +82,8 @@ export const useYouTubePlayerSetup = (
                 onClose();
               } else if (event.data === window.YT?.PlayerState.PAUSED) {
                 console.log('Video paused');
+              } else if (event.data === window.YT?.PlayerState.BUFFERING) {
+                console.log('Video buffering');
               }
             },
             'onPlaybackQualityChange': (event: any) => {
@@ -88,19 +97,44 @@ export const useYouTubePlayerSetup = (
               }
             },
             'onError': (event: any) => {
-              console.error('YouTube player error:', event);
+              console.error('YouTube player error:', event.data);
+              
+              // Handle specific error codes
+              let errorMessage = 'Unknown error occurred';
+              switch (event.data) {
+                case 2:
+                  errorMessage = 'Invalid video ID';
+                  break;
+                case 5:
+                  errorMessage = 'HTML5 player error';
+                  break;
+                case 100:
+                  errorMessage = 'Video not found or removed';
+                  break;
+                case 101:
+                case 150:
+                  errorMessage = 'Video playback not allowed in embedded player';
+                  break;
+              }
+              
+              console.error(errorMessage);
               setLoadError(true);
               setIsLoading(false);
             }
           }
         });
+      } else {
+        console.error('YouTube API not available');
+        setLoadError(true);
+        setIsLoading(false);
       }
     } catch (e) {
       console.error('Error initializing YouTube player:', e);
       // Fall back to regular iframe if API initialization fails
       setIsLoading(false);
+      setLoadError(true);
     }
-  };
+  }, [videoId, isMuted, onClose, playbackSpeed, setIsLoading, setLoadError, setPlayerReady, setVideoQuality, volume]);
 
   return {
     setupYouTubePlayer
