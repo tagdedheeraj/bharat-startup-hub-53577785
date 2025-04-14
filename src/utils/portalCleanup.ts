@@ -23,8 +23,11 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
         // Only remove if no stateFilter provided OR element state matches the filter (e.g., 'closed')
         if (!stateFilter || state === stateFilter) {
           if (element.parentNode) {
-            element.parentNode.removeChild(element);
-            removedCount++;
+            // Before removing, ensure this isn't currently being interacted with
+            if (!element.matches(':active, :focus, :hover')) {
+              element.parentNode.removeChild(element);
+              removedCount++;
+            }
           }
         }
       } catch (e) {
@@ -70,9 +73,64 @@ export const cleanupAllPortals = () => {
         }
       }
     });
+    
+    // Remove any stuck touch event handlers or ghost elements
+    cleanupTouchGhosts();
   }
   
   return total;
+};
+
+/**
+ * Clean up elements that might be interfering with touch/scroll events
+ */
+const cleanupTouchGhosts = () => {
+  if (!isBrowser) return;
+  
+  try {
+    // Remove invisible touch overlays that can block scrolling
+    const ghostSelectors = [
+      'div[style*="position: fixed"][style*="inset: 0"]',
+      'div[style*="position: fixed"][style*="opacity: 0"]',
+      'div[style*="position: absolute"][style*="opacity: 0"][style*="pointer-events"]',
+      'div[style*="touch-action: none"]',
+      '.overlay:not([data-state="open"])',
+      '.modal-overlay:not(.active)'
+    ];
+    
+    let removed = 0;
+    
+    ghostSelectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(element => {
+        // Only remove if it doesn't have important attributes
+        if (!element.hasAttribute('data-state') || 
+            element.getAttribute('data-state') === 'closed') {
+          if (element.parentNode) {
+            element.parentNode.removeChild(element);
+            removed++;
+          }
+        }
+      });
+    });
+    
+    // Find any elements with pointer-events: none that are full screen
+    document.querySelectorAll('div[style*="pointer-events: none"]').forEach(element => {
+      const rect = element.getBoundingClientRect();
+      // If it's a large overlay-like element, remove it
+      if (rect.width > window.innerWidth * 0.5 && rect.height > window.innerHeight * 0.5) {
+        if (element.parentNode) {
+          element.parentNode.removeChild(element);
+          removed++;
+        }
+      }
+    });
+    
+    if (removed > 0) {
+      console.log(`Removed ${removed} potential touch/scroll blockers`);
+    }
+  } catch (e) {
+    console.warn('Error cleaning up touch ghosts', e);
+  }
 };
 
 /**

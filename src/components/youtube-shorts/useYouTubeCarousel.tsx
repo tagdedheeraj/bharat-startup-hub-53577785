@@ -18,6 +18,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   const isPausedRef = useRef(isPaused);
   const isCarouselMounted = useRef(true);
   const lowPerformanceDevice = useRef(isLowPerformanceDevice());
+  const isMobileDevice = useRef(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
   
   // Update ref when state changes
   useEffect(() => {
@@ -25,9 +26,8 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   }, [isPaused]);
 
   useEffect(() => {
-    // Adjust behavior for low performance devices
-    if (lowPerformanceDevice.current) {
-      // Auto-pause on low performance devices to avoid jank
+    // Auto-pause on low performance or mobile devices to avoid jank
+    if (lowPerformanceDevice.current || isMobileDevice.current) {
       if (!isPausedRef.current) {
         setIsPaused(true);
       }
@@ -46,13 +46,25 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
           return;
         }
         
-        const shorts = await getYoutubeShorts();
-        if (isMounted && shorts.length > 0) {
-          setYoutubeShorts(shorts);
-        }
+        // Use a timeout to ensure this doesn't block initial page rendering
+        setTimeout(async () => {
+          try {
+            if (!isMounted) return;
+            
+            const shorts = await getYoutubeShorts();
+            if (isMounted && shorts.length > 0) {
+              setYoutubeShorts(shorts);
+            }
+          } catch (error) {
+            console.error("Error loading YouTube shorts:", error);
+          } finally {
+            if (isMounted) {
+              setIsLoading(false);
+            }
+          }
+        }, 1000);
       } catch (error) {
-        console.error("Error loading YouTube shorts:", error);
-      } finally {
+        console.error("Error scheduling YouTube shorts load:", error);
         if (isMounted) {
           setIsLoading(false);
         }
@@ -80,7 +92,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     }
     
     // Only show toast on non-low-performance devices
-    if (!lowPerformanceDevice.current) {
+    if (!lowPerformanceDevice.current && !isMobileDevice.current) {
       toast("Playing video", {
         description: youtubeShorts.find(short => short.id === videoId)?.title,
         icon: <Play className="h-5 w-5 text-green-500" />
@@ -90,7 +102,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
 
   const closeVideo = () => {
     setCurrentVideoId(null);
-    if (!isPausedRef.current && isCarouselMounted.current && !lowPerformanceDevice.current) {
+    if (!isPausedRef.current && isCarouselMounted.current && !lowPerformanceDevice.current && !isMobileDevice.current) {
       startAutoSlide();
     }
   };
@@ -99,7 +111,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     setIsPaused(!isPaused);
     
     // Only show toast on non-low-performance devices
-    if (!lowPerformanceDevice.current) {
+    if (!lowPerformanceDevice.current && !isMobileDevice.current) {
       toast(isPaused ? "Auto-sliding resumed" : "Auto-sliding paused", {
         icon: isPaused ? <Play className="h-5 w-5 text-green-500" /> : <Pause className="h-5 w-5 text-orange-500" />
       });
@@ -110,48 +122,31 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-    } else if (!lowPerformanceDevice.current) {
+    } else if (!lowPerformanceDevice.current && !isMobileDevice.current) {
       startAutoSlide();
     }
   };
 
   const startAutoSlide = () => {
-    if (!isCarouselMounted.current || lowPerformanceDevice.current) return;
+    if (!isCarouselMounted.current || lowPerformanceDevice.current || isMobileDevice.current) return;
     
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     
-    // Use a more performant approach with requestAnimationFrame
-    let lastTime = 0;
-    const animationInterval = 5000; // 5 seconds
-    
-    const animate = (timestamp: number) => {
-      if (!isCarouselMounted.current) return;
+    // Use more efficient setInterval for non-mobile devices
+    intervalRef.current = window.setInterval(() => {
+      if (!isCarouselMounted.current || isPausedRef.current) return;
       
-      if (!lastTime) lastTime = timestamp;
-      const elapsed = timestamp - lastTime;
-      
-      if (elapsed >= animationInterval) {
-        lastTime = timestamp;
-        // Only trigger if actually mounted and not paused
-        if (isCarouselMounted.current && !isPausedRef.current) {
-          const carouselEl = document.querySelector('[data-embla-carousel]');
-          if (carouselEl) {
-            const nextButton = carouselEl.querySelector('[data-carousel-next]') as HTMLButtonElement;
-            if (nextButton) {
-              nextButton.click();
-            }
-          }
+      // Click the next button if it exists
+      const carouselEl = document.querySelector('[data-embla-carousel]');
+      if (carouselEl) {
+        const nextButton = carouselEl.querySelector('[data-carousel-next]') as HTMLButtonElement;
+        if (nextButton) {
+          nextButton.click();
         }
       }
-      
-      if (isCarouselMounted.current) {
-        requestAnimationFrame(animate);
-      }
-    };
-    
-    requestAnimationFrame(animate);
+    }, 5000) as unknown as number;
   };
 
   useEffect(() => {
@@ -162,7 +157,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
       }
     }, 1000);
 
-    if (!isPausedRef.current && !lowPerformanceDevice.current) {
+    if (!isPausedRef.current && !lowPerformanceDevice.current && !isMobileDevice.current) {
       startAutoSlide();
     }
 
@@ -186,6 +181,6 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     playVideo,
     closeVideo,
     togglePause,
-    isLowPerformanceDevice: lowPerformanceDevice.current
+    isLowPerformanceDevice: lowPerformanceDevice.current || isMobileDevice.current
   };
 };

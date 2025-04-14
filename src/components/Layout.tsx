@@ -1,5 +1,5 @@
 
-import { ReactNode, useEffect, memo, useState } from 'react';
+import { ReactNode, useEffect, memo, useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
@@ -16,11 +16,33 @@ const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isLowPerformance, setIsLowPerformance] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
   
   // Check for low performance device on mount
   useEffect(() => {
     setIsLowPerformance(isLowPerformanceDevice());
-  }, []);
+    
+    // Add specific mobile scrolling optimizations
+    if (isMobile) {
+      // Apply scroll optimization styles directly to the main element
+      if (mainRef.current) {
+        mainRef.current.style.WebkitOverflowScrolling = 'touch';
+        mainRef.current.style.overscrollBehavior = 'none';
+      }
+      
+      // Fix mobile scrolling jank by removing overflow:hidden where not needed
+      const fixScrollingStyles = () => {
+        // Find all scrollable containers and ensure they have touch scrolling
+        document.querySelectorAll('.overflow-auto, .overflow-y-auto, [style*="overflow"]').forEach((el) => {
+          (el as HTMLElement).style.WebkitOverflowScrolling = 'touch';
+        });
+      };
+      
+      // Run immediately and after a short delay to catch dynamically rendered elements
+      fixScrollingStyles();
+      setTimeout(fixScrollingStyles, 500);
+    }
+  }, [isMobile]);
   
   // Add a class to adjust background for 404 page
   const isNotFoundPage = location.pathname === "*" || location.pathname === "/404";
@@ -33,7 +55,10 @@ const Layout = ({ children }: LayoutProps) => {
       : 'bg-gradient-to-b from-india-saffron via-india-white to-india-green';
 
   return (
-    <div className={`flex flex-col min-h-screen ${bgClass}`}>
+    <div 
+      className={`flex flex-col min-h-screen ${bgClass}`}
+      style={isMobile ? { WebkitOverflowScrolling: 'touch', overscrollBehavior: 'none' } : undefined}
+    >
       {/* Only render 3D header on non-low-performance devices */}
       {!isLowPerformance && <OvalHeader />}
       
@@ -50,7 +75,14 @@ const Layout = ({ children }: LayoutProps) => {
         </header>
       )}
       
-      <main className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8">
+      <main 
+        ref={mainRef}
+        className="flex-grow pt-8 pb-12 container mx-auto px-4 sm:px-6 lg:px-8"
+        style={isMobile ? { 
+          WebkitOverflowScrolling: 'touch',
+          scrollBehavior: 'auto'
+        } : undefined}
+      >
         {children || <Outlet />}
       </main>
       <Footer />
