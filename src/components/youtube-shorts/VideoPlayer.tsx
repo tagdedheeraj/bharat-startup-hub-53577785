@@ -73,6 +73,9 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
           </div>
         ) : (
           <div className="w-full h-full relative">
+            {/* Video overlay with gradient to make controls more visible */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none z-[103]"></div>
+            
             <iframe
               ref={iframeRef}
               src={youtubeUrl}
@@ -91,6 +94,7 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
                 console.error('Error loading YouTube iframe');
               }}
             ></iframe>
+            
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-[101]">
                 <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
@@ -98,13 +102,21 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
             )}
           </div>
         )}
+        
+        {/* Improved close button with pulsing effect */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 rounded-full p-2 text-white transition-colors transform hover:scale-110 z-[103]"
+          className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 rounded-full p-2 text-white transition-all transform hover:scale-110 z-[103] group"
           aria-label="Close video"
         >
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6 group-hover:text-red-400 transition-colors" />
+          <span className="absolute inset-0 rounded-full bg-white/5 animate-ping opacity-75"></span>
         </button>
+        
+        {/* Video title indicator */}
+        <div className="absolute top-4 left-4 z-[103] bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-lg">
+          <p className="text-white text-sm font-medium max-w-[200px] truncate">Startup Masterclass</p>
+        </div>
       </div>
     </div>
   );

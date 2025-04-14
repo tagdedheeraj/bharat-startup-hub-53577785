@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -13,7 +12,7 @@ export default {
 	theme: {
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: "2rem",
 			screens: {
 				'2xl': '1400px'
 			}
@@ -107,6 +106,11 @@ export default {
 					"0%": { opacity: "0", transform: "scale(0.95)" },
 					"100%": { opacity: "1", transform: "scale(1)" }
 				},
+				shimmer: {
+					'100%': {
+						transform: 'translateX(100%)',
+					},
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
@@ -115,6 +119,7 @@ export default {
 				fadeInLeft: "fadeInLeft 0.6s ease-out forwards",
 				fadeInRight: "fadeInRight 0.6s ease-out forwards",
 				scaleIn: "scaleIn 0.4s ease-out forwards",
+				shimmer: 'shimmer 1.5s infinite',
 			}
 		}
 	},
