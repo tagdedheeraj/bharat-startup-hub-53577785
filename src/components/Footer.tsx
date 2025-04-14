@@ -12,7 +12,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-display font-bold mb-4">Bharat Startup Solution</h3>
             <p className="text-gray-300 mb-4">
-              A Proud Product of Shaswat Initial Support Services
+              A Proud Product of <strong>Shaswat Initial Support Services</strong>
             </p>
             <p className="text-gray-300 mb-4">
               Your one-stop solution for MSMEs and startups. We help businesses grow, fund, and succeed.
@@ -20,7 +20,7 @@ export default function Footer() {
             <div className="flex items-center space-x-2 bg-brand-500/10 p-2 rounded">
               <Building className="w-5 h-5 text-brand-400" />
               <span className="text-sm text-gray-300">
-                A Division of Shaswat Initial Support Services
+                A Division of <strong>Shaswat Initial Support Services</strong>
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -36,7 +36,7 @@ export default function Footer() {
               </a>
               <a href="https://www.instagram.com/bharatstartup_solution?igsh=NTlhODk1NnZncnBn" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.504.344-1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM15.194 12 10 15V9l5.194 3Z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.504.344-1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM15.194 12 10 15V9l5.194 3Z" clipRule="evenodd" />
                 </svg>
               </a>
               <a href="https://www.youtube.com/@BharatStartupSolution" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
@@ -166,7 +166,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400">
-              © {currentYear} Bharat Startup Solution. A Product of Shaswat Initial Support Services
+              © {currentYear} Bharat Startup Solution. A Product of <strong>Shaswat Initial Support Services</strong>
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link to="/terms-and-conditions" className="text-gray-400 hover:text-white transition-colors text-sm">
