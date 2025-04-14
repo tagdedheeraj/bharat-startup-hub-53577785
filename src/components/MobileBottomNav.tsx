@@ -1,21 +1,22 @@
 
+import { memo } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Home, Info, Briefcase, Shield, LifeBuoy } from 'lucide-react';
 import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
 
-export default function MobileBottomNav() {
+const navItems = [
+  { icon: Home, label: 'Home', to: '/' },
+  { icon: Info, label: 'About', to: '/about' },
+  { icon: Briefcase, label: 'Services', to: '/services' },
+  { icon: Shield, label: 'CA', to: '/ca-services' },
+  { icon: LifeBuoy, label: 'Support', to: '/support' },
+];
+
+const MobileBottomNav = () => {
   const isMobile = useIsMobile();
   
   if (!isMobile) return null;
   
-  const navItems = [
-    { icon: Home, label: 'Home', to: '/' },
-    { icon: Info, label: 'About', to: '/about' },
-    { icon: Briefcase, label: 'Services', to: '/services' },
-    { icon: Shield, label: 'CA', to: '/ca-services' },
-    { icon: LifeBuoy, label: 'Support', to: '/support' }, // Added support nav item
-  ];
-
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden">
       <nav className="flex justify-around items-center h-16">
@@ -41,4 +42,7 @@ export default function MobileBottomNav() {
       </nav>
     </div>
   );
-}
+};
+
+// Memoize the component to prevent unnecessary re-renders
+export default memo(MobileBottomNav);

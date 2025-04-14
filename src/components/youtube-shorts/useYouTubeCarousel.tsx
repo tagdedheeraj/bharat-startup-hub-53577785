@@ -12,9 +12,8 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
   const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>(initialShorts);
   const intervalRef = useRef<number | null>(null);
-  
-  // Use ref to prevent unnecessary effect dependencies
   const isPausedRef = useRef(isPaused);
+  const isCarouselMounted = useRef(true);
   
   useEffect(() => {
     isPausedRef.current = isPaused;
@@ -26,11 +25,15 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     const loadShorts = async () => {
       try {
         const shorts = await getYoutubeShorts();
-        if (isMounted) {
+        if (isMounted && shorts.length > 0) {
           setYoutubeShorts(shorts);
         }
       } catch (error) {
         console.error("Error loading YouTube shorts:", error);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
     
@@ -38,6 +41,12 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     
     return () => {
       isMounted = false;
+      isCarouselMounted.current = false;
+      // Clear any running intervals
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
   }, []);
 
@@ -55,7 +64,7 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
 
   const closeVideo = () => {
     setCurrentVideoId(null);
-    if (!isPausedRef.current) {
+    if (!isPausedRef.current && isCarouselMounted.current) {
       startAutoSlide();
     }
   };
@@ -76,24 +85,50 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
   };
 
   const startAutoSlide = () => {
+    if (!isCarouselMounted.current) return;
+    
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    intervalRef.current = window.setInterval(() => {
-      const carouselEl = document.querySelector('[data-embla-carousel]');
-      if (carouselEl) {
-        const nextButton = carouselEl.querySelector('[data-carousel-next]') as HTMLButtonElement;
-        if (nextButton) {
-          nextButton.click();
+    
+    // Use a more performant approach with requestAnimationFrame
+    let lastTime = 0;
+    const animationInterval = 5000; // 5 seconds
+    
+    const animate = (timestamp: number) => {
+      if (!isCarouselMounted.current) return;
+      
+      if (!lastTime) lastTime = timestamp;
+      const elapsed = timestamp - lastTime;
+      
+      if (elapsed >= animationInterval) {
+        lastTime = timestamp;
+        // Only trigger if actually mounted and not paused
+        if (isCarouselMounted.current && !isPausedRef.current) {
+          const carouselEl = document.querySelector('[data-embla-carousel]');
+          if (carouselEl) {
+            const nextButton = carouselEl.querySelector('[data-carousel-next]') as HTMLButtonElement;
+            if (nextButton) {
+              nextButton.click();
+            }
+          }
         }
       }
-    }, 5000);
+      
+      if (isCarouselMounted.current) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
   };
 
   useEffect(() => {
     // Use setTimeout for loading state to avoid jank
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      if (isCarouselMounted.current) {
+        setIsLoading(false);
+      }
     }, 1000);
 
     if (!isPausedRef.current) {
@@ -101,11 +136,12 @@ export const useYouTubeCarousel = (initialShorts: YouTubeShort[]) => {
     }
 
     return () => {
+      clearTimeout(timer);
+      isCarouselMounted.current = false;
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      clearTimeout(timer);
     };
   }, []);
 
