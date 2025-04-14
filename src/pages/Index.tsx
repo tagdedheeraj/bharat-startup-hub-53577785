@@ -12,6 +12,7 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/funding/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
+import FeaturedYouTubeVideo from '@/components/youtube-shorts/FeaturedYouTubeVideo';
 
 const HomePage = () => {
   return (
@@ -56,6 +57,9 @@ const HomePage = () => {
 
       {/* CTA Section */}
       <CTASection />
+      
+      {/* Featured YouTube Video Section - Added at the bottom */}
+      <FeaturedYouTubeVideo />
     </div>
   );
 };
