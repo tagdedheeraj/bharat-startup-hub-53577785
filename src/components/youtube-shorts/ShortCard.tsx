@@ -33,12 +33,14 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
         }
       }}
     >
-      {/* Thumbnail image with zoom effect */}
+      {/* Thumbnail image with optimized loading */}
       <img
         src={short.thumbnail}
         alt={short.title}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:opacity-80"
         loading="lazy"
+        decoding="async"
+        fetchPriority="high"
       />
       
       {/* Gradient overlay */}
@@ -54,15 +56,15 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
         </div>
       )}
       
-      {/* Play button - made more prominent */}
+      {/* Play button - more prominent for better visibility */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform group-hover:scale-125 transition-all duration-300 shadow-lg">
-          <Play fill="white" size={28} className="animate-pulse" />
+          <Play fill="white" size={32} className="animate-pulse" />
         </div>
         
-        {/* Play hint text */}
+        {/* Play hint text - more visible */}
         <div className="absolute bottom-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <p className="text-white text-sm font-bold bg-black/50 px-3 py-1 rounded-full">
+          <p className="text-white text-sm font-bold bg-black/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
             Click to play
           </p>
         </div>
@@ -70,14 +72,14 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       
       {/* Content overlay */}
       <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
-        {/* Title card with blur effect */}
-        <div className="bg-black/60 backdrop-blur-sm p-3 rounded-lg transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          <h3 className="font-bold text-lg">{short.title}</h3>
+        {/* Title card with enhanced blur effect */}
+        <div className="bg-black/70 backdrop-blur-sm p-3 rounded-lg shadow-lg transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+          <h3 className="font-bold text-lg line-clamp-2">{short.title}</h3>
         </div>
       </div>
       
       {/* "SHORTS" badge */}
-      <div className="absolute top-2 right-2 bg-gradient-to-r from-red-600 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute top-2 right-2 bg-gradient-to-r from-red-600 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
         <span className="w-2 h-2 bg-white rounded-full animate-ping absolute"></span>
         <span className="w-2 h-2 bg-white rounded-full relative"></span>
         <span>SHORTS</span>

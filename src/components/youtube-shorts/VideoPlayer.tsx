@@ -1,5 +1,4 @@
-
-import { X, Volume2, VolumeX } from 'lucide-react';
+import { X, Volume2, VolumeX, RefreshCw } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
 interface VideoPlayerProps {
@@ -15,6 +14,7 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const playerInitAttempted = useRef(false);
+  const youtubePlayer = useRef<any>(null);
   
   // Function to toggle mute state
   const toggleMute = () => {
@@ -34,6 +34,27 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
       console.error("Error toggling mute:", error);
     }
   };
+
+  // Function to retry loading the video
+  const retryLoading = () => {
+    setIsLoading(true);
+    setLoadError(false);
+    playerInitAttempted.current = false;
+    
+    // Recreate the iframe with a new URL to force reload
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      const currentSrc = iframe.src;
+      iframe.src = '';
+      
+      // Short delay to ensure DOM updates
+      setTimeout(() => {
+        iframe.src = currentSrc.includes('?') 
+          ? `${currentSrc.split('?')[0]}?autoplay=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&fs=1&rel=0`
+          : `${currentSrc}?autoplay=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&fs=1&rel=0`;
+      }, 100);
+    }
+  };
   
   useEffect(() => {
     // Reset states when videoId changes
@@ -42,14 +63,82 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
     setPlayerReady(false);
     playerInitAttempted.current = false;
     
+    // Load the YouTube IFrame API script if not already loaded
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+      
+      console.log('YouTube IFrame API script loaded');
+    }
+    
+    // Setup the YouTube player once the API is ready
+    const setupYouTubePlayer = () => {
+      if (!iframeRef.current || playerInitAttempted.current) return;
+      
+      playerInitAttempted.current = true;
+      console.log('Setting up YouTube player for video:', videoId);
+      
+      try {
+        // Try to use the YouTube IFrame API directly
+        if (window.YT && window.YT.Player) {
+          youtubePlayer.current = new window.YT.Player(iframeRef.current, {
+            events: {
+              'onReady': (event: any) => {
+                console.log('YouTube player ready');
+                setIsLoading(false);
+                setPlayerReady(true);
+                event.target.playVideo();
+              },
+              'onStateChange': (event: any) => {
+                if (event.data === window.YT.PlayerState.PLAYING) {
+                  console.log('Video is now playing');
+                  setIsLoading(false);
+                } else if (event.data === window.YT.PlayerState.ENDED) {
+                  console.log('Video ended');
+                  onClose();
+                } else if (event.data === window.YT.PlayerState.PAUSED) {
+                  console.log('Video paused');
+                }
+              },
+              'onError': (event: any) => {
+                console.error('YouTube player error:', event);
+                setLoadError(true);
+                setIsLoading(false);
+              }
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error initializing YouTube player:', e);
+        // Fall back to regular iframe if API initialization fails
+        setIsLoading(false);
+      }
+    };
+    
+    // Add event listener for YouTube API loaded
+    const onYouTubeIframeAPIReady = () => {
+      console.log('YouTube IFrame API ready');
+      setupYouTubePlayer();
+    };
+    
+    // If API is already loaded, set up player immediately
+    if (window.YT && window.YT.Player) {
+      console.log('YouTube API already loaded');
+      setupYouTubePlayer();
+    } else {
+      // Otherwise wait for API to load
+      window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+    }
+    
     // Add event listener for message from the iframe
     const handleMessage = (event: MessageEvent) => {
-      // Check if message is from YouTube (either youtube.com or youtube-nocookie.com)
+      // Check if message is from YouTube
       if (event.origin.includes('youtube')) {
         try {
           // Try to parse the message data
           const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-          console.log("YouTube message received:", data);
           
           if (data.event === 'onError' || data.info === 'onError') {
             console.error('YouTube player error:', data);
@@ -61,22 +150,6 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
             setIsLoading(false);
             setPlayerReady(true);
             console.log('YouTube video is ready to play');
-            
-            // Try to start the video playback explicitly
-            if (iframeRef.current && iframeRef.current.contentWindow) {
-              try {
-                // Send play command
-                iframeRef.current.contentWindow.postMessage(
-                  JSON.stringify({
-                    event: 'command',
-                    func: 'playVideo' 
-                  }), 
-                  '*'
-                );
-              } catch (e) {
-                console.error("Failed to send play command:", e);
-              }
-            }
           }
           
           // Handle play state change
@@ -89,7 +162,6 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
               setIsLoading(false);
             } else if (playerState === 0) {
               console.log("Video ended");
-              // Auto-close when video ends
               onClose();
             }
           }
@@ -104,15 +176,9 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
     
     // Set a timeout to consider it failed if taking too long
     const timeoutId = setTimeout(() => {
-      if (isLoading && !playerReady) {
+      if (isLoading && !playerReady && !loadError) {
         console.log('YouTube video load timeout exceeded, trying alternative method');
-        // Try alternative method - reload the iframe with different parameters
-        if (iframeRef.current && !playerInitAttempted.current) {
-          playerInitAttempted.current = true;
-          const iframe = iframeRef.current;
-          const originalSrc = iframe.src;
-          iframe.src = originalSrc + "&forcereload=1";
-        }
+        retryLoading();
       }
     }, 8000);
     
@@ -122,39 +188,21 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
     return () => {
       window.removeEventListener('message', handleMessage);
       clearTimeout(timeoutId);
+      
+      // Clean up any YouTube player instance
+      if (youtubePlayer.current && youtubePlayer.current.destroy) {
+        try {
+          youtubePlayer.current.destroy();
+        } catch (e) {
+          console.error('Error destroying YouTube player:', e);
+        }
+      }
     };
   }, [videoId, isLoading, playerReady, onClose]);
 
   // Create a more resilient YouTube URL with enhanced parameters
-  // Use embed-nocookie for better privacy and specify exact parameters needed
+  // Using www.youtube.com instead of embed-nocookie for better compatibility
   const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1&playsinline=1&origin=${encodeURIComponent(window.location.origin)}&controls=1&mute=0&iv_load_policy=3&fs=1`;
-  
-  // When the iframe loads, attempt to send a postMessage to initialize the player
-  const handleIframeLoad = () => {
-    console.log("YouTube iframe DOM loaded");
-    
-    // Small delay to ensure YouTube API has time to initialize
-    setTimeout(() => {
-      try {
-        if (iframeRef.current && iframeRef.current.contentWindow) {
-          // Try to send a ready check message
-          iframeRef.current.contentWindow.postMessage('{"event":"listening"}', '*');
-          console.log("Sent listening message to YouTube iframe");
-          
-          // Also try the standard YouTube iframe API approach
-          iframeRef.current.contentWindow.postMessage(
-            JSON.stringify({
-              event: 'command',
-              func: 'playVideo' 
-            }), 
-            '*'
-          );
-        }
-      } catch (error) {
-        console.error("Error communicating with YouTube iframe:", error);
-      }
-    }, 1000);
-  };
   
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-fadeIn">
@@ -166,12 +214,21 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
           <div className="w-full h-full flex flex-col items-center justify-center text-white p-6">
             <p className="text-xl font-semibold mb-4">Unable to load video</p>
             <p className="text-center mb-6">The YouTube video (ID: {videoId}) could not be loaded. Please check your internet connection and try again.</p>
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors"
-            >
-              Close
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={retryLoading}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full transition-colors flex items-center"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Try Again
+              </button>
+              <button
+                onClick={onClose}
+                className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         ) : (
           <div className="w-full h-full relative">
@@ -185,11 +242,6 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
-                onLoad={handleIframeLoad}
-                onError={() => {
-                  setLoadError(true);
-                  console.error('Error loading YouTube iframe');
-                }}
                 style={{
                   visibility: isLoading ? 'hidden' : 'visible'
                 }}
