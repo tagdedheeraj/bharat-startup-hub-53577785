@@ -1,3 +1,4 @@
+
 import { X, Volume2, VolumeX, RefreshCw } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 
@@ -14,7 +15,7 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const playerInitAttempted = useRef(false);
-  const youtubePlayer = useRef<any>(null);
+  const youtubePlayer = useRef<YTPlayer | null>(null);
   
   // Function to toggle mute state
   const toggleMute = () => {
@@ -92,13 +93,13 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
                 event.target.playVideo();
               },
               'onStateChange': (event: any) => {
-                if (event.data === window.YT.PlayerState.PLAYING) {
+                if (event.data === window.YT?.PlayerState.PLAYING) {
                   console.log('Video is now playing');
                   setIsLoading(false);
-                } else if (event.data === window.YT.PlayerState.ENDED) {
+                } else if (event.data === window.YT?.PlayerState.ENDED) {
                   console.log('Video ended');
                   onClose();
-                } else if (event.data === window.YT.PlayerState.PAUSED) {
+                } else if (event.data === window.YT?.PlayerState.PAUSED) {
                   console.log('Video paused');
                 }
               },

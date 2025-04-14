@@ -19,7 +19,7 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
   
   return (
     <div 
-      className="relative group aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-gray-900 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:z-10"
+      className={`relative group aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-gray-900 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:z-10 ${isHovered ? 'ring-2 ring-red-500' : ''}`}
       onClick={handlePlay}
       onMouseEnter={() => onHover(short.id)}
       onMouseLeave={() => onHover(null)}
@@ -46,7 +46,7 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
       
-      {/* Hover effects */}
+      {/* Hover effects with improved visibility */}
       {isHovered && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-full h-full pointer-events-none">
@@ -58,8 +58,8 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       
       {/* Play button - more prominent for better visibility */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform group-hover:scale-125 transition-all duration-300 shadow-lg">
-          <Play fill="white" size={32} className="animate-pulse" />
+        <div className={`bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform transition-all duration-300 shadow-lg ${isHovered ? 'scale-125 animate-pulse' : ''}`}>
+          <Play fill="white" size={32} className={isHovered ? 'animate-pulse' : ''} />
         </div>
         
         {/* Play hint text - more visible */}
