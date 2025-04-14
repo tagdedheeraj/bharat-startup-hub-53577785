@@ -4,14 +4,7 @@ import { ArrowUpRight, IndianRupee } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import FundingApplicationForm from './funding/FundingApplicationForm';
+import FundingApplicationModal from './funding/FundingApplicationModal';
 
 interface FundingCardProps {
   amount: string;
@@ -57,10 +50,6 @@ export default function FundingCard({
     setOpen(true);
   };
   
-  const handleSuccess = () => {
-    setOpen(false);
-  };
-  
   return (
     <>
       <div 
@@ -91,21 +80,13 @@ export default function FundingCard({
         </Button>
       </div>
       
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Apply for Funding</DialogTitle>
-            <DialogDescription>
-              Complete the form below to apply for funding.
-            </DialogDescription>
-          </DialogHeader>
-          <FundingApplicationForm 
-            fundingTitle={title}
-            fundingAmount={amount}
-            onSuccess={handleSuccess}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* Use the modal component that ensures higher z-index and proper visibility */}
+      <FundingApplicationModal
+        open={open}
+        onOpenChange={setOpen}
+        fundingTitle={title}
+        fundingAmount={amount}
+      />
     </>
   );
 }

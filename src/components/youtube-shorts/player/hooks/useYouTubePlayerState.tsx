@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 /**
  * Hook for managing YouTube player state with improved error handling
@@ -11,15 +11,15 @@ export const useYouTubePlayerState = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   
   // Function to toggle mute state
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
+  const toggleMute = useCallback(() => {
+    setIsMuted(prevMuted => !prevMuted);
+  }, []);
   
   // Reset state for clean retries
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setIsLoading(true);
     setLoadError(false);
-  };
+  }, []);
   
   return {
     isLoading,

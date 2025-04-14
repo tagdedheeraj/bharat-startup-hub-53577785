@@ -7,10 +7,12 @@ import { cleanupAllPortals } from '../portalCleanup';
 // Utility function to cleanup DOM elements safely for better performance
 export const cleanupDOM = (): void => {
   try {
-    // Skip cleanup if a YouTube player is active
+    // IMPORTANT: Skip cleanup if a YouTube player or dialog is active
     if (document.querySelector('[data-youtube-iframe="true"]') || 
-        document.querySelector('[data-youtube-player-container="true"]')) {
-      console.log("Skipping DOM cleanup due to active YouTube player");
+        document.querySelector('[data-youtube-player-container="true"]') ||
+        document.querySelector('[role="dialog"][data-state="open"]') ||
+        document.querySelector('[role="alertdialog"][data-state="open"]')) {
+      console.log("Skipping DOM cleanup due to active YouTube player or dialog");
       return;
     }
     
@@ -42,9 +44,11 @@ export const cleanupDOM = (): void => {
 export const removeTouchGhosts = (): void => {
   if (typeof document === 'undefined') return;
   
-  // Skip if a YouTube player is active
+  // Skip if a YouTube player or dialog is active
   if (document.querySelector('[data-youtube-iframe="true"]') || 
-      document.querySelector('[data-youtube-player-container="true"]')) {
+      document.querySelector('[data-youtube-player-container="true"]') ||
+      document.querySelector('[role="dialog"][data-state="open"]') ||
+      document.querySelector('[role="alertdialog"][data-state="open"]')) {
     return;
   }
   
@@ -59,8 +63,10 @@ export const removeTouchGhosts = (): void => {
     try {
       const elements = document.querySelectorAll(selector);
       elements.forEach(el => {
-        // Skip if element is needed for YouTube
-        if (el.closest('[data-youtube-player-container="true"]')) {
+        // Skip if element is needed for YouTube or dialogs
+        if (el.closest('[data-youtube-player-container="true"]') ||
+            el.closest('[role="dialog"]') ||
+            el.closest('[role="alertdialog"]')) {
           return;
         }
         

@@ -1,7 +1,7 @@
 
 /**
  * Utility module for handling portal-related cleanup
- * Optimized for better performance with YouTube safety
+ * Optimized for better performance with YouTube and dialog safety
  */
 
 // Check if we're in a browser environment
@@ -19,10 +19,12 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
     
     elements.forEach(element => {
       try {
-        // Skip YouTube iframes or their containers
+        // Skip YouTube iframes, their containers, or open dialogs
         if (element.querySelector('[data-youtube-iframe="true"]') || 
-            element.closest('[data-youtube-player-container="true"]')) {
-          console.log("Skipping cleanup for YouTube player element");
+            element.closest('[data-youtube-player-container="true"]') ||
+            element.closest('[role="dialog"][data-state="open"]') ||
+            element.closest('[role="alertdialog"][data-state="open"]')) {
+          console.log("Skipping cleanup for active element");
           return;
         }
         
@@ -56,10 +58,14 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
 export const cleanupAllPortals = () => {
   if (!isBrowser) return 0;
   
-  // Check if YouTube player is active - if so, skip cleanup completely
-  const hasActiveYouTubePlayer = document.querySelector('[data-youtube-player-container="true"]') !== null;
-  if (hasActiveYouTubePlayer) {
-    console.log("Skipping portal cleanup due to active YouTube player");
+  // Check if YouTube player or dialog is active - if so, skip cleanup completely
+  const hasActiveElement = 
+    document.querySelector('[data-youtube-player-container="true"]') !== null ||
+    document.querySelector('[role="dialog"][data-state="open"]') !== null ||
+    document.querySelector('[role="alertdialog"][data-state="open"]') !== null;
+    
+  if (hasActiveElement) {
+    console.log("Skipping portal cleanup due to active elements");
     return 0;
   }
   
@@ -85,9 +91,6 @@ export const markPortalInteractions = () => {
   });
 };
 
-/**
- * Debug function that logs information about all portals
- */
 export const debugPortals = () => {
   if (!isBrowser) return;
   
@@ -105,9 +108,6 @@ export const debugPortals = () => {
   }
 };
 
-/**
- * Check if the device is currently offline
- */
 export const isOffline = (): boolean => {
   return isBrowser && !navigator.onLine;
 };
