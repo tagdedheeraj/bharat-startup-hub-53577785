@@ -92,7 +92,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         updateDialogState(dialogId, open);
       }}>
         <DialogContent 
-          className="sm:max-w-3xl p-0 bg-transparent border-none z-[999]" 
+          className="w-[95%] max-w-3xl p-0 mx-auto bg-transparent border-none z-[999]" 
           onInteractOutside={(e) => {
             e.preventDefault(); // Prevent closing on outside click for video popup
           }}
@@ -111,10 +111,10 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
             ></iframe>
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 rounded-full p-2 text-white transition-colors transform hover:scale-110"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-white/10 hover:bg-white/20 rounded-full p-1.5 sm:p-2 text-white transition-colors transform hover:scale-110"
               aria-label="Close video"
             >
-              <X className="w-6 h-6" />
+              <X className="w-4 h-4 sm:w-6 sm:h-6" />
             </button>
           </div>
         </DialogContent>

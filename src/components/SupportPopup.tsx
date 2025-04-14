@@ -36,48 +36,48 @@ export default function SupportPopup() {
         className="bg-india-saffron hover:bg-india-saffron/90 text-white font-bold flex items-center gap-2"
       >
         <MessageSquare size={18} />
-        Support
+        <span className="sm:inline">Support</span>
       </Button>
       
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="w-[95%] max-w-md mx-auto rounded-lg p-4 sm:p-6 overflow-hidden">
           <DialogHeader>
-            <DialogTitle>Contact Support</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Contact Support</DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">
               Choose how you'd like to get in touch with our support team.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-4 py-4">
+          <div className="grid gap-3 py-3 sm:gap-4 sm:py-4">
             <Button 
-              className="w-full flex items-center justify-start gap-3"
+              className="w-full flex items-center justify-start gap-3 text-xs sm:text-sm"
               onClick={handleOpenMail}
             >
-              <Mail className="h-5 w-5" />
-              <span>Email: support@bharatstartupsolution.com</span>
+              <Mail className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <span className="truncate">Email: support@bharatstartupsolution.com</span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="w-full flex items-center justify-start gap-3"
+              className="w-full flex items-center justify-start gap-3 text-xs sm:text-sm"
               onClick={handleOpenPhone}
             >
-              <Phone className="h-5 w-5" />
+              <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
               <span>Call: +91 7046 396020</span>
             </Button>
             
             <Button 
               variant="outline" 
-              className="w-full flex items-center justify-start gap-3"
+              className="w-full flex items-center justify-start gap-3 text-xs sm:text-sm"
               onClick={handleOpenChat}
             >
-              <MessageSquare className="h-5 w-5" />
+              <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
               <span>Chat with Support</span>
             </Button>
           </div>
           
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+          <DialogFooter className="sm:justify-end">
+            <Button variant="outline" onClick={() => setOpen(false)} className="w-full sm:w-auto">Cancel</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

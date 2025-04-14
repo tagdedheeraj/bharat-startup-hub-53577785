@@ -18,24 +18,26 @@ export default function SupportDrawer() {
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <div>
+        <div className="w-full h-full">
           <SupportTriggerButton 
             onClick={handleOpenDrawer} 
             buttonRef={supportButtonRef} 
           />
         </div>
       </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Need Help?</DrawerTitle>
-          <DrawerDescription>
-            Our support team is here to assist you. Choose how you'd like to get in touch.
-          </DrawerDescription>
-        </DrawerHeader>
-        <SupportActions onActionComplete={() => setIsOpen(false)} />
-        <DrawerFooter>
-          {/* Footer is empty but kept for layout consistency */}
-        </DrawerFooter>
+      <DrawerContent className="max-h-[85vh] overflow-y-auto">
+        <div className="max-w-md mx-auto w-full">
+          <DrawerHeader>
+            <DrawerTitle>Need Help?</DrawerTitle>
+            <DrawerDescription>
+              Our support team is here to assist you. Choose how you'd like to get in touch.
+            </DrawerDescription>
+          </DrawerHeader>
+          <SupportActions onActionComplete={() => setIsOpen(false)} />
+          <DrawerFooter className="pt-2">
+            {/* Footer is empty but kept for layout consistency */}
+          </DrawerFooter>
+        </div>
       </DrawerContent>
     </Drawer>
   );
