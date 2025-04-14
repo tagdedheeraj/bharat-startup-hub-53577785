@@ -2,7 +2,7 @@
 import { memo } from 'react';
 import { Youtube, Play, Pause, RefreshCw } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { useYouTubeCarousel } from './youtube-shorts/useYouTubeCarousel';
+import { useYouTubeCarousel } from './youtube-shorts/hooks/useYouTubeCarousel';
 import { youtubeShorts } from './youtube-shorts/data';
 import VideoPlayer from './youtube-shorts/VideoPlayer';
 import ShortCard from './youtube-shorts/ShortCard';
