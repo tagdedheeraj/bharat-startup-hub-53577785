@@ -1,6 +1,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { cleanupDOM } from "@/utils/mobilePerformance";
 
 const NavigationObserver = () => {
   const location = useLocation();
@@ -15,19 +16,12 @@ const NavigationObserver = () => {
       // Perform cleanup of any stale DOM elements
       // This is important for mobile performance
       const cleanup = setTimeout(() => {
-        // Clean up any lingering portals or modals that might be causing issues
-        try {
-          const elements = document.querySelectorAll('[role="dialog"][data-state="closed"]');
-          elements.forEach(el => {
-            if (el.parentNode) el.parentNode.removeChild(el);
-          });
-        } catch (e) {
-          // Silent fail
-        }
+        // Clean up portal elements and other remnants
+        cleanupDOM();
         
-        // Force garbage collection hint
+        // Force scroll to top for better user experience
         window.scrollTo(0, 0);
-      }, 300);
+      }, 100); // Reduced from 300ms to 100ms for faster cleanup
       
       return () => clearTimeout(cleanup);
     }

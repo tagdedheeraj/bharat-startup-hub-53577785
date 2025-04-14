@@ -1,4 +1,5 @@
 
+import { memo } from 'react';
 import { Youtube, Play, Pause } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useYouTubeCarousel } from './youtube-shorts/useYouTubeCarousel';
@@ -17,8 +18,12 @@ const YouTubeShortsCarousel = () => {
     setHoveredVideo,
     playVideo,
     closeVideo,
-    togglePause
+    togglePause,
+    isLowPerformanceDevice
   } = useYouTubeCarousel(youtubeShorts);
+
+  // For low performance devices, limit to 3 items maximum
+  const optimizedShorts = isLowPerformanceDevice ? displayedShorts.slice(0, 3) : displayedShorts;
 
   return (
     <div className="relative py-16 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-slate-900">
@@ -50,7 +55,7 @@ const YouTubeShortsCarousel = () => {
           ) : (
             <Carousel className="w-full" opts={{ loop: true }}>
               <CarouselContent>
-                {displayedShorts.map((short, index) => (
+                {optimizedShorts.map((short, index) => (
                   <CarouselItem key={short.id} className="md:basis-1/2 lg:basis-1/3 pl-4 transform transition-all duration-500">
                     <ShortCard 
                       short={short}
@@ -80,4 +85,5 @@ const YouTubeShortsCarousel = () => {
   );
 };
 
-export default YouTubeShortsCarousel;
+// Memoize the component to prevent unnecessary re-renders
+export default memo(YouTubeShortsCarousel);

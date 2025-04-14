@@ -1,10 +1,16 @@
 
 /**
  * Utility module for handling portal-related cleanup
+ * Optimized for better mobile performance
  */
+
+// Check if we're in a browser environment
+const isBrowser = typeof window !== 'undefined';
 
 // Safely remove DOM elements that match a selector and state
 export const safelyRemoveElements = (selector: string, stateFilter?: string) => {
+  if (!isBrowser) return 0;
+  
   try {
     const elements = document.querySelectorAll(selector);
     let removedCount = 0;
@@ -17,70 +23,76 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
         // Only remove if no stateFilter provided OR element state matches the filter (e.g., 'closed')
         if (!stateFilter || state === stateFilter) {
           if (element.parentNode) {
-            console.log(`Removing element with selector ${selector} and state ${state}`);
             element.parentNode.removeChild(element);
             removedCount++;
           }
-        } else {
-          console.log(`Skipping element with selector ${selector} because state ${state} doesn't match ${stateFilter}`);
         }
       } catch (e) {
-        console.debug(`Error removing element ${selector}:`, e);
+        // Silent fail for individual elements
       }
     });
     
     return removedCount; // Return count of removed elements
   } catch (e) {
-    console.debug(`Error selecting elements ${selector}:`, e);
     return 0;
   }
 };
 
 /**
  * Clean up only closed/inactive portals (much safer than removing all)
+ * Optimized for mobile performance
  */
 export const cleanupAllPortals = () => {
-  console.log("Cleaning up closed portals only");
+  if (!isBrowser) return 0;
+  
   // Only clean up portals that are explicitly marked as closed
   const portalsRemoved = safelyRemoveElements('[data-radix-portal]', 'closed');
   const menuPortalsRemoved = safelyRemoveElements('[data-radix-dropdown-menu-content]', 'closed');
   const toastPortalsRemoved = safelyRemoveElements('[role="status"][data-state="closed"]');
+  const dialogsRemoved = safelyRemoveElements('[role="dialog"][data-state="closed"]');
+  const alertsRemoved = safelyRemoveElements('[role="alertdialog"][data-state="closed"]');
   
-  const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved;
-  if (total > 0) {
-    console.debug(`Cleaned up ${total} closed portal elements`);
+  const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved + dialogsRemoved + alertsRemoved;
+  
+  // Also clean up any elements that should be removed but don't have proper states
+  if (isBrowser) {
+    // Check for stale portals (over 30 seconds old with no interactions)
+    const now = Date.now();
+    document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+      const lastInteraction = portal.getAttribute('data-last-interaction');
+      if (lastInteraction) {
+        const time = parseInt(lastInteraction, 10);
+        if (!isNaN(time) && (now - time > 30000)) {
+          // Portal is stale, remove it
+          if (portal.parentNode) {
+            portal.parentNode.removeChild(portal);
+          }
+        }
+      }
+    });
   }
   
   return total;
 };
 
 /**
- * Force cleanup all portals (use with caution, mainly for development or emergency)
- * This function is DISABLED to prevent accidentally closing active dialogs
+ * Mark all portals with current timestamp to track interaction time
  */
-export const forceCleanupAllPortals = () => {
-  console.warn("Force cleanup is disabled to prevent accidental closing of active dialogs");
-  return 0;
+export const markPortalInteractions = () => {
+  if (!isBrowser) return;
   
-  // This code is intentionally disabled
-  /*
-  const portalsRemoved = safelyRemoveElements('[data-radix-portal]');
-  const menuPortalsRemoved = safelyRemoveElements('[data-radix-dropdown-menu-content]');
-  const toastPortalsRemoved = safelyRemoveElements('[role="status"]');
-  
-  const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved;
-  if (total > 0) {
-    console.warn(`Force cleaned up ${total} portal elements - use carefully`);
-  }
-  
-  return total;
-  */
+  const now = Date.now().toString();
+  document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+    portal.setAttribute('data-last-interaction', now);
+  });
 };
 
 /**
  * Debug function that logs information about all portals
  */
 export const debugPortals = () => {
+  if (!isBrowser) return;
+  
   try {
     const portals = document.querySelectorAll('[data-radix-portal]');
     console.log(`Found ${portals.length} portals total`);
@@ -90,16 +102,8 @@ export const debugPortals = () => {
       const state = portal.getAttribute('data-state');
       console.log(`Portal ${index + 1} state:`, state);
     });
-    
-    // Log dialog portals specifically
-    const dialogPortals = document.querySelectorAll('[role="dialog"]');
-    console.log(`Found ${dialogPortals.length} dialog portals`);
-    
-    // Log alert dialog portals
-    const alertDialogPortals = document.querySelectorAll('[role="alertdialog"]');
-    console.log(`Found ${alertDialogPortals.length} alert dialog portals`);
   } catch (e) {
-    console.debug("Portal debug error:", e);
+    // Silent fail
   }
 };
 
@@ -107,5 +111,5 @@ export const debugPortals = () => {
  * Check if the device is currently offline
  */
 export const isOffline = (): boolean => {
-  return typeof navigator !== 'undefined' && !navigator.onLine;
+  return isBrowser && !navigator.onLine;
 };

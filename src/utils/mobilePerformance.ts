@@ -2,6 +2,7 @@
 /**
  * Utility functions to improve mobile performance
  */
+import { cleanupAllPortals } from './portalCleanup';
 
 // Throttle function to limit how often a function can be called
 export const throttle = <T extends (...args: any[]) => any>(
@@ -42,57 +43,89 @@ export const isLowPerformanceDevice = (): boolean => {
 
 // Apply performance optimizations for mobile devices
 export const applyMobileOptimizations = (): void => {
-  if (isLowPerformanceDevice()) {
-    // Reduce animation complexity
+  if (typeof window === 'undefined') return;
+  
+  // Apply optimizations for all mobile devices
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+  
+  if (isMobile) {
+    // Add mobile class to html element
+    document.documentElement.classList.add('mobile-device');
+    
+    // Reduce animation complexity for all mobile devices
     document.documentElement.classList.add('reduce-motion');
     
-    // Add listener to detect when the device might be struggling
-    let lastFrameTime = performance.now();
-    let lowFPSCount = 0;
-    
-    const checkFrameRate = () => {
-      const now = performance.now();
-      const delta = now - lastFrameTime;
-      lastFrameTime = now;
+    // More aggressive optimizations for low-performance devices
+    if (isLowPerformanceDevice()) {
+      document.documentElement.classList.add('minimal-animations');
+      window.sessionStorage.setItem('reduced-features', 'true');
       
-      // If frame time is > 50ms (< 20fps), consider it low performance
-      if (delta > 50) {
-        lowFPSCount++;
-        
-        // If we detect consistently poor performance, apply more aggressive optimizations
-        if (lowFPSCount > 5) {
-          document.documentElement.classList.add('minimal-animations');
-          // Disable some non-essential features
-          window.sessionStorage.setItem('reduced-features', 'true');
-        }
-      } else {
-        // Reset the counter if performance is good
-        lowFPSCount = Math.max(0, lowFPSCount - 1);
+      // Set lower priority for non-critical resources
+      const deferImages = () => {
+        setTimeout(() => {
+          document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            (img as HTMLImageElement).loading = 'lazy';
+          });
+        }, 1000);
+      };
+      
+      window.addEventListener('load', deferImages);
+    }
+    
+    // Setup periodic cleanup
+    setupPeriodicCleanup();
+  }
+};
+
+// Setup periodic cleanup for better performance
+export const setupPeriodicCleanup = (): void => {
+  // Clean DOM immediately on first load
+  cleanupDOM();
+  
+  // Set up interval to periodically clean DOM
+  setInterval(() => {
+    cleanupDOM();
+  }, 15000); // Every 15 seconds instead of 30
+  
+  // Clean up on route changes
+  if (typeof window !== 'undefined') {
+    let lastUrl = window.location.href;
+    
+    // Use more efficient mutation observer pattern
+    const urlObserver = new MutationObserver(() => {
+      if (lastUrl !== window.location.href) {
+        lastUrl = window.location.href;
+        cleanupDOM();
       }
-      
-      requestAnimationFrame(checkFrameRate);
-    };
+    });
     
-    // Start monitoring frame rate
-    requestAnimationFrame(checkFrameRate);
+    // Observe the body for changes
+    urlObserver.observe(document.body, { childList: true, subtree: true });
   }
 };
 
 // Utility function to cleanup DOM elements safely for better performance
 export const cleanupDOM = (): void => {
-  // Clean up unused portal elements
-  const unusedPortals = document.querySelectorAll('[data-radix-portal][data-state="closed"]');
-  unusedPortals.forEach(portal => {
-    if (portal.parentNode) {
-      portal.parentNode.removeChild(portal);
+  try {
+    // Use the specialized portal cleanup utility
+    const elementsRemoved = cleanupAllPortals();
+    
+    // Force garbage collection hint if elements were removed
+    if (elementsRemoved > 0) {
+      // Scroll to force repaints
+      window.scrollBy(0, 0);
+      
+      // Use requestIdleCallback if available for non-critical cleanup
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          // Additional cleanup during idle time
+          console.log('Performed idle cleanup');
+        });
+      }
     }
-  });
-  
-  // Clean up any unused toast notifications
-  const closedToasts = document.querySelectorAll('[role="status"][data-state="closed"]');
-  closedToasts.forEach(toast => {
-    if (toast.parentNode) {
-      toast.parentNode.removeChild(toast);
-    }
-  });
+  } catch (error) {
+    console.warn('Error during DOM cleanup:', error);
+  }
 };
