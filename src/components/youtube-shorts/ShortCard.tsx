@@ -14,7 +14,6 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
   const handlePlay = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("ShortCard play clicked for video ID:", short.id);
     onPlay(short.id);
   };
   
@@ -58,14 +57,10 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       )}
       
       {/* Play button - more prominent for better visibility */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <button 
-          onClick={handlePlay}
-          className={`bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform transition-all duration-300 shadow-lg ${isHovered ? 'scale-125 animate-pulse' : ''}`}
-          aria-label="Play video"
-        >
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className={`bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform transition-all duration-300 shadow-lg ${isHovered ? 'scale-125 animate-pulse' : ''}`}>
           <Play fill="white" size={32} className={isHovered ? 'animate-pulse' : ''} />
-        </button>
+        </div>
         
         {/* Play hint text - more visible */}
         <div className="absolute bottom-16 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -76,7 +71,7 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       </div>
       
       {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-between p-4 text-white pointer-events-none">
+      <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
         {/* Title card with enhanced blur effect */}
         <div className="bg-black/70 backdrop-blur-sm p-3 rounded-lg shadow-lg transform translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
           <h3 className="font-bold text-lg line-clamp-2">{short.title}</h3>
