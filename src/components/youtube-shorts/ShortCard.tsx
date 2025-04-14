@@ -11,15 +11,27 @@ interface ShortCardProps {
 }
 
 const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps) => {
+  const handlePlay = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onPlay(short.id);
+  };
+  
   return (
     <div 
       className="relative group aspect-[9/16] rounded-xl overflow-hidden cursor-pointer bg-gray-900 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl hover:z-10"
-      onClick={() => onPlay(short.id)}
+      onClick={handlePlay}
       onMouseEnter={() => onHover(short.id)}
       onMouseLeave={() => onHover(null)}
       style={{animationDelay: `${index * 100}ms`}}
       aria-label={`Play ${short.title} video`}
       role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handlePlay(e as unknown as React.MouseEvent);
+        }
+      }}
     >
       {/* Thumbnail image with zoom effect */}
       <img
@@ -44,8 +56,8 @@ const ShortCard = ({ short, index, isHovered, onPlay, onHover }: ShortCardProps)
       
       {/* Play button - made more prominent */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-3 opacity-90 group-hover:opacity-100 transform group-hover:scale-125 transition-all duration-300 shadow-lg">
-          <Play fill="white" size={24} className="animate-pulse" />
+        <div className="bg-gradient-to-r from-red-600 to-purple-600 rounded-full p-4 opacity-90 group-hover:opacity-100 transform group-hover:scale-125 transition-all duration-300 shadow-lg">
+          <Play fill="white" size={28} className="animate-pulse" />
         </div>
         
         {/* Play hint text */}
