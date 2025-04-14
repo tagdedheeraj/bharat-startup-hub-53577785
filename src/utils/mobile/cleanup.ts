@@ -1,12 +1,19 @@
 
 /**
- * Utilities for cleaning up DOM elements
+ * Utilities for cleaning up DOM elements - YouTube friendly version
  */
 import { cleanupAllPortals } from '../portalCleanup';
 
 // Utility function to cleanup DOM elements safely for better performance
 export const cleanupDOM = (): void => {
   try {
+    // Skip cleanup if a YouTube player is active
+    if (document.querySelector('[data-youtube-iframe="true"]') || 
+        document.querySelector('[data-youtube-player-container="true"]')) {
+      console.log("Skipping DOM cleanup due to active YouTube player");
+      return;
+    }
+    
     // Use the specialized portal cleanup utility
     const elementsRemoved = cleanupAllPortals();
     
@@ -35,6 +42,12 @@ export const cleanupDOM = (): void => {
 export const removeTouchGhosts = (): void => {
   if (typeof document === 'undefined') return;
   
+  // Skip if a YouTube player is active
+  if (document.querySelector('[data-youtube-iframe="true"]') || 
+      document.querySelector('[data-youtube-player-container="true"]')) {
+    return;
+  }
+  
   // Find and remove any elements that might be causing touch input issues
   const ghostSelectors = [
     'div[style*="position: fixed"][style*="z-index: 999"]',
@@ -46,6 +59,11 @@ export const removeTouchGhosts = (): void => {
     try {
       const elements = document.querySelectorAll(selector);
       elements.forEach(el => {
+        // Skip if element is needed for YouTube
+        if (el.closest('[data-youtube-player-container="true"]')) {
+          return;
+        }
+        
         if (el.parentNode && !el.hasAttribute('data-keep')) {
           el.parentNode.removeChild(el);
         }

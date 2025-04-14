@@ -1,4 +1,7 @@
 
+/**
+ * Get a video title by ID, with fallback to a default title
+ */
 export const getVideoTitle = (videoId: string): string => {
   // Map of known video IDs to their titles
   const titleMap: Record<string, string> = {
@@ -9,5 +12,27 @@ export const getVideoTitle = (videoId: string): string => {
   };
   
   // Return the mapped title or a default one
-  return titleMap[videoId] || "Startup Masterclass";
+  const title = titleMap[videoId];
+  
+  if (!title) {
+    console.log(`No title found for video ID: ${videoId}, using default`);
+    return "Startup Masterclass";
+  }
+  
+  return title;
+};
+
+/**
+ * Validate YouTube ID format
+ */
+export const isValidYouTubeID = (id: string): boolean => {
+  // YouTube IDs are typically 11 characters
+  return /^[a-zA-Z0-9_-]{11}$/.test(id);
+};
+
+/**
+ * Get a thumbnail URL for a YouTube video ID
+ */
+export const getYouTubeThumbnail = (videoId: string): string => {
+  return `https://i3.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
 };

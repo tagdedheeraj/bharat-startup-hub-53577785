@@ -1,13 +1,16 @@
 
 /**
  * Utility module for handling portal-related cleanup
- * Optimized for better mobile performance
+ * Optimized for better mobile performance with YouTube safety
  */
 
 // Check if we're in a browser environment
 const isBrowser = typeof window !== 'undefined';
 
-// Safely remove DOM elements that match a selector and state
+/**
+ * Safely remove DOM elements that match a selector and state
+ * Now includes protection for YouTube players
+ */
 export const safelyRemoveElements = (selector: string, stateFilter?: string) => {
   if (!isBrowser) return 0;
   
@@ -17,6 +20,12 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
     
     elements.forEach(element => {
       try {
+        // Skip YouTube iframes or their containers
+        if (element.querySelector('[data-youtube-iframe="true"]') || 
+            element.closest('[data-youtube-player-container="true"]')) {
+          return;
+        }
+        
         // If we have a stateFilter, only remove elements that match that state
         const state = element.getAttribute('data-state');
         
@@ -43,10 +52,17 @@ export const safelyRemoveElements = (selector: string, stateFilter?: string) => 
 
 /**
  * Clean up only closed/inactive portals (much safer than removing all)
- * Optimized for mobile performance
+ * Now has protection for YouTube players
  */
 export const cleanupAllPortals = () => {
   if (!isBrowser) return 0;
+  
+  // Check if YouTube player is active - if so, skip cleanup
+  const hasActiveYouTubePlayer = document.querySelector('[data-youtube-iframe="true"]') !== null;
+  if (hasActiveYouTubePlayer) {
+    console.log("Skipping portal cleanup due to active YouTube player");
+    return 0;
+  }
   
   // Only clean up portals that are explicitly marked as closed
   const portalsRemoved = safelyRemoveElements('[data-radix-portal]', 'closed');
@@ -58,10 +74,13 @@ export const cleanupAllPortals = () => {
   const total = portalsRemoved + menuPortalsRemoved + toastPortalsRemoved + dialogsRemoved + alertsRemoved;
   
   // Also clean up any elements that should be removed but don't have proper states
-  if (isBrowser) {
+  if (isBrowser && !hasActiveYouTubePlayer) {
     // Check for stale portals (over 30 seconds old with no interactions)
     const now = Date.now();
     document.querySelectorAll('[data-radix-portal]').forEach(portal => {
+      // Skip any portal that contains a YouTube player
+      if (portal.querySelector('[data-youtube-iframe="true"]')) return;
+      
       const lastInteraction = portal.getAttribute('data-last-interaction');
       if (lastInteraction) {
         const time = parseInt(lastInteraction, 10);
@@ -74,7 +93,7 @@ export const cleanupAllPortals = () => {
       }
     });
     
-    // Remove any stuck touch event handlers or ghost elements
+    // Only clean touch ghosts if no YouTube player is active
     cleanupTouchGhosts();
   }
   
@@ -83,9 +102,15 @@ export const cleanupAllPortals = () => {
 
 /**
  * Clean up elements that might be interfering with touch/scroll events
+ * Now with protection for YouTube players
  */
 const cleanupTouchGhosts = () => {
   if (!isBrowser) return;
+  
+  // Skip if YouTube player is active
+  if (document.querySelector('[data-youtube-iframe="true"]')) {
+    return;
+  }
   
   try {
     // Remove invisible touch overlays that can block scrolling
@@ -102,6 +127,12 @@ const cleanupTouchGhosts = () => {
     
     ghostSelectors.forEach(selector => {
       document.querySelectorAll(selector).forEach(element => {
+        // Skip if element is part of a YouTube player
+        if (element.closest('[data-youtube-player-container="true"]') || 
+            element.querySelector('[data-youtube-iframe="true"]')) {
+          return;
+        }
+        
         // Only remove if it doesn't have important attributes
         if (!element.hasAttribute('data-state') || 
             element.getAttribute('data-state') === 'closed') {
@@ -115,6 +146,11 @@ const cleanupTouchGhosts = () => {
     
     // Find any elements with pointer-events: none that are full screen
     document.querySelectorAll('div[style*="pointer-events: none"]').forEach(element => {
+      // Skip if element is part of a YouTube player
+      if (element.closest('[data-youtube-player-container="true"]')) {
+        return;
+      }
+      
       const rect = element.getBoundingClientRect();
       // If it's a large overlay-like element, remove it
       if (rect.width > window.innerWidth * 0.5 && rect.height > window.innerHeight * 0.5) {
@@ -124,10 +160,6 @@ const cleanupTouchGhosts = () => {
         }
       }
     });
-    
-    if (removed > 0) {
-      console.log(`Removed ${removed} potential touch/scroll blockers`);
-    }
   } catch (e) {
     console.warn('Error cleaning up touch ghosts', e);
   }

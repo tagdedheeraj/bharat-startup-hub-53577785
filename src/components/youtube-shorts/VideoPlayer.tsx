@@ -26,7 +26,10 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
   const videoTitle = getVideoTitle(videoId);
   
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-fadeIn">
+    <div 
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 animate-fadeIn"
+      data-youtube-player-container="true"
+    >
       <div 
         className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10 animate-scaleIn z-[1001]"
       >
