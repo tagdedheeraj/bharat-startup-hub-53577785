@@ -1,3 +1,4 @@
+
 import { YouTubeShort } from './types';
 import { 
   collection, 
@@ -29,6 +30,11 @@ export const youtubeShorts: YouTubeShort[] = [
     id: "pq22sadiXqQ", // Added from FirstTimeVideoPopup for guaranteed working video
     title: "Startup Funding Guide",
     thumbnail: "https://i3.ytimg.com/vi/pq22sadiXqQ/maxresdefault.jpg"
+  },
+  {
+    id: "sEKYtxnpAP4", // New video added per user request
+    title: "Startup Growth Strategies",
+    thumbnail: "https://i3.ytimg.com/vi/sEKYtxnpAP4/maxresdefault.jpg"
   }
 ];
 
