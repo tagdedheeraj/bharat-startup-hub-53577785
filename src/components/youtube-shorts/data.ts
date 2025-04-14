@@ -1,4 +1,3 @@
-
 import { YouTubeShort } from './types';
 import { 
   collection, 
@@ -20,11 +19,6 @@ export const youtubeShorts: YouTubeShort[] = [
     id: "lM3Tswmx8zM",
     title: "Business Strategy Secrets",
     thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
-  },
-  {
-    id: "xkLNpYiwak8",
-    title: "Business Model Innovation",
-    thumbnail: "https://i3.ytimg.com/vi/xkLNpYiwak8/maxresdefault.jpg"
   },
   {
     id: "k6t0Fivw0EQ",
