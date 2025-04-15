@@ -1,4 +1,3 @@
-
 import { ReactNode, useEffect, memo, useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
@@ -10,6 +9,7 @@ import { isLowPerformanceDevice } from '@/utils/mobile/detection';
 import MobileOptimizer from './layout/MobileOptimizer';
 import SimpleHeader from './layout/SimpleHeader';
 import MainContent from './layout/MainContent';
+import MobileBottomNav from './MobileBottomNav';
 
 interface ExtendedCSSProperties extends React.CSSProperties {
   WebkitOverflowScrolling?: 'touch' | 'auto';
@@ -38,7 +38,8 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       className={`flex flex-col min-h-screen ${bgClass}`}
       style={isMobile ? {
         WebkitOverflowScrolling: 'touch',
-        overscrollBehavior: 'none'
+        overscrollBehavior: 'none',
+        paddingBottom: '64px'
       } as ExtendedCSSProperties : undefined}
     >
       <MobileOptimizer mainRef={mainRef} />
@@ -51,6 +52,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       
       <Footer />
       <SideDrawerNavigation />
+      <MobileBottomNav />
     </div>
   );
 };

@@ -1,81 +1,49 @@
-import { memo, useEffect, useState, useRef } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Home, Info, Briefcase, Shield, LifeBuoy } from 'lucide-react';
-import { NavItem, ContactNavItem, SupportDrawer, MoreMenuSheet } from './mobile-nav';
-import { isLowPerformanceDevice } from '@/utils/mobile/detection';
 
-const navItems = [
-  { icon: Home, label: 'Home', to: '/' },
-  { icon: Info, label: 'About', to: '/about' },
-  { icon: Briefcase, label: 'Services', to: '/services' },
-  { icon: Shield, label: 'CA', to: '/ca-services' },
-  { icon: LifeBuoy, label: 'Support', to: '/support' },
-];
+import { memo } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Home, Search, MessageCircle, User, Menu } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
 
 const MobileBottomNav = () => {
   const isMobile = useIsMobile();
-  const [isLowPerformance, setIsLowPerformance] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    setIsLowPerformance(isLowPerformanceDevice());
-    
-    if (navRef.current && isMobile) {
-      navRef.current.style.transform = 'translateZ(0)';
-      navRef.current.style.willChange = 'transform';
-      navRef.current.style.touchAction = 'none';
-      document.body.style.paddingBottom = '70px';
-    }
-    
-    return () => {
-      if (isMobile) {
-        document.body.style.paddingBottom = '';
-      }
-    };
-  }, [isMobile]);
+  const location = useLocation();
   
   if (!isMobile) return null;
   
-  if (isLowPerformance) {
-    return (
-      <div 
-        ref={navRef}
-        className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
-        style={{ transform: 'translateZ(0)', willChange: 'transform' }}
-      >
-        <nav className="flex justify-around items-center h-16">
-          <NavItem key="/" icon={Home} label="Home" to="/" />
-          <NavItem key="/services" icon={Briefcase} label="Services" to="/services" />
-          <ContactNavItem />
-          <MoreMenuSheet />
-        </nav>
-      </div>
-    );
-  }
-  
+  const navItems = [
+    { icon: Home, label: 'Home', path: '/' },
+    { icon: Search, label: 'Search', path: '/search' },
+    { icon: MessageCircle, label: 'Contact', path: '/contact' },
+    { icon: User, label: 'Account', path: '/account' },
+    { icon: Menu, label: 'Menu', path: '/menu' },
+  ];
+
   return (
-    <div 
-      ref={navRef}
-      className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden"
-      style={{ transform: 'translateZ(0)', willChange: 'transform' }}
-    >
-      <nav className="flex justify-around items-center h-16">
-        {navItems.map((item) => (
-          <NavItem 
-            key={item.to} 
-            icon={item.icon} 
-            label={item.label} 
-            to={item.to} 
-          />
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 md:hidden">
+      <nav className="flex justify-around items-center h-16 px-2">
+        {navItems.map(({ icon: Icon, label, path }) => (
+          <Link
+            key={path}
+            to={path}
+            className="flex flex-col items-center justify-center w-full h-full"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-full transition-colors",
+                location.pathname === path 
+                  ? "text-india-saffron hover:text-india-saffron/90" 
+                  : "text-gray-500 hover:text-india-saffron"
+              )}
+            >
+              <Icon size={20} />
+              <span className="text-xs">{label}</span>
+            </Button>
+          </Link>
         ))}
-        
-        <ContactNavItem />
-        
-        <div className="relative support-section">
-          <SupportDrawer />
-        </div>
-        
-        <MoreMenuSheet />
       </nav>
     </div>
   );
