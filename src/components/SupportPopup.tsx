@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -10,9 +9,13 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Mail, Phone, MessageSquare } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function SupportPopup() {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
+  
+  if (isMobile) return null;
   
   const handleOpenMail = () => {
     window.open('mailto:support@bharatstartupsolution.com');

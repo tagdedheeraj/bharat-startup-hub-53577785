@@ -1,6 +1,9 @@
 
-import { LifeBuoy } from 'lucide-react';
+import { MessagesSquare } from 'lucide-react';
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { useLocation } from 'react-router-dom';
+import { Button } from '../ui/button';
 
 type SupportTriggerButtonProps = {
   onClick: (e: React.MouseEvent) => void;
@@ -8,20 +11,24 @@ type SupportTriggerButtonProps = {
 };
 
 export default function SupportTriggerButton({ onClick, buttonRef }: SupportTriggerButtonProps) {
+  const location = useLocation();
+  const isActive = location.pathname === '/support';
+
   return (
-    <button 
+    <Button 
       ref={buttonRef}
-      className="support-button flex flex-col items-center justify-center w-full h-full"
+      variant="ghost"
+      size="icon"
+      className={cn(
+        "flex flex-col items-center justify-center gap-1 w-12 h-12 rounded-full transition-colors",
+        isActive ? "text-india-saffron" : "text-gray-500 hover:text-india-saffron"
+      )}
       onClick={onClick}
       aria-label="Support"
     >
-      <LifeBuoy 
-        size={24} 
-        className="text-india-saffron" 
-        strokeWidth={2.5}
-      />
-      <span className="text-xs mt-1 font-semibold text-india-saffron">Support</span>
-      <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-    </button>
+      <MessagesSquare size={20} />
+      <span className="text-xs">Support</span>
+      <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+    </Button>
   );
 }
