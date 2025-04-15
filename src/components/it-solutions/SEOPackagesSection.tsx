@@ -1,8 +1,8 @@
-
 import { motion } from "framer-motion";
-import { Link2 } from "lucide-react";
+import { Link2, Check, Minus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "@/components/ui/table";
 
 interface PackageFeature {
   text: string;
@@ -60,6 +60,21 @@ const seoPackages: SEOPackage[] = [
     ],
     gradient: "from-amber-500/20 to-orange-500/20"
   }
+];
+
+const comparisonFeatures = [
+  { feature: "Total Backlinks", boostStarter: "250+", rankRise: "500+", dominanceMax: "750+" },
+  { feature: "Tier 1 Backlinks", boostStarter: "100", rankRise: "200", dominanceMax: "300" },
+  { feature: "Tier 2 Backlinks", boostStarter: "150", rankRise: "300", dominanceMax: "450" },
+  { feature: "Domain Authority", boostStarter: "DA 20-40", rankRise: "DA 30-50", dominanceMax: "DA 40-60" },
+  { feature: "Drip-Feed Strategy", boostStarter: true, rankRise: true, dominanceMax: true },
+  { feature: "E-E-A-T High Authority Links", boostStarter: true, rankRise: true, dominanceMax: true },
+  { feature: "Priority Processing", boostStarter: false, rankRise: true, dominanceMax: true },
+  { feature: "Monthly Report", boostStarter: false, rankRise: false, dominanceMax: true },
+  { feature: "Delivery Time", boostStarter: "7 days", rankRise: "14 days", dominanceMax: "21 days" },
+  { feature: "Support", boostStarter: "Email", rankRise: "Email + Chat", dominanceMax: "Priority Support" },
+  { feature: "Link Building Strategy", boostStarter: "Basic", rankRise: "Advanced", dominanceMax: "Premium" },
+  { feature: "Niche Relevancy", boostStarter: "Medium", rankRise: "High", dominanceMax: "Very High" }
 ];
 
 const SEOPackagesSection = () => {
@@ -135,6 +150,67 @@ const SEOPackagesSection = () => {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-16"
+        >
+          <h3 className="text-2xl font-bold mb-6 text-center">Detailed Package Comparison</h3>
+          <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="w-1/4">Features</TableHead>
+                  <TableHead>BoostStarter</TableHead>
+                  <TableHead>RankRise</TableHead>
+                  <TableHead>DominanceMax</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {comparisonFeatures.map((item, index) => (
+                  <TableRow key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <TableCell className="font-medium">{item.feature}</TableCell>
+                    <TableCell>
+                      {typeof item.boostStarter === 'boolean' ? (
+                        item.boostStarter ? (
+                          <Check className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <Minus className="w-5 h-5 text-gray-400" />
+                        )
+                      ) : (
+                        item.boostStarter
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {typeof item.rankRise === 'boolean' ? (
+                        item.rankRise ? (
+                          <Check className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <Minus className="w-5 h-5 text-gray-400" />
+                        )
+                      ) : (
+                        item.rankRise
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {typeof item.dominanceMax === 'boolean' ? (
+                        item.dominanceMax ? (
+                          <Check className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <Minus className="w-5 h-5 text-gray-400" />
+                        )
+                      ) : (
+                        item.dominanceMax
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </motion.div>
       </div>
     </section>
