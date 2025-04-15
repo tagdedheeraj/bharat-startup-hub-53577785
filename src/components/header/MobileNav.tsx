@@ -4,6 +4,8 @@ import { Menu, X, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AuthButtons from '../AuthButtons';
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SupportActions from '../mobile-nav/SupportActions';
 
 interface MobileNavProps {
   toggleMobileMenu: () => void;
@@ -12,6 +14,7 @@ interface MobileNavProps {
 
 const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="lg:hidden flex items-center gap-2">
@@ -19,13 +22,24 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
         <Search size={20} />
       </Button>
       <AuthButtons />
-      <button
-        type="button"
-        className="p-2 rounded-md text-gray-600 hover:text-gray-900 transition-colors"
-        onClick={toggleMobileMenu}
-      >
-        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="text-gray-600 hover:text-gray-900 transition-colors"
+            onClick={() => setIsOpen(true)}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[280px] p-0">
+          <div className="flex flex-col h-full overflow-auto py-6">
+            <SupportActions onActionComplete={() => setIsOpen(false)} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
