@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Scene from './Scene';
@@ -9,6 +10,12 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import AuthButtons from '../AuthButtons';
 
 const Logo = () => (
@@ -93,7 +100,8 @@ const OvalHeader = () => {
     window.scrollTo(0, 0);
   };
 
-  const renderMobileNavContent = (onClose: () => void) => (
+  // Fixing the type issue by properly typing the close parameter
+  const renderMobileNavContent = (close: () => void) => (
     <div className="py-6">
       <nav className="flex flex-col space-y-1">
         {navItems.map((item) => (
@@ -114,7 +122,7 @@ const OvalHeader = () => {
                         : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
                     )}
                     onClick={() => {
-                      onClose();
+                      close();
                       handleNavigation(child.href);
                     }}
                   >
@@ -138,7 +146,7 @@ const OvalHeader = () => {
                   : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
               )}
               onClick={() => {
-                onClose();
+                close();
                 handleNavigation(item.href);
               }}
             >
@@ -151,7 +159,7 @@ const OvalHeader = () => {
         <Button 
           className="w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90"
           onClick={() => {
-            onClose();
+            close();
             handleNavigation('/contact');
           }}
         >
@@ -304,7 +312,7 @@ const OvalHeader = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[80%]">
-                {(close) => renderMobileNavContent(close)}
+                {({ close }) => renderMobileNavContent(close)}
               </SheetContent>
             </Sheet>
           </div>
