@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Code2, BracesSquare, Zap, Palette, Library, Database, Route, LineChart, FileCode, Blocks } from "lucide-react";
+import { Code2, Type, Zap, Palette, Library, Database, Route, LineChart, FileCode, Blocks } from "lucide-react";
 
 interface TechItem {
   name: string;
@@ -19,7 +19,7 @@ const technologies: TechItem[] = [
   {
     name: "TypeScript",
     description: "Type-safe development for scalable applications",
-    icon: <BracesSquare className="w-6 h-6" />,
+    icon: <Type className="w-6 h-6" />, // Replaced BracesSquare with Type
     gradient: "from-blue-600/20 to-blue-400/20"
   },
   {
