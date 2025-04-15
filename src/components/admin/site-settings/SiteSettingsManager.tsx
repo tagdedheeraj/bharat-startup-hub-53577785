@@ -2,7 +2,7 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SiteIdentityForm from './site-identity/SiteIdentityForm';
-import { ImageManager } from './image-manager/ImageManager';
+import { ImageManager } from '@/components/admin/site-settings/ImageManager';
 
 const SiteSettingsManager = () => {
   return (
