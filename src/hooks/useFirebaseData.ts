@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { 
   getDocument, 
@@ -86,6 +85,14 @@ export function useCollection<T>(
   return { data, loading, error };
 }
 
+// Firestore collection hook specifically designed for this application
+export function useFirestoreCollection<T>(
+  collectionName: string,
+  constraints: any[] = []
+) {
+  return useCollection<T>(collectionName, constraints);
+}
+
 // Hook for user-specific data
 export function useUserData<T extends FirebaseData>(collectionName: string) {
   const { user } = useAuth();
@@ -166,4 +173,25 @@ export function useInvestmentOpportunities(limitCount: number = 20) {
       firestoreLimit(limitCount)
     ]
   );
+}
+
+// New hook for managing website images
+export function useWebsiteImages() {
+  const { data: images, loading, error } = useCollection<any>('website-images');
+
+  const addImage = async (imageData: any) => {
+    return await createDocument('website-images', imageData);
+  };
+
+  const deleteImage = async (id: string) => {
+    return await deleteDocument('website-images', id);
+  };
+
+  return {
+    images,
+    loading,
+    error,
+    addImage,
+    deleteImage
+  };
 }

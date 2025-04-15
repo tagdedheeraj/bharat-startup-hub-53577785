@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import SectionImage from '@/components/shared/SectionImage';
 
 const HeroSection = () => {
   return (
@@ -30,10 +31,12 @@ const HeroSection = () => {
           <div className="md:w-1/2 mt-12 md:mt-0 animate-fadeInRight">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-brand-600/20 to-transparent rounded-2xl transform rotate-3"></div>
-              <img
-                src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+              <SectionImage
+                pageName="home"
+                sectionName="hero"
+                fallbackSrc="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
                 alt="Startup team meeting"
-                className="relative z-10 rounded-2xl shadow-xl"
+                className="relative z-10 rounded-2xl shadow-xl w-full"
               />
             </div>
           </div>

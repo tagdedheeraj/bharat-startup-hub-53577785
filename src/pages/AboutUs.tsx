@@ -1,6 +1,7 @@
 
 import SectionHeading from '@/components/SectionHeading';
 import { Award, Target, Clock, Users, CheckCircle } from 'lucide-react';
+import SectionImage from '@/components/shared/SectionImage';
 
 const AboutPage = () => {
   return (
@@ -42,10 +43,12 @@ const AboutPage = () => {
             <div className="md:w-1/2 animate-fadeInRight">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-600/20 to-transparent rounded-xl transform -rotate-3"></div>
-                <img
-                  src="https://images.unsplash.com/photo-1558403194-611308249627?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+                <SectionImage
+                  pageName="about"
+                  sectionName="story"
+                  fallbackSrc="https://images.unsplash.com/photo-1558403194-611308249627?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
                   alt="Our team in office"
-                  className="relative z-10 rounded-xl shadow-xl"
+                  className="relative z-10 rounded-xl shadow-xl w-full"
                 />
               </div>
             </div>
@@ -152,8 +155,10 @@ const AboutPage = () => {
             {/* Team Member 1 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-md animate-fadeIn" style={{ animationDelay: "100ms" }}>
               <div className="h-64 bg-gray-200">
-                <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+                <SectionImage
+                  pageName="about"
+                  sectionName="team-ceo"
+                  fallbackSrc="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
                   alt="Rajesh Sharma"
                   className="w-full h-full object-cover"
                 />
@@ -170,8 +175,10 @@ const AboutPage = () => {
             {/* Team Member 2 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-md animate-fadeIn" style={{ animationDelay: "200ms" }}>
               <div className="h-64 bg-gray-200">
-                <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+                <SectionImage
+                  pageName="about"
+                  sectionName="team-legal"
+                  fallbackSrc="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
                   alt="Priya Verma"
                   className="w-full h-full object-cover"
                 />
@@ -188,8 +195,10 @@ const AboutPage = () => {
             {/* Team Member 3 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-md animate-fadeIn" style={{ animationDelay: "300ms" }}>
               <div className="h-64 bg-gray-200">
-                <img
-                  src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+                <SectionImage
+                  pageName="about"
+                  sectionName="team-funding"
+                  fallbackSrc="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
                   alt="Amit Patel"
                   className="w-full h-full object-cover"
                 />

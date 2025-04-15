@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/SectionHeading";
 import SolutionCard from "@/components/it-solutions/SolutionCard";
@@ -7,6 +8,7 @@ import SEOPackagesSection from "@/components/it-solutions/SEOPackagesSection";
 import SocialMediaSection from "@/components/it-solutions/SocialMediaSection";
 import GoogleAdsSection from "@/components/it-solutions/google-ads/GoogleAdsSection";
 import { solutions } from "@/components/it-solutions/solutionsData";
+import SectionImage from "@/components/shared/SectionImage";
 
 const ITSolutions = () => {
   const containerVariants = {
