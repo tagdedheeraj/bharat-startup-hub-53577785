@@ -5,11 +5,10 @@ import { cn } from '@/lib/utils';
 import { Search, BellRing, Menu, X, ChevronDown, ChevronRight, Shield, FileText, IndianRupee, Receipt, FileSpreadsheet, ShieldCheck } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import AuthButtons from '../AuthButtons';
 
 const Logo = () => (
@@ -44,8 +43,6 @@ const OvalHeader = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
-
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -95,6 +92,74 @@ const OvalHeader = () => {
     navigate(href);
     window.scrollTo(0, 0);
   };
+
+  const renderMobileNavContent = (onClose: () => void) => (
+    <div className="py-6">
+      <nav className="flex flex-col space-y-1">
+        {navItems.map((item) => (
+          item.children ? (
+            <div key={item.name} className="py-1.5">
+              <div className="font-medium text-india-saffron px-4 py-2 flex items-center bg-gradient-to-r from-white/10 to-transparent rounded-lg mb-1">
+                <span className="mr-2">{item.name}</span>
+                <div className="h-px flex-grow bg-gradient-to-r from-transparent via-india-white/30 to-transparent"></div>
+              </div>
+              <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
+                {item.children.map((child) => (
+                  <button
+                    key={child.name}
+                    className={cn(
+                      "w-full text-left px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center",
+                      isActive(child.href) 
+                        ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron" 
+                        : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
+                    )}
+                    onClick={() => {
+                      onClose();
+                      handleNavigation(child.href);
+                    }}
+                  >
+                    {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
+                    <div className={cn(
+                      "w-1.5 h-1.5 rounded-full mr-2",
+                      isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
+                    )}></div>
+                    {child.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <button
+              key={item.name}
+              className={cn(
+                "w-full text-left px-4 py-2.5 rounded-lg transition-all duration-200",
+                isActive(item.href) 
+                  ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron" 
+                  : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
+              )}
+              onClick={() => {
+                onClose();
+                handleNavigation(item.href);
+              }}
+            >
+              {item.name}
+            </button>
+          )
+        ))}
+      </nav>
+      <div className="px-4 mt-6">
+        <Button 
+          className="w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90"
+          onClick={() => {
+            onClose();
+            handleNavigation('/contact');
+          }}
+        >
+          Get Started
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <header className={cn(
@@ -228,92 +293,21 @@ const OvalHeader = () => {
           
           <div className="lg:hidden flex items-center">
             <AuthButtons />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-black hover:text-india-saffron"
-              onClick={toggleMobileMenu}
-            >
-              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </Button>
-          </div>
-        </div>
-        
-        <div
-          className={cn(
-            "lg:hidden overflow-hidden transition-all duration-500 ease-in-out",
-            mobileMenuOpen ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0"
-          )}
-        >
-          <nav className="flex flex-col space-y-1 px-4">
-            {navItems.map((item) => (
-              item.children ? (
-                <div key={item.name} className="py-1.5">
-                  <div className="font-medium text-india-saffron px-4 py-2 flex items-center bg-gradient-to-r from-white/10 to-transparent rounded-lg mb-1">
-                    <span className="mr-2">{item.name}</span>
-                    <div className="h-px flex-grow bg-gradient-to-r from-transparent via-india-white/30 to-transparent"></div>
-                  </div>
-                  <div className="ml-4 space-y-1 pl-2 border-l border-india-white/30 bg-gradient-to-b from-white/5 to-transparent rounded-r-lg">
-                    {item.children.map((child) => (
-                      <button
-                        key={child.name}
-                        className={cn(
-                          "w-full text-left block px-4 py-2.5 rounded-lg text-black/80 hover:text-black transition-all duration-200 flex items-center cursor-pointer",
-                          isActive(child.href) 
-                            ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-black border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                            : "hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
-                        )}
-                        onClick={() => {
-                          toggleMobileMenu();
-                          setTimeout(() => {
-                            handleNavigation(child.href);
-                          }, 10);
-                        }}
-                      >
-                        {child.icon && <child.icon className="h-4 w-4 mr-2 text-india-white/80" />}
-                        <div className={cn(
-                          "w-1.5 h-1.5 rounded-full mr-2",
-                          isActive(child.href) ? "bg-india-saffron animate-pulse" : "bg-india-white/40"
-                        )}></div>
-                        {child.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    "block px-4 py-2.5 rounded-lg transition-all duration-200",
-                    isActive(item.href) 
-                      ? "bg-gradient-to-r from-india-saffron/20 to-transparent text-india-saffron border-l-2 border-india-saffron shadow-[inset_0_0_10px_rgba(255,255,255,0.05)]" 
-                      : "text-black hover:text-india-saffron hover:bg-white/5 hover:border-l-2 hover:border-india-white/40"
-                  )}
-                  onClick={() => {
-                    toggleMobileMenu();
-                    window.scrollTo(0, 0);
-                  }}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-black hover:text-india-saffron"
                 >
-                  {item.name}
-                </Link>
-              )
-            ))}
-            <div className="w-full cursor-pointer">
-              <Button 
-                className="mt-4 w-full bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
-                  border border-india-white/30 transition-all"
-                onClick={() => {
-                  toggleMobileMenu();
-                  setTimeout(() => {
-                    handleNavigation('/contact');
-                  }, 10);
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
-          </nav>
+                  <Menu size={22} />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[80%]">
+                {(close) => renderMobileNavContent(close)}
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
