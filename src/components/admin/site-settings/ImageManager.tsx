@@ -1,14 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Image as ImageIcon, Upload, Trash2, Copy, X, CheckCircle, RotateCw } from 'lucide-react';
+import { useWebsiteImages, WebsiteImage } from '@/hooks/useWebsiteImages';
 import { uploadFile } from '@/services/firebase/storageOperations';
 import { toast } from '@/hooks/use-toast';
-import { useWebsiteImages, WebsiteImage } from '@/hooks/useWebsiteImages';
 
 interface PageConfig {
   id: string;
@@ -52,7 +52,6 @@ export const ImageManager = () => {
         path
       };
       
-      // Add to Firestore collection
       await addImage(newImage);
       
       toast({
@@ -73,7 +72,6 @@ export const ImageManager = () => {
 
   const handleImageDelete = async (image: WebsiteImage) => {
     try {
-      // Delete image from both Firestore and Storage
       await deleteImage(image.id, image.path);
       
       toast({
