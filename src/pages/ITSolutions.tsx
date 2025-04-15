@@ -5,6 +5,7 @@ import CTASection from "@/components/it-solutions/CTASection";
 import TechStackSection from "@/components/it-solutions/TechStackSection";
 import SEOPackagesSection from "@/components/it-solutions/SEOPackagesSection";
 import SocialMediaSection from "@/components/it-solutions/SocialMediaSection";
+import GoogleAdsSection from "@/components/it-solutions/google-ads/GoogleAdsSection";
 import { solutions } from "@/components/it-solutions/solutionsData";
 
 const ITSolutions = () => {
@@ -68,6 +69,7 @@ const ITSolutions = () => {
       <div className="space-y-20">
         <SEOPackagesSection />
         <SocialMediaSection />
+        <GoogleAdsSection />
         <TechStackSection />
         <CTASection />
       </div>
