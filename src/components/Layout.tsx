@@ -1,3 +1,4 @@
+
 import { ReactNode, useEffect, memo, useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
@@ -39,7 +40,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       style={isMobile ? {
         WebkitOverflowScrolling: 'touch',
         overscrollBehavior: 'none',
-        paddingBottom: '64px'
+        paddingBottom: '80px' // Increased padding to prevent content from being hidden
       } as ExtendedCSSProperties : undefined}
     >
       <MobileOptimizer mainRef={mainRef} />

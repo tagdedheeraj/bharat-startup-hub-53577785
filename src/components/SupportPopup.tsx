@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -33,7 +34,7 @@ export default function SupportPopup() {
   };
   
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-20 right-4 z-50">
       <Button 
         onClick={() => setOpen(true)}
         className="bg-india-saffron hover:bg-india-saffron/90 text-white font-bold flex items-center gap-2"
