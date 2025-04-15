@@ -232,3 +232,11 @@ div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"]:not([class]
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+@layer utilities {
+  .bg-grid-pattern {
+    background-image: linear-gradient(to right, rgb(0 0 0 / 0.1) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgb(0 0 0 / 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
