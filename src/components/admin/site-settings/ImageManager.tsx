@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Image as ImageIcon, Upload, Trash2, Copy, X, CheckCircle, RotateCw } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
 import { useWebsiteImages, WebsiteImage } from '@/hooks/useWebsiteImages';
 import { uploadFile } from '@/services/firebase/storageOperations';
 import { toast } from '@/hooks/use-toast';
+import ImagePreviewModal from './image-manager/ImagePreviewModal';
+import ImageGrid from './image-manager/ImageGrid';
+import SectionUploader from './image-manager/SectionUploader';
 
 interface PageConfig {
   id: string;
@@ -29,8 +28,7 @@ export const ImageManager = () => {
     images, 
     loading: loadingImages, 
     addImage, 
-    deleteImage, 
-    fetchImages 
+    deleteImage
   } = useWebsiteImages();
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, section: string, page: string) => {
@@ -143,14 +141,6 @@ export const ImageManager = () => {
     },
   ];
 
-  const handleImagePreview = (url: string) => {
-    setSelectedImageUrl(url);
-  };
-
-  const closePreview = () => {
-    setSelectedImageUrl(null);
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -171,88 +161,27 @@ export const ImageManager = () => {
             <TabsContent key={page.id} value={page.id} className="space-y-6">
               {page.sections.map((section) => (
                 <div key={section.id} className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-lg font-medium">{section.name}</Label>
-                    <div>
-                      <Input
-                        id={`${page.id}-${section.id}-upload`}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageUpload(e, section.id, page.id)}
-                        className="hidden"
-                      />
-                      <Button 
-                        variant="outline" 
-                        disabled={uploading}
-                        onClick={() => document.getElementById(`${page.id}-${section.id}-upload`)?.click()}
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        {uploading ? 'Uploading...' : 'Upload Image'}
-                      </Button>
-                    </div>
-                  </div>
+                  <SectionUploader
+                    section={section}
+                    pageId={page.id}
+                    onUpload={handleImageUpload}
+                    uploading={uploading}
+                  />
                   
                   {loadingImages ? (
                     <div className="py-8 flex justify-center">
                       <RotateCw className="h-8 w-8 animate-spin text-muted-foreground" />
                     </div>
                   ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {images
-                        .filter(img => img.page === page.id && img.section === section.id)
-                        .sort((a, b) => b.createdAt - a.createdAt) // Sort by newest first
-                        .map((image) => (
-                          <div key={image.id} className="relative group border rounded-lg overflow-hidden bg-gray-50">
-                            <div 
-                              className="aspect-square relative cursor-pointer"
-                              onClick={() => handleImagePreview(image.url)}
-                            >
-                              <img 
-                                src={image.url} 
-                                alt={image.name}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            
-                            <div className="p-2 border-t bg-white">
-                              <p className="text-xs font-medium truncate" title={image.name}>
-                                {image.name.length > 20 ? `${image.name.substring(0, 20)}...` : image.name}
-                              </p>
-                            </div>
-
-                            <div className="absolute top-2 right-2 flex space-x-1">
-                              <Button
-                                variant="destructive"
-                                size="icon"
-                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => handleImageDelete(image)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                              
-                              <Button
-                                variant="secondary"
-                                size="icon"
-                                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => copyImageUrl(image.url)}
-                              >
-                                {copySuccess === image.url ? (
-                                  <CheckCircle className="h-4 w-4 text-green-500" />
-                                ) : (
-                                  <Copy className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-
-                      {images.filter(img => img.page === page.id && img.section === section.id).length === 0 && (
-                        <div className="col-span-full py-8 text-center border rounded-lg bg-gray-50">
-                          <ImageIcon className="h-10 w-10 mx-auto text-muted-foreground mb-2" />
-                          <p className="text-muted-foreground">No images uploaded for this section yet</p>
-                        </div>
-                      )}
-                    </div>
+                    <ImageGrid
+                      images={images}
+                      sectionId={section.id}
+                      pageId={page.id}
+                      onPreview={setSelectedImageUrl}
+                      onDelete={handleImageDelete}
+                      onCopy={copyImageUrl}
+                      copySuccess={copySuccess}
+                    />
                   )}
                 </div>
               ))}
@@ -261,25 +190,11 @@ export const ImageManager = () => {
         </Tabs>
       </CardContent>
 
-      {/* Image Preview Modal */}
       {selectedImageUrl && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="relative max-w-4xl max-h-[80vh]">
-            <img 
-              src={selectedImageUrl} 
-              alt="Preview" 
-              className="max-w-full max-h-[80vh] object-contain"
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute top-2 right-2 bg-white hover:bg-gray-200"
-              onClick={closePreview}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        <ImagePreviewModal
+          imageUrl={selectedImageUrl}
+          onClose={() => setSelectedImageUrl(null)}
+        />
       )}
     </Card>
   );
