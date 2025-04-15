@@ -40,13 +40,13 @@ export default function NavigationDrawer({ isOpen, onClose }: NavigationDrawerPr
                   <div className="space-y-1">
                     {section.children?.map((item) => (
                       <Link
-                        key={item.href}
-                        to={item.href}
+                        key={item.to}
+                        to={item.to}
                         onClick={onClose}
                         className={cn(
                           "flex items-center justify-between py-2 px-3 rounded-lg text-sm transition-colors",
                           "hover:bg-india-saffron/10 active:bg-india-saffron/20",
-                          location.pathname === item.href
+                          location.pathname === item.to
                             ? "bg-india-saffron/15 text-india-saffron font-medium"
                             : "text-gray-700"
                         )}
@@ -56,19 +56,19 @@ export default function NavigationDrawer({ isOpen, onClose }: NavigationDrawerPr
                             <item.icon 
                               size={18} 
                               className={cn(
-                                location.pathname === item.href 
+                                location.pathname === item.to 
                                   ? "text-india-saffron" 
                                   : "text-gray-500"
                               )} 
                             />
                           )}
-                          {item.name}
+                          {item.label}
                         </div>
                         <ChevronRight 
                           size={16} 
                           className={cn(
                             "text-gray-400 transition-transform",
-                            location.pathname === item.href && "text-india-saffron"
+                            location.pathname === item.to && "text-india-saffron"
                           )} 
                         />
                       </Link>
