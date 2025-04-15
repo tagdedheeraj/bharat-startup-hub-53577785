@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 import { Image, Upload } from 'lucide-react';
+import { ImageManager } from './ImageManager';
 
 const SiteSettingsManager = () => {
   const { settings, loading, uploadLogo, uploadFavicon, updateName } = useSiteSettings();
@@ -145,6 +146,8 @@ const SiteSettingsManager = () => {
           </div>
         </CardContent>
       </Card>
+
+      <ImageManager />
     </div>
   );
 };
