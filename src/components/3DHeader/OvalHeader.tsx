@@ -1,6 +1,15 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { 
+  Menu, 
+  Shield, 
+  ShieldCheck, 
+  IndianRupee, 
+  FileText, 
+  Receipt, 
+  FileSpreadsheet 
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import {
@@ -116,14 +125,17 @@ const OvalHeader = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[80%]">
-                {({ close }: { close: () => void }) => (
-                  <MobileNavContent
-                    navItems={navItems}
-                    currentPath={currentPath}
-                    close={close}
-                    handleNavigation={handleNavigation}
-                  />
-                )}
+                <MobileNavContent
+                  navItems={navItems}
+                  currentPath={currentPath}
+                  close={() => {
+                    const closeButton = document.querySelector('[data-radix-collection-item]');
+                    if (closeButton instanceof HTMLElement) {
+                      closeButton.click();
+                    }
+                  }}
+                  handleNavigation={handleNavigation}
+                />
               </SheetContent>
             </Sheet>
           </div>
