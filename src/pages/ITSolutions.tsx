@@ -5,6 +5,7 @@ import SolutionCard from "@/components/it-solutions/SolutionCard";
 import CTASection from "@/components/it-solutions/CTASection";
 import TechStackSection from "@/components/it-solutions/TechStackSection";
 import SEOPackagesSection from "@/components/it-solutions/SEOPackagesSection";
+import SocialMediaSection from "@/components/it-solutions/SocialMediaSection";
 import { solutions } from "@/components/it-solutions/solutionsData";
 
 const ITSolutions = () => {
@@ -43,6 +44,7 @@ const ITSolutions = () => {
       </div>
 
       <SEOPackagesSection />
+      <SocialMediaSection />
       <TechStackSection />
       <CTASection />
     </div>
