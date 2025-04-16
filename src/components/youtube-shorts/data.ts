@@ -1,4 +1,3 @@
-
 import { YouTubeShort } from './types';
 import { 
   collection, 
@@ -17,6 +16,11 @@ import { toast } from 'sonner';
 // Initial YouTube shorts data as fallback with verified IDs
 export const youtubeShorts: YouTubeShort[] = [
   {
+    id: "I5QH6rGjZEs",
+    title: "Business Growth Tips",
+    thumbnail: "https://i3.ytimg.com/vi/I5QH6rGjZEs/maxresdefault.jpg"
+  },
+  {
     id: "lM3Tswmx8zM",
     title: "Business Strategy Secrets",
     thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
@@ -27,12 +31,7 @@ export const youtubeShorts: YouTubeShort[] = [
     thumbnail: "https://i3.ytimg.com/vi/sEKYtxnpAP4/maxresdefault.jpg"
   },
   {
-    id: "k6t0Fivw0EQ",
-    title: "Entrepreneurship Success Factors",
-    thumbnail: "https://i3.ytimg.com/vi/k6t0Fivw0EQ/maxresdefault.jpg"
-  },
-  {
-    id: "pq22sadiXqQ", // Added from FirstTimeVideoPopup for guaranteed working video
+    id: "pq22sadiXqQ",
     title: "Startup Funding Guide",
     thumbnail: "https://i3.ytimg.com/vi/pq22sadiXqQ/maxresdefault.jpg"
   }
