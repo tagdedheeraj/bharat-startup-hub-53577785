@@ -13,7 +13,7 @@ export const useImageOperations = () => {
     loading, 
     error,
     addImage, 
-    deleteImage,
+    deleteImage: deleteImageFromDb,
     fetchImages
   } = useWebsiteImages();
 
@@ -64,6 +64,26 @@ export const useImageOperations = () => {
       title: "Copied",
       description: "Image URL copied to clipboard",
     });
+  };
+
+  // Create a wrapper for deleteImage to match the expected signature
+  const deleteImage = async (imageId: string, storagePath?: string) => {
+    try {
+      await deleteImageFromDb(imageId, storagePath);
+      toast({
+        title: "Success",
+        description: "Image deleted successfully",
+      });
+      return true;
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete image",
+        variant: "destructive"
+      });
+      return false;
+    }
   };
 
   return {

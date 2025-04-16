@@ -25,6 +25,13 @@ export const ImageManager = () => {
     deleteImage
   } = useImageOperations();
 
+  // Wrapper function to match the expected type signature
+  const handleDeleteImage = (image: WebsiteImage) => {
+    if (image.id && image.path) {
+      deleteImage(image.id, image.path);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -53,7 +60,7 @@ export const ImageManager = () => {
               uploading={uploading}
               onUpload={handleImageUpload}
               onPreview={setSelectedImageUrl}
-              onDelete={deleteImage}
+              onDelete={handleDeleteImage}
               onCopy={handleCopyUrl}
               copySuccess={copySuccess}
             />
