@@ -13,7 +13,7 @@ export default function CertificationsPage() {
       benefits={[
         "Increased market credibility and trust",
         "Access to government schemes and benefits",
-        "Preference in government tenders and contracts",
+        "Preference in government tenders and contracts", 
         "Tax benefits and incentives",
         "Access to specialized funding options",
         "Enhanced business opportunities and partnerships"
