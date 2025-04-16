@@ -1,13 +1,15 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RotateCw } from 'lucide-react';
+import { RotateCw, AlertCircle } from 'lucide-react';
 import { useWebsiteImages, WebsiteImage } from '@/hooks/useWebsiteImages';
 import { uploadFile } from '@/services/firebase/storageOperations';
 import { toast } from '@/hooks/use-toast';
 import ImagePreviewModal from './image-manager/ImagePreviewModal';
 import ImageGrid from './image-manager/ImageGrid';
 import SectionUploader from './image-manager/SectionUploader';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface PageConfig {
   id: string;
@@ -27,8 +29,10 @@ export const ImageManager = () => {
   const { 
     images, 
     loading: loadingImages, 
+    error,
     addImage, 
-    deleteImage
+    deleteImage,
+    fetchImages
   } = useWebsiteImages();
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, section: string, page: string) => {
@@ -56,6 +60,9 @@ export const ImageManager = () => {
         title: "Success",
         description: "Image uploaded successfully",
       });
+
+      // Refresh images after upload
+      fetchImages();
     } catch (error) {
       console.error('Error uploading image:', error);
       toast({
@@ -148,6 +155,15 @@ export const ImageManager = () => {
         <CardDescription>Manage images across different sections of your website</CardDescription>
       </CardHeader>
       <CardContent>
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Error loading images. Please try again later.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <Tabs defaultValue="home" value={activePage} onValueChange={setActivePage}>
           <TabsList className="mb-4 overflow-x-auto flex w-full">
             {pageConfigs.map((page) => (
@@ -178,7 +194,7 @@ export const ImageManager = () => {
                       sectionId={section.id}
                       pageId={page.id}
                       onPreview={setSelectedImageUrl}
-                      onDelete={handleImageDelete}
+                      onDelete={deleteImage}
                       onCopy={copyImageUrl}
                       copySuccess={copySuccess}
                     />
