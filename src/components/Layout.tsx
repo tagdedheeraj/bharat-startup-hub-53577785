@@ -10,7 +10,6 @@ import { isLowPerformanceDevice } from '@/utils/mobile/detection';
 import MobileOptimizer from './layout/MobileOptimizer';
 import SimpleHeader from './layout/SimpleHeader';
 import MainContent from './layout/MainContent';
-import MobileBottomNav from './MobileBottomNav';
 
 interface ExtendedCSSProperties extends React.CSSProperties {
   WebkitOverflowScrolling?: 'touch' | 'auto';
@@ -39,8 +38,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       className={`flex flex-col min-h-screen ${bgClass}`}
       style={isMobile ? {
         WebkitOverflowScrolling: 'touch',
-        overscrollBehavior: 'none',
-        paddingBottom: '80px' // Increased padding to prevent content from being hidden
+        overscrollBehavior: 'none'
       } as ExtendedCSSProperties : undefined}
     >
       <MobileOptimizer mainRef={mainRef} />
@@ -53,7 +51,6 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       
       <Footer />
       <SideDrawerNavigation />
-      <MobileBottomNav />
     </div>
   );
 };
