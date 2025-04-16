@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Award, CheckCircle, FileCheck, HelpCircle, TrendingUp, BadgeCheck, BadgePercent, BadgeDollarSign, CreditCard, Building, Landmark, ShieldCheck, FileText, Scale, Smartphone, Banknote, Droplet, Film, Truck } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -393,7 +395,7 @@ const CertificateMarketingPage = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-600/20 to-transparent rounded-xl transform -rotate-3"></div>
                 <img
-                  src="public/lovable-uploads/7202be4c-4f99-4147-bc69-d18b503ec173.png"
+                  src="/public/lovable-uploads/ca813a94-716f-4a40-a170-91ce4033c4d3.png"
                   alt="Bharat Startup Solution Certification Services"
                   className="relative z-10 rounded-xl shadow-xl"
                 />
