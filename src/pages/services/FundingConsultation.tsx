@@ -8,7 +8,6 @@ import BenefitsSection from '@/components/funding/BenefitsSection';
 import FAQSection from '@/components/funding/FAQSection';
 import CTASection from '@/components/funding/CTASection';
 import LegalDisclaimer from '@/components/funding/LegalDisclaimer';
-import SectionImage from '@/components/shared/SectionImage';
 
 const FundingConsultationPage = () => {
   const { toast } = useToast();
@@ -33,14 +32,8 @@ const FundingConsultationPage = () => {
   }, [toast]);
 
   return (
-    <div className="pb-20">
-      <SectionImage 
-        pageName="funding-consultation"
-        sectionName="hero"
-        fallbackSrc="public/lovable-uploads/0433a3aa-ca15-48e9-a229-33964e20a4fd.png"
-        className="w-full h-96 object-cover rounded-lg shadow-lg"
-        alt="Bharat Startup Solution Team"
-      />
+    <div className="pb-20"> {/* Added padding to bottom to ensure content doesn't get hidden behind the nav */}
+      <HeroSection />
       <FundingOptionsSection />
       <ProcessSection />
       <BenefitsSection />
