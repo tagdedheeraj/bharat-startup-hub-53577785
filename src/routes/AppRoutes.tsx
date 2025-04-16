@@ -26,6 +26,7 @@ import PrivacyPolicyPage from "@/pages/PrivacyPolicy";
 import DisclaimerPage from "@/pages/Disclaimer";
 import ClientServiceAgreementPage from "@/pages/ClientServiceAgreement";
 import RefundPolicyPage from "@/pages/RefundPolicy";
+import GrievancesPage from "@/pages/Grievances";
 
 // CA Services Pages
 import CAServicesPage from "@/pages/CAServices";
@@ -62,6 +63,7 @@ const AppRoutes = () => {
         <Route path="/success-stories" element={<SuccessStoriesPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/faqs" element={<FAQsPage />} />
+        <Route path="/grievances" element={<GrievancesPage />} />
         
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />

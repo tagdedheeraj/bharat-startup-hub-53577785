@@ -75,6 +75,9 @@ export default function Footer() {
                   Admin Panel
                 </Link>
               </li>
+              <li>
+                <Link to="/grievances" className="text-gray-300 hover:text-white transition-colors">Submit Grievance</Link>
+              </li>
             </ul>
           </div>
           
