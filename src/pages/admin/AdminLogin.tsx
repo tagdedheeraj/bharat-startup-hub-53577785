@@ -2,16 +2,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { setupAdminUser } from '@/lib/firebase/adminSetup';
+import AdminLoginForm from '@/components/admin/login/AdminLoginForm';
+import AdminLoginError from '@/components/admin/login/AdminLoginError';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -27,15 +24,11 @@ const AdminLogin = () => {
     
     try {
       setIsLoading(true);
-
-      // First, ensure admin user exists
       await setupAdminUser();
       
-      // Attempt to sign in
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
-      // Verify admin role
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
       
@@ -69,53 +62,15 @@ const AdminLogin = () => {
         </CardHeader>
         
         <CardContent>
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-          
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email" 
-                required
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password" 
-                required
-              />
-            </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Logging in...
-                </>
-              ) : (
-                'Login to Admin Panel'
-              )}
-            </Button>
-          </form>
+          <AdminLoginError error={error || ''} />
+          <AdminLoginForm
+            email={email}
+            password={password}
+            isLoading={isLoading}
+            onEmailChange={(e) => setEmail(e.target.value)}
+            onPasswordChange={(e) => setPassword(e.target.value)}
+            onSubmit={handleLogin}
+          />
         </CardContent>
         
         <CardFooter>
