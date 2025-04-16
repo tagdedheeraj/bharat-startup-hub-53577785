@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock, RefreshCcw } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock, RefreshCcw, Instagram } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -35,9 +35,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a href="https://www.instagram.com/bharatstartup_solution?igsh=NTlhODk1NnZncnBn" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.504.344-1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM15.194 12 10 15V9l5.194 3Z" clipRule="evenodd" />
-                </svg>
+                <Instagram className="w-6 h-6" />
               </a>
               <a href="https://www.youtube.com/@BharatStartupSolution" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -168,28 +166,6 @@ export default function Footer() {
             <p className="text-gray-400">
               © {currentYear} Bharat Startup Solution. A Product of <strong>Shaswat Initial Support Services</strong>
             </p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <Link to="/terms-and-conditions" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Terms & Conditions
-              </Link>
-              <span className="text-gray-600">|</span>
-              <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Privacy Policy
-              </Link>
-              <span className="text-gray-600">|</span>
-              <Link to="/disclaimer" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Disclaimer
-              </Link>
-              <span className="text-gray-600">|</span>
-              <Link to="/client-service-agreement" className="text-gray-400 hover:text-white transition-colors text-sm">
-                Client Service Agreement
-              </Link>
-              <span className="text-gray-600">|</span>
-              <Link to="/admin" className="text-gray-400 hover:text-white transition-colors text-sm flex items-center">
-                <Lock className="w-3 h-3 mr-1" />
-                Admin
-              </Link>
-            </div>
           </div>
         </div>
       </div>
