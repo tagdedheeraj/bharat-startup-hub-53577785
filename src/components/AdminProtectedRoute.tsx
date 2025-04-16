@@ -16,48 +16,39 @@ const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) =
 
   useEffect(() => {
     const checkAdmin = async () => {
-      // First check local storage for faster initial load
-      const storedAdmin = localStorage.getItem('adminAuth') === 'true';
-      
-      if (storedAdmin) {
-        setIsAdmin(true);
-        setIsLoading(false);
-      } else {
-        // Check current auth state
+      try {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          try {
-            if (user) {
-              // Check if user has admin role in Firestore
-              const userDoc = await getDoc(doc(db, 'users', user.uid));
-              const userData = userDoc.data();
-              const hasAdminRole = userData && userData.role === 'admin';
-              
-              if (hasAdminRole) {
-                localStorage.setItem('adminAuth', 'true');
-                localStorage.setItem('adminEmail', user.email || '');
-                localStorage.setItem('adminUid', user.uid);
-                setIsAdmin(true);
-              } else {
-                localStorage.removeItem('adminAuth');
-                localStorage.removeItem('adminEmail');
-                localStorage.removeItem('adminUid');
-                setIsAdmin(false);
-              }
+          if (user) {
+            // Check if user has admin role in Firestore
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            const userData = userDoc.data();
+            const hasAdminRole = userData && userData.role === 'admin';
+            
+            if (hasAdminRole) {
+              localStorage.setItem('adminAuth', 'true');
+              localStorage.setItem('adminEmail', user.email || '');
+              localStorage.setItem('adminUid', user.uid);
+              setIsAdmin(true);
             } else {
               localStorage.removeItem('adminAuth');
               localStorage.removeItem('adminEmail');
               localStorage.removeItem('adminUid');
               setIsAdmin(false);
             }
-          } catch (error) {
-            console.error("Error checking admin status:", error);
+          } else {
+            localStorage.removeItem('adminAuth');
+            localStorage.removeItem('adminEmail');
+            localStorage.removeItem('adminUid');
             setIsAdmin(false);
-          } finally {
-            setIsLoading(false);
           }
+          setIsLoading(false);
         });
         
         return () => unsubscribe();
+      } catch (error) {
+        console.error("Error checking admin status:", error);
+        setIsAdmin(false);
+        setIsLoading(false);
       }
     };
     
