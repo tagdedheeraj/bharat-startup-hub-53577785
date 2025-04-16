@@ -1,4 +1,3 @@
-
 import { Mail, Phone } from 'lucide-react';
 
 const TopBar = () => {
@@ -8,12 +7,12 @@ const TopBar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-center py-2 text-black">
           <div className="flex items-center space-x-6 text-sm">
-            <a href="tel:+917046396020" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
+            <a href="tel:+919081622284" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
               <div className="relative">
                 <Phone size={14} className="group-hover:animate-ping absolute opacity-0 group-hover:opacity-75" />
                 <Phone size={14} className="relative" />
               </div>
-              <span>+91 7046396020</span>
+              <span>+91 90816 22284</span>
             </a>
             <a href="mailto:info@bharatstartup.com" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
               <div className="relative">

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -24,12 +23,12 @@ export default function SupportPopup() {
   };
   
   const handleOpenPhone = () => {
-    window.open('tel:+917046396020');
+    window.open('tel:+919081622284');
     setOpen(false);
   };
   
   const handleOpenChat = () => {
-    window.open('https://wa.me/917046396020');
+    window.open('https://wa.me/919081622284');
     setOpen(false);
   };
   
@@ -67,7 +66,7 @@ export default function SupportPopup() {
               onClick={handleOpenPhone}
             >
               <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span>Call: +91 7046 396020</span>
+              <span>Call: +91 90816 22284</span>
             </Button>
             
             <Button 
