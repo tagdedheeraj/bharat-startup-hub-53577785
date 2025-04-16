@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +12,9 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db, isFirestoreAvailable } from '@/lib/firebase';
 import OfflineFirebaseAlert from '@/components/auth/OfflineFirebaseAlert';
+import NetworkStatusAlert from '@/components/auth/NetworkStatusAlert';
+import ErrorAlert from '@/components/auth/ErrorAlert';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +22,7 @@ const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
   
   const navigate = useNavigate();
 
@@ -69,8 +74,8 @@ const AdminLogin = () => {
     } catch (error: any) {
       console.error("Login error:", error);
       
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        setError('Invalid email or password');
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        setError('Invalid email or password. Please check your credentials and try again.');
       } else if (error.code === 'auth/network-request-failed') {
         setError('Network error. Please check your connection');
         setIsOffline(true);
@@ -93,6 +98,8 @@ const AdminLogin = () => {
         </CardHeader>
         
         <CardContent>
+          <NetworkStatusAlert />
+          
           {isOffline && (
             <div className="mb-4">
               <OfflineFirebaseAlert />
@@ -152,6 +159,16 @@ const AdminLogin = () => {
               )}
             </Button>
           </form>
+          
+          <div className="mt-4 text-center">
+            <Button 
+              variant="link" 
+              className="text-sm text-blue-600"
+              onClick={() => setShowHelpDialog(true)}
+            >
+              Need help accessing the admin panel?
+            </Button>
+          </div>
         </CardContent>
         
         <CardFooter>
@@ -160,6 +177,45 @@ const AdminLogin = () => {
           </p>
         </CardFooter>
       </Card>
+      
+      <Dialog open={showHelpDialog} onOpenChange={setShowHelpDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Admin Access Help</DialogTitle>
+            <DialogDescription>
+              If you're having trouble logging in, please try the following:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <h3 className="font-medium mb-1">Online Mode:</h3>
+              <p className="text-sm text-gray-600">
+                You need a Firebase account with admin privileges to access the admin panel. 
+                Contact your system administrator if you need access.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-medium mb-1">Offline/Development Mode:</h3>
+              <p className="text-sm text-gray-600">
+                If Firebase is unavailable, you can use the development credentials:
+                <br />
+                Email: admin@example.com
+                <br />
+                Password: admin123
+              </p>
+            </div>
+            <div>
+              <h3 className="font-medium mb-1">Common Issues:</h3>
+              <ul className="list-disc pl-5 text-sm text-gray-600">
+                <li>Check if your account has admin privileges</li>
+                <li>Verify your internet connection</li>
+                <li>Make sure your email and password are entered correctly</li>
+                <li>Check if Firebase services are accessible</li>
+              </ul>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
