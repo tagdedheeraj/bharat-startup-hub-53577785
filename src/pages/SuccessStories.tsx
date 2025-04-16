@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { ArrowRight, Quote } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
@@ -14,7 +13,7 @@ const SuccessStoriesPage = () => {
       testimonial: "With Bharat Startup Solution's guidance, we secured ₹2.5 CR funding that transformed our business. Their expertise in preparing our pitch and connecting us with the right investors was invaluable.",
       person: "Raj Malhotra",
       position: "Founder & CEO",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+      image: "public/lovable-uploads/0433a3aa-ca15-48e9-a229-33964e20a4fd.png"
     },
     {
       name: "GreenHealth Organics",
@@ -25,7 +24,7 @@ const SuccessStoriesPage = () => {
       testimonial: "The legal team at Bharat Startup Solution helped us navigate the complex regulatory landscape of the health supplements industry. Their expertise ensured we were fully compliant while scaling our operations.",
       person: "Priya Sharma",
       position: "Co-founder",
-      image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+      image: "public/lovable-uploads/7202be4c-4f99-4147-bc69-d18b503ec173.png"
     },
     {
       name: "EcoManufacture India",
@@ -36,7 +35,7 @@ const SuccessStoriesPage = () => {
       testimonial: "Bharat Startup Solution's comprehensive approach helped us not only secure ₹3 CR in funding but also establish robust compliance systems. This dual support has been crucial to our rapid growth.",
       person: "Vikram Singh",
       position: "Managing Director",
-      image: "https://images.unsplash.com/photo-1570612861542-284f4c12e75f?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+      image: "public/lovable-uploads/0433a3aa-ca15-48e9-a229-33964e20a4fd.png"
     }
   ];
 

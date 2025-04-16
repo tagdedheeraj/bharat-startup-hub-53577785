@@ -393,8 +393,8 @@ const CertificateMarketingPage = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-600/20 to-transparent rounded-xl transform -rotate-3"></div>
                 <img
-                  src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
-                  alt="Business certification"
+                  src="public/lovable-uploads/7202be4c-4f99-4147-bc69-d18b503ec173.png"
+                  alt="Bharat Startup Solution Certification Services"
                   className="relative z-10 rounded-xl shadow-xl"
                 />
               </div>
