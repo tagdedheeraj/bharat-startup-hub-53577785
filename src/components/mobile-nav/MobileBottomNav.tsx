@@ -33,7 +33,7 @@ const MobileBottomNav = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 backdrop-blur-lg border-t border-white/20 shadow-lg z-50 md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 backdrop-blur-lg border-t border-white/20 shadow-lg z-40 md:hidden">
       <nav className="flex justify-around items-center h-16 px-2">
         {navItems.map(({ icon: Icon, label, path, component: Component, onClick }) => {
           if (Component) {

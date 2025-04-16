@@ -92,7 +92,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         updateDialogState(dialogId, open);
       }}>
         <DialogContent 
-          className="w-[95%] max-w-3xl p-0 mx-auto bg-transparent border-none z-[999]" 
+          className="w-[95%] max-w-3xl p-0 mx-auto bg-transparent border-none z-[9999]" 
           onInteractOutside={(e) => {
             e.preventDefault(); // Prevent closing on outside click for video popup
           }}

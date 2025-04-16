@@ -27,11 +27,11 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
   
   return (
     <div 
-      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9000] flex items-center justify-center p-2 sm:p-4 animate-fadeIn"
+      className="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] flex items-center justify-center p-2 sm:p-4 animate-fadeIn"
       data-youtube-player-container="true"
     >
       <div 
-        className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10 animate-scaleIn z-[9001]"
+        className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl border border-white/10 animate-scaleIn z-[10000]"
       >
         {loadError ? (
           <ErrorDisplay 
@@ -42,7 +42,7 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
         ) : (
           <div className="w-full h-full relative">
             {/* Video container with higher z-index */}
-            <div className="absolute inset-0 z-[9004]">
+            <div className="absolute inset-0 z-[10004]">
               <YouTubeIframe 
                 ref={iframeRef}
                 videoId={videoId}
@@ -51,7 +51,7 @@ const VideoPlayer = ({ videoId, onClose }: VideoPlayerProps) => {
             </div>
             
             {/* Video overlay with gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none z-[9003]"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none z-[10003]"></div>
             
             {isLoading && <LoadingIndicator />}
           </div>
