@@ -9,6 +9,7 @@ import { pageConfigs } from './image-manager/config/pageConfigs';
 import { useImageOperations } from './image-manager/hooks/useImageOperations';
 import PageTabs from './image-manager/components/PageTabs';
 import PageContent from './image-manager/components/PageContent';
+import { WebsiteImage } from '@/hooks/useWebsiteImages';
 
 export const ImageManager = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
