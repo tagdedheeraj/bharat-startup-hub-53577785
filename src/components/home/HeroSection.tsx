@@ -34,8 +34,8 @@ const HeroSection = () => {
               <SectionImage
                 pageName="home"
                 sectionName="hero"
-                fallbackSrc="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="Startup team meeting"
+                fallbackSrc="/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png"
+                alt="Startup team at Bharat Startup Solution"
                 className="relative z-10 rounded-2xl shadow-xl w-full"
               />
             </div>
