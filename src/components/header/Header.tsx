@@ -5,15 +5,13 @@ import { Home, Search, MessagesSquare, UserCircle, LayoutGrid } from 'lucide-rea
 import Logo from './Logo';
 import TopBar from './TopBar';
 import DesktopNav from './DesktopNav';
-import MobileNav from './MobileNav';
-import MobileMenu from './MobileMenu';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/auth';
 import { cn } from '@/lib/utils';
 import MobileServicesDrawer from '../mobile-nav/MobileServicesDrawer';
+import SupportDrawer from '../mobile-nav/SupportDrawer';
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,7 +29,7 @@ export default function Header() {
     { icon: Home, label: 'Home', path: '/' },
     { icon: Search, label: 'Search', path: '/search' },
     { icon: LayoutGrid, label: 'Services', component: MobileServicesDrawer },
-    { icon: MessagesSquare, label: 'Support', path: '/contact' },
+    { icon: MessagesSquare, label: 'Support', component: SupportDrawer },
     { icon: UserCircle, label: 'Account', onClick: handleAccountClick },
   ];
 
@@ -43,10 +41,6 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
 
   return (
     <header
@@ -113,20 +107,6 @@ export default function Header() {
           </div>
         </div>
       </nav>
-      
-      <MobileMenu 
-        isOpen={mobileMenuOpen}
-        currentPath={location.pathname}
-        toggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
-        handleMobileItemClick={(path: string, e: React.MouseEvent) => {
-          e.preventDefault();
-          setMobileMenuOpen(false);
-          setTimeout(() => {
-            navigate(path);
-            window.scrollTo(0, 0);
-          }, 10);
-        }}
-      />
     </header>
   );
 }
