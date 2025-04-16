@@ -5,6 +5,7 @@ import { auth } from '@/lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { toast } from 'sonner';
 
 interface AdminProtectedRouteProps {
   children: ReactNode;
@@ -17,25 +18,53 @@ const AdminProtectedRoute: React.FC<AdminProtectedRouteProps> = ({ children }) =
   useEffect(() => {
     const checkAdmin = async () => {
       try {
+        console.log("Checking admin status...");
+        
+        // Check if adminAuth is in localStorage
+        const adminAuth = localStorage.getItem('adminAuth');
+        const adminUid = localStorage.getItem('adminUid');
+        
+        if (!adminAuth || !adminUid) {
+          console.log("No admin auth in localStorage");
+          setIsAdmin(false);
+          setIsLoading(false);
+          return;
+        }
+        
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
           if (user) {
+            console.log("User is authenticated:", user.uid);
+            // Verify UID matches the one in localStorage
+            if (user.uid !== adminUid) {
+              console.log("User ID doesn't match stored admin ID");
+              localStorage.removeItem('adminAuth');
+              localStorage.removeItem('adminEmail');
+              localStorage.removeItem('adminUid');
+              setIsAdmin(false);
+              setIsLoading(false);
+              return;
+            }
+            
             // Check if user has admin role in Firestore
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             const userData = userDoc.data();
             const hasAdminRole = userData && userData.role === 'admin';
             
+            console.log("User Firestore data:", userData);
+            
             if (hasAdminRole) {
-              localStorage.setItem('adminAuth', 'true');
-              localStorage.setItem('adminEmail', user.email || '');
-              localStorage.setItem('adminUid', user.uid);
+              console.log("User confirmed as admin");
               setIsAdmin(true);
             } else {
+              console.log("User does not have admin role");
               localStorage.removeItem('adminAuth');
               localStorage.removeItem('adminEmail');
               localStorage.removeItem('adminUid');
               setIsAdmin(false);
+              toast.error("You do not have admin privileges");
             }
           } else {
+            console.log("No authenticated user");
             localStorage.removeItem('adminAuth');
             localStorage.removeItem('adminEmail');
             localStorage.removeItem('adminUid');
