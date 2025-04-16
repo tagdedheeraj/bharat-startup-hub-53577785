@@ -47,8 +47,8 @@ export default function Header() {
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-500",
         isScrolled
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg'
-          : 'bg-white'
+          ? 'bg-[#04203E]/90 backdrop-blur-lg shadow-lg'
+          : 'bg-[#04203E]'
       )}
     >
       <TopBar />
@@ -57,10 +57,13 @@ export default function Header() {
         <div className="flex justify-between items-center">
           <Logo />
           
-          <DesktopNav />
+          {/* Desktop Navigation */}
+          <div className="hidden lg:block">
+            <DesktopNav />
+          </div>
           
           {/* Mobile Navigation */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-4">
             {navItems.map(({ icon: Icon, label, path, component: Component, onClick }) => {
               if (Component) {
                 return (
@@ -75,15 +78,16 @@ export default function Header() {
                   <Button
                     key={label}
                     variant="ghost"
-                    size="icon"
+                    size="sm"
                     onClick={onClick}
                     className={cn(
-                      "flex flex-col items-center justify-center gap-1",
-                      "hover:bg-purple-500/20 active:scale-95",
-                      location.pathname === path ? "text-purple-500" : "text-gray-500"
+                      "flex flex-col items-center justify-center gap-1 text-white",
+                      "hover:bg-white/10",
+                      location.pathname === path ? "text-white" : "text-white/70"
                     )}
                   >
                     <Icon size={20} />
+                    <span className="text-xs font-medium">{label}</span>
                   </Button>
                 );
               }
@@ -92,15 +96,16 @@ export default function Header() {
                 <Button
                   key={label}
                   variant="ghost"
-                  size="icon"
+                  size="sm"
                   onClick={() => navigate(path)}
                   className={cn(
-                    "flex flex-col items-center justify-center gap-1",
-                    "hover:bg-purple-500/20 active:scale-95",
-                    location.pathname === path ? "text-purple-500" : "text-gray-500"
+                    "flex flex-col items-center justify-center gap-1 text-white",
+                    "hover:bg-white/10",
+                    location.pathname === path ? "text-white" : "text-white/70"
                   )}
                 >
                   <Icon size={20} />
+                  <span className="text-xs font-medium">{label}</span>
                 </Button>
               );
             })}
