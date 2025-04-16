@@ -1,16 +1,16 @@
 
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, Clock } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 export function ContactInfo() {
   return (
-    <Card className="bg-white">
+    <Card className="bg-white transition-all duration-300 hover:shadow-lg">
       <CardContent className="p-6 space-y-6">
-        <h3 className="text-xl font-semibold mb-4">Contact Information</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-900">Contact Information</h3>
         
         <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <div className="bg-brand-50 p-2 rounded-lg">
+          <div className="flex items-center space-x-3 group">
+            <div className="bg-brand-50 p-3 rounded-lg group-hover:bg-brand-100 transition-colors">
               <Phone className="h-5 w-5 text-brand-600" />
             </div>
             <div>
@@ -21,8 +21,8 @@ export function ContactInfo() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="bg-brand-50 p-2 rounded-lg">
+          <div className="flex items-center space-x-3 group">
+            <div className="bg-brand-50 p-3 rounded-lg group-hover:bg-brand-100 transition-colors">
               <Mail className="h-5 w-5 text-brand-600" />
             </div>
             <div>
@@ -32,11 +32,24 @@ export function ContactInfo() {
               </a>
             </div>
           </div>
+
+          <div className="flex items-center space-x-3 group">
+            <div className="bg-brand-50 p-3 rounded-lg group-hover:bg-brand-100 transition-colors">
+              <Clock className="h-5 w-5 text-brand-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Business Hours</p>
+              <p className="text-gray-900 font-medium">
+                Monday to Friday<br />
+                9:00 AM to 6:00 PM IST
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="pt-6 mt-6 border-t border-gray-100">
           <p className="text-sm text-gray-600">
-            Our support team is available Monday to Friday, 9:00 AM to 6:00 PM IST.
+            We aim to respond to all grievances within 24-48 business hours.
           </p>
         </div>
       </CardContent>

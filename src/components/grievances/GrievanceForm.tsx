@@ -37,21 +37,21 @@ export function GrievanceForm() {
           name="userType"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel>Who are you?</FormLabel>
+              <FormLabel className="text-base">Who are you?</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-col sm:flex-row gap-4"
                 >
-                  <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                  <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200">
                     <RadioGroupItem value="startup" id="startup" />
                     <label htmlFor="startup" className="flex items-center gap-2 cursor-pointer">
                       <Building className="h-5 w-5 text-brand-600" />
                       <span>Startup</span>
                     </label>
                   </div>
-                  <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                  <div className="flex items-center space-x-2 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border border-gray-200">
                     <RadioGroupItem value="investor" id="investor" />
                     <label htmlFor="investor" className="flex items-center gap-2 cursor-pointer">
                       <Users className="h-5 w-5 text-brand-600" />
@@ -65,33 +65,35 @@ export function GrievanceForm() {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your name" className="bg-gray-50" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Enter your email" className="bg-gray-50" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -100,7 +102,7 @@ export function GrievanceForm() {
             <FormItem>
               <FormLabel>Subject</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the subject of your grievance" {...field} />
+                <Input placeholder="Enter the subject of your grievance" className="bg-gray-50" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -116,7 +118,7 @@ export function GrievanceForm() {
               <FormControl>
                 <Textarea 
                   placeholder="Please describe your grievance in detail" 
-                  className="min-h-[150px]" 
+                  className="min-h-[150px] bg-gray-50" 
                   {...field} 
                 />
               </FormControl>
@@ -125,7 +127,7 @@ export function GrievanceForm() {
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full bg-brand-600 hover:bg-brand-700">
           <Send className="w-4 h-4 mr-2" />
           Submit Grievance
         </Button>
