@@ -17,10 +17,10 @@ export default function Footer() {
             <p className="text-gray-300 mb-4">
               Your one-stop solution for MSMEs and startups. We help businesses grow, fund, and succeed.
             </p>
-            <div className="flex items-center space-x-2 bg-brand-500/10 p-2 rounded">
-              <Building className="w-5 h-5 text-brand-400" />
-              <span className="text-sm text-gray-300">
-                A Division of <strong>Shaswat Initial Support Services</strong>
+            <div className="flex items-center space-x-2 p-3 rounded-lg bg-gradient-to-r from-india-saffron/20 to-india-green/20 border border-white/10 backdrop-blur-sm hover:from-india-saffron/30 hover:to-india-green/30 transition-all duration-300">
+              <Building className="w-6 h-6 text-india-saffron" />
+              <span className="text-base font-medium text-white">
+                A Division of <strong className="text-india-saffron">Shaswat Initial Support Services</strong>
               </span>
             </div>
             <div className="flex items-center space-x-4">
