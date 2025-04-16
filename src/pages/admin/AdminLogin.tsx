@@ -42,7 +42,7 @@ const AdminLogin = () => {
           localStorage.setItem('adminAuth', 'true');
           localStorage.setItem('adminEmail', email);
           
-          toast.success("Admin login successful");
+          toast.success("Admin login successful (Development Mode)");
           navigate('/admin/dashboard');
         } else {
           setError('Invalid admin credentials');
@@ -68,6 +68,7 @@ const AdminLogin = () => {
       }
     } catch (error: any) {
       console.error("Login error:", error);
+      
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setError('Invalid email or password');
       } else if (error.code === 'auth/network-request-failed') {
