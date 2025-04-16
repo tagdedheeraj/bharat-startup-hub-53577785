@@ -137,18 +137,7 @@
     @apply bg-gradient-to-r from-india-saffron via-india-white to-india-green bg-clip-text text-transparent;
   }
   
-  .mobile-nav-button {
-    @apply flex flex-col items-center justify-center gap-1 text-white hover:bg-white/10 px-3 py-2 rounded-lg transition-colors;
-  }
-  
-  .mobile-nav-button.active {
-    @apply text-white bg-white/10;
-  }
-  
-  .mobile-nav-button:not(.active) {
-    @apply text-white/70;
-  }
-  
+  /* New curved section utilities */
   .curved-section {
     @apply relative rounded-3xl overflow-hidden;
   }
@@ -181,6 +170,7 @@
     @apply absolute opacity-10 rounded-full filter blur-3xl;
   }
   
+  /* New styles for legal pages */
   .legal-section-title {
     @apply text-lg font-semibold text-gray-800 mt-6 mb-2 flex items-center gap-2;
   }
@@ -193,6 +183,7 @@
     @apply transition-all duration-300 hover:shadow-xl hover:border-india-saffron/30;
   }
   
+  /* Enhanced prose styling for legal documents */
   .prose h2 {
     @apply text-xl font-semibold text-gray-800 mt-8 mb-3 pb-2 border-b;
   }
@@ -227,6 +218,7 @@
   background-size: 200% auto;
 }
 
+/* Hide Lovable-related elements */
 [class*="lovable-"], 
 [id*="lovable-"], 
 [data-lovable], 
