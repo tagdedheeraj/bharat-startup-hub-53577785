@@ -11,7 +11,6 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db, isFirestoreAvailable } from '@/lib/firebase';
-import { notifyYouTubeShortsUpdated } from '@/components/youtube-shorts/data';
 
 export const useYouTubeShortsCRUD = (
   youtubeShorts: YouTubeShort[],
@@ -28,7 +27,7 @@ export const useYouTubeShortsCRUD = (
       // Check for duplicate
       if (youtubeShorts.some(short => short.id === data.id)) {
         toast.error("A video with this YouTube ID already exists!");
-        return false;
+        return;
       }
 
       // Set thumbnail if not provided
@@ -50,10 +49,6 @@ export const useYouTubeShortsCRUD = (
           
           // Store the document ID
           newShort.docId = docRef.id;
-          
-          // Notify about the update to refresh other components
-          notifyYouTubeShortsUpdated();
-          
           toast.success("YouTube short added successfully!");
         } catch (error) {
           console.error("Error adding to Firestore:", error);
@@ -64,7 +59,7 @@ export const useYouTubeShortsCRUD = (
       }
       
       // Update local state
-      setYoutubeShorts(prev => [newShort, ...prev]);
+      setYoutubeShorts(prev => [...prev, newShort]);
       return true;
     } catch (error) {
       console.error("Error adding YouTube short:", error);
@@ -111,10 +106,6 @@ export const useYouTubeShortsCRUD = (
             ...data,
             updatedAt: serverTimestamp()
           });
-          
-          // Notify about the update to refresh other components
-          notifyYouTubeShortsUpdated();
-          
           toast.success("YouTube short updated in database!");
         } catch (error) {
           console.error("Error updating in Firestore:", error);
@@ -165,10 +156,6 @@ export const useYouTubeShortsCRUD = (
       if (docId && !isOffline) {
         try {
           await deleteDoc(doc(db, 'youtubeShorts', docId));
-          
-          // Notify about the update to refresh other components
-          notifyYouTubeShortsUpdated();
-          
           toast.success("YouTube short deleted from database!");
         } catch (error) {
           console.error("Error deleting from Firestore:", error);

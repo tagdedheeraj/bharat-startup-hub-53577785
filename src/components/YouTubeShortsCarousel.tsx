@@ -1,5 +1,5 @@
 
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { Youtube, Play, Pause, RefreshCw } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useYouTubeCarousel } from './youtube-shorts/hooks/useYouTubeCarousel';
@@ -23,26 +23,11 @@ const YouTubeShortsCarousel = () => {
     closeVideo,
     togglePause,
     retryLoading,
-    refreshShorts,
     isLowPerformanceDevice
   } = useYouTubeCarousel(youtubeShorts);
 
   // For low performance devices, limit to 3 items maximum
   const optimizedShorts = isLowPerformanceDevice ? displayedShorts.slice(0, 3) : displayedShorts;
-  
-  // Listen for YouTube shorts update events
-  useEffect(() => {
-    const handleShortsUpdated = () => {
-      console.log("Received youtube-shorts-updated event, refreshing shorts");
-      refreshShorts();
-    };
-    
-    window.addEventListener('youtube-shorts-updated', handleShortsUpdated);
-    
-    return () => {
-      window.removeEventListener('youtube-shorts-updated', handleShortsUpdated);
-    };
-  }, [refreshShorts]);
   
   // Early debug log to check what shorts are available
   console.log("YouTube Shorts to display:", optimizedShorts);
@@ -58,23 +43,13 @@ const YouTubeShortsCarousel = () => {
               <Youtube className="text-red-600" />
               <span>Startup Masterclass Shorts</span>
             </h2>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={refreshShorts}
-                className="flex items-center gap-1 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-3 py-2 rounded-full transition-all hover:scale-105 transform"
-                title="Refresh shorts"
-              >
-                <RefreshCw size={16} className="text-blue-600" />
-                <span className="sr-only md:not-sr-only md:inline-block">Refresh</span>
-              </button>
-              <button
-                onClick={togglePause}
-                className="flex items-center gap-2 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-4 py-2 rounded-full transition-all hover:scale-105 transform animate-fadeInRight"
-              >
-                {isPaused ? <Play size={18} className="text-green-600" /> : <Pause size={18} className="text-red-600" />}
-                <span>{isPaused ? "Resume" : "Pause"} Slideshow</span>
-              </button>
-            </div>
+            <button
+              onClick={togglePause}
+              className="flex items-center gap-2 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-4 py-2 rounded-full transition-all hover:scale-105 transform animate-fadeInRight"
+            >
+              {isPaused ? <Play size={18} className="text-green-600" /> : <Pause size={18} className="text-red-600" />}
+              <span>{isPaused ? "Resume" : "Pause"} Slideshow</span>
+            </button>
           </div>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto animate-fadeIn">
             Quick video tips and insights for entrepreneurs and startup founders. Click on any short to watch the full video.

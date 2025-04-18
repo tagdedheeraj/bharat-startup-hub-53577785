@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TabsContent } from '@/components/ui/tabs';
-import { PageConfig, SectionConfig } from '../config/pageConfigs';
+import { PageConfig } from '../config/pageConfigs';
 import { WebsiteImage } from '@/hooks/useWebsiteImages';
 import { RotateCw } from 'lucide-react';
 import ImageGrid from '../ImageGrid';

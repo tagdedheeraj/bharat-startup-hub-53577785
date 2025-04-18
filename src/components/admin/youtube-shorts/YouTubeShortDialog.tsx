@@ -53,10 +53,6 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
     "Enter the details of the YouTube short to add.";
 
   const submitLabel = initialData ? "Update" : "Add";
-  
-  const handleDialogSubmit = (data: YouTubeShort) => {
-    onSubmit(data);
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -73,7 +69,7 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleDialogSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="id"
@@ -84,7 +80,6 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
                     <Input 
                       placeholder="e.g., dQw4w9WgXcQ" 
                       {...field} 
-                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -101,7 +96,6 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
                     <Input 
                       placeholder="Title of the video" 
                       {...field} 
-                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -118,7 +112,6 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
                     <Input 
                       placeholder="Leave blank to use YouTube default thumbnail" 
                       {...field} 
-                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />

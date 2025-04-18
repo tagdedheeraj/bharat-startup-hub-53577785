@@ -32,7 +32,6 @@ import ApplicationManagement from '@/components/admin/ApplicationManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import ContentManagement from '@/components/admin/ContentManagement';
 import YouTubeShortsManagement from '@/components/admin/YouTubeShortsManagement';
-import TeamManagement from '@/components/admin/TeamManagement';
 import SiteSettingsManager from '@/components/admin/site-settings/SiteSettingsManager';
 
 const AdminDashboard = () => {
@@ -148,7 +147,7 @@ const AdminDashboard = () => {
       
       {/* Admin tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-1 md:grid-cols-7 mb-8">
+        <TabsList className="grid grid-cols-1 md:grid-cols-6 mb-8">
           <TabsTrigger value="analytics">
             <BarChart className="w-4 h-4 mr-2" />
             Analytics
@@ -164,10 +163,6 @@ const AdminDashboard = () => {
           <TabsTrigger value="content">
             <Layers className="w-4 h-4 mr-2" />
             Content
-          </TabsTrigger>
-          <TabsTrigger value="team">
-            <Users className="w-4 h-4 mr-2" />
-            Team
           </TabsTrigger>
           <TabsTrigger value="site-settings">
             <Globe className="w-4 h-4 mr-2" />
@@ -200,11 +195,6 @@ const AdminDashboard = () => {
             <ContentManagement />
             <YouTubeShortsManagement isOffline={isOffline} />
           </div>
-        </TabsContent>
-        
-        {/* Team Management Tab */}
-        <TabsContent value="team">
-          <TeamManagement isOffline={isOffline} />
         </TabsContent>
         
         {/* Site Settings Tab */}
