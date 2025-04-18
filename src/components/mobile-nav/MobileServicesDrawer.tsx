@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { LayoutGrid, ChevronRight, Briefcase, Shield, FileText } from "lucide-react";
+import { LayoutGrid, ChevronRight, Briefcase, Shield, FileText, Brain } from "lucide-react";
 import { cn } from '@/lib/utils';
 
 const services = [
@@ -12,6 +12,7 @@ const services = [
     category: "Business Services",
     icon: Briefcase,
     items: [
+      { name: "AI Services", path: "/ai-services" },
       { name: "Funding Consultation", path: "/services/funding-consultation" },
       { name: "Certificate Marketing", path: "/services/certificate-marketing" },
       { name: "Legal Consultation", path: "/services/legal-consultation" },

@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
     name: 'Services', 
     href: '/services',
     children: [
+      { name: 'AI Services', href: '/ai-services' },
       { name: 'Funding Consultation', href: '/services/funding-consultation' },
       { name: 'Certificate Marketing', href: '/services/certificate-marketing' },
       { name: 'Legal Consultation', href: '/services/legal-consultation' }
