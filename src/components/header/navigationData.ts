@@ -1,6 +1,7 @@
 import { 
   LifeBuoy, Globe, Shield, ShieldCheck, IndianRupee, 
-  FileText, Receipt, FileSpreadsheet, BellRing, Bot, Brain 
+  FileText, Receipt, FileSpreadsheet, BellRing, Bot, Brain, 
+  Code, Cpu, Layers
 } from 'lucide-react';
 
 export const navigationData = [
