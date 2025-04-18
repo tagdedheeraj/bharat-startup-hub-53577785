@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone } from 'lucide-react';
+import { Phone, MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
+import LiveChat from '@/components/support/LiveChat';
+import { useState } from 'react';
 
 type SupportActionProps = {
   onActionComplete: () => void;
@@ -10,9 +12,16 @@ type SupportActionProps = {
 export default function SupportActions({ onActionComplete }: SupportActionProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [showLiveChat, setShowLiveChat] = useState(false);
 
   const handleSupportAction = (action: string) => {
     console.log(`Support action triggered: ${action}`);
+    
+    if (action === 'chat') {
+      setShowLiveChat(true);
+      return;
+    }
+    
     onActionComplete(); 
     
     setTimeout(() => {
@@ -47,15 +56,36 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
   const handleNavigation = (path: string) => {
     console.log(`Navigation from support drawer to: ${path}`);
     onActionComplete();
-    // Delay navigation slightly to allow drawer to close
     setTimeout(() => {
       navigate(path);
     }, 300);
   };
 
+  if (showLiveChat) {
+    return (
+      <div className="p-4">
+        <LiveChat />
+        <Button 
+          variant="outline" 
+          className="w-full mt-4"
+          onClick={() => setShowLiveChat(false)}
+        >
+          Back to Support Options
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="p-4 space-y-4">
+        <Button 
+          className="w-full flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-600" 
+          onClick={() => handleSupportAction('chat')}
+        >
+          <MessageSquare size={16} />
+          <span>Start Live Chat</span>
+        </Button>
         <Button 
           className="w-full flex items-center justify-center gap-2" 
           onClick={() => handleSupportAction('contact')}
