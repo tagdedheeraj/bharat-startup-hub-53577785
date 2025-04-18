@@ -1,7 +1,6 @@
-
 import { 
   LifeBuoy, Globe, Shield, ShieldCheck, IndianRupee, 
-  FileText, Receipt, FileSpreadsheet, BellRing 
+  FileText, Receipt, FileSpreadsheet, BellRing, Bot 
 } from 'lucide-react';
 
 export const navigationData = [
@@ -10,6 +9,12 @@ export const navigationData = [
     label: 'Services',
     to: '/services',
     children: [
+      { 
+        label: 'AI Services',
+        to: '/ai-services',
+        description: 'Advanced AI solutions including chatbots, computer vision, and custom AI development',
+        icon: Bot
+      },
       { 
         label: 'Funding Consultation', 
         to: '/services/funding-consultation',

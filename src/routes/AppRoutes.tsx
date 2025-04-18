@@ -8,6 +8,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import HomePage from "@/pages/Index";
 import AboutPage from "@/pages/AboutUs";
 import ServicesPage from "@/pages/Services";
+import AIServicesPage from "@/pages/AIServices";  // Add this import
 import FundingConsultationPage from "@/pages/services/FundingConsultation";
 import CertificateMarketingPage from "@/pages/services/CertificateMarketing";
 import LegalConsultationPage from "@/pages/services/LegalConsultation";
@@ -56,6 +57,7 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/ai-services" element={<AIServicesPage />} />
         <Route path="/services/funding-consultation" element={<FundingConsultationPage />} />
         <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
         <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
