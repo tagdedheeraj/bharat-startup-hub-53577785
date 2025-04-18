@@ -1,3 +1,4 @@
+
 import { YouTubeShort } from './types';
 import { 
   collection, 
@@ -73,9 +74,9 @@ const convertDocToYouTubeShort = (doc: DocumentData): YouTubeShort | null => {
 };
 
 // Get YouTube shorts from Firebase with improved error handling
-export const getYoutubeShorts = async (): Promise<YouTubeShort[]> => {
+export const getYoutubeShorts = async (timestamp?: number): Promise<YouTubeShort[]> => {
   try {
-    console.log("Checking Firestore availability...");
+    console.log(`Checking Firestore availability... (timestamp: ${timestamp || 'none'})`);
     // First check if Firestore is available
     const isAvailable = await isFirestoreAvailable();
     
@@ -86,12 +87,12 @@ export const getYoutubeShorts = async (): Promise<YouTubeShort[]> => {
     
     console.log("Firestore is available, fetching YouTube shorts...");
     
-    // Set up query with ordering and limit to prevent large data fetches
+    // Set up query with ordering and no limit for admin panel (to show all shorts)
     const shortsCollection = collection(db, 'youtubeShorts');
     const shortsQuery = query(
       shortsCollection, 
-      orderBy('title'),
-      limit(10) // Limit to reasonable number
+      orderBy('updatedAt', 'desc'), // Sort by most recently updated
+      limit(20) // Increased limit to show more shorts
     );
     
     console.log("Executing Firestore query...");
@@ -138,5 +139,18 @@ export const validateYouTubeVideo = async (videoId: string): Promise<boolean> =>
   } catch (error) {
     console.error("Error validating YouTube video:", error);
     return false;
+  }
+};
+
+// Function to notify other components about shorts updates
+export const notifyYouTubeShortsUpdated = () => {
+  console.log("Setting youtube-shorts-updated flag in localStorage");
+  localStorage.setItem('youtube-shorts-updated', Date.now().toString());
+  
+  // Dispatch event for same-window updates (when admin panel and home page are in same window)
+  try {
+    window.dispatchEvent(new CustomEvent('youtube-shorts-updated'));
+  } catch (error) {
+    console.error("Error dispatching youtube-shorts-updated event:", error);
   }
 };

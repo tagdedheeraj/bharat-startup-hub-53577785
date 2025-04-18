@@ -6,18 +6,20 @@ import { getYoutubeShorts } from '../../data';
 /**
  * Hook responsible for managing the carousel's state
  */
-export const useCarouselState = (initialShorts: YouTubeShort[]) => {
+export const useCarouselState = (initialShorts: YouTubeShort[], refreshTrigger: number = 0) => {
   const [currentVideoId, setCurrentVideoId] = useState<string | null>(null);
   const [youtubeShorts, setYoutubeShorts] = useState<YouTubeShort[]>(initialShorts);
 
-  // Load shorts data on mount
+  // Load shorts data on mount or when refresh is triggered
   useEffect(() => {
     let isMounted = true;
     
     const loadShorts = async () => {
       try {
-        console.log("Fetching YouTube shorts data from useCarouselState...");
-        const shorts = await getYoutubeShorts();
+        console.log(`Fetching YouTube shorts data from useCarouselState... (refresh: ${refreshTrigger})`);
+        // Pass timestamp to bypass cache
+        const timestamp = new Date().getTime();
+        const shorts = await getYoutubeShorts(timestamp);
         console.log("Fetched shorts:", shorts);
         
         if (isMounted) {
@@ -43,7 +45,7 @@ export const useCarouselState = (initialShorts: YouTubeShort[]) => {
     return () => {
       isMounted = false;
     };
-  }, [initialShorts]);
+  }, [initialShorts, refreshTrigger]);
 
   return {
     currentVideoId,
