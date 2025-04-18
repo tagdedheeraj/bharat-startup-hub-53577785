@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -8,11 +9,13 @@ import {
   DialogTitle,
   DialogFooter
 } from "@/components/ui/dialog";
-import { Mail, Phone, MessageSquare } from "lucide-react";
+import { Mail, Phone, MessageSquare, Headphones } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import LiveChat from "@/components/support/LiveChat";
 
 export default function SupportPopup() {
   const [open, setOpen] = useState(false);
+  const [showLiveChat, setShowLiveChat] = useState(false);
   const isMobile = useIsMobile();
   
   if (isMobile) return null;
@@ -31,6 +34,23 @@ export default function SupportPopup() {
     window.open('https://wa.me/919081622284');
     setOpen(false);
   };
+
+  if (showLiveChat) {
+    return (
+      <div className="fixed bottom-20 right-4 z-50">
+        <div className="w-[400px]">
+          <LiveChat />
+          <Button 
+            variant="outline" 
+            className="w-full mt-4"
+            onClick={() => setShowLiveChat(false)}
+          >
+            Back to Support Options
+          </Button>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="fixed bottom-20 right-4 z-50">
@@ -76,6 +96,18 @@ export default function SupportPopup() {
             >
               <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
               <span>Chat with Support</span>
+            </Button>
+
+            <Button 
+              variant="outline" 
+              className="w-full flex items-center justify-start gap-3 text-xs sm:text-sm"
+              onClick={() => {
+                setOpen(false);
+                setShowLiveChat(true);
+              }}
+            >
+              <Headphones className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <span>Live Support</span>
             </Button>
           </div>
           
