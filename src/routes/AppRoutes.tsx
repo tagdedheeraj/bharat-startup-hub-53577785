@@ -8,7 +8,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import HomePage from "@/pages/Index";
 import AboutPage from "@/pages/AboutUs";
 import ServicesPage from "@/pages/Services";
-import AIServicesPage from "@/pages/AIServices";  // Add this import
+import AIServicesPage from "@/pages/AIServices";
 import FundingConsultationPage from "@/pages/services/FundingConsultation";
 import CertificateMarketingPage from "@/pages/services/CertificateMarketing";
 import LegalConsultationPage from "@/pages/services/LegalConsultation";
@@ -52,7 +52,6 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Main site routes with Layout */}
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -67,11 +66,9 @@ const AppRoutes = () => {
         <Route path="/faqs" element={<FAQsPage />} />
         <Route path="/grievances" element={<GrievancesPage />} />
         
-        {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* Dashboard Routes */}
         <Route 
           path="/dashboard/startup" 
           element={
@@ -89,14 +86,12 @@ const AppRoutes = () => {
           } 
         />
         
-        {/* Legal Pages */}
         <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         <Route path="/disclaimer" element={<DisclaimerPage />} />
         <Route path="/client-service-agreement" element={<ClientServiceAgreementPage />} />
         <Route path="/refund-policy" element={<RefundPolicyPage />} />
         
-        {/* CA Services Routes */}
         <Route path="/ca-services" element={<CAServicesPage />} />
         <Route path="/ca-services/certifications" element={<CertificationsPage />} />
         <Route path="/ca-services/trademark" element={<TrademarkPage />} />
@@ -106,7 +101,6 @@ const AppRoutes = () => {
         <Route path="/ca-services/payroll" element={<PayrollPage />} />
         <Route path="/ca-services/compliance" element={<CACompliancePage />} />
         
-        {/* More Routes */}
         <Route path="/more/experts" element={<ExpertsPage />} />
         <Route path="/more/msme-events" element={<MSMEEventsPage />} />
         <Route path="/more/reviews" element={<ReviewsPage />} />
@@ -115,7 +109,6 @@ const AppRoutes = () => {
         <Route path="*" element={<NotFound />} />
       </Route>
       
-      {/* Admin Routes (Outside of main Layout) */}
       <Route path="/admin" element={<AdminLogin />} />
       <Route 
         path="/admin/dashboard" 
