@@ -1,7 +1,8 @@
+
 import { 
   LifeBuoy, Globe, Shield, ShieldCheck, IndianRupee, 
   FileText, Receipt, FileSpreadsheet, BellRing, Bot, Brain, 
-  Code, Cpu, Layers
+  Code, Cpu, Layers, Database, Book, Users
 } from 'lucide-react';
 
 export const navigationData = [
@@ -92,6 +93,7 @@ export const navigationData = [
     children: [
       { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: LifeBuoy },
       { label: 'MSME Events', to: '/more/msme-events', description: 'Upcoming events and workshops for MSMEs', icon: BellRing },
+      { label: 'Special Services', to: '/more/special-services', description: 'Enterprise-grade business solutions', icon: Database },
       { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: LifeBuoy },
       { label: 'Blogs', to: '/more/blogs', description: 'Insights and advice for startups and MSMEs', icon: LifeBuoy },
       { label: 'Compliance', to: '/more/compliance', description: 'Stay compliant with regulatory requirements', icon: Globe },
