@@ -1,4 +1,3 @@
-
 import { YouTubeShort } from './types';
 import { 
   collection, 
@@ -22,19 +21,9 @@ export const youtubeShorts: YouTubeShort[] = [
     thumbnail: "https://i3.ytimg.com/vi/I5QH6rGjZEs/maxresdefault.jpg"
   },
   {
-    id: "lM3Tswmx8zM",
-    title: "Business Strategy Secrets",
-    thumbnail: "https://i3.ytimg.com/vi/lM3Tswmx8zM/maxresdefault.jpg"
-  },
-  {
     id: "sEKYtxnpAP4",
     title: "Startup Growth Strategies",
     thumbnail: "https://i3.ytimg.com/vi/sEKYtxnpAP4/maxresdefault.jpg"
-  },
-  {
-    id: "pq22sadiXqQ",
-    title: "Startup Funding Guide",
-    thumbnail: "https://i3.ytimg.com/vi/pq22sadiXqQ/maxresdefault.jpg"
   }
 ];
 

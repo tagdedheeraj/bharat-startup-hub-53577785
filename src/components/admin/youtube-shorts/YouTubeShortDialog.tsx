@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { toast } from 'sonner';
 
 interface YouTubeShortDialogProps {
   open: boolean;
@@ -50,11 +51,45 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
 
   const description = initialData ? 
     "Edit the YouTube short details below." : 
-    "Enter the details of the YouTube short to add.";
+    "Enter the YouTube video URL or ID below.";
 
   const submitLabel = initialData ? "Update" : "Add";
+
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    try {
+      // Handle different URL formats
+      let videoId = '';
+      if (value.includes('youtube.com') || value.includes('youtu.be')) {
+        const url = new URL(value);
+        if (value.includes('youtube.com/shorts/')) {
+          videoId = url.pathname.split('/shorts/')[1];
+        } else if (value.includes('youtube.com/watch')) {
+          videoId = url.searchParams.get('v') || '';
+        } else if (value.includes('youtu.be/')) {
+          videoId = url.pathname.substring(1);
+        }
+      } else {
+        // Assume it's a direct video ID
+        videoId = value;
+      }
+
+      // Clean up video ID
+      videoId = videoId.split('?')[0].split('&')[0];
+
+      if (videoId) {
+        form.setValue('id', videoId);
+      }
+    } catch (error) {
+      console.error('Error parsing YouTube URL:', error);
+    }
+  };
   
   const handleDialogSubmit = (data: YouTubeShort) => {
+    if (!data.id) {
+      toast.error("Please enter a valid YouTube video URL or ID");
+      return;
+    }
     onSubmit(data);
   };
 
@@ -79,11 +114,15 @@ const YouTubeShortDialog: React.FC<YouTubeShortDialogProps> = ({
               name="id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>YouTube Video ID</FormLabel>
+                  <FormLabel>YouTube Video URL or ID</FormLabel>
                   <FormControl>
                     <Input 
-                      placeholder="e.g., dQw4w9WgXcQ" 
-                      {...field} 
+                      placeholder="Enter YouTube URL or video ID" 
+                      onChange={(e) => {
+                        handleUrlChange(e);
+                        field.onChange(e);
+                      }}
+                      value={field.value}
                       autoComplete="off"
                     />
                   </FormControl>

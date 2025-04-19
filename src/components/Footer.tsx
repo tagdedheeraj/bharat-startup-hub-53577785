@@ -17,7 +17,7 @@ export default function Footer() {
             <p className="text-gray-300 mb-4">
               Your one-stop solution for MSMEs and startups. We help businesses grow, fund, and succeed.
             </p>
-            <div className="flex items-center space-x-2 p-3 rounded-lg bg-gradient-to-r from-india-saffron/20 to-india-green/20 border border-white/10 backdrop-blur-sm hover:from-india-saffron/30 hover:to-india-green/30 transition-all duration-300">
+            <div className="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-india-saffron/20 to-india-green/20 border border-white/10 backdrop-blur-sm hover:from-india-saffron/30 hover:to-india-green/30 transition-all duration-300">
               <Building className="w-6 h-6 text-india-saffron" />
               <span className="text-base font-medium text-white">
                 A Division of <strong className="text-india-saffron">Shaswat Group</strong>
@@ -168,6 +168,11 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400">
               © {currentYear} Bharat Startup Solution. A Product of <strong>Shaswat Group</strong>
+            </p>
+          </div>
+          <div className="mt-4 text-sm text-gray-400 text-center px-4">
+            <p>
+              Please note: We are a startup consultancy service provider and are not affiliated with any government, non-government agencies, institutions, organizations, or departments. We provide consultation services to help businesses navigate funding opportunities.
             </p>
           </div>
         </div>
