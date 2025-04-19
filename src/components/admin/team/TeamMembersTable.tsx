@@ -50,7 +50,9 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
           <TableHead>Photo</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Role</TableHead>
-          <TableHead>Section Name</TableHead>
+          <TableHead>Experience</TableHead>
+          <TableHead>Section</TableHead>
+          <TableHead>Team</TableHead>
           <TableHead className="text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -63,9 +65,18 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
                 <AvatarFallback>{member.name.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
             </TableCell>
-            <TableCell className="font-medium">{member.name}</TableCell>
+            <TableCell>
+              <div>
+                <p className="font-medium">{member.name}</p>
+                <p className="text-sm text-muted-foreground">{member.expertise}</p>
+              </div>
+            </TableCell>
             <TableCell>{member.role}</TableCell>
+            <TableCell>{member.experience}</TableCell>
             <TableCell>{member.sectionName}</TableCell>
+            <TableCell>
+              <span className="capitalize">{member.teamSection.replace('-', ' ')}</span>
+            </TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-2">
                 <Button

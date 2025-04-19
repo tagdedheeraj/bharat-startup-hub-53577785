@@ -6,6 +6,11 @@ export interface TeamMember {
   description: string;
   sectionName: string;
   photoUrl: string;
+  experience: string;
+  expertise: string;
+  bio: string;
+  linkedinUrl: string;
+  teamSection: 'leadership' | 'domain-experts';
   createdAt?: any;
   updatedAt?: any;
 }
