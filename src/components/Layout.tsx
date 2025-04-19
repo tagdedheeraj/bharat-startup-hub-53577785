@@ -1,8 +1,8 @@
-
-import { ReactNode, useEffect, memo, useState, useRef } from 'react';
+import React, { ReactNode, useEffect, memo, useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
 import Footer from './Footer';
+import LegalDisclaimer from './funding/LegalDisclaimer';
 import SideDrawerNavigation from './SideDrawerNavigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
@@ -50,6 +50,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       </MainContent>
       
       <Footer />
+      <LegalDisclaimer />
       <SideDrawerNavigation />
     </div>
   );
