@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,18 +8,12 @@ import {
   Users, 
   FileText, 
   Settings, 
-  Shield, 
-  AlertCircle, 
-  Layers, 
-  Upload, 
-  Database,
-  Building,
-  Mail,
-  Calendar,
-  Youtube,
-  Globe,
+  Globe, 
   Wifi,
-  WifiOff
+  WifiOff,
+  AlertCircle,
+  Building,
+  RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { auth, isFirestoreAvailable } from '@/lib/firebase';
@@ -30,7 +24,6 @@ import UserManagement from '@/components/admin/UserManagement';
 import ApplicationManagement from '@/components/admin/ApplicationManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import ContentManagement from '@/components/admin/ContentManagement';
-import TeamManagement from '@/components/admin/TeamManagement';
 import SiteSettingsManager from '@/components/admin/site-settings/SiteSettingsManager';
 import { SimpleYouTubeShortsManager } from '@/components/admin/youtube-shorts';
 
@@ -46,15 +39,12 @@ const AdminDashboard = () => {
     { title: 'Active Investors', value: '--', icon: BarChart, color: 'bg-purple-100 text-purple-700' },
   ]);
   
-  // Check if admin is logged in and Firebase connection
   useEffect(() => {
-    // Get admin email from localStorage
     const email = localStorage.getItem('adminEmail');
     if (email) {
       setAdminEmail(email);
     }
 
-    // Check Firebase connection
     const checkFirestoreStatus = async () => {
       const available = await isFirestoreAvailable();
       setIsOffline(!available);
@@ -66,8 +56,6 @@ const AdminDashboard = () => {
     
     checkFirestoreStatus();
     
-    // Load mock stats for now
-    // In a real application, you would fetch these from Firestore
     setTimeout(() => {
       setStats([
         { title: 'Total Users', value: '1,248', icon: Users, color: 'bg-blue-100 text-blue-700' },
@@ -80,12 +68,10 @@ const AdminDashboard = () => {
   
   const handleLogout = async () => {
     try {
-      // Sign out from Firebase
       if (!isOffline) {
         await signOut(auth);
       }
       
-      // Clear local storage
       localStorage.removeItem('adminAuth');
       localStorage.removeItem('adminEmail');
       localStorage.removeItem('adminUid');
@@ -113,7 +99,6 @@ const AdminDashboard = () => {
         <Button variant="outline" onClick={handleLogout}>Logout</Button>
       </div>
       
-      {/* Network status alert */}
       {isOffline && (
         <Card className="mb-6 border-amber-200 bg-amber-50">
           <CardContent className="p-4">
@@ -128,7 +113,6 @@ const AdminDashboard = () => {
         </Card>
       )}
       
-      {/* Stats section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
           <Card key={index}>
@@ -145,9 +129,8 @@ const AdminDashboard = () => {
         ))}
       </div>
       
-      {/* Admin tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-1 md:grid-cols-7 mb-8">
+        <TabsList className="grid grid-cols-1 md:grid-cols-6 mb-8">
           <TabsTrigger value="analytics">
             <BarChart className="w-4 h-4 mr-2" />
             Analytics
@@ -161,12 +144,8 @@ const AdminDashboard = () => {
             Applications
           </TabsTrigger>
           <TabsTrigger value="content">
-            <Layers className="w-4 h-4 mr-2" />
+            <Building className="w-4 h-4 mr-2" />
             Content
-          </TabsTrigger>
-          <TabsTrigger value="team">
-            <Users className="w-4 h-4 mr-2" />
-            Team
           </TabsTrigger>
           <TabsTrigger value="site-settings">
             <Globe className="w-4 h-4 mr-2" />
@@ -178,22 +157,18 @@ const AdminDashboard = () => {
           </TabsTrigger>
         </TabsList>
         
-        {/* Analytics Tab */}
         <TabsContent value="analytics">
           <AnalyticsDashboard />
         </TabsContent>
         
-        {/* User Management Tab */}
         <TabsContent value="users">
           <UserManagement />
         </TabsContent>
         
-        {/* Applications Tab */}
         <TabsContent value="applications">
           <ApplicationManagement />
         </TabsContent>
         
-        {/* Content Management Tab */}
         <TabsContent value="content">
           <div className="grid grid-cols-1 gap-6">
             <ContentManagement />
@@ -201,17 +176,10 @@ const AdminDashboard = () => {
           </div>
         </TabsContent>
         
-        {/* Team Management Tab */}
-        <TabsContent value="team">
-          <TeamManagement isOffline={isOffline} />
-        </TabsContent>
-        
-        {/* Site Settings Tab */}
         <TabsContent value="site-settings">
           <SiteSettingsManager />
         </TabsContent>
         
-        {/* Settings Tab */}
         <TabsContent value="settings">
           <Card>
             <CardHeader>

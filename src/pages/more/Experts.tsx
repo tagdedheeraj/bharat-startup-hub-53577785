@@ -1,69 +1,85 @@
-
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Linkedin, Mail, ExternalLink, User, Briefcase, Star } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+interface TeamMember {
+  id: string;
+  name: string;
+  position: string;
+  expertise: string;
+  experience: string;
+  bio: string;
+  photoUrl: string;
+  linkedinUrl: string;
+  teamSection: string;
+  description: string;
+}
 
 const ExpertsPage = () => {
-  const experts = [
-    {
-      name: "Rajesh Sharma",
-      position: "Founder & CEO",
-      expertise: "Venture Capital, Business Strategy",
-      experience: "20+ years",
-      bio: "Rajesh is a seasoned entrepreneur and venture capitalist with over two decades of experience in building and scaling businesses across various sectors. Before founding Bharat Startup Solution, he was a partner at a leading VC firm where he led investments in over 30 startups.",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    },
-    {
-      name: "Priya Verma",
-      position: "Legal Director",
-      expertise: "Corporate Law, Compliance",
-      experience: "15+ years",
-      bio: "Priya is a corporate law expert with specialization in startup regulations and compliance frameworks. She has previously worked with top law firms in India and has helped over 200 startups navigate complex legal challenges.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    },
-    {
-      name: "Amit Patel",
-      position: "Head of Funding",
-      expertise: "Investment Banking, Fundraising",
-      experience: "18+ years",
-      bio: "Amit brings his extensive experience in investment banking to help startups secure funding. He has a strong network in the venture capital and private equity sectors and has facilitated funding of over ₹500 Crores for various businesses.",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    },
-    {
-      name: "Neha Gupta",
-      position: "Marketing Director",
-      expertise: "Digital Marketing, Brand Development",
-      experience: "12+ years",
-      bio: "Neha is a marketing strategist with expertise in digital marketing and brand development. She has worked with Fortune 500 companies and startups alike, helping them establish strong market presence and customer acquisition strategies.",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    },
-    {
-      name: "Vikram Singh",
-      position: "Technology Advisor",
-      expertise: "Technology Strategy, Digital Transformation",
-      experience: "14+ years",
-      bio: "Vikram is a technology strategist who helps businesses leverage the latest technologies for growth. He has led digital transformation initiatives for various organizations and provides valuable guidance on technology adoption.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    },
-    {
-      name: "Anjali Desai",
-      position: "Financial Consultant",
-      expertise: "Financial Planning, Investment Strategy",
-      experience: "16+ years",
-      bio: "Anjali is a financial expert who helps startups with financial planning, forecasting, and investment strategies. She has previously worked with a Big Four accounting firm and brings valuable insights into financial management.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3",
-      linkedin: "#"
-    }
-  ];
+  const [experts, setExperts] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchExperts = async () => {
+      try {
+        setLoading(true);
+        const teamCollection = collection(db, 'teamMembers');
+        const teamQuery = query(teamCollection, orderBy('teamSection', 'asc'));
+        const querySnapshot = await getDocs(teamQuery);
+        
+        const fetchedExperts: TeamMember[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedExperts.push({ id: doc.id, ...doc.data() } as TeamMember);
+        });
+        
+        setExperts(fetchedExperts);
+      } catch (err) {
+        console.error('Error fetching experts:', err);
+        setError('Failed to load team members. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExperts();
+  }, []);
+
+  const leadershipTeam = experts.filter(expert => expert.teamSection === 'leadership');
+  const domainExperts = experts.filter(expert => expert.teamSection === 'domain-experts');
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  
 
   return (
     <div>
-      {/* Hero Section - Updated with new heading and description */}
+      {/* Hero Section */}
       <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
@@ -86,15 +102,14 @@ const ExpertsPage = () => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {experts.slice(0, 3).map((expert, index) => (
+            {leadershipTeam.map((expert) => (
               <div 
-                key={index} 
+                key={expert.id} 
                 className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
-                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="h-72 overflow-hidden">
                   <img
-                    src={expert.image}
+                    src={expert.photoUrl}
                     alt={expert.name}
                     className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
                   />
@@ -110,14 +125,16 @@ const ExpertsPage = () => {
                   </p>
                   <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
                   <div className="flex items-center space-x-4 mt-4">
-                    <a 
-                      href={expert.linkedin} 
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Linkedin size={20} />
-                    </a>
+                    {expert.linkedinUrl && (
+                      <a 
+                        href={expert.linkedinUrl} 
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Linkedin size={20} />
+                      </a>
+                    )}
                     <a 
                       href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
                       className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
@@ -142,15 +159,14 @@ const ExpertsPage = () => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {experts.slice(3).map((expert, index) => (
+            {domainExperts.map((expert) => (
               <div 
-                key={index} 
+                key={expert.id} 
                 className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
-                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="h-72 overflow-hidden">
                   <img
-                    src={expert.image}
+                    src={expert.photoUrl}
                     alt={expert.name}
                     className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
                   />
@@ -166,14 +182,16 @@ const ExpertsPage = () => {
                   </p>
                   <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
                   <div className="flex items-center space-x-4 mt-4">
-                    <a 
-                      href={expert.linkedin} 
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Linkedin size={20} />
-                    </a>
+                    {expert.linkedinUrl && (
+                      <a 
+                        href={expert.linkedinUrl} 
+                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Linkedin size={20} />
+                      </a>
+                    )}
                     <a 
                       href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
                       className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
