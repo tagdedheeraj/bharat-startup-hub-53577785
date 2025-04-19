@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 import { TeamMember } from '../types';
+import FormSelectField from './fields/FormSelectField';
 
 interface TeamMemberSectionSelectProps {
   form: UseFormReturn<TeamMember>;
@@ -26,62 +25,21 @@ const sectionOptions = [
 const TeamMemberSectionSelect: React.FC<TeamMemberSectionSelectProps> = ({ form }) => {
   return (
     <div className="space-y-4">
-      <FormField
-        control={form.control}
+      <FormSelectField
+        form={form}
         name="teamSection"
-        rules={{ required: "Team section is required" }}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Team Section</FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select team section" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {teamSections.map(section => (
-                  <SelectItem key={section.value} value={section.value}>
-                    {section.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
+        label="Team Section"
+        placeholder="Select team section"
+        options={teamSections}
+        required
       />
-
-      <FormField
-        control={form.control}
+      <FormSelectField
+        form={form}
         name="sectionName"
-        rules={{ required: "Section name is required" }}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Position Type</FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a position type" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {sectionOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        )}
+        label="Position Type"
+        placeholder="Select a position type"
+        options={sectionOptions}
+        required
       />
     </div>
   );
