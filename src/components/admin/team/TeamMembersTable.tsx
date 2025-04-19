@@ -48,8 +48,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
       <TableHeader>
         <TableRow>
           <TableHead>Photo</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Role</TableHead>
+          <TableHead>Name & Details</TableHead>
           <TableHead>Experience</TableHead>
           <TableHead>Section</TableHead>
           <TableHead>Team</TableHead>
@@ -58,22 +57,24 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({
       </TableHeader>
       <TableBody>
         {teamMembers.map((member) => (
-          <TableRow key={member.id}>
+          <TableRow key={member.id} className="hover:bg-muted/50">
             <TableCell>
-              <Avatar className="h-12 w-12">
+              <Avatar className="h-16 w-16">
                 <AvatarImage src={member.photoUrl} alt={member.name} />
                 <AvatarFallback>{member.name.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
             </TableCell>
             <TableCell>
-              <div>
-                <p className="font-medium">{member.name}</p>
-                <p className="text-sm text-muted-foreground">{member.expertise}</p>
+              <div className="space-y-1">
+                <p className="font-medium text-base">{member.name}</p>
+                <p className="text-sm text-muted-foreground">{member.role}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2">{member.description}</p>
               </div>
             </TableCell>
-            <TableCell>{member.role}</TableCell>
             <TableCell>{member.experience}</TableCell>
-            <TableCell>{member.sectionName}</TableCell>
+            <TableCell>
+              <span className="capitalize">{member.sectionName.replace('team-', '').replace('-', ' ')}</span>
+            </TableCell>
             <TableCell>
               <span className="capitalize">{member.teamSection.replace('-', ' ')}</span>
             </TableCell>
