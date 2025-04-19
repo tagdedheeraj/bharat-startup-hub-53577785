@@ -49,6 +49,9 @@ import InvestorDashboard from "@/pages/dashboard/InvestorDashboard";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 
+// New Page
+import SpecialServices from "@/pages/it-solutions/SpecialServices";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -61,6 +64,7 @@ const AppRoutes = () => {
         <Route path="/services/certificate-marketing" element={<CertificateMarketingPage />} />
         <Route path="/services/legal-consultation" element={<LegalConsultationPage />} />
         <Route path="/it-solutions" element={<ITSolutionsPage />} />
+        <Route path="/it-solutions/special-services" element={<SpecialServices />} />
         <Route path="/success-stories" element={<SuccessStoriesPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/faqs" element={<FAQsPage />} />

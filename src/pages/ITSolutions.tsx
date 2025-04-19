@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/SectionHeading";
 import SolutionCard from "@/components/it-solutions/SolutionCard";
@@ -9,6 +8,8 @@ import SocialMediaSection from "@/components/it-solutions/SocialMediaSection";
 import GoogleAdsSection from "@/components/it-solutions/google-ads/GoogleAdsSection";
 import { solutions } from "@/components/it-solutions/solutionsData";
 import SectionImage from "@/components/shared/SectionImage";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const ITSolutions = () => {
   const containerVariants = {
@@ -51,6 +52,14 @@ const ITSolutions = () => {
           description="Explore our comprehensive range of IT services designed to elevate your business"
           align="center"
         />
+        
+        <div className="text-center mt-6">
+          <Button asChild className="bg-gradient-to-r from-india-saffron to-india-green text-white">
+            <Link to="/it-solutions/special-services">
+              Explore Special Services
+            </Link>
+          </Button>
+        </div>
         
         <motion.div 
           className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
