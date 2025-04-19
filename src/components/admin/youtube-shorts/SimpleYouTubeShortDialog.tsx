@@ -31,6 +31,7 @@ const SimpleYouTubeShortDialog: React.FC<SimpleYouTubeShortDialogProps> = ({
   const [title, setTitle] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [thumbnailError, setThumbnailError] = useState(false);
 
   const extractVideoId = (input: string): string | null => {
     try {
@@ -58,13 +59,24 @@ const SimpleYouTubeShortDialog: React.FC<SimpleYouTubeShortDialogProps> = ({
     const videoId = extractVideoId(value);
     
     if (videoId) {
+      // Try maxresdefault first, fallback to mqdefault
+      setThumbnailError(false);
       setPreviewUrl(`https://i3.ytimg.com/vi/${videoId}/maxresdefault.jpg`);
       if (!title) {
-        // Set a default title if none is provided
         setTitle(`YouTube Short #${videoId}`);
       }
     } else {
       setPreviewUrl('');
+      setThumbnailError(false);
+    }
+  };
+
+  const handleThumbnailError = () => {
+    const videoId = extractVideoId(url);
+    if (videoId) {
+      // Fallback to medium quality thumbnail
+      setPreviewUrl(`https://i3.ytimg.com/vi/${videoId}/mqdefault.jpg`);
+      setThumbnailError(true);
     }
   };
 
@@ -87,6 +99,7 @@ const SimpleYouTubeShortDialog: React.FC<SimpleYouTubeShortDialogProps> = ({
       setUrl('');
       setTitle('');
       setPreviewUrl('');
+      setThumbnailError(false);
       onOpenChange(false);
     } catch (error) {
       toast.error("Error validating video");
@@ -138,11 +151,14 @@ const SimpleYouTubeShortDialog: React.FC<SimpleYouTubeShortDialogProps> = ({
                 <img
                   src={previewUrl}
                   alt="Video thumbnail"
-                  className="object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "https://placehold.co/480x360/gray/white?text=No+Preview";
-                  }}
+                  className="object-cover w-full h-full"
+                  onError={handleThumbnailError}
                 />
+                {thumbnailError && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/75 text-white text-xs p-1 text-center">
+                    Using lower quality thumbnail
+                  </div>
+                )}
               </div>
             </div>
           )}
