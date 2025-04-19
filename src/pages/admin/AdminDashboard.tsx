@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -31,9 +30,9 @@ import UserManagement from '@/components/admin/UserManagement';
 import ApplicationManagement from '@/components/admin/ApplicationManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import ContentManagement from '@/components/admin/ContentManagement';
-import YouTubeShortsManagement from '@/components/admin/YouTubeShortsManagement';
 import TeamManagement from '@/components/admin/TeamManagement';
 import SiteSettingsManager from '@/components/admin/site-settings/SiteSettingsManager';
+import { SimpleYouTubeShortsManager } from '@/components/admin/youtube-shorts';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -198,7 +197,7 @@ const AdminDashboard = () => {
         <TabsContent value="content">
           <div className="grid grid-cols-1 gap-6">
             <ContentManagement />
-            <YouTubeShortsManagement isOffline={isOffline} />
+            <SimpleYouTubeShortsManager isOffline={isOffline} />
           </div>
         </TabsContent>
         
