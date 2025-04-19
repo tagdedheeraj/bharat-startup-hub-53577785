@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, Plus, Pencil, Trash2, WifiOff, RefreshCw } from 'lucide-react';
+import { AlertCircle, Plus, Pencil, Trash2, WifiOff } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { collection, getDocs, doc, deleteDoc, query, orderBy, where } from 'firebase/firestore';
@@ -35,15 +35,18 @@ const TeamMembersManager = () => {
         return;
       }
       
+      // Query team members collection
       const teamCollection = collection(db, 'teamMembers');
       const teamQuery = query(teamCollection, orderBy('updatedAt', 'desc'));
       const querySnapshot = await getDocs(teamQuery);
       
+      // Transform data and set state
       const fetchedMembers: TeamMember[] = [];
       querySnapshot.forEach((doc) => {
         fetchedMembers.push({ id: doc.id, ...doc.data() } as TeamMember);
       });
       
+      console.log('Fetched team members:', fetchedMembers);
       setTeamMembers(fetchedMembers);
     } catch (err) {
       console.error('Error fetching team members:', err);
@@ -94,6 +97,18 @@ const TeamMembersManager = () => {
 
   const filteredMembers = teamMembers.filter(member => member.teamSection === activeTab);
 
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="py-8">
+          <div className="flex justify-center">
+            <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -106,6 +121,7 @@ const TeamMembersManager = () => {
         </CardTitle>
         <CardDescription>Manage team members displayed on your website</CardDescription>
       </CardHeader>
+
       <CardContent>
         {error && (
           <Alert variant="destructive" className="mb-4">
@@ -122,20 +138,16 @@ const TeamMembersManager = () => {
             </AlertDescription>
           </Alert>
         )}
-        
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4">
             <TabsTrigger value="leadership">Leadership Team</TabsTrigger>
             <TabsTrigger value="domain-experts">Domain Experts</TabsTrigger>
           </TabsList>
-          
+
           {['leadership', 'domain-experts'].map((section) => (
             <TabsContent key={section} value={section} className="mt-0">
-              {loading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
-                </div>
-              ) : filteredMembers.length > 0 ? (
+              {filteredMembers.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filteredMembers.map((member) => (
                     <div key={member.id} className="border rounded-lg p-4 flex">
@@ -193,21 +205,8 @@ const TeamMembersManager = () => {
             </TabsContent>
           ))}
         </Tabs>
-        
-        <div className="mt-4 flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-            onClick={fetchTeamMembers}
-            disabled={loading}
-          >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-        </div>
       </CardContent>
-      
+
       <TeamMemberDialog
         open={dialogOpen}
         onClose={handleDialogClose}
