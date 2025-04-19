@@ -6,7 +6,7 @@ export interface TeamMemberProps {
   name: string;
   role: string;
   description: string;
-  sectionName: string;
+  sectionName?: string;
   fallbackSrc: string;
   delay: string;
 }
@@ -14,10 +14,8 @@ export interface TeamMemberProps {
 const TeamMember = ({ name, role, description, sectionName, fallbackSrc, delay }: TeamMemberProps) => (
   <div className="bg-white rounded-xl overflow-hidden shadow-md animate-fadeIn" style={{ animationDelay: delay }}>
     <div className="h-64 bg-gray-200">
-      <SectionImage
-        pageName="about"
-        sectionName={sectionName}
-        fallbackSrc={fallbackSrc}
+      <img
+        src={fallbackSrc}
         alt={name}
         className="w-full h-full object-cover"
       />

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import SectionHeading from '@/components/SectionHeading';
 import TeamMember, { TeamMemberProps } from './TeamMember';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db, isFirestoreAvailable } from '@/lib/firebase';
 
 // Default team members as fallback
@@ -36,10 +36,10 @@ const defaultTeamMembers: TeamMemberProps[] = [
 interface DbTeamMember {
   id: string;
   name: string;
-  role: string;
+  position: string;
   description: string;
-  sectionName: string;
   photoUrl: string;
+  teamSection: string;
 }
 
 const TeamSection = () => {
@@ -62,7 +62,7 @@ const TeamSection = () => {
         
         // Query team members collection
         const teamCollection = collection(db, 'teamMembers');
-        const teamQuery = query(teamCollection, orderBy('updatedAt', 'desc'));
+        const teamQuery = query(teamCollection, orderBy('updatedAt', 'desc'), limit(6));
         const querySnapshot = await getDocs(teamQuery);
         
         if (querySnapshot.empty) {
@@ -80,9 +80,9 @@ const TeamSection = () => {
           const data = doc.data() as DbTeamMember;
           fetchedMembers.push({
             name: data.name,
-            role: data.role,
+            role: data.position,
             description: data.description,
-            sectionName: data.sectionName,
+            sectionName: `team-${data.id}`,
             fallbackSrc: data.photoUrl,
             delay: `${delayCounter * 100}ms`
           });
@@ -104,26 +104,6 @@ const TeamSection = () => {
     };
     
     fetchTeamMembers();
-    
-    // Listen for team member updates
-    const handleTeamUpdated = () => {
-      console.log("Team members updated, refreshing data");
-      fetchTeamMembers();
-    };
-    
-    window.addEventListener('team-members-updated', handleTeamUpdated);
-    
-    // Check if we need to refresh on mount
-    const needsRefresh = localStorage.getItem('team-members-updated');
-    if (needsRefresh) {
-      console.log("Found refresh flag for team members, refreshing");
-      localStorage.removeItem('team-members-updated');
-      fetchTeamMembers();
-    }
-    
-    return () => {
-      window.removeEventListener('team-members-updated', handleTeamUpdated);
-    };
   }, []);
 
   return (
@@ -143,7 +123,7 @@ const TeamSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {teamMembers.map((member, index) => (
               <TeamMember
-                key={`${member.sectionName}-${index}`}
+                key={`${member.sectionName || index}`}
                 name={member.name}
                 role={member.role}
                 description={member.description}

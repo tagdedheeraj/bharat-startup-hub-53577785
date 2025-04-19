@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Linkedin, Mail, ExternalLink, User, Briefcase, Star } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import { db, isFirestoreAvailable } from '@/lib/firebase';
 
 interface TeamMember {
   id: string;
@@ -14,7 +15,7 @@ interface TeamMember {
   bio: string;
   photoUrl: string;
   linkedinUrl: string;
-  teamSection: string;
+  teamSection: 'leadership' | 'domain-experts';
   description: string;
 }
 
@@ -27,8 +28,17 @@ const ExpertsPage = () => {
     const fetchExperts = async () => {
       try {
         setLoading(true);
+        
+        // Check if Firestore is available
+        const isAvailable = await isFirestoreAvailable();
+        if (!isAvailable) {
+          setError('Cannot connect to Firestore. Please try again later.');
+          setLoading(false);
+          return;
+        }
+        
         const teamCollection = collection(db, 'teamMembers');
-        const teamQuery = query(teamCollection, orderBy('teamSection', 'asc'));
+        const teamQuery = query(teamCollection, orderBy('updatedAt', 'desc'));
         const querySnapshot = await getDocs(teamQuery);
         
         const fetchedExperts: TeamMember[] = [];
@@ -75,7 +85,23 @@ const ExpertsPage = () => {
     );
   }
 
-  
+  // If no team members exist yet
+  if (experts.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <User className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold mb-2">No Team Members Found</h2>
+          <p className="text-gray-600 mb-6">
+            It looks like team members haven't been added yet. You can add team members from the admin panel.
+          </p>
+          <Link to="/admin" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Go to Admin Panel
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -102,49 +128,55 @@ const ExpertsPage = () => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {leadershipTeam.map((expert) => (
-              <div 
-                key={expert.id} 
-                className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
-              >
-                <div className="h-72 overflow-hidden">
-                  <img
-                    src={expert.photoUrl}
-                    alt={expert.name}
-                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
-                  />
-                </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full mb-3 inline-block">
-                    {expert.experience} Experience
+            {leadershipTeam.length > 0 ? (
+              leadershipTeam.map((expert) => (
+                <div 
+                  key={expert.id} 
+                  className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
+                >
+                  <div className="h-72 overflow-hidden">
+                    <img
+                      src={expert.photoUrl}
+                      alt={expert.name}
+                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+                    />
                   </div>
-                  <h3 className="text-2xl font-bold mb-1">{expert.name}</h3>
-                  <p className="text-brand-600 font-medium mb-2">{expert.position}</p>
-                  <p className="text-gray-600 mb-4">
-                    <span className="font-medium">Expertise: </span>{expert.expertise}
-                  </p>
-                  <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
-                  <div className="flex items-center space-x-4 mt-4">
-                    {expert.linkedinUrl && (
+                  <div className="p-6 flex-grow flex flex-col">
+                    <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full mb-3 inline-block">
+                      {expert.experience} Experience
+                    </div>
+                    <h3 className="text-2xl font-bold mb-1">{expert.name}</h3>
+                    <p className="text-brand-600 font-medium mb-2">{expert.position}</p>
+                    <p className="text-gray-600 mb-4">
+                      <span className="font-medium">Expertise: </span>{expert.expertise}
+                    </p>
+                    <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
+                    <div className="flex items-center space-x-4 mt-4">
+                      {expert.linkedinUrl && (
+                        <a 
+                          href={expert.linkedinUrl} 
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Linkedin size={20} />
+                        </a>
+                      )}
                       <a 
-                        href={expert.linkedinUrl} 
+                        href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
                         className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                        target="_blank"
-                        rel="noopener noreferrer"
                       >
-                        <Linkedin size={20} />
+                        <Mail size={20} />
                       </a>
-                    )}
-                    <a 
-                      href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                    >
-                      <Mail size={20} />
-                    </a>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500">No leadership team members found. Add some from the admin panel.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -159,49 +191,55 @@ const ExpertsPage = () => {
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {domainExperts.map((expert) => (
-              <div 
-                key={expert.id} 
-                className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
-              >
-                <div className="h-72 overflow-hidden">
-                  <img
-                    src={expert.photoUrl}
-                    alt={expert.name}
-                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
-                  />
-                </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full mb-3 inline-block">
-                    {expert.experience} Experience
+            {domainExperts.length > 0 ? (
+              domainExperts.map((expert) => (
+                <div 
+                  key={expert.id} 
+                  className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
+                >
+                  <div className="h-72 overflow-hidden">
+                    <img
+                      src={expert.photoUrl}
+                      alt={expert.name}
+                      className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+                    />
                   </div>
-                  <h3 className="text-2xl font-bold mb-1">{expert.name}</h3>
-                  <p className="text-brand-600 font-medium mb-2">{expert.position}</p>
-                  <p className="text-gray-600 mb-4">
-                    <span className="font-medium">Expertise: </span>{expert.expertise}
-                  </p>
-                  <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
-                  <div className="flex items-center space-x-4 mt-4">
-                    {expert.linkedinUrl && (
+                  <div className="p-6 flex-grow flex flex-col">
+                    <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full mb-3 inline-block">
+                      {expert.experience} Experience
+                    </div>
+                    <h3 className="text-2xl font-bold mb-1">{expert.name}</h3>
+                    <p className="text-brand-600 font-medium mb-2">{expert.position}</p>
+                    <p className="text-gray-600 mb-4">
+                      <span className="font-medium">Expertise: </span>{expert.expertise}
+                    </p>
+                    <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
+                    <div className="flex items-center space-x-4 mt-4">
+                      {expert.linkedinUrl && (
+                        <a 
+                          href={expert.linkedinUrl} 
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Linkedin size={20} />
+                        </a>
+                      )}
                       <a 
-                        href={expert.linkedinUrl} 
+                        href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
                         className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                        target="_blank"
-                        rel="noopener noreferrer"
                       >
-                        <Linkedin size={20} />
+                        <Mail size={20} />
                       </a>
-                    )}
-                    <a 
-                      href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                    >
-                      <Mail size={20} />
-                    </a>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500">No domain experts found. Add some from the admin panel.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
