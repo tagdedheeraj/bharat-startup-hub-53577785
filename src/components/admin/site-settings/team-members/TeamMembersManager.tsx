@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,39 @@ const TeamMembersManager = () => {
   };
 
   useEffect(() => {
-    fetchTeamMembers();
+    const initializeCEOProfile = async () => {
+      try {
+        const teamCollection = collection(db, 'teamMembers');
+        const ceoDoc = doc(teamCollection, 'ceo-dhruv-thakar');
+        
+        await setDoc(ceoDoc, {
+          id: 'ceo-dhruv-thakar',
+          name: 'Dhruv Thakar',
+          position: 'Founder & CEO',
+          teamSection: 'leadership',
+          experience: '10+ years',
+          expertise: 'Business Development, Real Estate, Angel Investment',
+          bio: `As a distinguished alumnus of LD College of Engineering and SPIPA, I have cultivated a unique blend of administrative acumen and technological expertise. With a storied career spanning multiple MNCs, including BOB, Chemmanur International, and Quickr, I have honed my skills as a Business Sales Head, driving growth and innovation.
+
+As a trailblazing entrepreneur, I have successfully created my own identity and forged strategic partnerships. My expertise extends to real estate, where I have demonstrated a keen eye for opportunity and investment.
+
+A passionate advocate for startup ecosystems, I have nurtured numerous directors and companies, fostering a culture of innovation and entrepreneurship. As an angel investor, I have supported visionary ventures, empowering them to achieve their full potential.`,
+          description: 'Distinguished alumnus and business leader with expertise in sales, real estate, and startup ecosystem development.',
+          photoUrl: '/lovable-uploads/41bea343-2e2d-4c51-a6ac-fa0e16b74ea0.png',
+          linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        console.log('CEO profile updated successfully');
+        fetchTeamMembers(); // Refresh the team members list
+      } catch (err) {
+        console.error('Error updating CEO profile:', err);
+        setError('Failed to update CEO profile');
+      }
+    };
+
+    initializeCEOProfile();
   }, []);
 
   const handleAddMember = () => {
