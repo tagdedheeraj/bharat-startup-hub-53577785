@@ -1,11 +1,19 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ExpertCard from '@/components/experts/ExpertCard';
 import SectionHeading from '@/components/SectionHeading';
 import { Linkedin, Mail, Star, Award, Trophy, BookOpen } from 'lucide-react';
 
 const ExpertsPage = () => {
+  useEffect(() => {
+    // Preload the founder image to check if it loads correctly
+    const img = new Image();
+    img.src = '/lovable-uploads/9d9bd27c-4d2c-496b-adec-af14a2a5d7fb.png';
+    img.onload = () => console.log('Founder image preloaded successfully');
+    img.onerror = (e) => console.error('Failed to preload founder image:', e);
+  }, []);
+
   const founder = {
     name: 'Dhruv Thakar',
     position: 'Visionary Leader & Entrepreneur',
@@ -25,7 +33,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: '/lovable-uploads/dhruv-thakar.jpg',
+    photoUrl: '/lovable-uploads/9d9bd27c-4d2c-496b-adec-af14a2a5d7fb.png',
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
@@ -92,8 +100,10 @@ Key Highlights:
                     alt={founder.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     onError={(e) => {
-                      e.currentTarget.src = "/placeholder.svg";
+                      const target = e.currentTarget;
                       console.error("Failed to load founder image, using placeholder");
+                      target.onerror = null; // Prevent infinite error loop
+                      target.src = "/placeholder.svg";
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
