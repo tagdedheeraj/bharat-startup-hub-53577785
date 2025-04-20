@@ -4,15 +4,15 @@ import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/fi
 import { db } from '@/lib/firebase';
 import { TeamMember } from '../types';
 import { toast } from 'sonner';
-import { uploadPhoto } from './usePhotoUpload';
 
 interface UseTeamMemberSubmitProps {
   onClose: (created: boolean) => void;
   teamMember: TeamMember | null;
   isOffline: boolean;
+  uploadPhoto: (documentId: string, file: File | null) => Promise<string>;
 }
 
-export const useTeamMemberSubmit = ({ onClose, teamMember, isOffline }: UseTeamMemberSubmitProps) => {
+export const useTeamMemberSubmit = ({ onClose, teamMember, isOffline, uploadPhoto }: UseTeamMemberSubmitProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = !!teamMember;
 

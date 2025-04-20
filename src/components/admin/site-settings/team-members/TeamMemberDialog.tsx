@@ -25,12 +25,17 @@ interface TeamMemberDialogProps {
 const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDialogProps) => {
   const isEditMode = !!teamMember;
   
-  const { photoFile, photoPreview, handlePhotoChange, setPhotoPreview } = usePhotoUpload(
+  const { photoFile, photoPreview, handlePhotoChange, uploadPhoto, setPhotoPreview } = usePhotoUpload(
     teamMember?.photoUrl || null
   );
   
   const form = useTeamMemberForm(teamMember);
-  const { isSubmitting, handleSubmit } = useTeamMemberSubmit({ onClose, teamMember, isOffline });
+  const { isSubmitting, handleSubmit } = useTeamMemberSubmit({ 
+    onClose, 
+    teamMember, 
+    isOffline,
+    uploadPhoto 
+  });
 
   React.useEffect(() => {
     if (teamMember) {

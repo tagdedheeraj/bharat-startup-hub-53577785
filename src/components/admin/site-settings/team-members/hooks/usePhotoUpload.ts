@@ -20,14 +20,14 @@ export const usePhotoUpload = (initialPhotoUrl: string | null = null) => {
     }
   };
 
-  const uploadPhoto = async (id: string): Promise<string> => {
-    if (!photoFile) {
+  const uploadPhoto = async (documentId: string, file: File | null): Promise<string> => {
+    if (!file) {
       return initialPhotoUrl || '';
     }
     
     try {
-      const storageRef = ref(storage, `team-members/${id}_${Date.now()}`);
-      await uploadBytes(storageRef, photoFile);
+      const storageRef = ref(storage, `team-members/${documentId}_${Date.now()}`);
+      await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
       console.log('Photo uploaded successfully:', url);
       return url;
