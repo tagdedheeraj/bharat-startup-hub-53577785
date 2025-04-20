@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Form } from '@/components/ui/form';
 import { AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { TeamMember } from './types';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 import { useTeamMemberForm } from './hooks/useTeamMemberForm';
+import { useTeamMemberSubmit } from './hooks/useTeamMemberSubmit';
 import PhotoUploadSection from './components/PhotoUploadSection';
 import BasicInfoSection from './components/BasicInfoSection';
 import ExperienceSection from './components/ExperienceSection';
@@ -24,14 +23,14 @@ interface TeamMemberDialogProps {
 }
 
 const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDialogProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = !!teamMember;
   
-  const { photoFile, photoPreview, handlePhotoChange, uploadPhoto, setPhotoPreview } = usePhotoUpload(
+  const { photoFile, photoPreview, handlePhotoChange, setPhotoPreview } = usePhotoUpload(
     teamMember?.photoUrl || null
   );
   
   const form = useTeamMemberForm(teamMember);
+  const { isSubmitting, handleSubmit } = useTeamMemberSubmit({ onClose, teamMember, isOffline });
 
   React.useEffect(() => {
     if (teamMember) {
@@ -61,73 +60,7 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
     }
   }, [teamMember, form, setPhotoPreview]);
 
-  const onSubmit = async (data: any) => {
-    if (isOffline) {
-      toast.error('Cannot save team members while offline');
-      return;
-    }
-    
-    try {
-      setIsSubmitting(true);
-      console.log('Starting to save team member...');
-      
-      const teamMembersCollection = collection(db, 'teamMembers');
-      let documentId;
-      let photoUrl = '';
-      
-      if (isEditMode && teamMember) {
-        documentId = teamMember.id;
-        console.log('Editing existing team member with ID:', documentId);
-        
-        try {
-          photoUrl = await uploadPhoto(documentId);
-          console.log('Photo upload complete, URL:', photoUrl);
-          
-          const memberRef = doc(db, 'teamMembers', documentId);
-          await updateDoc(memberRef, {
-            ...data,
-            photoUrl: photoUrl || teamMember.photoUrl,
-            updatedAt: serverTimestamp()
-          });
-          
-          console.log('Team member updated successfully');
-          toast.success('Team member updated successfully');
-          onClose(true);
-        } catch (error) {
-          console.error('Error in update flow:', error);
-          toast.error('Failed to update team member');
-        }
-      } else {
-        console.log('Creating new team member');
-        try {
-          const newDocRef = doc(teamMembersCollection);
-          documentId = newDocRef.id;
-          
-          photoUrl = await uploadPhoto(documentId);
-          console.log('Photo upload complete, URL:', photoUrl);
-          
-          await setDoc(newDocRef, {
-            ...data,
-            photoUrl,
-            createdAt: serverTimestamp(),
-            updatedAt: serverTimestamp()
-          });
-          
-          console.log('Team member created successfully with ID:', documentId);
-          toast.success('Team member added successfully');
-          onClose(true);
-        } catch (error) {
-          console.error('Error in create flow:', error);
-          toast.error('Failed to create team member');
-        }
-      }
-    } catch (error) {
-      console.error('General error saving team member:', error);
-      toast.error('Failed to save team member');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const onSubmit = form.handleSubmit((data) => handleSubmit(data, photoFile, photoPreview));
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose(false)}>
@@ -146,7 +79,7 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
         )}
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4">
             <PhotoUploadSection 
               photoPreview={photoPreview} 
               onPhotoChange={handlePhotoChange}
