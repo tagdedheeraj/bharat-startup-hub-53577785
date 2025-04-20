@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ExpertCard from '@/components/experts/ExpertCard';
@@ -84,6 +85,7 @@ Key Highlights:
                     console.error("Failed to load founder image, using placeholder");
                   }}
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
               
               <div className="space-y-6">
