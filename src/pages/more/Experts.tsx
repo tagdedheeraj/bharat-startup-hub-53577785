@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Linkedin, Mail, ExternalLink } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
+import ExpertCard from '@/components/experts/ExpertCard';
+import ExpertsHero from '@/components/experts/ExpertsHero';
+import ExpertsCTA from '@/components/experts/ExpertsCTA';
 
 const ExpertsPage = () => {
   const experts = [
@@ -20,19 +21,8 @@ const ExpertsPage = () => {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <span className="text-sm text-brand-600 font-medium uppercase tracking-wider">Our Experts</span>
-            <h1 className="text-4xl md:text-5xl font-bold mt-4 mb-6">Meet our Experts</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              The Team that Makes it Happen. Meet the brilliant minds that guide, support, and transform your business into a success story.
-            </p>
-          </div>
-        </div>
-      </section>
-
+      <ExpertsHero />
+      
       {/* Experts Grid */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,66 +34,13 @@ const ExpertsPage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
             {experts.map((expert, index) => (
-              <div 
-                key={index}
-                className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 animate-fadeIn h-full flex flex-col"
-              >
-                <div className="h-72 overflow-hidden">
-                  <img
-                    src={expert.photoUrl}
-                    alt={expert.name}
-                    className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
-                  />
-                </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full mb-3 inline-block">
-                    {expert.experience} Experience
-                  </div>
-                  <h3 className="text-2xl font-bold mb-1">{expert.name}</h3>
-                  <p className="text-brand-600 font-medium mb-2">{expert.position}</p>
-                  <p className="text-gray-600 mb-4">
-                    <span className="font-medium">Expertise: </span>{expert.expertise}
-                  </p>
-                  <p className="text-gray-600 mb-4 flex-grow">{expert.bio}</p>
-                  <div className="flex items-center space-x-4 mt-4">
-                    {expert.linkedinUrl && (
-                      <a 
-                        href={expert.linkedinUrl} 
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Linkedin size={20} />
-                      </a>
-                    )}
-                    <a 
-                      href={`mailto:${expert.name.toLowerCase().replace(' ', '.')}@bharatstartup.com`} 
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-2 rounded-full transition-colors"
-                    >
-                      <Mail size={20} />
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <ExpertCard key={index} {...expert} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-brand-600 to-blue-700 py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Work with Our Experts?</h2>
-            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Schedule a consultation with our team and discover how our expertise can help your business grow.
-            </p>
-            <Link to="/contact" className="px-8 py-3 bg-white text-brand-700 font-medium rounded-lg hover:bg-white/90 transition-colors shadow-lg">
-              Schedule a Consultation
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ExpertsCTA />
     </div>
   );
 };
