@@ -25,7 +25,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: '/lovable-uploads/931afba6-613d-4647-adf7-1a72b7ea9650.png',
+    photoUrl: '/lovable-uploads/bf4dce02-b165-4d12-a196-e2d67c1b432f.png',
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
