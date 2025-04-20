@@ -102,9 +102,17 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
       return teamMember?.photoUrl || '';
     }
     
-    const storageRef = ref(storage, `team-members/${id}_${Date.now()}`);
-    await uploadBytes(storageRef, photoFile);
-    return getDownloadURL(storageRef);
+    try {
+      const storageRef = ref(storage, `team-members/${id}_${Date.now()}`);
+      await uploadBytes(storageRef, photoFile);
+      const url = await getDownloadURL(storageRef);
+      console.log('Photo uploaded successfully:', url);
+      return url;
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast.error('Failed to upload photo');
+      throw error;
+    }
   };
   
   const onSubmit = async (data: z.infer<typeof teamMemberSchema>) => {
@@ -115,44 +123,61 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
     
     try {
       setIsSubmitting(true);
+      console.log('Starting to save team member...');
       
       const teamMembersCollection = collection(db, 'teamMembers');
-      const memberData = {
-        ...data,
-        updatedAt: serverTimestamp()
-      };
-      
       let documentId;
       let photoUrl = '';
       
       if (isEditMode && teamMember) {
         documentId = teamMember.id;
-        photoUrl = await uploadPhoto(documentId);
+        console.log('Editing existing team member with ID:', documentId);
         
-        const memberRef = doc(teamMembersCollection, documentId);
-        await updateDoc(memberRef, {
-          ...memberData,
-          photoUrl: photoUrl || teamMember.photoUrl,
-        });
-        
-        toast.success('Team member updated successfully');
+        try {
+          photoUrl = await uploadPhoto(documentId);
+          console.log('Photo upload complete, URL:', photoUrl);
+          
+          const memberRef = doc(db, 'teamMembers', documentId);
+          await updateDoc(memberRef, {
+            ...data,
+            photoUrl: photoUrl || teamMember.photoUrl,
+            updatedAt: serverTimestamp()
+          });
+          
+          console.log('Team member updated successfully');
+          toast.success('Team member updated successfully');
+          onClose(true);
+        } catch (error) {
+          console.error('Error in update flow:', error);
+          toast.error('Failed to update team member');
+        }
       } else {
-        const newDocRef = doc(teamMembersCollection);
-        documentId = newDocRef.id;
-        photoUrl = await uploadPhoto(documentId);
-        
-        await setDoc(newDocRef, {
-          ...memberData,
-          photoUrl,
-          createdAt: serverTimestamp(),
-        });
-        
-        toast.success('Team member added successfully');
+        // Creating a new team member
+        console.log('Creating new team member');
+        try {
+          const newDocRef = doc(teamMembersCollection);
+          documentId = newDocRef.id;
+          
+          photoUrl = await uploadPhoto(documentId);
+          console.log('Photo upload complete, URL:', photoUrl);
+          
+          await setDoc(newDocRef, {
+            ...data,
+            photoUrl,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+          
+          console.log('Team member created successfully with ID:', documentId);
+          toast.success('Team member added successfully');
+          onClose(true);
+        } catch (error) {
+          console.error('Error in create flow:', error);
+          toast.error('Failed to create team member');
+        }
       }
-      
-      onClose(true);
     } catch (error) {
-      console.error('Error saving team member:', error);
+      console.error('General error saving team member:', error);
       toast.error('Failed to save team member');
     } finally {
       setIsSubmitting(false);
