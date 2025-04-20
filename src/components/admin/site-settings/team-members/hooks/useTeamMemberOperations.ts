@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { TeamMember } from '../types';
 import { toast } from 'sonner';
@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 export const useTeamMemberOperations = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const saveTeamMember = async (data: any, photoUrl: string) => {
+  const saveTeamMember = async (data: any, photoUrl: string, existingMemberId?: string) => {
     try {
       setIsSubmitting(true);
       
@@ -24,17 +24,30 @@ export const useTeamMemberOperations = () => {
       const teamMemberData = {
         ...data,
         photoUrl,
-        createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
 
-      const docRef = await addDoc(collection(db, 'teamMembers'), teamMemberData);
-      
-      // Clear any cached data
-      localStorage.removeItem('team-members-cache');
-      
-      toast.success('Team member added successfully');
-      return docRef.id;
+      // If existingMemberId is provided, update the existing document
+      if (existingMemberId) {
+        const memberRef = doc(db, 'teamMembers', existingMemberId);
+        await updateDoc(memberRef, teamMemberData);
+        
+        // Clear any cached data
+        localStorage.removeItem('team-members-cache');
+        
+        toast.success('Team member updated successfully');
+        return existingMemberId;
+      } else {
+        // Create a new document
+        teamMemberData.createdAt = serverTimestamp();
+        const docRef = await addDoc(collection(db, 'teamMembers'), teamMemberData);
+        
+        // Clear any cached data
+        localStorage.removeItem('team-members-cache');
+        
+        toast.success('Team member added successfully');
+        return docRef.id;
+      }
     } catch (error) {
       console.error('Error saving team member:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to save team member');

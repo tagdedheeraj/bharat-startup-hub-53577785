@@ -78,7 +78,8 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
         return;
       }
 
-      await saveTeamMember(formData, photoUrl);
+      // Pass the existing ID when in edit mode
+      await saveTeamMember(formData, photoUrl, isEditMode ? teamMember?.id : undefined);
       onClose(true);
     } catch (error) {
       console.error('Error in form submission:', error);
