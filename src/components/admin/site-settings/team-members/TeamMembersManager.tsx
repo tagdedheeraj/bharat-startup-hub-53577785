@@ -1,15 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, Plus, Pencil, Trash2, WifiOff, RefreshCw } from 'lucide-react';
+import { AlertCircle, Plus, WifiOff, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { collection, getDocs, doc, deleteDoc, query, orderBy, where } from 'firebase/firestore';
+import { collection, getDocs, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, isFirestoreAvailable } from '@/lib/firebase';
 import { toast } from 'sonner';
 import { TeamMember } from './types';
 import TeamMemberDialog from './TeamMemberDialog';
+import TeamMembersList from './components/TeamMembersList';
 
 const TeamMembersManager = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -25,7 +25,6 @@ const TeamMembersManager = () => {
       setLoading(true);
       setError(null);
       
-      // Check if Firestore is available
       const available = await isFirestoreAvailable();
       setIsOffline(!available);
       
@@ -35,12 +34,10 @@ const TeamMembersManager = () => {
         return;
       }
       
-      // Query team members collection
       const teamCollection = collection(db, 'teamMembers');
       const teamQuery = query(teamCollection, orderBy('updatedAt', 'desc'));
       const querySnapshot = await getDocs(teamQuery);
       
-      // Transform data and set state
       const fetchedMembers: TeamMember[] = [];
       querySnapshot.forEach((doc) => {
         fetchedMembers.push({ id: doc.id, ...doc.data() } as TeamMember);
@@ -114,7 +111,7 @@ const TeamMembersManager = () => {
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           <span>Team Members</span>
-          <Button onClick={handleAddMember} className="flex items-center gap-2">
+          <Button onClick={() => setDialogOpen(true)} className="flex items-center gap-2">
             <Plus className="h-4 w-4" />
             Add Team Member
           </Button>
@@ -147,65 +144,19 @@ const TeamMembersManager = () => {
 
           {['leadership', 'domain-experts'].map((section) => (
             <TabsContent key={section} value={section} className="mt-0">
-              {loading ? (
-                <div className="flex justify-center py-8">
-                  <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
-                </div>
-              ) : filteredMembers.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredMembers.map((member) => (
-                    <div key={member.id} className="border rounded-lg p-4 flex">
-                      <div className="h-20 w-20 bg-gray-200 rounded-lg overflow-hidden mr-4">
-                        {member.photoUrl && (
-                          <img
-                            src={member.photoUrl}
-                            alt={member.name}
-                            className="h-full w-full object-cover"
-                          />
-                        )}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium">{member.name}</h3>
-                        <p className="text-sm text-gray-600">{member.position}</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Experience: {member.experience || 'N/A'}
-                        </p>
-                        <div className="mt-3 flex space-x-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleEditMember(member)}
-                            className="h-8 px-2"
-                          >
-                            <Pencil className="h-3.5 w-3.5 mr-1" />
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleDeleteMember(member.id)}
-                            className="h-8 px-2 text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="h-3.5 w-3.5 mr-1" />
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 border rounded-lg">
-                  <p className="text-gray-500">No team members found in this section.</p>
-                  <Button
-                    variant="outline"
-                    className="mt-4"
-                    onClick={handleAddMember}
-                  >
-                    Add Team Member
-                  </Button>
-                </div>
-              )}
+              <TeamMembersList
+                members={filteredMembers}
+                loading={loading}
+                onEdit={(member) => {
+                  setSelectedMember(member);
+                  setDialogOpen(true);
+                }}
+                onDelete={handleDeleteMember}
+                onAdd={() => {
+                  setSelectedMember(null);
+                  setDialogOpen(true);
+                }}
+              />
             </TabsContent>
           ))}
         </Tabs>
@@ -226,7 +177,12 @@ const TeamMembersManager = () => {
 
       <TeamMemberDialog
         open={dialogOpen}
-        onClose={handleDialogClose}
+        onClose={(created) => {
+          setDialogOpen(false);
+          if (created) {
+            fetchTeamMembers();
+          }
+        }}
         teamMember={selectedMember}
         isOffline={isOffline}
       />
