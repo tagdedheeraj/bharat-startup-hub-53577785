@@ -8,7 +8,7 @@ import { AlertCircle } from 'lucide-react';
 import { TeamMember } from './types';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 import { useTeamMemberForm } from './hooks/useTeamMemberForm';
-import { useTeamMemberSubmit } from './hooks/useTeamMemberSubmit';
+import { useTeamMemberOperations } from './hooks/useTeamMemberOperations';
 import PhotoUploadSection from './components/PhotoUploadSection';
 import BasicInfoSection from './components/BasicInfoSection';
 import ExperienceSection from './components/ExperienceSection';
@@ -24,18 +24,11 @@ interface TeamMemberDialogProps {
 
 const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDialogProps) => {
   const isEditMode = !!teamMember;
-  
   const { photoFile, photoPreview, handlePhotoChange, uploadPhoto, setPhotoPreview } = usePhotoUpload(
     teamMember?.photoUrl || null
   );
-  
   const form = useTeamMemberForm(teamMember);
-  const { isSubmitting, handleSubmit } = useTeamMemberSubmit({ 
-    onClose, 
-    teamMember, 
-    isOffline,
-    uploadPhoto 
-  });
+  const { isSubmitting, saveTeamMember } = useTeamMemberOperations();
 
   React.useEffect(() => {
     if (teamMember) {
@@ -47,7 +40,7 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
         bio: teamMember.bio || '',
         description: teamMember.description || '',
         linkedinUrl: teamMember.linkedinUrl || '',
-        teamSection: (teamMember.teamSection as 'leadership' | 'domain-experts') || 'leadership'
+        teamSection: teamMember.teamSection || 'leadership'
       });
       setPhotoPreview(teamMember.photoUrl || null);
     } else {
@@ -65,7 +58,31 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
     }
   }, [teamMember, form, setPhotoPreview]);
 
-  const onSubmit = form.handleSubmit((data) => handleSubmit(data, photoFile, photoPreview));
+  const handleSubmit = async (formData: any) => {
+    if (isOffline) {
+      toast.error('Cannot save while offline');
+      return;
+    }
+
+    try {
+      let photoUrl = teamMember?.photoUrl || '';
+      
+      if (photoFile) {
+        const documentId = teamMember?.id || 'new';
+        photoUrl = await uploadPhoto(documentId, photoFile);
+      }
+
+      if (!photoUrl) {
+        toast.error('Please upload a photo');
+        return;
+      }
+
+      await saveTeamMember(formData, photoUrl);
+      onClose(true);
+    } catch (error) {
+      console.error('Error in form submission:', error);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose(false)}>
@@ -84,7 +101,7 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
         )}
         
         <Form {...form}>
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <PhotoUploadSection 
               photoPreview={photoPreview} 
               onPhotoChange={handlePhotoChange}

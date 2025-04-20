@@ -28,13 +28,11 @@ const ExpertsPage = () => {
     const fetchExperts = async () => {
       try {
         setLoading(true);
+        setError(null);
         
-        // Check if Firestore is available
         const isAvailable = await isFirestoreAvailable();
         if (!isAvailable) {
-          setError('Cannot connect to Firestore. Please try again later.');
-          setLoading(false);
-          return;
+          throw new Error('Cannot connect to Firestore. Please try again later.');
         }
         
         const teamCollection = collection(db, 'teamMembers');
@@ -43,19 +41,44 @@ const ExpertsPage = () => {
         
         const fetchedExperts: TeamMember[] = [];
         querySnapshot.forEach((doc) => {
-          fetchedExperts.push({ id: doc.id, ...doc.data() } as TeamMember);
+          const data = doc.data();
+          if (data.name && data.position && data.teamSection) {
+            fetchedExperts.push({ 
+              id: doc.id, 
+              ...data 
+            } as TeamMember);
+          }
         });
         
+        console.log('Fetched experts:', fetchedExperts);
         setExperts(fetchedExperts);
+        
+        // Update cache with fresh data
+        localStorage.setItem('team-members-cache', JSON.stringify(fetchedExperts));
       } catch (err) {
         console.error('Error fetching experts:', err);
-        setError('Failed to load team members. Please try again later.');
+        setError(err instanceof Error ? err.message : 'Failed to load team members');
+        
+        // Try to load from cache if fetch fails
+        const cachedData = localStorage.getItem('team-members-cache');
+        if (cachedData) {
+          setExperts(JSON.parse(cachedData));
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchExperts();
+
+    // Listen for team member updates
+    const handleTeamMembersUpdate = () => {
+      console.log('Team members updated, refreshing...');
+      fetchExperts();
+    };
+
+    window.addEventListener('team-members-updated', handleTeamMembersUpdate);
+    return () => window.removeEventListener('team-members-updated', handleTeamMembersUpdate);
   }, []);
 
   const leadershipTeam = experts.filter(expert => expert.teamSection === 'leadership');
