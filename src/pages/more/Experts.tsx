@@ -25,7 +25,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: '/lovable-uploads/d88c4e6e-38f6-423a-a75b-e838a003d0ba.png',
+    photoUrl: '/placeholder.svg', // Using placeholder image as fallback
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
@@ -85,7 +85,7 @@ Key Highlights:
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.src = "/placeholder.svg";
-                      console.error("Failed to load founder image");
+                      console.error("Failed to load founder image, using placeholder");
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:hidden" />
