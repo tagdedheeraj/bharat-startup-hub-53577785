@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, Plus, WifiOff, RefreshCw } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { RefreshCw } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { collection, getDocs, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db, isFirestoreAvailable } from '@/lib/firebase';
@@ -10,6 +9,8 @@ import { toast } from 'sonner';
 import { TeamMember } from './types';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMembersList from './components/TeamMembersList';
+import TeamMembersHeader from './components/TeamMembersHeader';
+import TeamMembersAlerts from './components/TeamMembersAlerts';
 
 const TeamMembersManager = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -108,34 +109,10 @@ const TeamMembersManager = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <span>Team Members</span>
-          <Button onClick={() => setDialogOpen(true)} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            Add Team Member
-          </Button>
-        </CardTitle>
-        <CardDescription>Manage team members displayed on your website</CardDescription>
-      </CardHeader>
-
+      <TeamMembersHeader onAdd={handleAddMember} />
       <CardContent>
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+        <TeamMembersAlerts error={error} isOffline={isOffline} />
         
-        {isOffline && (
-          <Alert className="mb-4 border-amber-200 bg-amber-50">
-            <WifiOff className="h-4 w-4 text-amber-600" />
-            <AlertDescription className="text-amber-600">
-              You are in offline mode. Some features may be limited.
-            </AlertDescription>
-          </Alert>
-        )}
-
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4">
             <TabsTrigger value="leadership">Leadership Team</TabsTrigger>
@@ -147,15 +124,9 @@ const TeamMembersManager = () => {
               <TeamMembersList
                 members={filteredMembers}
                 loading={loading}
-                onEdit={(member) => {
-                  setSelectedMember(member);
-                  setDialogOpen(true);
-                }}
+                onEdit={handleEditMember}
                 onDelete={handleDeleteMember}
-                onAdd={() => {
-                  setSelectedMember(null);
-                  setDialogOpen(true);
-                }}
+                onAdd={handleAddMember}
               />
             </TabsContent>
           ))}
@@ -177,12 +148,7 @@ const TeamMembersManager = () => {
 
       <TeamMemberDialog
         open={dialogOpen}
-        onClose={(created) => {
-          setDialogOpen(false);
-          if (created) {
-            fetchTeamMembers();
-          }
-        }}
+        onClose={handleDialogClose}
         teamMember={selectedMember}
         isOffline={isOffline}
       />
