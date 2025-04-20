@@ -91,7 +91,8 @@ export const navigationData = [
     label: 'More',
     to: '/more',
     children: [
-      { label: 'Experts', to: '/more/experts', description: 'Meet our team of industry experts', icon: LifeBuoy },
+      { label: 'Experts', to: '/more/experts', description: 'Meet our industry experts', icon: LifeBuoy },
+      { label: 'Our Team', to: '/more/team', description: 'Meet the talented people behind Bharat Startup', icon: Users },
       { label: 'MSME Events', to: '/more/msme-events', description: 'Upcoming events and workshops for MSMEs', icon: BellRing },
       { label: 'Special Services', to: '/more/special-services', description: 'Enterprise-grade business solutions', icon: Database },
       { label: 'Reviews', to: '/more/reviews', description: 'See what our clients say about our services', icon: LifeBuoy },
