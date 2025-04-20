@@ -1,12 +1,8 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Form } from '@/components/ui/form';
 import { AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
@@ -15,6 +11,10 @@ import { TeamMember } from './types';
 import { usePhotoUpload } from './hooks/usePhotoUpload';
 import { useTeamMemberForm } from './hooks/useTeamMemberForm';
 import PhotoUploadSection from './components/PhotoUploadSection';
+import BasicInfoSection from './components/BasicInfoSection';
+import ExperienceSection from './components/ExperienceSection';
+import BioSection from './components/BioSection';
+import TeamSectionSelect from './components/TeamSectionSelect';
 
 interface TeamMemberDialogProps {
   open: boolean;
@@ -152,140 +152,10 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
               onPhotoChange={handlePhotoChange}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="position"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Position</FormLabel>
-                    <FormControl>
-                      <Input placeholder="CEO" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="experience"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Experience</FormLabel>
-                    <FormControl>
-                      <Input placeholder="10+ years" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="expertise"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Expertise</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Business Strategy, Finance" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <FormField
-              control={form.control}
-              name="linkedinUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LinkedIn URL (optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://linkedin.com/in/username" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Short Description</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="A brief description that appears on cards" 
-                      {...field} 
-                      className="min-h-[80px]" 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Bio</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="A detailed description of the team member's background" 
-                      {...field} 
-                      className="min-h-[120px]" 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="teamSection"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Team Section</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a section" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="leadership">Leadership Team</SelectItem>
-                      <SelectItem value="domain-experts">Domain Experts</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <BasicInfoSection form={form} />
+            <ExperienceSection form={form} />
+            <BioSection form={form} />
+            <TeamSectionSelect form={form} />
             
             <div className="flex justify-end gap-2 pt-4">
               <Button 
