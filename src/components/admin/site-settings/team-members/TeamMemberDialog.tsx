@@ -14,6 +14,7 @@ import BasicInfoSection from './components/BasicInfoSection';
 import ExperienceSection from './components/ExperienceSection';
 import BioSection from './components/BioSection';
 import TeamSectionSelect from './components/TeamSectionSelect';
+import { toast } from 'sonner';
 
 interface TeamMemberDialogProps {
   open: boolean;
