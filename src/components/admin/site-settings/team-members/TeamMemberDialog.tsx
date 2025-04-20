@@ -1,21 +1,20 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertCircle, Upload } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { collection, doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
 import { TeamMember } from './types';
+import { usePhotoUpload } from './hooks/usePhotoUpload';
+import { useTeamMemberForm } from './hooks/useTeamMemberForm';
+import PhotoUploadSection from './components/PhotoUploadSection';
 
 interface TeamMemberDialogProps {
   open: boolean;
@@ -24,38 +23,16 @@ interface TeamMemberDialogProps {
   isOffline: boolean;
 }
 
-const teamMemberSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  position: z.string().min(2, { message: 'Position is required' }),
-  experience: z.string().min(1, { message: 'Experience is required' }),
-  expertise: z.string().min(2, { message: 'Expertise is required' }),
-  bio: z.string().min(10, { message: 'Bio must be at least 10 characters' }),
-  description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
-  linkedinUrl: z.string().url({ message: 'Must be a valid URL' }).or(z.string().length(0)),
-  teamSection: z.enum(['leadership', 'domain-experts'])
-});
-
 const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDialogProps) => {
-  const [photoFile, setPhotoFile] = React.useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = React.useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = !!teamMember;
   
-  const form = useForm<z.infer<typeof teamMemberSchema>>({
-    resolver: zodResolver(teamMemberSchema),
-    defaultValues: {
-      name: teamMember?.name || '',
-      position: teamMember?.position || '',
-      experience: teamMember?.experience || '',
-      expertise: teamMember?.expertise || '',
-      bio: teamMember?.bio || '',
-      description: teamMember?.description || '',
-      linkedinUrl: teamMember?.linkedinUrl || '',
-      teamSection: (teamMember?.teamSection as 'leadership' | 'domain-experts') || 'leadership'
-    }
-  });
+  const { photoFile, photoPreview, handlePhotoChange, uploadPhoto, setPhotoPreview } = usePhotoUpload(
+    teamMember?.photoUrl || null
+  );
   
+  const form = useTeamMemberForm(teamMember);
+
   React.useEffect(() => {
     if (teamMember) {
       form.reset({
@@ -82,40 +59,9 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
       });
       setPhotoPreview(null);
     }
-    setPhotoFile(null);
-  }, [teamMember, form, open]);
-  
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPhotoFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  
-  const uploadPhoto = async (id: string): Promise<string> => {
-    if (!photoFile) {
-      return teamMember?.photoUrl || '';
-    }
-    
-    try {
-      const storageRef = ref(storage, `team-members/${id}_${Date.now()}`);
-      await uploadBytes(storageRef, photoFile);
-      const url = await getDownloadURL(storageRef);
-      console.log('Photo uploaded successfully:', url);
-      return url;
-    } catch (error) {
-      console.error('Error uploading photo:', error);
-      toast.error('Failed to upload photo');
-      throw error;
-    }
-  };
-  
-  const onSubmit = async (data: z.infer<typeof teamMemberSchema>) => {
+  }, [teamMember, form, setPhotoPreview]);
+
+  const onSubmit = async (data: any) => {
     if (isOffline) {
       toast.error('Cannot save team members while offline');
       return;
@@ -152,7 +98,6 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
           toast.error('Failed to update team member');
         }
       } else {
-        // Creating a new team member
         console.log('Creating new team member');
         try {
           const newDocRef = doc(teamMembersCollection);
@@ -183,7 +128,7 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose(false)}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -202,24 +147,10 @@ const TeamMemberDialog = ({ open, onClose, teamMember, isOffline }: TeamMemberDi
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-24 h-24 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                {photoPreview ? (
-                  <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
-                ) : (
-                  <Upload className="text-gray-400 h-8 w-8" />
-                )}
-              </div>
-              <div className="flex-1">
-                <FormLabel>Photo</FormLabel>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
+            <PhotoUploadSection 
+              photoPreview={photoPreview} 
+              onPhotoChange={handlePhotoChange}
+            />
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
