@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Linkedin, Mail, Star, Calendar } from 'lucide-react';
 

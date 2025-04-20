@@ -9,7 +9,7 @@ const ExpertsPage = () => {
   useEffect(() => {
     // Preload the founder image to check if it loads correctly
     const img = new Image();
-    img.src = '/lovable-uploads/9d9bd27c-4d2c-496b-adec-af14a2a5d7fb.png';
+    img.src = '/lovable-uploads/931afba6-613d-4647-adf7-1a72b7ea9650.png';
     img.onload = () => console.log('Founder image preloaded successfully');
     img.onerror = (e) => console.error('Failed to preload founder image:', e);
   }, []);
@@ -33,7 +33,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: '/lovable-uploads/9d9bd27c-4d2c-496b-adec-af14a2a5d7fb.png',
+    photoUrl: '/lovable-uploads/931afba6-613d-4647-adf7-1a72b7ea9650.png',
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
