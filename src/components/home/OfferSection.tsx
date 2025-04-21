@@ -92,9 +92,8 @@ const OfferSection = () => (
             11 Services in <span className="text-vivid-purple">₹1 Lakh</span>
           </h2>
         </div>
-        <p className="text-center text-lg text-brand-600 font-semibold mb-1 animate-fade-in">
-          Idea to <span className="font-bold text-vivid-purple">Implementation</span>
-        </p>
+        {/* Removed the "Idea to Implementation" line here */}
+
         <div className="flex items-center gap-2 justify-center text-base text-orange-500 mb-3">
           <Rocket className="w-5 h-5" />
           <span>Just in</span>
@@ -148,3 +147,4 @@ const OfferSection = () => (
 );
 
 export default OfferSection;
+
