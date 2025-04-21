@@ -1,4 +1,3 @@
-
 import FirstTimeVideoPopup from '@/components/FirstTimeVideoPopup';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
@@ -12,13 +11,17 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/funding/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
+import OfferSection from '@/components/home/OfferSection';
 
 const HomePage = () => {
   return (
     <div className="overflow-hidden">
       {/* First-time visitor video popup - with a standard YouTube ID */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
-      
+
+      {/* Offer Section - 11 Services in 1 Lakh */}
+      <OfferSection />
+
       {/* Hero Section */}
       <HeroSection />
 
