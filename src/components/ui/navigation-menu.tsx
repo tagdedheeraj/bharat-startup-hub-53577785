@@ -3,98 +3,66 @@ import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
 import { ChevronDown } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 
-function useCloseOnOutsideClick(ref: React.RefObject<HTMLElement>, isOpen: boolean, setOpen: (open: boolean) => void) {
+type NavigationMenuContextType = {
+  isOpen: boolean
+  setOpen: (open: boolean) => void
+}
+const NavigationMenuContext = React.createContext<NavigationMenuContextType | undefined>(undefined)
+
+function useOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void) {
   React.useEffect(() => {
-    if (!isOpen) return;
-    function handleClick(event: MouseEvent) {
-      const navMenu = ref.current
-      if (navMenu && !navMenu.contains(event.target as Node)) {
-        setOpen(false)
+    function handleMouseDown(event: MouseEvent) {
+      const node = ref.current
+      if (node && !node.contains(event.target as Node)) {
+        handler()
       }
     }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [isOpen, ref, setOpen]);
-}
-
-// Define custom interfaces for our components with additional props
-interface NavigationMenuListProps extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> {
-  setNavigationMenuOpen?: (open: boolean) => void;
-}
-
-interface NavigationMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> {
-  setNavigationMenuOpen?: (open: boolean) => void;
-  onOpenChange?: (open: boolean) => void;
+    document.addEventListener("mousedown", handleMouseDown)
+    return () => document.removeEventListener("mousedown", handleMouseDown)
+  }, [ref, handler])
 }
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, children, ...props }, ref) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const rootRef = React.useRef<HTMLElement>(null);
+  const [open, setOpen] = React.useState(false)
+  const rootRef = React.useRef<HTMLElement>(null)
 
-  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement);
+  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement)
 
-  useCloseOnOutsideClick(rootRef, isOpen, setIsOpen);
+  // Only use the outside click handler when open
+  useOutsideClick(rootRef, () => {
+    if (open) setOpen(false)
+  })
 
-  const handleValueChange = React.useCallback((value: any) => {
-    setIsOpen(value === "open" || value === true);
-    if (props.onValueChange) props.onValueChange(value);
-  }, [props]);
-
+  // Accept open/close only by our state: controlled open
   return (
-    <NavigationMenuPrimitive.Root
-      ref={rootRef}
-      className={cn(
-        "relative z-10 flex max-w-max flex-1 items-center justify-center",
-        className
-      )}
-      {...props}
-    >
-      {React.Children.map(children, child => {
-        if (
-          React.isValidElement(child) &&
-          (child.type as any).displayName === NavigationMenuList.displayName
-        ) {
-          // Type assertion to allow custom props
-          return React.cloneElement(child as React.ReactElement<NavigationMenuListProps>, { 
-            setNavigationMenuOpen: setIsOpen 
-          });
-        }
-        return child;
-      })}
-      <NavigationMenuViewport />
-    </NavigationMenuPrimitive.Root>
+    <NavigationMenuContext.Provider value={{ isOpen: open, setOpen }}>
+      <NavigationMenuPrimitive.Root
+        ref={rootRef}
+        className={cn(
+          "relative z-30 flex max-w-max flex-1 items-center justify-center", // z-30 ensures dropdown is visually above main content
+          className
+        )}
+        open={open}
+        onOpenChange={setOpen}
+        {...props}
+      >
+        {children}
+        <NavigationMenuViewport />
+      </NavigationMenuPrimitive.Root>
+    </NavigationMenuContext.Provider>
   )
 })
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
 const NavigationMenuList = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.List>,
-  NavigationMenuListProps
->(({ className, children, setNavigationMenuOpen, ...props }, ref) => {
-  const handleOpenChange = (open: boolean) => {
-    setNavigationMenuOpen?.(open);
-  };
-  
-  const patchedChildren = React.Children.map(children, child => {
-    if (
-      React.isValidElement(child) &&
-      (child.type as any).displayName === NavigationMenuItem.displayName
-    ) {
-      // Type assertion to allow custom props
-      return React.cloneElement(child as React.ReactElement<NavigationMenuItemProps>, { 
-        setNavigationMenuOpen: setNavigationMenuOpen, 
-        onOpenChange: handleOpenChange 
-      });
-    }
-    return child;
-  });
-  
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
+>(({ className, children, ...props }, ref) => {
   return (
     <NavigationMenuPrimitive.List
       ref={ref}
@@ -104,13 +72,16 @@ const NavigationMenuList = React.forwardRef<
       )}
       {...props}
     >
-      {patchedChildren}
+      {children}
     </NavigationMenuPrimitive.List>
   )
 })
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 
-const NavigationMenuItem = NavigationMenuPrimitive.Item
+const NavigationMenuItem = (props: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item>) => {
+  // Let Radix handle all open/close logic through parent state
+  return <NavigationMenuPrimitive.Item {...props} />
+}
 
 const navigationMenuTriggerStyle = cva(
   "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
@@ -119,19 +90,24 @@ const navigationMenuTriggerStyle = cva(
 const NavigationMenuTrigger = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <NavigationMenuPrimitive.Trigger
-    ref={ref}
-    className={cn(navigationMenuTriggerStyle(), "group", className)}
-    {...props}
-  >
-    {children}{" "}
-    <ChevronDown
-      className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
-      aria-hidden="true"
-    />
-  </NavigationMenuPrimitive.Trigger>
-))
+>(({ className, children, ...props }, ref) => {
+  const ctx = React.useContext(NavigationMenuContext)
+  // Toggle opens menu; rely on context-controlled open state
+  return (
+    <NavigationMenuPrimitive.Trigger
+      ref={ref}
+      onClick={() => ctx?.setOpen?.(!ctx?.isOpen)}
+      className={cn(navigationMenuTriggerStyle(), "group", className)}
+      {...props}
+    >
+      {children}{" "}
+      <ChevronDown
+        className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180"
+        aria-hidden="true"
+      />
+    </NavigationMenuPrimitive.Trigger>
+  )
+})
 NavigationMenuTrigger.displayName = NavigationMenuPrimitive.Trigger.displayName
 
 const NavigationMenuContent = React.forwardRef<
@@ -141,7 +117,7 @@ const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto ",
+      "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto bg-white shadow-lg border", // ensure bg and shadow for dropdown
       className
     )}
     {...props}
