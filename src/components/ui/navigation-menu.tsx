@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
@@ -38,7 +37,6 @@ const NavigationMenu = React.forwardRef<
     if (open) setOpen(false)
   })
 
-  // Accept open/close only by our state: controlled open
   return (
     <NavigationMenuContext.Provider value={{ isOpen: open, setOpen }}>
       <NavigationMenuPrimitive.Root
@@ -47,8 +45,10 @@ const NavigationMenu = React.forwardRef<
           "relative z-30 flex max-w-max flex-1 items-center justify-center", // z-30 ensures dropdown is visually above main content
           className
         )}
-        open={open}
-        onOpenChange={setOpen}
+        onValueChange={(value) => {
+          // When value changes to empty string, it means the menu is closed
+          setOpen(value !== "")
+        }}
         {...props}
       >
         {children}
