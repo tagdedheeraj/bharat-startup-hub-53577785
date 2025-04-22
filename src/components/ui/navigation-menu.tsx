@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
@@ -17,6 +18,16 @@ function useCloseOnOutsideClick(ref: React.RefObject<HTMLElement>, isOpen: boole
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [isOpen, ref, setOpen]);
+}
+
+// Define custom interfaces for our components with additional props
+interface NavigationMenuListProps extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> {
+  setNavigationMenuOpen?: (open: boolean) => void;
+}
+
+interface NavigationMenuItemProps extends React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item> {
+  setNavigationMenuOpen?: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const NavigationMenu = React.forwardRef<
@@ -46,12 +57,15 @@ const NavigationMenu = React.forwardRef<
     >
       {React.Children.map(children, child => {
         if (
-          React.isValidElement(child)
-          && (child.type as any).displayName === NavigationMenuList.displayName
+          React.isValidElement(child) &&
+          (child.type as any).displayName === NavigationMenuList.displayName
         ) {
-          return React.cloneElement(child, { setNavigationMenuOpen: setIsOpen });
+          // Type assertion to allow custom props
+          return React.cloneElement(child as React.ReactElement<NavigationMenuListProps>, { 
+            setNavigationMenuOpen: setIsOpen 
+          });
         }
-        return child
+        return child;
       })}
       <NavigationMenuViewport />
     </NavigationMenuPrimitive.Root>
@@ -61,20 +75,26 @@ NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
 const NavigationMenuList = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> & { setNavigationMenuOpen?: (open: boolean) => void }
+  NavigationMenuListProps
 >(({ className, children, setNavigationMenuOpen, ...props }, ref) => {
   const handleOpenChange = (open: boolean) => {
     setNavigationMenuOpen?.(open);
   };
+  
   const patchedChildren = React.Children.map(children, child => {
     if (
-      React.isValidElement(child)
-      && (child.type as any).displayName === NavigationMenuItem.displayName
+      React.isValidElement(child) &&
+      (child.type as any).displayName === NavigationMenuItem.displayName
     ) {
-      return React.cloneElement(child, { setNavigationMenuOpen: setNavigationMenuOpen, onOpenChange: handleOpenChange });
+      // Type assertion to allow custom props
+      return React.cloneElement(child as React.ReactElement<NavigationMenuItemProps>, { 
+        setNavigationMenuOpen: setNavigationMenuOpen, 
+        onOpenChange: handleOpenChange 
+      });
     }
     return child;
   });
+  
   return (
     <NavigationMenuPrimitive.List
       ref={ref}
