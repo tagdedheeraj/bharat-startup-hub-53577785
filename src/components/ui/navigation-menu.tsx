@@ -5,37 +5,89 @@ import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+function useCloseOnOutsideClick(ref: React.RefObject<HTMLElement>, isOpen: boolean, setOpen: (open: boolean) => void) {
+  React.useEffect(() => {
+    if (!isOpen) return;
+    function handleClick(event: MouseEvent) {
+      const navMenu = ref.current
+      if (navMenu && !navMenu.contains(event.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [isOpen, ref, setOpen]);
+}
+
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
->(({ className, children, ...props }, ref) => (
-  <NavigationMenuPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative z-10 flex max-w-max flex-1 items-center justify-center",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <NavigationMenuViewport />
-  </NavigationMenuPrimitive.Root>
-))
+>(({ className, children, ...props }, ref) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const rootRef = React.useRef<HTMLElement>(null);
+
+  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement);
+
+  useCloseOnOutsideClick(rootRef, isOpen, setIsOpen);
+
+  const handleValueChange = React.useCallback((value: any) => {
+    setIsOpen(value === "open" || value === true);
+    if (props.onValueChange) props.onValueChange(value);
+  }, [props]);
+
+  return (
+    <NavigationMenuPrimitive.Root
+      ref={rootRef}
+      className={cn(
+        "relative z-10 flex max-w-max flex-1 items-center justify-center",
+        className
+      )}
+      {...props}
+    >
+      {React.Children.map(children, child => {
+        if (
+          React.isValidElement(child)
+          && (child.type as any).displayName === NavigationMenuList.displayName
+        ) {
+          return React.cloneElement(child, { setNavigationMenuOpen: setIsOpen });
+        }
+        return child
+      })}
+      <NavigationMenuViewport />
+    </NavigationMenuPrimitive.Root>
+  )
+})
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
 const NavigationMenuList = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List>
->(({ className, ...props }, ref) => (
-  <NavigationMenuPrimitive.List
-    ref={ref}
-    className={cn(
-      "group flex flex-1 list-none items-center justify-center space-x-1",
-      className
-    )}
-    {...props}
-  />
-))
+  React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.List> & { setNavigationMenuOpen?: (open: boolean) => void }
+>(({ className, children, setNavigationMenuOpen, ...props }, ref) => {
+  const handleOpenChange = (open: boolean) => {
+    setNavigationMenuOpen?.(open);
+  };
+  const patchedChildren = React.Children.map(children, child => {
+    if (
+      React.isValidElement(child)
+      && (child.type as any).displayName === NavigationMenuItem.displayName
+    ) {
+      return React.cloneElement(child, { setNavigationMenuOpen: setNavigationMenuOpen, onOpenChange: handleOpenChange });
+    }
+    return child;
+  });
+  return (
+    <NavigationMenuPrimitive.List
+      ref={ref}
+      className={cn(
+        "group flex flex-1 list-none items-center justify-center space-x-1",
+        className
+      )}
+      {...props}
+    >
+      {patchedChildren}
+    </NavigationMenuPrimitive.List>
+  )
+})
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 
 const NavigationMenuItem = NavigationMenuPrimitive.Item
