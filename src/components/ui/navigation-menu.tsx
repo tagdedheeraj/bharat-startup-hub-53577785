@@ -1,76 +1,61 @@
+
 import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
 import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type NavigationMenuContextType = {
-  value: string;
-  setValue: (value: string) => void;
-};
-const NavigationMenuContext = React.createContext<NavigationMenuContextType | undefined>(undefined);
-
-function useOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void) {
-  React.useEffect(() => {
-    function handleMouseDown(event: MouseEvent) {
-      const node = ref.current;
-      if (node && !node.contains(event.target as Node)) {
-        handler();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [ref, handler]);
-}
-
-function useGlobalOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void) {
-  React.useEffect(() => {
-    function handleClick(event: MouseEvent | TouchEvent) {
-      const node = ref.current;
-      if (node && !node.contains(event.target as Node)) {
-        handler();
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    document.addEventListener("touchstart", handleClick);
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-      document.removeEventListener("touchstart", handleClick);
-    };
-  }, [ref, handler]);
-}
-
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, children, ...props }, ref) => {
-  const [value, setValue] = React.useState("");
-  const rootRef = React.useRef<HTMLElement>(null);
-
-  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement);
-
-  useGlobalOutsideClick(rootRef, () => {
-    if (value !== "") setValue("");
-  });
-
+  const [open, setOpen] = React.useState<string | null>(null);
+  
+  // Close menu when user clicks outside
+  React.useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      // Get all navigation menus
+      const menus = document.querySelectorAll('[data-radix-navigation-menu]');
+      
+      // Check if click is outside all menus
+      let isOutside = true;
+      menus.forEach(menu => {
+        if (menu.contains(e.target as Node)) {
+          isOutside = false;
+        }
+      });
+      
+      // If click is outside, close all menus
+      if (isOutside) {
+        setOpen(null);
+      }
+    };
+    
+    // Add event listener to the document
+    document.addEventListener('mousedown', handleGlobalClick);
+    
+    // Clean up
+    return () => {
+      document.removeEventListener('mousedown', handleGlobalClick);
+    };
+  }, []);
+  
   return (
-    <NavigationMenuContext.Provider value={{ value, setValue }}>
-      <NavigationMenuPrimitive.Root
-        ref={rootRef}
-        value={value}
-        onValueChange={setValue}
-        className={cn(
-          "relative z-30 flex max-w-max flex-1 items-center justify-center",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <NavigationMenuViewport />
-      </NavigationMenuPrimitive.Root>
-    </NavigationMenuContext.Provider>
+    <NavigationMenuPrimitive.Root
+      ref={ref}
+      className={cn(
+        "relative z-30 flex max-w-max flex-1 items-center justify-center",
+        className
+      )}
+      value={open || ""}
+      onValueChange={(value) => setOpen(value || null)}
+      {...props}
+    >
+      {children}
+      <NavigationMenuViewport />
+    </NavigationMenuPrimitive.Root>
   );
-})
+});
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
 const NavigationMenuList = React.forwardRef<
@@ -93,7 +78,6 @@ const NavigationMenuList = React.forwardRef<
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 
 const NavigationMenuItem = (props: React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Item>) => {
-  // Let Radix handle all open/close logic through parent state
   return <NavigationMenuPrimitive.Item {...props} />
 }
 
@@ -105,14 +89,10 @@ const NavigationMenuTrigger = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
-  const ctx = React.useContext(NavigationMenuContext);
-  const triggerValue = children?.toString() || ""; // fallback for identification
-
   return (
     <NavigationMenuPrimitive.Trigger
       ref={ref}
       className={cn(navigationMenuTriggerStyle(), "group", className)}
-      // Let Radix handle state, but click can open if closed
       {...props}
     >
       {children}{" "}
@@ -132,7 +112,7 @@ const NavigationMenuContent = React.forwardRef<
   <NavigationMenuPrimitive.Content
     ref={ref}
     className={cn(
-      "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto bg-white shadow-lg border", // ensure bg and shadow for dropdown
+      "left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:absolute md:w-auto bg-white shadow-lg border", 
       className
     )}
     {...props}

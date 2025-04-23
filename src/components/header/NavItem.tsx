@@ -34,9 +34,10 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
     }, 10);
   };
 
+  // If this is a dropdown menu item
   if (children) {
     return (
-      <NavigationMenuItem>
+      <NavigationMenuItem value={label}>
         <NavigationMenuTrigger 
           className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
         >
@@ -74,6 +75,7 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
     );
   }
 
+  // If this is a regular menu item
   return (
     <NavigationMenuItem>
       <Link

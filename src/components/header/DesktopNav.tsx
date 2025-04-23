@@ -1,6 +1,7 @@
 
 import { Search, ArrowRight } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -13,10 +14,16 @@ import { navigationData } from './navigationData';
 const DesktopNav = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const [activeValue, setActiveValue] = useState<string | null>(null);
+  
+  // Close navigation dropdown when route changes
+  useEffect(() => {
+    setActiveValue(null);
+  }, [location]);
 
   return (
     <div className="hidden lg:flex justify-between items-center w-full">
-      <NavigationMenu>
+      <NavigationMenu value={activeValue || ""} onValueChange={(value) => setActiveValue(value || null)}>
         <NavigationMenuList className="flex space-x-1">
           {navigationData.map((item) => (
             <NavItem
