@@ -5,57 +5,54 @@ import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 type NavigationMenuContextType = {
-  isOpen: boolean
-  setOpen: (open: boolean) => void
-}
-const NavigationMenuContext = React.createContext<NavigationMenuContextType | undefined>(undefined)
+  value: string;
+  setValue: (value: string) => void;
+};
+const NavigationMenuContext = React.createContext<NavigationMenuContextType | undefined>(undefined);
 
 function useOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void) {
   React.useEffect(() => {
     function handleMouseDown(event: MouseEvent) {
-      const node = ref.current
+      const node = ref.current;
       if (node && !node.contains(event.target as Node)) {
-        handler()
+        handler();
       }
     }
-    document.addEventListener("mousedown", handleMouseDown)
-    return () => document.removeEventListener("mousedown", handleMouseDown)
-  }, [ref, handler])
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [ref, handler]);
 }
 
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
 >(({ className, children, ...props }, ref) => {
-  const [open, setOpen] = React.useState(false)
-  const rootRef = React.useRef<HTMLElement>(null)
+  const [value, setValue] = React.useState("");
+  const rootRef = React.useRef<HTMLElement>(null);
 
-  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement)
+  React.useImperativeHandle(ref, () => rootRef.current as HTMLElement);
 
-  // Only use the outside click handler when open
   useOutsideClick(rootRef, () => {
-    if (open) setOpen(false)
-  })
+    if (value !== "") setValue("");
+  });
 
   return (
-    <NavigationMenuContext.Provider value={{ isOpen: open, setOpen }}>
+    <NavigationMenuContext.Provider value={{ value, setValue }}>
       <NavigationMenuPrimitive.Root
         ref={rootRef}
+        value={value}
+        onValueChange={setValue}
         className={cn(
-          "relative z-30 flex max-w-max flex-1 items-center justify-center", // z-30 ensures dropdown is visually above main content
+          "relative z-30 flex max-w-max flex-1 items-center justify-center",
           className
         )}
-        onValueChange={(value) => {
-          // When value changes to empty string, it means the menu is closed
-          setOpen(value !== "")
-        }}
         {...props}
       >
         {children}
         <NavigationMenuViewport />
       </NavigationMenuPrimitive.Root>
     </NavigationMenuContext.Provider>
-  )
+  );
 })
 NavigationMenu.displayName = NavigationMenuPrimitive.Root.displayName
 
@@ -91,13 +88,14 @@ const NavigationMenuTrigger = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
-  const ctx = React.useContext(NavigationMenuContext)
-  // Toggle opens menu; rely on context-controlled open state
+  const ctx = React.useContext(NavigationMenuContext);
+  const triggerValue = children?.toString() || ""; // fallback for identification
+
   return (
     <NavigationMenuPrimitive.Trigger
       ref={ref}
-      onClick={() => ctx?.setOpen?.(!ctx?.isOpen)}
       className={cn(navigationMenuTriggerStyle(), "group", className)}
+      // Let Radix handle state, but click can open if closed
       {...props}
     >
       {children}{" "}
