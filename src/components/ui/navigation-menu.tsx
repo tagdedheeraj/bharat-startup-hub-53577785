@@ -23,6 +23,23 @@ function useOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void)
   }, [ref, handler]);
 }
 
+function useGlobalOutsideClick(ref: React.RefObject<HTMLElement>, handler: () => void) {
+  React.useEffect(() => {
+    function handleClick(event: MouseEvent | TouchEvent) {
+      const node = ref.current;
+      if (node && !node.contains(event.target as Node)) {
+        handler();
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("touchstart", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("touchstart", handleClick);
+    };
+  }, [ref, handler]);
+}
+
 const NavigationMenu = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>
@@ -32,7 +49,7 @@ const NavigationMenu = React.forwardRef<
 
   React.useImperativeHandle(ref, () => rootRef.current as HTMLElement);
 
-  useOutsideClick(rootRef, () => {
+  useGlobalOutsideClick(rootRef, () => {
     if (value !== "") setValue("");
   });
 
