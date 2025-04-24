@@ -70,12 +70,6 @@ export default function Footer() {
                 <Link to="/faqs" className="text-gray-300 hover:text-white transition-colors">FAQs</Link>
               </li>
               <li>
-                <Link to="/admin" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                  <Lock className="w-4 h-4 mr-2 text-brand-400" />
-                  Admin Panel
-                </Link>
-              </li>
-              <li>
                 <Link to="/grievances" className="text-gray-300 hover:text-white transition-colors">Submit Grievance</Link>
               </li>
             </ul>

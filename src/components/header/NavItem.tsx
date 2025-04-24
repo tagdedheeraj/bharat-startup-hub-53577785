@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import {
@@ -22,6 +22,14 @@ interface NavItemProps {
 }
 
 const NavItem = ({ to, label, active, children }: NavItemProps) => {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate(path);
+    window.scrollTo(0, 0);
+  };
+
   if (children) {
     return (
       <NavigationMenuItem>
@@ -37,6 +45,7 @@ const NavItem = ({ to, label, active, children }: NavItemProps) => {
                 <NavigationMenuLink asChild>
                   <Link
                     to={item.to}
+                    onClick={(e) => handleNavigation(item.to, e)}
                     className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
                   >
                     <div className="flex items-center gap-3">
@@ -69,6 +78,7 @@ const NavItem = ({ to, label, active, children }: NavItemProps) => {
           "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
           active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
         )}
+        onClick={() => window.scrollTo(0, 0)}
       >
         <span className="relative z-10">{label}</span>
         {active && (

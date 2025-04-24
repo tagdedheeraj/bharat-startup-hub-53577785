@@ -16,29 +16,28 @@ export default function Header() {
   
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+  
+  // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
     
     window.addEventListener('scroll', handleScroll);
-    
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
-
   const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     toggleMobileMenu();
-    setTimeout(() => {
-      navigate(path);
-      window.scrollTo(0, 0);
-    }, 10);
+    navigate(path);
+    window.scrollTo(0, 0);
   };
 
   return (
