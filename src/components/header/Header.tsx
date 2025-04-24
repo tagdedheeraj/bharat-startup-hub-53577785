@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import TopBar from './TopBar';
@@ -13,6 +13,7 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
+  const headerRef = useRef<HTMLDivElement>(null);
   
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
@@ -33,6 +34,32 @@ export default function Header() {
     };
   }, []);
 
+  // Add click outside handler to close menus
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // If we're clicking inside navigation, don't close menus
+      if (event.target instanceof Node && headerRef.current?.contains(event.target)) {
+        return;
+      }
+      
+      // Force close any open menus by removing the data-state="open" attribute
+      const openTriggers = document.querySelectorAll('[data-state="open"]');
+      openTriggers.forEach((trigger) => {
+        if (trigger instanceof HTMLElement) {
+          trigger.click(); // Simulate clicking the trigger to close it
+        }
+      });
+    };
+    
+    // Attach the handler
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+      document.body.style.overflow = ''; // Ensure scroll is enabled when component unmounts
+    };
+  }, []);
+
   const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     toggleMobileMenu();
@@ -42,6 +69,7 @@ export default function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         isScrolled
           ? 'bg-white/80 backdrop-blur-lg shadow-lg'

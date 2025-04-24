@@ -8,6 +8,7 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
+import { useEffect } from 'react';
 
 interface NavItemProps {
   to: string;
@@ -24,11 +25,21 @@ interface NavItemProps {
 const NavItem = ({ to, label, active, children }: NavItemProps) => {
   const navigate = useNavigate();
 
+  // Handles immediate navigation and prevents default behavior
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     navigate(path);
     window.scrollTo(0, 0);
   };
+
+  // Makes sure Radix UI's defaultOpen is not stuck
+  useEffect(() => {
+    return () => {
+      // Cleanup function to ensure state is reset when component unmounts
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   if (children) {
     return (
