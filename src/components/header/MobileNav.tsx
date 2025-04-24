@@ -50,20 +50,9 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
     
     setSearchResults(filtered);
   };
-  
+
   const handleSearchClick = () => {
     setIsSearchOpen(true);
-  };
-  
-  const handleNotificationClick = () => {
-    if (!user) {
-      toast.info("Please log in to view notifications", {
-        description: "Sign in to access your personalized notifications."
-      });
-      return;
-    }
-    
-    setIsNotificationOpen(true);
   };
   
   return (
@@ -130,7 +119,6 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
               variant="ghost" 
               size="icon" 
               className="text-foreground/70 hover:bg-gray-100/50 hover:text-foreground/90 relative"
-              onClick={handleNotificationClick}
             >
               <Bell size={20} />
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
@@ -154,22 +142,8 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
         </Sheet>
       )}
       
-      {!user && (
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-foreground/70 hover:bg-gray-100/50 hover:text-foreground/90"
-          onClick={() => {
-            toast.info("Please log in to view notifications", {
-              description: "Sign in to access your personalized notifications."
-            });
-          }}
-        >
-          <Bell size={20} />
-        </Button>
-      )}
-      
       <AuthButtons />
+      
       <Button
         variant="ghost"
         size="icon"

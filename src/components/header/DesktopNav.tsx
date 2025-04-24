@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
-import { Search, ArrowRight, Bell } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Search, Bell } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -16,12 +16,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useAuth } from '@/contexts/auth/useAuth';
+import { useAuth } from '@/contexts/auth';
 import { Input } from '@/components/ui/input';
 
 const DesktopNav = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   
@@ -52,27 +53,6 @@ const DesktopNav = () => {
     setSearchResults(filtered);
   };
 
-  const handleSearchClick = () => {
-    if (searchResults.length === 0 && searchQuery.trim() !== '') {
-      toast.info("No matching services found", {
-        description: "Try a different search term"
-      });
-    }
-  };
-  
-  const handleNotificationClick = () => {
-    if (!user) {
-      toast.info("Please log in to view notifications", {
-        description: "Sign in to access your personalized notifications."
-      });
-      return;
-    }
-    
-    toast.info("You have 2 new notifications", {
-      description: "Check your notifications panel for updates."
-    });
-  };
-
   return (
     <div className="hidden lg:flex justify-between items-center w-full">
       <NavigationMenu>
@@ -96,14 +76,13 @@ const DesktopNav = () => {
               variant="ghost" 
               size="icon" 
               className="text-foreground/70 hover:text-brand-600 relative group transition-all duration-300"
-              onClick={handleSearchClick}
             >
               <Search size={20} className="transition-all group-hover:scale-110" />
               <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80 p-0" align="end">
-            <div className="p-4 space-y-4">
+          <PopoverContent className="w-80 p-4" align="end">
+            <div className="space-y-4">
               <div className="flex items-center border rounded-md focus-within:ring-1 focus-within:ring-brand-500">
                 <Search className="ml-2 h-4 w-4 shrink-0 text-muted-foreground" />
                 <Input
@@ -111,6 +90,7 @@ const DesktopNav = () => {
                   className="border-0 focus-visible:ring-0"
                   value={searchQuery}
                   onChange={handleSearchChange}
+                  autoFocus
                 />
               </div>
               {searchResults.length > 0 ? (
@@ -125,19 +105,23 @@ const DesktopNav = () => {
                         setSearchResults([]);
                       }}
                     >
-                      <div className="text-xs text-gray-500">{result.category}</div>
-                      <div className="text-sm font-medium">{result.title}</div>
+                      <div>
+                        <div className="text-xs text-gray-500">{result.category}</div>
+                        <div className="text-sm font-medium">{result.title}</div>
+                      </div>
                     </Link>
                   ))}
                 </div>
               ) : searchQuery.trim() !== '' ? (
                 <div className="text-center py-3 text-sm text-gray-500">No results found</div>
-              ) : null}
+              ) : (
+                <div className="text-center py-3 text-sm text-gray-500">Type to search services</div>
+              )}
             </div>
           </PopoverContent>
         </Popover>
         
-        {user ? (
+        {user && (
           <Popover>
             <PopoverTrigger asChild>
               <Button 
@@ -168,30 +152,18 @@ const DesktopNav = () => {
               </div>
             </PopoverContent>
           </Popover>
-        ) : (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-foreground/70 hover:text-brand-600 relative group transition-all duration-300"
-            onClick={handleNotificationClick}
-          >
-            <Bell size={20} className="transition-all group-hover:scale-110" />
-            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
-          </Button>
         )}
         
         <AuthButtons />
-        <Button asChild className="relative group overflow-hidden">
-          <Link 
-            to="/contact" 
-            className="relative z-10 bg-brand-600 text-black px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Get Started
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </span>
-            <span className="absolute inset-0 bg-gradient-to-r from-brand-500 to-brand-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          </Link>
+        
+        <Button 
+          className="bg-gradient-to-r from-india-saffron to-india-green text-black hover:from-india-saffron/90 hover:to-india-green/90 backdrop-blur-sm 
+            shadow-[0_0_15px_rgba(255,255,255,0.2)] border border-india-white/30 text-sm
+            hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
+          size="sm"
+          onClick={() => navigate('/contact')}
+        >
+          Get Started
         </Button>
       </div>
     </div>

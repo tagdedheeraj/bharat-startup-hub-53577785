@@ -1,14 +1,13 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import {
   NavigationMenuItem,
   NavigationMenuContent,
   NavigationMenuLink,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import { useEffect } from 'react';
 
 interface NavItemProps {
   to: string;
@@ -25,7 +24,6 @@ interface NavItemProps {
 const NavItem = ({ to, label, active, children }: NavItemProps) => {
   const navigate = useNavigate();
 
-  // Handles immediate navigation and prevents default behavior
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -33,17 +31,9 @@ const NavItem = ({ to, label, active, children }: NavItemProps) => {
     window.scrollTo(0, 0);
   };
 
-  // Makes sure Radix UI's defaultOpen is not stuck
-  useEffect(() => {
-    return () => {
-      // Cleanup function to ensure state is reset when component unmounts
-      document.body.style.overflow = '';
-    };
-  }, []);
-
   if (children) {
     return (
-      <NavigationMenuItem>
+      <NavigationMenuItem className="z-50">
         <NavigationMenuTrigger 
           className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
         >
@@ -70,7 +60,6 @@ const NavItem = ({ to, label, active, children }: NavItemProps) => {
                         )}
                       </div>
                     </div>
-                    <ArrowRight className="h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-brand-500" />
                   </Link>
                 </NavigationMenuLink>
               </li>
