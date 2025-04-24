@@ -1,5 +1,5 @@
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ArrowRight } from 'lucide-react';
 import {
@@ -19,25 +19,12 @@ interface NavItemProps {
     description?: string;
     icon?: React.ComponentType<any>;
   }[];
-  toggleMobileMenu?: () => void;
 }
 
-const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps) => {
-  const navigate = useNavigate();
-
-  const handleNavigation = (path: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    if (toggleMobileMenu) toggleMobileMenu();
-    setTimeout(() => {
-      navigate(path);
-      window.scrollTo(0, 0);
-    }, 10);
-  };
-
-  // If this is a dropdown menu item
+const NavItem = ({ to, label, active, children }: NavItemProps) => {
   if (children) {
     return (
-      <NavigationMenuItem value={label}>
+      <NavigationMenuItem>
         <NavigationMenuTrigger 
           className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
         >
@@ -48,10 +35,9 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
             {children.map((item) => (
               <li key={item.to} className="group">
                 <NavigationMenuLink asChild>
-                  <a
-                    href={item.to}
+                  <Link
+                    to={item.to}
                     className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
-                    onClick={(e) => handleNavigation(item.to, e)}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
@@ -65,7 +51,7 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
                       </div>
                     </div>
                     <ArrowRight className="h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transform translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 text-brand-500" />
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
             ))}
@@ -75,7 +61,6 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
     );
   }
 
-  // If this is a regular menu item
   return (
     <NavigationMenuItem>
       <Link
@@ -84,10 +69,6 @@ const NavItem = ({ to, label, active, children, toggleMobileMenu }: NavItemProps
           "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
           active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
         )}
-        onClick={() => {
-          if (toggleMobileMenu) toggleMobileMenu();
-          window.scrollTo(0, 0);
-        }}
       >
         <span className="relative z-10">{label}</span>
         {active && (

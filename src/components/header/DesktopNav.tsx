@@ -1,7 +1,6 @@
 
 import { Search, ArrowRight } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -12,25 +11,16 @@ import AuthButtons from '../AuthButtons';
 import { navigationData } from './navigationData';
 
 const DesktopNav = () => {
-  const location = useLocation();
-  const currentPath = location.pathname;
-  const [activeValue, setActiveValue] = useState<string | null>(null);
-  
-  // Close navigation dropdown when route changes
-  useEffect(() => {
-    setActiveValue(null);
-  }, [location]);
-
   return (
     <div className="hidden lg:flex justify-between items-center w-full">
-      <NavigationMenu value={activeValue || ""} onValueChange={(value) => setActiveValue(value || null)}>
+      <NavigationMenu>
         <NavigationMenuList className="flex space-x-1">
           {navigationData.map((item) => (
             <NavItem
               key={item.to}
               to={item.to}
               label={item.label}
-              active={currentPath === item.to || (item.children && item.children.some(child => currentPath === child.to))}
+              active={location.pathname === item.to || (item.children && item.children.some(child => location.pathname === child.to))}
               children={item.children}
             />
           ))}
@@ -47,7 +37,6 @@ const DesktopNav = () => {
           <Link 
             to="/contact" 
             className="relative z-10 bg-brand-600 text-black px-6 py-2 rounded-md transition-all duration-300 hover:bg-brand-700"
-            onClick={() => window.scrollTo(0, 0)}
           >
             <span className="relative z-10 flex items-center gap-2">
               Get Started
