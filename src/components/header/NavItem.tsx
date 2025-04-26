@@ -8,6 +8,7 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
+import { useEffect, useRef } from 'react';
 
 interface NavItemProps {
   to: string;
@@ -23,17 +24,36 @@ interface NavItemProps {
 
 const NavItem = ({ to, label, active, children }: NavItemProps) => {
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
     navigate(path);
     window.scrollTo(0, 0);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        // Find any open menus and close them
+        const openTriggers = menuRef.current.querySelectorAll('[data-state="open"]');
+        openTriggers.forEach((trigger) => {
+          if (trigger instanceof HTMLElement) {
+            trigger.click();
+          }
+        });
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   if (children) {
     return (
-      <NavigationMenuItem className="z-50">
+      <NavigationMenuItem className="z-50" ref={menuRef}>
         <NavigationMenuTrigger 
           className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
         >
