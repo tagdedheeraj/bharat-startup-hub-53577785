@@ -8,7 +8,6 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import { useEffect, useRef } from 'react';
 
 interface NavItemProps {
   to: string;
@@ -20,73 +19,59 @@ interface NavItemProps {
     description?: string;
     icon?: React.ComponentType<any>;
   }[];
+  isOpen?: boolean;
+  onOpenChange?: () => void;
 }
 
-const NavItem = ({ to, label, active, children }: NavItemProps) => {
+const NavItem = ({ to, label, active, children, isOpen, onOpenChange }: NavItemProps) => {
   const navigate = useNavigate();
-  // Change the ref type from HTMLDivElement to HTMLLIElement
-  const menuRef = useRef<HTMLLIElement>(null);
 
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent the event from bubbling up
     navigate(path);
     window.scrollTo(0, 0);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        // Find any open menus and close them
-        const openTriggers = menuRef.current.querySelectorAll('[data-state="open"]');
-        openTriggers.forEach((trigger) => {
-          if (trigger instanceof HTMLElement) {
-            trigger.click();
-          }
-        });
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   if (children) {
     return (
-      <NavigationMenuItem className="z-50" ref={menuRef}>
+      <NavigationMenuItem>
         <NavigationMenuTrigger 
           className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
+          onClick={onOpenChange}
+          data-state={isOpen ? "open" : "closed"}
         >
           {label}
         </NavigationMenuTrigger>
-        <NavigationMenuContent>
-          <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
-            {children.map((item) => (
-              <li key={item.to} className="group">
-                <NavigationMenuLink asChild>
-                  <Link
-                    to={item.to}
-                    onClick={(e) => handleNavigation(item.to, e)}
-                    className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
-                      <div>
-                        <div className="font-medium leading-none mb-1">{item.label}</div>
-                        {item.description && (
-                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                            {item.description}
-                          </p>
-                        )}
+        {isOpen && (
+          <NavigationMenuContent>
+            <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2 bg-white shadow-lg rounded-md">
+              {children.map((item) => (
+                <li key={item.to} className="group">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={item.to}
+                      onClick={(e) => handleNavigation(item.to, e)}
+                      className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
+                    >
+                      <div className="flex items-center gap-3">
+                        {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
+                        <div>
+                          <div className="font-medium leading-none mb-1">{item.label}</div>
+                          {item.description && (
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-              </li>
-            ))}
-          </ul>
-        </NavigationMenuContent>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        )}
       </NavigationMenuItem>
     );
   }
