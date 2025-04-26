@@ -24,7 +24,8 @@ interface NavItemProps {
 
 const NavItem = ({ to, label, active, children }: NavItemProps) => {
   const navigate = useNavigate();
-  const menuRef = useRef<HTMLDivElement>(null);
+  // Change the ref type from HTMLDivElement to HTMLLIElement
+  const menuRef = useRef<HTMLLIElement>(null);
 
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
