@@ -1,16 +1,18 @@
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   NavigationMenu,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import NavItem from './NavItem';
 import { navigationData } from './navigationData';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export const MainNavigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null);
+  const navigationRef = useRef<HTMLDivElement>(null);
 
   // Close all menus when route changes
   useEffect(() => {
@@ -27,11 +29,17 @@ export const MainNavigation = () => {
     setActiveItemIndex(prevIndex => prevIndex === index ? null : index);
   };
 
+  // Handle direct navigation
+  const handleDirectNavigation = (path: string) => {
+    handleCloseAllMenus();
+    navigate(path);
+    window.scrollTo(0, 0);
+  };
+
   // Effect to handle clicking outside the navigation
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const navigation = document.querySelector('.navigation-menu-root');
-      if (navigation && !navigation.contains(event.target as Node)) {
+      if (navigationRef.current && !navigationRef.current.contains(event.target as Node)) {
         handleCloseAllMenus();
       }
     };
@@ -43,7 +51,7 @@ export const MainNavigation = () => {
   }, []);
 
   return (
-    <NavigationMenu className="relative z-30 navigation-menu-root">
+    <NavigationMenu className="relative z-50" ref={navigationRef}>
       <NavigationMenuList className="flex space-x-1">
         {navigationData.map((item, index) => (
           <NavItem
@@ -54,6 +62,8 @@ export const MainNavigation = () => {
             children={item.children}
             isOpen={activeItemIndex === index}
             onOpenChange={() => handleMenuItemClick(index)}
+            onDirectNavigation={handleDirectNavigation}
+            closeAllMenus={handleCloseAllMenus}
           />
         ))}
       </NavigationMenuList>

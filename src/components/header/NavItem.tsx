@@ -1,5 +1,5 @@
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import {
@@ -21,16 +21,28 @@ interface NavItemProps {
   }[];
   isOpen?: boolean;
   onOpenChange?: () => void;
+  onDirectNavigation?: (path: string) => void;
+  closeAllMenus?: () => void;
 }
 
-const NavItem = ({ to, label, active, children, isOpen, onOpenChange }: NavItemProps) => {
-  const navigate = useNavigate();
+const NavItem = ({
+  to,
+  label,
+  active,
+  children,
+  isOpen,
+  onOpenChange,
+  onDirectNavigation,
+  closeAllMenus
+}: NavItemProps) => {
 
   const handleNavigation = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent the event from bubbling up
-    navigate(path);
-    window.scrollTo(0, 0);
+    e.stopPropagation();
+    
+    if (onDirectNavigation) {
+      onDirectNavigation(path);
+    }
   };
 
   if (children) {
@@ -84,7 +96,10 @@ const NavItem = ({ to, label, active, children, isOpen, onOpenChange }: NavItemP
           "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
           active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
         )}
-        onClick={() => window.scrollTo(0, 0)}
+        onClick={() => {
+          if (closeAllMenus) closeAllMenus();
+          window.scrollTo(0, 0);
+        }}
       >
         <span className="relative z-10">{label}</span>
         {active && (

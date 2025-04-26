@@ -34,32 +34,6 @@ export default function Header() {
     };
   }, []);
 
-  // Add click outside handler to close menus
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // If we're clicking inside navigation, don't close menus
-      if (event.target instanceof Node && headerRef.current?.contains(event.target)) {
-        return;
-      }
-      
-      // Force close any open menus by removing the data-state="open" attribute
-      const openTriggers = document.querySelectorAll('[data-state="open"]');
-      openTriggers.forEach((trigger) => {
-        if (trigger instanceof HTMLElement) {
-          trigger.click(); // Simulate clicking the trigger to close it
-        }
-      });
-    };
-    
-    // Attach the handler
-    document.addEventListener('click', handleClickOutside);
-    
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.body.style.overflow = ''; // Ensure scroll is enabled when component unmounts
-    };
-  }, []);
-
   const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
     toggleMobileMenu();
