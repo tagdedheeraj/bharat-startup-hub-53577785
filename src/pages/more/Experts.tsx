@@ -26,9 +26,39 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: 'dhruv.png', // Using just the filename for Firebase storage
+    photoUrl: 'profiles/experts/dhruv-thakar.png',
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
+
+  const experts = [
+    {
+      name: 'Priya Sharma',
+      position: 'Legal & Compliance Head',
+      expertise: 'Corporate Law, Regulatory Compliance, IPR',
+      experience: '12+ years',
+      bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors. Her expertise has been instrumental in helping startups navigate legal challenges.',
+      photoUrl: 'profiles/experts/priya-sharma.png',
+      linkedinUrl: 'https://linkedin.com/in/priya-sharma',
+    },
+    {
+      name: 'Rajesh Kumar',
+      position: 'Senior Investment Advisor',
+      expertise: 'Investment Strategy, Financial Planning, Market Analysis',
+      experience: '15+ years',
+      bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis and strategic planning has helped companies raise substantial funding and achieve sustainable growth.',
+      photoUrl: 'profiles/experts/rajesh-kumar.png',
+      linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
+    },
+    {
+      name: 'Vikram Mehta',
+      position: 'Technology Strategist',
+      expertise: 'Digital Transformation, AI Implementation, Tech Architecture',
+      experience: '14+ years',
+      bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
+      photoUrl: 'profiles/experts/vikram-mehta.png',
+      linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
+    }
+  ];
 
   return (
     <div>
@@ -40,35 +70,5 @@ Key Highlights:
     </div>
   );
 };
-
-const experts = [
-  {
-    name: 'Priya Sharma',
-    position: 'Legal & Compliance Head',
-    expertise: 'Corporate Law, Regulatory Compliance, IPR',
-    experience: '12+ years',
-    bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors. Her expertise has been instrumental in helping startups navigate legal challenges.',
-    photoUrl: 'priya-sharma.png',
-    linkedinUrl: 'https://linkedin.com/in/priya-sharma',
-  },
-  {
-    name: 'Rajesh Kumar',
-    position: 'Senior Investment Advisor',
-    expertise: 'Investment Strategy, Financial Planning, Market Analysis',
-    experience: '15+ years',
-    bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis and strategic planning has helped companies raise substantial funding and achieve sustainable growth.',
-    photoUrl: 'rajesh-kumar.png',
-    linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
-  },
-  {
-    name: 'Vikram Mehta',
-    position: 'Technology Strategist',
-    expertise: 'Digital Transformation, AI Implementation, Tech Architecture',
-    experience: '14+ years',
-    bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
-    photoUrl: 'vikram-mehta.png',
-    linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
-  }
-];
 
 export default ExpertsPage;
