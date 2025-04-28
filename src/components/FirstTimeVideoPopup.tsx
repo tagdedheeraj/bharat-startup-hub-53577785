@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useId } from 'react';
 import { X } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -111,7 +112,7 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
       {process.env.NODE_ENV === 'development' && (
         <button 
           onClick={forceOpen}
-          className="fixed bottom-28 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
+          className="fixed bottom-40 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
         >
           Show Video Popup
         </button>
