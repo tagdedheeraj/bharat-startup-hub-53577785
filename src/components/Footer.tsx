@@ -164,11 +164,6 @@ export default function Footer() {
               © {currentYear} Bharat Startup Solution. A Product of <strong>Shaswat Group</strong>
             </p>
           </div>
-          <div className="mt-4 text-sm text-gray-400 text-center px-4">
-            <p>
-              Please note: We are a startup consultancy service provider and are not affiliated with any government, non-government agencies, institutions, organizations, or departments. We provide consultation services to help businesses navigate funding opportunities.
-            </p>
-          </div>
         </div>
       </div>
     </footer>
