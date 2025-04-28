@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Award, BookOpen } from 'lucide-react';
-import SectionImage from '@/components/shared/SectionImage';
+import { storage } from '@/lib/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
 
 interface FounderData {
   name: string;
@@ -18,6 +19,36 @@ interface FounderSectionProps {
 }
 
 const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
+  const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      if (!founder.photoUrl) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        if (founder.photoUrl.startsWith('http')) {
+          setImageUrl(founder.photoUrl);
+        } else {
+          const storageRef = ref(storage, founder.photoUrl);
+          const url = await getDownloadURL(storageRef);
+          console.log("Founder image loaded:", url);
+          setImageUrl(url);
+        }
+      } catch (error) {
+        console.error('Error loading founder image:', error);
+        setImageUrl('/placeholder.svg');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadImage();
+  }, [founder.photoUrl]);
+
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Background decorative elements */}
@@ -32,13 +63,17 @@ const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
             <div className="lg:col-span-2">
               <div className="relative h-[600px] rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300 group">
-                <SectionImage
-                  pageName="experts"
-                  sectionName="founder"
-                  fallbackSrc="/placeholder.svg"
+                <img
+                  src={imageUrl}
                   alt={`${founder.name} - ${founder.position}`}
-                  className="w-full h-full"
-                  objectFit="cover"
+                  className={`w-full h-full object-cover transition-opacity duration-300 ${
+                    loading ? 'opacity-0' : 'opacity-100'
+                  }`}
+                  onLoad={() => setLoading(false)}
+                  onError={() => {
+                    setImageUrl('/placeholder.svg');
+                    setLoading(false);
+                  }}
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

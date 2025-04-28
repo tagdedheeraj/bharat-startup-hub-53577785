@@ -28,10 +28,23 @@ const ExpertCard: React.FC<ExpertProps> = ({
 
   useEffect(() => {
     const loadImage = async () => {
+      if (!photoUrl) {
+        setImageUrl('/placeholder.svg');
+        setLoading(false);
+        return;
+      }
+
       try {
-        if (photoUrl) {
-          const storageRef = ref(storage, photoUrl);
+        // Check if the photoUrl is already a complete URL
+        if (photoUrl.startsWith('http')) {
+          setImageUrl(photoUrl);
+        } else {
+          // If photoUrl is a storage path, get the download URL
+          // Make sure the path is correct (should be like: profiles/experts/filename.png)
+          const fullPath = photoUrl.includes('/') ? photoUrl : `profiles/experts/${photoUrl}`;
+          const storageRef = ref(storage, fullPath);
           const url = await getDownloadURL(storageRef);
+          console.log('Loaded image URL:', url);
           setImageUrl(url);
         }
       } catch (error) {
@@ -56,6 +69,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
           }`}
           onLoad={() => setLoading(false)}
           onError={() => {
+            console.log('Image load error, using placeholder');
             setImageUrl('/placeholder.svg');
             setLoading(false);
           }}
