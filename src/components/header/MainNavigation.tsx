@@ -27,17 +27,15 @@ export const MainNavigation = () => {
       setActiveItemIndex(null);
     };
 
-    // Only add listeners if a menu is open
-    if (activeItemIndex !== null) {
-      document.addEventListener('mousedown', handleClickOutside);
-      window.addEventListener('scroll', handleScroll);
-    }
+    // Always add click listener, regardless of menu state
+    document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [activeItemIndex]);
+  }, []); // No dependency on activeItemIndex
 
   const handleMenuItemClick = (index: number, hasChildren: boolean, path: string) => {
     if (hasChildren) {
