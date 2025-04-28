@@ -18,6 +18,9 @@ interface FounderSectionProps {
 
 const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
   useEffect(() => {
+    // Log the photoUrl to verify what's being passed to the component
+    console.log('Founder photo URL:', founder.photoUrl);
+    
     // Preload the founder image to check if it loads correctly
     const img = new Image();
     img.src = founder.photoUrl;

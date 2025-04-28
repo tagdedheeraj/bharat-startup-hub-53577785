@@ -1,8 +1,5 @@
-
 import React from 'react';
-import ExpertCard from './ExpertCard';
 import SectionHeading from '@/components/SectionHeading';
-import { Star, Calendar } from 'lucide-react';
 
 const teamMembers = [
   {
@@ -91,7 +88,11 @@ const TeamSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-700 flex items-center space-x-1 shadow-sm">
-                    <Calendar className="w-3 h-3 text-brand-600" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand-600">
+                      <rect width="16" height="16" x="4" y="4" rx="2"></rect>
+                      <rect width="4" height="4" x="9" y="9" rx="0.5"></rect>
+                      <path d="M9 15h6"></path>
+                    </svg>
                     <span>{member.experience}</span>
                   </div>
                 </div>

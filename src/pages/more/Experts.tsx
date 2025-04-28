@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ExpertsHero from '@/components/experts/ExpertsHero';
 import FounderSection from '@/components/experts/FounderSection';
@@ -28,6 +29,9 @@ Key Highlights:
     photoUrl: '/lovable-uploads/b9a6b7eb-db9e-481a-b063-ffa302a69816.png',
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
+
+  // Log the founder photo URL to verify it's correct
+  console.log('Founder photo URL in Experts.tsx:', founder.photoUrl);
 
   const experts = [
     {
