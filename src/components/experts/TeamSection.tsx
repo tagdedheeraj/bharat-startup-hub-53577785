@@ -1,4 +1,3 @@
-
 import React from 'react';
 import SectionImage from '@/components/shared/SectionImage';
 import { storage } from '@/lib/firebase';
@@ -10,35 +9,35 @@ const team = [
     name: 'Bhonde Kinjal',
     position: 'Customer Support',
     expertise: 'Customer Experience, Technical Support, Communication Strategy',
-    photoUrl: 'profiles/experts/bhonde-kinjal.png',
+    photoUrl: 'https://firebasestorage.googleapis.com/v0/b/bharat-startup.firebasestorage.app/o/profiles%2Fexperts%2Fgorpalak.jpeg?alt=media&token=49317ddf-a87a-4178-8416-26ac9e9afb1c',
     linkedinUrl: 'https://linkedin.com/in/bhonde-kinjal'
   },
   {
     name: 'Siddhi Panchal',
     position: 'Product Manager',
     expertise: 'Product Development, Agile Methodologies, User Experience',
-    photoUrl: 'profiles/experts/siddhi-panchal.png',
+    photoUrl: 'https://firebasestorage.googleapis.com/v0/b/bharat-startup.firebasestorage.app/o/profiles%2Fexperts%2FSiddhiPanchal.jpeg?alt=media&token=b0b1d7fa-5623-4493-a1ab-5454151e93c8',
     linkedinUrl: 'https://linkedin.com/in/siddhi-panchal'
   },
   {
     name: 'Leua Rachana',
     position: 'Market Research Analyst',
     expertise: 'Data Analysis, Market Trends, Consumer Behavior Research',
-    photoUrl: 'profiles/experts/leua-rachana.png',
+    photoUrl: 'https://firebasestorage.googleapis.com/v0/b/bharat-startup.firebasestorage.app/o/profiles%2Fexperts%2FLeuaRachana.jpeg?alt=media&token=e9c4dc07-39d8-4c82-9ff5-16681e6b021a',
     linkedinUrl: 'https://linkedin.com/in/leua-rachana'
   },
   {
     name: 'Gor Palak',
     position: 'UI/UX Designer',
     expertise: 'User Interface Design, User Experience, Design Systems',
-    photoUrl: 'profiles/experts/gor-palak.png',
+    photoUrl: 'https://firebasestorage.googleapis.com/v0/b/bharat-startup.firebasestorage.app/o/profiles%2Fexperts%2Fgorpalak.jpeg?alt=media&token=49317ddf-a87a-4178-8416-26ac9e9afb1c',
     linkedinUrl: 'https://linkedin.com/in/gor-palak'
   },
   {
     name: 'Ankit Modi',
     position: 'IT Manager',
     expertise: 'Infrastructure Management, Cloud Solutions, IT Strategy',
-    photoUrl: 'profiles/experts/ankit-modi.png',
+    photoUrl: 'https://firebasestorage.googleapis.com/v0/b/bharat-startup.firebasestorage.app/o/profiles%2Fexperts%2Fankit.jpeg?alt=media&token=93a27f69-83a5-4112-9491-5aee656029ee',
     linkedinUrl: 'https://linkedin.com/in/ankit-modi'
   },
 ];
