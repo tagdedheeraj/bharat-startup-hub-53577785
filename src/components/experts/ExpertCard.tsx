@@ -4,6 +4,7 @@ import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { toast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AlertCircle } from 'lucide-react';
 
 interface ExpertProps {
   name: string;
@@ -26,6 +27,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
 }) => {
   const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -37,33 +39,43 @@ const ExpertCard: React.FC<ExpertProps> = ({
       }
 
       try {
-        console.log(`Attempting to load image for ${name} from path: ${photoUrl}`);
+        console.log(`🔍 DEBUG - Attempting to load image for ${name} from path: ${photoUrl}`);
         
         // Check if the photoUrl is already a complete URL
         if (photoUrl.startsWith('http')) {
           console.log(`Using direct URL for ${name}: ${photoUrl}`);
           setImageUrl(photoUrl);
+          setLoadError(null);
         } else {
           // Get the download URL from Firebase Storage
-          console.log(`Fetching Firebase Storage URL for ${name} from path: ${photoUrl}`);
+          console.log(`Creating Firebase Storage reference for ${name} from path: ${photoUrl}`);
+          
           const storageRef = ref(storage, photoUrl);
+          console.log(`Storage reference created, requesting download URL for ${name}...`);
+          
           const url = await getDownloadURL(storageRef);
-          console.log(`Successfully loaded image for ${name}:`, url);
+          console.log(`✅ SUCCESS - Image loaded for ${name}: ${url}`);
+          
           setImageUrl(url);
+          setLoadError(null);
           
           toast({
             title: "Image Loaded",
             description: `Successfully loaded image for ${name}`,
           });
         }
-      } catch (error) {
-        console.error(`Error loading image for ${name}:`, error);
-        console.log(`Storage path attempted: ${photoUrl}`);
+      } catch (error: any) {
+        console.error(`❌ ERROR loading image for ${name}:`, error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        console.error(`Storage path attempted: ${photoUrl}`);
+        
+        setLoadError(`${error.code || 'Unknown error'}: ${error.message}`);
         setImageUrl('/placeholder.svg');
         
         toast({
           title: "Image Load Error",
-          description: `Failed to load image for ${name}. Using placeholder.`,
+          description: `Failed to load image for ${name}. ${error.code || 'Unknown error'}`,
           variant: "destructive"
         });
       } finally {
@@ -80,15 +92,24 @@ const ExpertCard: React.FC<ExpertProps> = ({
         {loading ? (
           <Skeleton className="w-full h-full" />
         ) : (
-          <img
-            src={imageUrl}
-            alt={`${name} - ${position}`}
-            className="w-full h-full object-cover transition-opacity duration-300"
-            onError={() => {
-              console.log(`Image load error for ${name}, using placeholder`);
-              setImageUrl('/placeholder.svg');
-            }}
-          />
+          <>
+            <img
+              src={imageUrl}
+              alt={`${name} - ${position}`}
+              className="w-full h-full object-cover transition-opacity duration-300"
+              onError={() => {
+                console.log(`Image load error for ${name}, using placeholder`);
+                setImageUrl('/placeholder.svg');
+              }}
+            />
+            
+            {loadError && (
+              <div className="absolute inset-0 bg-red-50/80 flex flex-col items-center justify-center p-4">
+                <AlertCircle className="text-red-500 h-8 w-8 mb-2" />
+                <p className="text-red-700 font-medium text-center">{loadError}</p>
+              </div>
+            )}
+          </>
         )}
         
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm">

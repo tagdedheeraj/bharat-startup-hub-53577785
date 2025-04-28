@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Trophy, Award, BookOpen } from 'lucide-react';
 import { storage } from '@/lib/firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
+import { toast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface FounderData {
   name: string;
@@ -21,26 +23,54 @@ interface FounderSectionProps {
 const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
   const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadImage = async () => {
       if (!founder.photoUrl) {
+        console.log('No photo URL provided for founder');
         setLoading(false);
+        setImageUrl('/placeholder.svg');
         return;
       }
 
       try {
+        console.log(`🔍 DEBUG - Attempting to load founder image from: ${founder.photoUrl}`);
+        
         if (founder.photoUrl.startsWith('http')) {
+          console.log('Using direct URL for founder image');
           setImageUrl(founder.photoUrl);
+          setLoading(false);
         } else {
+          // Using Firebase Storage
+          console.log(`Creating storage reference to: ${founder.photoUrl}`);
           const storageRef = ref(storage, founder.photoUrl);
+          
+          console.log('Requesting download URL from Firebase...');
           const url = await getDownloadURL(storageRef);
-          console.log("Founder image loaded:", url);
+          
+          console.log(`✅ SUCCESS - Founder image loaded: ${url}`);
           setImageUrl(url);
+          setError(null);
+          
+          toast({
+            title: "Founder Image Loaded",
+            description: "Successfully loaded founder image",
+          });
         }
-      } catch (error) {
-        console.error('Error loading founder image:', error);
+      } catch (error: any) {
+        console.error('❌ ERROR - Failed to load founder image:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        
+        setError(`Failed to load image: ${error.message}`);
         setImageUrl('/placeholder.svg');
+        
+        toast({
+          title: "Image Load Error",
+          description: `Failed to load founder image. Error: ${error.code || 'unknown'}`,
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
@@ -63,18 +93,28 @@ const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
             <div className="lg:col-span-2">
               <div className="relative h-[600px] rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300 group">
-                <img
-                  src={imageUrl}
-                  alt={`${founder.name} - ${founder.position}`}
-                  className={`w-full h-full object-cover transition-opacity duration-300 ${
-                    loading ? 'opacity-0' : 'opacity-100'
-                  }`}
-                  onLoad={() => setLoading(false)}
-                  onError={() => {
-                    setImageUrl('/placeholder.svg');
-                    setLoading(false);
-                  }}
-                />
+                {loading ? (
+                  <Skeleton className="w-full h-full" />
+                ) : (
+                  <img
+                    src={imageUrl}
+                    alt={`${founder.name} - ${founder.position}`}
+                    className="w-full h-full object-cover transition-opacity duration-300"
+                    onError={(e) => {
+                      console.error('Image load error in render, using placeholder');
+                      setImageUrl('/placeholder.svg');
+                    }}
+                  />
+                )}
+                
+                {error && (
+                  <div className="absolute inset-0 bg-red-50/90 flex items-center justify-center p-4">
+                    <div className="text-center text-red-700 p-4 rounded-lg max-w-xs">
+                      <p className="font-semibold mb-2">Error Loading Image</p>
+                      <p className="text-sm">{error}</p>
+                    </div>
+                  </div>
+                )}
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 

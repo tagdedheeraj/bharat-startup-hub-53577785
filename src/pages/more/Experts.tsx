@@ -1,9 +1,12 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import ExpertsHero from '@/components/experts/ExpertsHero';
 import FounderSection from '@/components/experts/FounderSection';
 import ExpertsGrid from '@/components/experts/ExpertsGrid';
 import ExpertsContactCTA from '@/components/experts/ExpertsContactCTA';
 import TeamSection from '@/components/experts/TeamSection';
+import { runImageDiagnostics } from '@/utils/firebaseStorageDiagnostic';
+import { toast } from '@/hooks/use-toast';
 
 const ExpertsPage = () => {
   const founder = {
@@ -58,6 +61,32 @@ Key Highlights:
       linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
     }
   ];
+
+  useEffect(() => {
+    // On page load, run diagnostics for all image paths
+    const checkAllImages = async () => {
+      console.log('🧪 Running diagnostics on all expert images...');
+      
+      // Check founder image first
+      console.log(`Checking founder image: ${founder.photoUrl}`);
+      await runImageDiagnostics(founder.photoUrl);
+      
+      // Then check all expert images
+      for (const expert of experts) {
+        console.log(`Checking expert image: ${expert.photoUrl}`);
+        await runImageDiagnostics(expert.photoUrl);
+      }
+      
+      // List all files in the profiles/experts directory
+      console.log('Showing all available expert profile images');
+      toast({
+        title: "Diagnostic Info",
+        description: "Check console for detailed diagnostics of all images",
+      });
+    };
+    
+    checkAllImages();
+  }, []);
 
   return (
     <div>
