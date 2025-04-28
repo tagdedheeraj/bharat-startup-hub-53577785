@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ExpertsHero from '@/components/experts/ExpertsHero';
 import FounderSection from '@/components/experts/FounderSection';
@@ -30,39 +29,6 @@ Key Highlights:
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
-  // Log the founder photo URL to verify it's correct
-  console.log('Founder photo URL in Experts.tsx:', founder.photoUrl);
-
-  const experts = [
-    {
-      name: 'Priya Sharma',
-      position: 'Legal & Compliance Head',
-      expertise: 'Corporate Law, Regulatory Compliance, IPR',
-      experience: '12+ years',
-      bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors. Her expertise has been instrumental in helping startups navigate legal challenges.',
-      photoUrl: '/lovable-uploads/9e5fe674-093d-408f-b174-4f59a6ea7235.png',
-      linkedinUrl: 'https://linkedin.com/in/priya-sharma',
-    },
-    {
-      name: 'Rajesh Kumar',
-      position: 'Senior Investment Advisor',
-      expertise: 'Investment Strategy, Financial Planning, Market Analysis',
-      experience: '15+ years',
-      bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis and strategic planning has helped companies raise substantial funding and achieve sustainable growth.',
-      photoUrl: '/lovable-uploads/6566b2a8-7eca-450d-a989-1c3f27d3fdcd.png',
-      linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
-    },
-    {
-      name: 'Vikram Mehta',
-      position: 'Technology Strategist',
-      expertise: 'Digital Transformation, AI Implementation, Tech Architecture',
-      experience: '14+ years',
-      bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
-      photoUrl: '/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png',
-      linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
-    }
-  ];
-
   return (
     <div>
       <ExpertsHero />
@@ -73,5 +39,35 @@ Key Highlights:
     </div>
   );
 };
+
+const experts = [
+  {
+    name: 'Priya Sharma',
+    position: 'Legal & Compliance Head',
+    expertise: 'Corporate Law, Regulatory Compliance, IPR',
+    experience: '12+ years',
+    bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors. Her expertise has been instrumental in helping startups navigate legal challenges.',
+    photoUrl: '/lovable-uploads/9e5fe674-093d-408f-b174-4f59a6ea7235.png',
+    linkedinUrl: 'https://linkedin.com/in/priya-sharma',
+  },
+  {
+    name: 'Rajesh Kumar',
+    position: 'Senior Investment Advisor',
+    expertise: 'Investment Strategy, Financial Planning, Market Analysis',
+    experience: '15+ years',
+    bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis and strategic planning has helped companies raise substantial funding and achieve sustainable growth.',
+    photoUrl: '/lovable-uploads/6566b2a8-7eca-450d-a989-1c3f27d3fdcd.png',
+    linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
+  },
+  {
+    name: 'Vikram Mehta',
+    position: 'Technology Strategist',
+    expertise: 'Digital Transformation, AI Implementation, Tech Architecture',
+    experience: '14+ years',
+    bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
+    photoUrl: '/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png',
+    linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
+  }
+];
 
 export default ExpertsPage;
