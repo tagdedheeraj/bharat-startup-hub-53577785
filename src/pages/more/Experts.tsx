@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import ExpertsHero from '@/components/experts/ExpertsHero';
 import FounderSection from '@/components/experts/FounderSection';
-import ExpertsGrid from '@/components/experts/ExpertsGrid';
 import ExpertsContactCTA from '@/components/experts/ExpertsContactCTA';
 import TeamSection from '@/components/experts/TeamSection';
 import { runImageDiagnostics } from '@/utils/firebaseStorageDiagnostic';
@@ -92,7 +91,6 @@ Key Highlights:
       <ExpertsHero />
       <FounderSection founder={founder} />
       <TeamSection />
-      <ExpertsGrid experts={experts} />
       <ExpertsContactCTA />
     </div>
   );
