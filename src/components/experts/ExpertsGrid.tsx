@@ -1,7 +1,6 @@
 
 import React from 'react';
 import ExpertCard from './ExpertCard';
-import SectionHeading from '@/components/SectionHeading';
 
 interface Expert {
   name: string;
@@ -18,20 +17,38 @@ interface ExpertsGridProps {
 }
 
 const ExpertsGrid: React.FC<ExpertsGridProps> = ({ experts }) => {
+  if (!experts || experts.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="py-20 md:py-28 bg-gray-50">
+    <section className="bg-slate-50 py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          subheading="LEADERSHIP & EXPERTISE"
-          heading="Our Domain Specialists"
-          description="Connect with industry leaders who are shaping the future of business and innovation."
-          centered
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
-          {experts.map((expert, index) => (
-            <ExpertCard key={index} {...expert} />
-          ))}
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
+              Our Expert Advisors
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              A team of seasoned professionals with extensive experience across various domains
+              to guide you through every step of your business journey.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {experts.map((expert, index) => (
+              <ExpertCard
+                key={index}
+                name={expert.name}
+                position={expert.position}
+                expertise={expert.expertise}
+                experience={expert.experience}
+                bio={expert.bio}
+                photoUrl={expert.photoUrl}
+                linkedinUrl={expert.linkedinUrl}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

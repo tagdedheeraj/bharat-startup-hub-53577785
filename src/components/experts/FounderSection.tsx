@@ -1,6 +1,7 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Trophy, Award, BookOpen } from 'lucide-react';
+import SectionImage from '@/components/shared/SectionImage';
 
 interface FounderData {
   name: string;
@@ -17,30 +18,6 @@ interface FounderSectionProps {
 }
 
 const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  
-  useEffect(() => {
-    // Log the photoUrl to verify what's being passed to the component
-    console.log('Founder photo URL:', founder.photoUrl);
-    
-    // Reset states when photo URL changes
-    setImageLoaded(false);
-    setImageError(false);
-    
-    // Preload the founder image to check if it loads correctly
-    const img = new Image();
-    img.src = founder.photoUrl;
-    img.onload = () => {
-      console.log('Founder image loaded successfully');
-      setImageLoaded(true);
-    };
-    img.onerror = (e) => {
-      console.error('Failed to preload founder image:', e);
-      setImageError(true);
-    };
-  }, [founder.photoUrl]);
-
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Background decorative elements */}
@@ -55,25 +32,15 @@ const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
             <div className="lg:col-span-2">
               <div className="relative h-[600px] rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300 group">
-                {imageError && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                    <p className="text-gray-500">Image not available</p>
-                  </div>
-                )}
-                
-                <img
-                  src={founder.photoUrl}
-                  alt={founder.name}
-                  className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-                  onLoad={() => setImageLoaded(true)}
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    console.error("Failed to load founder image, using placeholder");
-                    setImageError(true);
-                    target.onerror = null;
-                    target.src = "/placeholder.svg";
-                  }}
+                <SectionImage
+                  pageName="experts"
+                  sectionName="founder"
+                  fallbackSrc="/placeholder.svg"
+                  alt={`${founder.name} - ${founder.position}`}
+                  className="w-full h-full"
+                  objectFit="cover"
                 />
+                
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
                 <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/70 to-transparent text-white transform translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">

@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React from 'react';
+import SectionImage from '@/components/shared/SectionImage';
 
 interface ExpertProps {
   name: string;
@@ -20,30 +21,18 @@ const ExpertCard: React.FC<ExpertProps> = ({
   photoUrl,
   linkedinUrl
 }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col transform hover:-translate-y-1 transition-transform">
       <div className="relative h-64 overflow-hidden">
-        {imageError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-            <p className="text-gray-500">Image not available</p>
-          </div>
-        )}
-        
-        <img 
-          src={photoUrl} 
-          alt={name}
-          className={`w-full h-full object-cover transition-transform duration-500 hover:scale-105 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoad={() => setImageLoaded(true)}
-          onError={(e) => {
-            console.error(`Failed to load image for ${name}`, e);
-            setImageError(true);
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "/placeholder.svg";
-          }}
+        <SectionImage
+          pageName="experts"
+          sectionName={`expert-${name.toLowerCase().replace(/\s+/g, '-')}`}
+          fallbackSrc="/placeholder.svg"
+          alt={`${name} - ${position}`}
+          className="w-full h-full"
+          objectFit="cover"
         />
+        
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm">
           {experience}
         </div>

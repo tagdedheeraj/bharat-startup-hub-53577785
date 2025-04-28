@@ -26,7 +26,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: '/lovable-uploads/a1d97097-b5f7-4a0b-a7f7-54e4ce4a801b.png',
+    photoUrl: 'dhruv.png', // Using just the filename for Firebase storage
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
@@ -48,7 +48,7 @@ const experts = [
     expertise: 'Corporate Law, Regulatory Compliance, IPR',
     experience: '12+ years',
     bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors. Her expertise has been instrumental in helping startups navigate legal challenges.',
-    photoUrl: '/lovable-uploads/9e5fe674-093d-408f-b174-4f59a6ea7235.png',
+    photoUrl: 'priya-sharma.png',
     linkedinUrl: 'https://linkedin.com/in/priya-sharma',
   },
   {
@@ -57,7 +57,7 @@ const experts = [
     expertise: 'Investment Strategy, Financial Planning, Market Analysis',
     experience: '15+ years',
     bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis and strategic planning has helped companies raise substantial funding and achieve sustainable growth.',
-    photoUrl: '/lovable-uploads/6566b2a8-7eca-450d-a989-1c3f27d3fdcd.png',
+    photoUrl: 'rajesh-kumar.png',
     linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
   },
   {
@@ -66,7 +66,7 @@ const experts = [
     expertise: 'Digital Transformation, AI Implementation, Tech Architecture',
     experience: '14+ years',
     bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
-    photoUrl: '/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png',
+    photoUrl: 'vikram-mehta.png',
     linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
   }
 ];
