@@ -1,7 +1,9 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { useState, useEffect } from 'react';
+import { toast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface ExpertProps {
   name: string;
@@ -17,8 +19,8 @@ const ExpertCard: React.FC<ExpertProps> = ({
   name,
   position,
   expertise,
-  experience,
   bio,
+  experience,
   photoUrl,
   linkedinUrl
 }) => {
@@ -28,25 +30,42 @@ const ExpertCard: React.FC<ExpertProps> = ({
   useEffect(() => {
     const loadImage = async () => {
       if (!photoUrl) {
+        console.log(`No photo URL provided for ${name}`);
         setImageUrl('/placeholder.svg');
         setLoading(false);
         return;
       }
 
       try {
+        console.log(`Attempting to load image for ${name} from path: ${photoUrl}`);
+        
         // Check if the photoUrl is already a complete URL
         if (photoUrl.startsWith('http')) {
+          console.log(`Using direct URL for ${name}: ${photoUrl}`);
           setImageUrl(photoUrl);
         } else {
           // Get the download URL from Firebase Storage
+          console.log(`Fetching Firebase Storage URL for ${name} from path: ${photoUrl}`);
           const storageRef = ref(storage, photoUrl);
           const url = await getDownloadURL(storageRef);
-          console.log(`Loaded image for ${name}:`, url);
+          console.log(`Successfully loaded image for ${name}:`, url);
           setImageUrl(url);
+          
+          toast({
+            title: "Image Loaded",
+            description: `Successfully loaded image for ${name}`,
+          });
         }
       } catch (error) {
         console.error(`Error loading image for ${name}:`, error);
+        console.log(`Storage path attempted: ${photoUrl}`);
         setImageUrl('/placeholder.svg');
+        
+        toast({
+          title: "Image Load Error",
+          description: `Failed to load image for ${name}. Using placeholder.`,
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
@@ -58,19 +77,19 @@ const ExpertCard: React.FC<ExpertProps> = ({
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col transform hover:-translate-y-1 transition-transform">
       <div className="relative h-64 overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={`${name} - ${position}`}
-          className={`w-full h-full object-cover transition-opacity duration-300 ${
-            loading ? 'opacity-0' : 'opacity-100'
-          }`}
-          onLoad={() => setLoading(false)}
-          onError={() => {
-            console.log('Image load error, using placeholder');
-            setImageUrl('/placeholder.svg');
-            setLoading(false);
-          }}
-        />
+        {loading ? (
+          <Skeleton className="w-full h-full" />
+        ) : (
+          <img
+            src={imageUrl}
+            alt={`${name} - ${position}`}
+            className="w-full h-full object-cover transition-opacity duration-300"
+            onError={() => {
+              console.log(`Image load error for ${name}, using placeholder`);
+              setImageUrl('/placeholder.svg');
+            }}
+          />
+        )}
         
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm">
           {experience}

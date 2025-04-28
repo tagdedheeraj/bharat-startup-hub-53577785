@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ExpertsHero from '@/components/experts/ExpertsHero';
 import FounderSection from '@/components/experts/FounderSection';
@@ -26,7 +25,7 @@ Key Highlights:
 • Real estate expert with a proven track record
 • Angel investor in multiple companies
 • Startup ecosystem builder with a focus on nurturing directors and companies`,
-    photoUrl: 'profiles/experts/dhruv-thakar.png',
+    photoUrl: 'profiles/experts/dhruv-thakar.png', // Make sure this matches your Firebase Storage path
     linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
   };
 
