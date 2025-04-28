@@ -13,38 +13,51 @@ import PopularFundingServices from '@/components/funding/PopularFundingServices'
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
 import OfferSection from '@/components/home/OfferSection';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HomePage = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="overflow-hidden">
+    <div className={`overflow-hidden ${isMobile ? 'pb-16' : ''}`}>
       {/* First-time visitor video popup - with a standard YouTube ID */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
 
       {/* Hero Section */}
-      <HeroSection />
+      <div className={isMobile ? "rounded-b-3xl overflow-hidden shadow-lg" : ""}>
+        <HeroSection />
+      </div>
 
       {/* YouTube Shorts Section */}
-      <section className="py-16">
+      <section className={`py-16 ${isMobile ? "px-4" : ""}`}>
         <YouTubeShortsCarousel />
       </section>
 
       {/* Statistics Slider Section */}
-      <StatisticsSlider />
+      <div className={isMobile ? "rounded-3xl mx-4 shadow-lg overflow-hidden" : ""}>
+        <StatisticsSlider />
+      </div>
 
       {/* Popular Funding Services Section */}
-      <PopularFundingServices />
+      <div className="mt-8">
+        <PopularFundingServices />
+      </div>
       
       {/* Features Section */}
       <FeaturesSection />
 
       {/* Expertise Section */}
-      <ExpertiseSection />
+      <div className={isMobile ? "rounded-3xl mx-4 overflow-hidden bg-white shadow-lg my-8" : ""}>
+        <ExpertiseSection />
+      </div>
 
       {/* Funding Options Section */}
       <FundingOptionsSection />
 
       {/* Offer Section - 11 Services in 1 Lakh (moved below Funding Options, above News) */}
-      <OfferSection />
+      <div className={isMobile ? "rounded-3xl mx-4 overflow-hidden shadow-lg my-8" : ""}>
+        <OfferSection />
+      </div>
 
       {/* News Headlines Section */}
       <NewsHeadlines />

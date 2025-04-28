@@ -1,58 +1,55 @@
 
-/* Header specific styles */
-.menu-dropdown {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.2s ease-in-out;
-  transform: translateY(-10px);
+/* General Header Styles */
+header {
+  --header-height: calc(var(--top-bar-height, 36px) + var(--main-nav-height, 64px));
 }
 
-.menu-dropdown.open {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
+/* Mobile App-like styles */
+@media (max-width: 767px) {
+  header {
+    transform: translateZ(0); /* Force hardware acceleration */
+    will-change: transform; /* Optimize animation performance */
+  }
+  
+  .mobile-nav-trigger {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  .mobile-menu-container {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  .mobile-menu-item {
+    -webkit-touch-callout: none;
+  }
 }
 
-/* Z-index management - ensure proper layering */
-.header-topbar {
-  z-index: 51;
+/* App-like transitions */
+.scale-in-transition {
+  transform-origin: center top;
+  animation: scale-in 0.2s ease-out forwards;
 }
 
-.header-main {
-  z-index: 50;
+@keyframes scale-in {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-.header-dropdown {
-  z-index: 49;
+/* Native mobile feel */
+.mobile-active-state {
+  transition: transform 0.05s ease-out;
 }
 
-.mobile-menu {
-  z-index: 48;
-}
-
-/* Make sure dropdowns have proper z-index and background */
-.nav-item-container {
-  position: relative;
-}
-
-.nav-item-container .absolute {
-  z-index: 100;
-  background-color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-/* Backdrop for mobile menus */
-.mobile-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 47;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease;
-}
-
-.mobile-backdrop.open {
-  opacity: 1;
-  visibility: visible;
+.mobile-active-state:active {
+  transform: scale(0.96);
 }

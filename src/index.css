@@ -103,5 +103,44 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    overscroll-behavior-y: none; /* Prevent bounce effect on iOS */
+  }
+
+  /* Mobile app-like feel */
+  @media (max-width: 767px) {
+    body {
+      @apply overflow-x-hidden;
+      touch-action: manipulation; /* Optimize for touch */
+      user-select: none; /* Prevent text selection which feels non-native */
+    }
+    
+    /* Make buttons feel more native on touch */
+    button, a {
+      @apply active:opacity-70 transition-opacity;
+    }
+  }
+
+  /* Native-looking scrollbars */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  /* Mobile app style helpers */
+  .app-card {
+    @apply bg-white rounded-xl shadow-md overflow-hidden border border-gray-100;
+  }
+  
+  .btn-primary {
+    @apply bg-india-saffron text-white px-6 py-2.5 rounded-lg font-medium hover:bg-india-saffron/90 transition-all shadow-sm;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-gray-800 border border-gray-200 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-all shadow-sm;
   }
 }

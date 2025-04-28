@@ -1,8 +1,6 @@
 
 import { useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { MessagesSquare } from "lucide-react";
 import SupportTriggerButton from "./SupportTriggerButton";
 import SupportActions from "./SupportActions";
 import { useSupportDrawer } from '@/hooks/use-support-drawer';

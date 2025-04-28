@@ -1,3 +1,4 @@
+
 import React, { ReactNode, useEffect, memo, useState, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import OvalHeader from './3DHeader/OvalHeader';
@@ -52,6 +53,11 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       <Footer />
       <LegalDisclaimer />
       <SideDrawerNavigation />
+      
+      {/* Add bottom padding on mobile to account for the bottom navigation */}
+      {isMobile && (
+        <div className="h-16 md:h-0" aria-hidden="true"></div>
+      )}
     </div>
   );
 };
