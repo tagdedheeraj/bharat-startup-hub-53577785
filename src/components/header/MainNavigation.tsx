@@ -10,12 +10,12 @@ export const MainNavigation = () => {
   const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null);
   const navigationRef = useRef<HTMLDivElement>(null);
 
-  // Close all menus when route changes
+  // Close menus when route changes
   useEffect(() => {
     setActiveItemIndex(null);
   }, [location.pathname]);
 
-  // Handle clicking outside the navigation to close menus
+  // Handle clicking outside to close menus
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (navigationRef.current && !navigationRef.current.contains(event.target as Node)) {
@@ -23,25 +23,31 @@ export const MainNavigation = () => {
       }
     };
 
+    const handleScroll = () => {
+      setActiveItemIndex(null);
+    };
+
+    // Only add listeners if a menu is open
     if (activeItemIndex !== null) {
       document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('scroll', handleScroll);
     }
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [activeItemIndex]);
 
-  // Function to handle menu item click
   const handleMenuItemClick = (index: number, hasChildren: boolean, path: string) => {
     if (hasChildren) {
+      // Close other menus when opening a new one
       setActiveItemIndex(prevIndex => prevIndex === index ? null : index);
     } else {
       handleDirectNavigation(path);
     }
   };
 
-  // Handle direct navigation
   const handleDirectNavigation = (path: string) => {
     setActiveItemIndex(null);
     navigate(path);
