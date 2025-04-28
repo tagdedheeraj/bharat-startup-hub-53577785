@@ -2,7 +2,6 @@
 import FirstTimeVideoPopup from '@/components/FirstTimeVideoPopup';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
-import FundingOptionsSection from '@/components/home/FundingOptionsSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import ContactSection from '@/components/home/ContactSection';
 import CTASection from '@/components/home/CTASection';
@@ -13,13 +12,14 @@ import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
 import OfferSection from '@/components/home/OfferSection';
 import { useIsMobile } from '@/hooks/use-mobile';
+import StatsSection from '@/components/home/StatsSection';
 
 const HomePage = () => {
   const isMobile = useIsMobile();
   
   return (
     <div className={`overflow-hidden ${isMobile ? 'pb-16' : ''}`}>
-      {/* First-time visitor video popup - with a standard YouTube ID */}
+      {/* First-time visitor video popup */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
 
       {/* Hero Section */}
@@ -50,9 +50,9 @@ const HomePage = () => {
         <ExpertiseSection />
       </div>
 
-      {/* Funding Options Section - Directly after Expertise Section */}
-      <FundingOptionsSection />
-
+      {/* Stats Section - Our Impact in Numbers */}
+      <StatsSection />
+      
       {/* News Headlines Section */}
       <NewsHeadlines />
 

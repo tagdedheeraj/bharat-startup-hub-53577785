@@ -1,6 +1,6 @@
 
 import { Search } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -43,6 +43,12 @@ export const SearchPopover = () => {
     setSearchResults(filtered);
   };
 
+  const handleResultClick = (url: string) => {
+    navigate(url);
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -73,11 +79,7 @@ export const SearchPopover = () => {
                 <div 
                   key={idx} 
                   className="flex items-center p-2 hover:bg-gray-100 rounded-md gap-2 cursor-pointer"
-                  onClick={() => {
-                    navigate(result.url);
-                    setSearchQuery('');
-                    setSearchResults([]);
-                  }}
+                  onClick={() => handleResultClick(result.url)}
                 >
                   <div>
                     <div className="text-xs text-gray-500">{result.category}</div>

@@ -2,10 +2,9 @@
 import { useState } from 'react';
 import { Menu, X, Search, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 import AuthButtons from '../AuthButtons';
-import NavigationDrawer from './NavigationDrawer';
-import { useAuth } from '@/contexts/auth/useAuth';
+import { useAuth } from '@/contexts/auth';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
@@ -17,12 +16,12 @@ interface MobileNavProps {
 }
 
 const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   
   // Combined list of all services for search
   const allServices = navigationData.flatMap(nav => 
