@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Trophy, Award, BookOpen } from 'lucide-react';
 import { storage } from '@/lib/firebase';
@@ -24,51 +23,50 @@ const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
   const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 3;
 
   useEffect(() => {
     const loadImage = async () => {
       if (!founder.photoUrl) {
-        console.log('No photo URL provided for founder');
         setLoading(false);
         setImageUrl('/placeholder.svg');
         return;
       }
 
       try {
-        console.log(`🔍 DEBUG - Attempting to load founder image from: ${founder.photoUrl}`);
+        console.log(`🔍 Attempting to load founder image from: ${founder.photoUrl}`);
         
         if (founder.photoUrl.startsWith('http')) {
-          console.log('Using direct URL for founder image');
           setImageUrl(founder.photoUrl);
-          setLoading(false);
+          setError(null);
         } else {
-          // Using Firebase Storage
-          console.log(`Creating storage reference to: ${founder.photoUrl}`);
           const storageRef = ref(storage, founder.photoUrl);
-          
           console.log('Requesting download URL from Firebase...');
           const url = await getDownloadURL(storageRef);
           
           console.log(`✅ SUCCESS - Founder image loaded: ${url}`);
           setImageUrl(url);
           setError(null);
-          
-          toast({
-            title: "Founder Image Loaded",
-            description: "Successfully loaded founder image",
-          });
         }
       } catch (error: any) {
         console.error('❌ ERROR - Failed to load founder image:', error);
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
         
+        if (retryCount < maxRetries) {
+          console.log(`Retrying founder image load (Attempt ${retryCount + 1}/${maxRetries})`);
+          setRetryCount(prev => prev + 1);
+          setTimeout(loadImage, 1000 * (retryCount + 1)); // Exponential backoff
+          return;
+        }
+
         setError(`Failed to load image: ${error.message}`);
         setImageUrl('/placeholder.svg');
         
         toast({
           title: "Image Load Error",
-          description: `Failed to load founder image. Error: ${error.code || 'unknown'}`,
+          description: `Failed to load founder image. Using placeholder.`,
           variant: "destructive"
         });
       } finally {
@@ -77,7 +75,7 @@ const FounderSection: React.FC<FounderSectionProps> = ({ founder }) => {
     };
 
     loadImage();
-  }, [founder.photoUrl]);
+  }, [founder.photoUrl, retryCount]);
 
   return (
     <section className="relative py-24 overflow-hidden bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">

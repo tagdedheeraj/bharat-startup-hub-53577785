@@ -1,4 +1,3 @@
-
 import { ref, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { toast } from '@/hooks/use-toast';
@@ -8,11 +7,14 @@ import { toast } from '@/hooks/use-toast';
  */
 export const checkFileExists = async (path: string): Promise<boolean> => {
   try {
+    console.log(`Checking if file exists: ${path}`);
     const storageRef = ref(storage, path);
     await getMetadata(storageRef);
+    console.log(`✅ File exists: ${path}`);
     return true;
   } catch (error: any) {
-    console.error(`File check failed for ${path}:`, error);
+    console.error(`❌ File check failed for ${path}:`, error);
+    console.error(`Storage bucket: ${storage.app.options.storageBucket}`);
     return false;
   }
 };
@@ -89,6 +91,9 @@ export const diagnosePath = async (path: string): Promise<{
  * Run diagnostics and show toast with results
  */
 export const runImageDiagnostics = async (path: string): Promise<void> => {
+  console.log(`Running diagnostics for: ${path}`);
+  console.log(`Current storage bucket: ${storage.app.options.storageBucket}`);
+  
   toast({
     title: "Running Diagnostics",
     description: `Checking path: ${path}`,
@@ -97,15 +102,17 @@ export const runImageDiagnostics = async (path: string): Promise<void> => {
   const result = await diagnosePath(path);
   
   if (result.exists) {
+    console.log(`✅ File exists and is accessible: ${path}`);
     toast({
       title: "File Exists",
       description: `Successfully located: ${path}`,
     });
   } else {
+    console.error(`❌ File not found or not accessible: ${path}`);
     if (result.parentContents && result.parentContents.length > 0) {
       toast({
         title: "File Not Found",
-        description: `Could not find ${path.split('/').pop()}. Available files in directory: ${result.parentContents.join(', ')}`,
+        description: `Could not find ${path.split('/').pop()}. Available files: ${result.parentContents.join(', ')}`,
         variant: "destructive"
       });
     } else {

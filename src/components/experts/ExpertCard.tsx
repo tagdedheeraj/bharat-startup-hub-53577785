@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
@@ -28,54 +27,50 @@ const ExpertCard: React.FC<ExpertProps> = ({
   const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 3;
 
   useEffect(() => {
     const loadImage = async () => {
       if (!photoUrl) {
-        console.log(`No photo URL provided for ${name}`);
         setImageUrl('/placeholder.svg');
         setLoading(false);
         return;
       }
 
       try {
-        console.log(`🔍 DEBUG - Attempting to load image for ${name} from path: ${photoUrl}`);
-        
-        // Check if the photoUrl is already a complete URL
         if (photoUrl.startsWith('http')) {
-          console.log(`Using direct URL for ${name}: ${photoUrl}`);
           setImageUrl(photoUrl);
           setLoadError(null);
         } else {
-          // Get the download URL from Firebase Storage
-          console.log(`Creating Firebase Storage reference for ${name} from path: ${photoUrl}`);
-          
           const storageRef = ref(storage, photoUrl);
-          console.log(`Storage reference created, requesting download URL for ${name}...`);
+          console.log(`Attempting to load image for ${name} from: ${photoUrl}`);
           
           const url = await getDownloadURL(storageRef);
-          console.log(`✅ SUCCESS - Image loaded for ${name}: ${url}`);
+          console.log(`Successfully loaded image for ${name}: ${url}`);
           
           setImageUrl(url);
           setLoadError(null);
-          
-          toast({
-            title: "Image Loaded",
-            description: `Successfully loaded image for ${name}`,
-          });
         }
       } catch (error: any) {
         console.error(`❌ ERROR loading image for ${name}:`, error);
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
         console.error(`Storage path attempted: ${photoUrl}`);
-        
-        setLoadError(`${error.code || 'Unknown error'}: ${error.message}`);
+
+        if (retryCount < maxRetries) {
+          console.log(`Retrying image load for ${name} (Attempt ${retryCount + 1}/${maxRetries})`);
+          setRetryCount(prev => prev + 1);
+          setTimeout(loadImage, 1000 * (retryCount + 1)); // Exponential backoff
+          return;
+        }
+
+        setLoadError(`Failed to load image: ${error.message}`);
         setImageUrl('/placeholder.svg');
         
         toast({
           title: "Image Load Error",
-          description: `Failed to load image for ${name}. ${error.code || 'Unknown error'}`,
+          description: `Could not load image for ${name}. Using placeholder.`,
           variant: "destructive"
         });
       } finally {
@@ -84,7 +79,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
     };
 
     loadImage();
-  }, [photoUrl, name]);
+  }, [photoUrl, name, retryCount]);
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col transform hover:-translate-y-1 transition-transform">
