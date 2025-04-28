@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
@@ -39,15 +40,19 @@ const ExpertCard: React.FC<ExpertProps> = ({
       }
 
       try {
-        if (photoUrl.startsWith('http')) {
+        // Check if the photoUrl is already a complete Firebase Storage URL
+        if (photoUrl.includes('firebasestorage.googleapis.com')) {
+          console.log(`Using full Firebase Storage URL for ${name}: ${photoUrl}`);
           setImageUrl(photoUrl);
           setLoadError(null);
         } else {
+          // If it's a storage path, get the download URL
           const storageRef = ref(storage, photoUrl);
-          console.log(`Attempting to load image for ${name} from: ${photoUrl}`);
+          console.log(`Attempting to load image for ${name} from path: ${photoUrl}`);
+          console.log('Storage bucket:', storage.app.options.storageBucket);
           
           const url = await getDownloadURL(storageRef);
-          console.log(`Successfully loaded image for ${name}: ${url}`);
+          console.log(`Successfully loaded image URL for ${name}: ${url}`);
           
           setImageUrl(url);
           setLoadError(null);
@@ -56,7 +61,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
         console.error(`❌ ERROR loading image for ${name}:`, error);
         console.error('Error code:', error.code);
         console.error('Error message:', error.message);
-        console.error(`Storage path attempted: ${photoUrl}`);
+        console.error(`Storage path/URL attempted: ${photoUrl}`);
 
         if (retryCount < maxRetries) {
           console.log(`Retrying image load for ${name} (Attempt ${retryCount + 1}/${maxRetries})`);
