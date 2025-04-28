@@ -1,5 +1,6 @@
+
 import { useEffect, useRef } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { Toaster } from "sonner";
 import AppProviders from "@/components/AppProviders";
 import AppRoutes from "@/routes/AppRoutes";
@@ -113,7 +114,7 @@ const App = () => {
 
   return (
     <AppProviders>
-      <BrowserRouter>
+      <Router>
         <NavigationObserver />
         <AppRoutes />
         <Toaster 
@@ -125,7 +126,7 @@ const App = () => {
           }}
         />
         <SupportPopup />
-      </BrowserRouter>
+      </Router>
     </AppProviders>
   );
 };
