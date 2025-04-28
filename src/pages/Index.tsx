@@ -3,7 +3,6 @@ import FirstTimeVideoPopup from '@/components/FirstTimeVideoPopup';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import FundingOptionsSection from '@/components/home/FundingOptionsSection';
-import StatsSection from '@/components/home/StatsSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import ContactSection from '@/components/home/ContactSection';
 import CTASection from '@/components/home/CTASection';
@@ -54,16 +53,13 @@ const HomePage = () => {
       {/* Funding Options Section - Directly after Expertise Section */}
       <FundingOptionsSection />
 
-      {/* News Headlines Section - Directly after Funding Options */}
+      {/* News Headlines Section */}
       <NewsHeadlines />
 
-      {/* Offer Section - moved below News Headlines */}
+      {/* Offer Section */}
       <div className={isMobile ? "rounded-3xl mx-4 overflow-hidden shadow-lg my-8" : ""}>
         <OfferSection />
       </div>
-
-      {/* Stats Section */}
-      <StatsSection />
 
       {/* Testimonials Section */}
       <TestimonialsSection />
