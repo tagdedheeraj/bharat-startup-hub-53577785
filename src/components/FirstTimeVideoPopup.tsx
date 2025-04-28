@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useId } from 'react';
 import { X } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -14,20 +13,15 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
   const { registerDialog, unregisterDialog, updateDialogState } = useDialog();
   
   useEffect(() => {
-    // Register this dialog with the dialog context
     registerDialog(dialogId, isOpen);
-    
-    // Create a session-based flag instead of localStorage
     const hasSeenVideo = sessionStorage.getItem('hasSeenIntroVideo');
     
     if (!hasSeenVideo) {
-      // Show the video popup after a short delay
       const timer = setTimeout(() => {
         setIsOpen(true);
         updateDialogState(dialogId, true);
-        // Mark that the user has seen the video for this session only
         sessionStorage.setItem('hasSeenIntroVideo', 'true');
-      }, 2000); // Increased delay for better reliability
+      }, 2000);
       
       return () => {
         clearTimeout(timer);
@@ -41,7 +35,6 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
   }, [dialogId, registerDialog, unregisterDialog, updateDialogState]);
   
   useEffect(() => {
-    // Update dialog state when open state changes
     updateDialogState(dialogId, isOpen);
   }, [dialogId, isOpen, updateDialogState]);
   
@@ -50,21 +43,17 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
     updateDialogState(dialogId, false);
   };
   
-  // Force open for testing (remove this in production)
   const forceOpen = () => {
     sessionStorage.removeItem('hasSeenIntroVideo');
     setIsOpen(true);
     updateDialogState(dialogId, true);
   };
   
-  // Extract video ID from full YouTube URL if needed
   const extractVideoId = (videoParam: string): string => {
-    // If it's already just an ID (no slashes or dots), return it as is
     if (!/[\/\.]/.test(videoParam)) {
       return videoParam;
     }
     
-    // Try to extract from various YouTube URL formats
     const regexPatterns = [
       /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/watch\?.*v=)([^&\?\/#]+)/i,
       /youtube\.com\/watch\?.*v=([^&\?\/#]+)/i,
@@ -78,7 +67,6 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
       }
     }
     
-    // Fallback to the original value if no pattern matches
     console.warn('Could not extract YouTube video ID, using original value');
     return videoParam;
   };
@@ -94,10 +82,10 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         <DialogContent 
           className="w-[95%] max-w-3xl p-0 mx-auto bg-transparent border-none z-[9999]" 
           onInteractOutside={(e) => {
-            e.preventDefault(); // Prevent closing on outside click for video popup
+            e.preventDefault();
           }}
           onEscapeKeyDown={(e) => {
-            e.preventDefault(); // Prevent closing on escape key
+            e.preventDefault();
           }}
         >
           <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
@@ -120,11 +108,10 @@ const FirstTimeVideoPopup = ({ videoId }: FirstTimeVideoPopupProps) => {
         </DialogContent>
       </Dialog>
       
-      {/* Developer button to force show the popup - remove in production */}
       {process.env.NODE_ENV === 'development' && (
         <button 
           onClick={forceOpen}
-          className="fixed bottom-16 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
+          className="fixed bottom-28 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm z-50 opacity-70 hover:opacity-100"
         >
           Show Video Popup
         </button>
