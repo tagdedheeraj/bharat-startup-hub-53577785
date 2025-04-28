@@ -1,242 +1,107 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+ 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --header-height: calc(var(--top-bar-height, 36px) + var(--main-nav-height, 64px));
+    --top-bar-height: 36px;
+    --main-nav-height: 64px;
 
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+ 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
+ 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 25 95% 53%;
+ 
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
+ 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
+ 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 142 81% 29%;
-    --accent-foreground: 210 40% 98%;
-
+ 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+ 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 25 95% 53%;
+    --ring: 222.2 84% 4.9%;
+ 
+    --radius: 0.5rem;
 
-    --radius: 0.75rem;
+    --brand-25: 30 100% 97%;
+    --brand-50: 30 100% 95%;
+    --brand-100: 30 100% 90%;
+    --brand-200: 30 95% 80%;
+    --brand-300: 30 90% 70%;
+    --brand-400: 30 85% 60%;
+    --brand-500: 30 80% 50%;
+    --brand-600: 30 75% 40%;
+    --brand-700: 30 70% 30%;
+    --brand-800: 30 65% 20%;
+    --brand-900: 30 60% 10%;
+    
+    /* India flag colors */
+    --india-saffron: 39 100% 50%;
+    --india-white: 0 0% 100%;
+    --india-green: 120 100% 25%;
+    --india-blue: 240 100% 40%;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
   }
-
+ 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
+ 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
+ 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 25 95% 53%;
-    --primary-foreground: 210 40% 98%;
-
+ 
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+ 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
+ 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 142 81% 29%;
+ 
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
+ 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
+ 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 25 95% 53%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground font-sans;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight;
-  }
-  
-  img {
-    @apply max-w-full h-auto;
-  }
-}
-
-@layer components {
-  .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-md;
-  }
-  
-  .nav-link {
-    @apply relative px-2 py-2 text-foreground/80 hover:text-foreground transition-colors 
-    after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-india-saffron
-    after:transition-all hover:after:w-full;
-  }
-  
-  .nav-link.active {
-    @apply text-india-saffron after:w-full;
-  }
-  
-  .btn-primary {
-    @apply bg-india-saffron text-white px-6 py-3 rounded-lg hover:opacity-90 transition-all shadow-md hover:shadow-lg active:shadow-sm;
-  }
-  
-  .btn-secondary {
-    @apply bg-india-green text-white px-6 py-3 rounded-lg hover:opacity-90 border border-transparent transition-all;
-  }
-  
-  .sub-heading {
-    @apply text-sm font-medium tracking-wider text-india-saffron uppercase mb-2;
-  }
-  
-  .section {
-    @apply py-16 md:py-24;
-  }
-  
-  .funding-card {
-    @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-india-saffron/50;
-  }
-  
-  .oval-header-glass {
-    @apply backdrop-blur-lg bg-white/5 border border-white/10 rounded-full shadow-[0_4px_20px_-2px_rgba(0,0,0,0.3)];
-  }
-  
-  .nav-item-3d {
-    @apply relative px-4 py-2 text-white hover:text-india-saffron/90 transition-colors;
-  }
-  
-  .gradient-text-3d {
-    @apply bg-gradient-to-r from-india-saffron via-white to-india-green bg-clip-text text-transparent;
-  }
-  
-  .gradient-text-india {
-    @apply bg-gradient-to-r from-india-saffron via-india-white to-india-green bg-clip-text text-transparent;
-  }
-  
-  /* New curved section utilities */
-  .curved-section {
-    @apply relative rounded-3xl overflow-hidden;
-  }
-  
-  .curved-section-top {
-    @apply relative pt-16 rounded-t-3xl overflow-hidden;
-  }
-  
-  .curved-section-bottom {
-    @apply relative pb-16 rounded-b-3xl overflow-hidden;
-  }
-  
-  .curved-section-both {
-    @apply relative py-16 rounded-3xl overflow-hidden;
-  }
-  
-  .curved-wave-top {
-    @apply absolute top-0 left-0 w-full overflow-hidden leading-[0] rotate-180;
-  }
-  
-  .curved-wave-bottom {
-    @apply absolute bottom-0 left-0 w-full overflow-hidden leading-[0];
-  }
-  
-  .wave-divider {
-    @apply relative h-24 overflow-hidden -mb-1;
-  }
-  
-  .blob-shape {
-    @apply absolute opacity-10 rounded-full filter blur-3xl;
-  }
-  
-  /* New styles for legal pages */
-  .legal-section-title {
-    @apply text-lg font-semibold text-gray-800 mt-6 mb-2 flex items-center gap-2;
-  }
-  
-  .legal-card {
-    @apply bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-100;
-  }
-  
-  .legal-card-hover {
-    @apply transition-all duration-300 hover:shadow-xl hover:border-india-saffron/30;
-  }
-  
-  /* Enhanced prose styling for legal documents */
-  .prose h2 {
-    @apply text-xl font-semibold text-gray-800 mt-8 mb-3 pb-2 border-b;
-  }
-  
-  .prose p {
-    @apply text-gray-700 leading-relaxed;
-  }
-  
-  .prose ul {
-    @apply my-4 space-y-2;
-  }
-  
-  .prose ul li {
-    @apply text-gray-700;
-  }
-}
-
-@keyframes gradient-x {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
-
-.animate-gradient-x {
-  animation: gradient-x 15s ease infinite;
-  background-size: 200% auto;
-}
-
-/* Hide Lovable-related elements */
-[class*="lovable-"], 
-[id*="lovable-"], 
-[data-lovable], 
-.gpt-engineer-container, 
-.gpt-engineer-button,
-[class*="gpt-engineer"],
-[id*="gpt-engineer"],
-div[style*="position: fixed"][style*="bottom: 0"][style*="right: 0"]:not([class]) {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-@layer utilities {
-  .bg-grid-pattern {
-    background-image: linear-gradient(to right, rgb(0 0 0 / 0.1) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgb(0 0 0 / 0.1) 1px, transparent 1px);
-    background-size: 24px 24px;
+    @apply bg-background text-foreground;
   }
 }

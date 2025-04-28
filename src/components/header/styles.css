@@ -1,0 +1,47 @@
+
+/* Header specific styles */
+.menu-dropdown {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  transform: translateY(-10px);
+}
+
+.menu-dropdown.open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Z-index management */
+.header-topbar {
+  z-index: 51;
+}
+
+.header-main {
+  z-index: 50;
+}
+
+.header-dropdown {
+  z-index: 49;
+}
+
+.mobile-menu {
+  z-index: 48;
+}
+
+/* Backdrop for mobile menus */
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 47;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}

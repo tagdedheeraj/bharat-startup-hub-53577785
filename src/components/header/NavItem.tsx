@@ -2,12 +2,6 @@
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
-import {
-  NavigationMenuItem,
-  NavigationMenuContent,
-  NavigationMenuLink,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
 
 interface NavItemProps {
   to: string;
@@ -20,9 +14,8 @@ interface NavItemProps {
     icon?: React.ComponentType<any>;
   }[];
   isOpen?: boolean;
-  onOpenChange?: () => void;
-  onDirectNavigation?: (path: string) => void;
-  closeAllMenus?: () => void;
+  onItemClick: () => void;
+  onChildClick: (path: string) => void;
 }
 
 const NavItem = ({
@@ -31,83 +24,85 @@ const NavItem = ({
   active,
   children,
   isOpen,
-  onOpenChange,
-  onDirectNavigation,
-  closeAllMenus
+  onItemClick,
+  onChildClick
 }: NavItemProps) => {
-
-  const handleNavigation = (path: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (onDirectNavigation) {
-      onDirectNavigation(path);
-    }
-  };
 
   if (children) {
     return (
-      <NavigationMenuItem>
-        <NavigationMenuTrigger 
-          className={`${active ? 'text-brand-600 font-medium' : 'text-foreground/80'} hover:text-brand-600 transition-all duration-300`}
-          onClick={onOpenChange}
-          data-state={isOpen ? "open" : "closed"}
+      <div className="relative">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            onItemClick();
+          }}
+          className={cn(
+            "flex items-center px-4 py-2 text-sm font-medium transition-colors outline-none",
+            active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
+          )}
         >
-          {label}
-        </NavigationMenuTrigger>
+          <span className="mr-1">{label}</span>
+          <ChevronDown 
+            className={cn(
+              "h-4 w-4 transition-transform duration-200",
+              isOpen ? "rotate-180" : ""
+            )} 
+          />
+        </button>
+        
         {isOpen && (
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-6 md:w-[500px] lg:w-[600px] lg:grid-cols-2 bg-white shadow-lg rounded-md">
+          <div className="absolute left-0 top-full mt-1 bg-white rounded-md shadow-lg z-50 min-w-[220px] p-3 border border-gray-100">
+            <div className="grid gap-2 md:w-[500px] lg:w-[600px] lg:grid-cols-2">
               {children.map((item) => (
-                <li key={item.to} className="group">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={item.to}
-                      onClick={(e) => handleNavigation(item.to, e)}
-                      className="block p-4 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 relative overflow-hidden group-hover:shadow-md border border-transparent group-hover:border-brand-100/50"
-                    >
-                      <div className="flex items-center gap-3">
-                        {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
-                        <div>
-                          <div className="font-medium leading-none mb-1">{item.label}</div>
-                          {item.description && (
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
+                <div 
+                  key={item.to} 
+                  className="group cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onChildClick(item.to);
+                  }}
+                >
+                  <div className="block p-3 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 group-hover:shadow-md border border-transparent group-hover:border-brand-100/50">
+                    <div className="flex items-center gap-3">
+                      {item.icon && <item.icon className="h-5 w-5 text-brand-500" />}
+                      <div>
+                        <div className="font-medium leading-none mb-1">{item.label}</div>
+                        {item.description && (
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </ul>
-          </NavigationMenuContent>
+            </div>
+          </div>
         )}
-      </NavigationMenuItem>
+      </div>
     );
   }
 
   return (
-    <NavigationMenuItem>
-      <Link
-        to={to}
-        className={cn(
-          "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
-          active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
-        )}
-        onClick={() => {
-          if (closeAllMenus) closeAllMenus();
-          window.scrollTo(0, 0);
-        }}
-      >
-        <span className="relative z-10">{label}</span>
-        {active && (
-          <span className="absolute inset-0 bg-brand-50 rounded-md -z-0"></span>
-        )}
-        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
-      </Link>
-    </NavigationMenuItem>
+    <Link
+      to={to}
+      className={cn(
+        "group flex items-center relative px-4 py-2 text-sm font-medium transition-colors outline-none",
+        active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
+      )}
+      onClick={(e) => {
+        e.preventDefault();
+        onItemClick();
+      }}
+    >
+      <span className="relative z-10">{label}</span>
+      {active && (
+        <span className="absolute inset-0 bg-brand-50 rounded-md -z-0"></span>
+      )}
+      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-brand-500 group-hover:w-4/5 transition-all duration-300"></span>
+    </Link>
   );
 };
 

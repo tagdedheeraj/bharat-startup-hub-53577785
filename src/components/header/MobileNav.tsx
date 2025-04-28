@@ -68,7 +68,7 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
             <Search size={20} />
           </Button>
         </SheetTrigger>
-        <SheetContent side="top" className="h-[60vh] pt-10">
+        <SheetContent side="top" className="h-[60vh] pt-10 z-50">
           <div className="flex flex-col h-full space-y-4">
             <div className="flex items-center border rounded-md focus-within:ring-1 focus-within:ring-brand-500">
               <Search className="ml-2 h-4 w-4 shrink-0 text-muted-foreground" />
@@ -124,7 +124,7 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
               <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+          <SheetContent side="right" className="w-[300px] sm:w-[400px] z-50">
             <h2 className="text-xl font-semibold mb-4 mt-4">Notifications</h2>
             <div className="space-y-3">
               <div className="p-3 bg-blue-50 rounded-md">
@@ -148,15 +148,11 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
         variant="ghost"
         size="icon"
         className="text-gray-600 hover:text-gray-900 transition-colors hover:bg-gray-100/50"
-        onClick={() => setIsDrawerOpen(true)}
+        onClick={toggleMobileMenu}
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
       >
-        {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
+        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </Button>
-
-      <NavigationDrawer 
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-      />
     </div>
   );
 };

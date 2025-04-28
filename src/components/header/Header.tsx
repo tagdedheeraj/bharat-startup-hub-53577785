@@ -6,6 +6,7 @@ import TopBar from './TopBar';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MobileMenu from './MobileMenu';
+import './styles.css';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,8 +35,20 @@ export default function Header() {
     };
   }, []);
 
-  const handleMobileItemClick = (path: string, e: React.MouseEvent) => {
-    e.preventDefault();
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  const handleMobileItemClick = (path: string) => {
     toggleMobileMenu();
     navigate(path);
     window.scrollTo(0, 0);
@@ -68,7 +81,6 @@ export default function Header() {
       <MobileMenu 
         isOpen={mobileMenuOpen}
         currentPath={currentPath}
-        toggleMobileMenu={toggleMobileMenu}
         handleMobileItemClick={handleMobileItemClick}
       />
     </header>
