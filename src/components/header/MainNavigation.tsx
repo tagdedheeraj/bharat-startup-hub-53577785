@@ -1,6 +1,6 @@
 
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import NavItem from './NavItem';
 import { navigationData } from './navigationData';
 
@@ -9,37 +9,71 @@ export const MainNavigation = () => {
   const navigate = useNavigate();
   const [activeItemIndex, setActiveItemIndex] = useState<number | null>(null);
   const navigationRef = useRef<HTMLDivElement>(null);
+  
+  // Function to close all menus
+  const closeAllMenus = useCallback(() => {
+    setActiveItemIndex(null);
+  }, []);
 
   // Close menus when route changes
   useEffect(() => {
-    setActiveItemIndex(null);
-  }, [location.pathname]);
+    closeAllMenus();
+  }, [location.pathname, closeAllMenus]);
 
   // Handle clicking outside to close menus
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (navigationRef.current && !navigationRef.current.contains(event.target as Node)) {
-        setActiveItemIndex(null);
+        closeAllMenus();
       }
     };
 
     const handleScroll = () => {
-      setActiveItemIndex(null);
+      closeAllMenus();
     };
 
-    // Always add click listener, regardless of menu state
+    // Add document-wide click listener to ensure we catch all clicks
     document.addEventListener('mousedown', handleClickOutside);
     window.addEventListener('scroll', handleScroll);
+    
+    // Add a global click handler on body to ensure menus close
+    document.body.addEventListener('click', (e) => {
+      // Check if click is outside nav items
+      const navItems = document.querySelectorAll('.nav-item-container');
+      let insideNavItem = false;
+      navItems.forEach(item => {
+        if (item.contains(e.target as Node)) {
+          insideNavItem = true;
+        }
+      });
+      
+      if (!insideNavItem && activeItemIndex !== null) {
+        closeAllMenus();
+      }
+    });
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('scroll', handleScroll);
+      document.body.removeEventListener('click', () => {});
     };
-  }, []); // No dependency on activeItemIndex
+  }, [closeAllMenus, activeItemIndex]);
+
+  // Reset menu state on page load
+  useEffect(() => {
+    closeAllMenus();
+    
+    // Fix for any lingering menus - force close after a short delay
+    const timer = setTimeout(() => {
+      closeAllMenus();
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [closeAllMenus]);
 
   const handleMenuItemClick = (index: number, hasChildren: boolean, path: string) => {
     if (hasChildren) {
-      // Close other menus when opening a new one
+      // Close menu if clicking the same menu item, otherwise open the clicked menu and close others
       setActiveItemIndex(prevIndex => prevIndex === index ? null : index);
     } else {
       handleDirectNavigation(path);
@@ -47,7 +81,7 @@ export const MainNavigation = () => {
   };
 
   const handleDirectNavigation = (path: string) => {
-    setActiveItemIndex(null);
+    closeAllMenus();
     navigate(path);
     window.scrollTo(0, 0);
   };
@@ -56,16 +90,17 @@ export const MainNavigation = () => {
     <div ref={navigationRef} className="flex relative z-30">
       <div className="flex space-x-1">
         {navigationData.map((item, index) => (
-          <NavItem
-            key={item.to}
-            to={item.to}
-            label={item.label}
-            active={location.pathname === item.to || (item.children && item.children.some(child => location.pathname === child.to))}
-            children={item.children}
-            isOpen={activeItemIndex === index}
-            onItemClick={() => handleMenuItemClick(index, !!item.children, item.to)}
-            onChildClick={handleDirectNavigation}
-          />
+          <div key={item.to} className="nav-item-container">
+            <NavItem
+              to={item.to}
+              label={item.label}
+              active={location.pathname === item.to || (item.children && item.children.some(child => location.pathname === child.to))}
+              children={item.children}
+              isOpen={activeItemIndex === index}
+              onItemClick={() => handleMenuItemClick(index, !!item.children, item.to)}
+              onChildClick={handleDirectNavigation}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -32,10 +32,7 @@ const NavItem = ({
     return (
       <div className="relative">
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            onItemClick();
-          }}
+          onClick={onItemClick}
           className={cn(
             "flex items-center px-4 py-2 text-sm font-medium transition-colors outline-none",
             active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
@@ -57,11 +54,7 @@ const NavItem = ({
                 <div 
                   key={item.to} 
                   className="group cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    onChildClick(item.to);
-                  }}
+                  onClick={() => onChildClick(item.to)}
                 >
                   <div className="block p-3 rounded-lg hover:bg-brand-50 hover:text-brand-600 transition-all duration-200 group-hover:shadow-md border border-transparent group-hover:border-brand-100/50">
                     <div className="flex items-center gap-3">
@@ -93,7 +86,6 @@ const NavItem = ({
         active ? "text-brand-600" : "text-foreground/80 hover:text-brand-600"
       )}
       onClick={(e) => {
-        e.preventDefault();
         onItemClick();
       }}
     >
