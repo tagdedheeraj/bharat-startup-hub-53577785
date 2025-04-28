@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { storage } from '@/lib/firebase';
 import { ref, getDownloadURL } from 'firebase/storage';
@@ -39,16 +38,14 @@ const ExpertCard: React.FC<ExpertProps> = ({
         if (photoUrl.startsWith('http')) {
           setImageUrl(photoUrl);
         } else {
-          // If photoUrl is a storage path, get the download URL
-          // Make sure the path is correct (should be like: profiles/experts/filename.png)
-          const fullPath = photoUrl.includes('/') ? photoUrl : `profiles/experts/${photoUrl}`;
-          const storageRef = ref(storage, fullPath);
+          // Get the download URL from Firebase Storage
+          const storageRef = ref(storage, photoUrl);
           const url = await getDownloadURL(storageRef);
-          console.log('Loaded image URL:', url);
+          console.log(`Loaded image for ${name}:`, url);
           setImageUrl(url);
         }
       } catch (error) {
-        console.error('Error loading image:', error);
+        console.error(`Error loading image for ${name}:`, error);
         setImageUrl('/placeholder.svg');
       } finally {
         setLoading(false);
@@ -56,7 +53,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
     };
 
     loadImage();
-  }, [photoUrl]);
+  }, [photoUrl, name]);
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 h-full flex flex-col transform hover:-translate-y-1 transition-transform">
