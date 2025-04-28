@@ -9,9 +9,9 @@ import {
 import { useAuth } from '@/contexts/auth';
 
 export const NotificationsPopover = () => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
-  if (!user) return null;
+  if (!isAuthenticated) return null;
 
   return (
     <Popover>

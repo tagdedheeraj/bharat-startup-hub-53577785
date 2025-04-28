@@ -51,16 +51,16 @@ const HomePage = () => {
         <ExpertiseSection />
       </div>
 
-      {/* Funding Options Section */}
+      {/* Funding Options Section - Directly after Expertise Section */}
       <FundingOptionsSection />
 
-      {/* Offer Section - 11 Services in 1 Lakh (moved below Funding Options, above News) */}
+      {/* News Headlines Section - Directly after Funding Options */}
+      <NewsHeadlines />
+
+      {/* Offer Section - moved below News Headlines */}
       <div className={isMobile ? "rounded-3xl mx-4 overflow-hidden shadow-lg my-8" : ""}>
         <OfferSection />
       </div>
-
-      {/* News Headlines Section */}
-      <NewsHeadlines />
 
       {/* Stats Section */}
       <StatsSection />

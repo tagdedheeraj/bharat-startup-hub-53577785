@@ -1,6 +1,6 @@
 
 import { Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -14,6 +14,7 @@ import { useState } from 'react';
 export const SearchPopover = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const navigate = useNavigate();
   
   // Combined list of all services for search
   const allServices = navigationData.flatMap(nav => 
@@ -69,11 +70,11 @@ export const SearchPopover = () => {
           {searchResults.length > 0 ? (
             <div className="max-h-72 overflow-auto">
               {searchResults.map((result, idx) => (
-                <Link 
+                <div 
                   key={idx} 
-                  to={result.url}
-                  className="flex items-center p-2 hover:bg-gray-100 rounded-md gap-2"
+                  className="flex items-center p-2 hover:bg-gray-100 rounded-md gap-2 cursor-pointer"
                   onClick={() => {
+                    navigate(result.url);
                     setSearchQuery('');
                     setSearchResults([]);
                   }}
@@ -82,7 +83,7 @@ export const SearchPopover = () => {
                     <div className="text-xs text-gray-500">{result.category}</div>
                     <div className="text-sm font-medium">{result.title}</div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : searchQuery.trim() !== '' ? (

@@ -22,7 +22,7 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   
   // Combined list of all services for search
   const allServices = navigationData.flatMap(nav => 
@@ -112,7 +112,7 @@ const MobileNav = ({ toggleMobileMenu, mobileMenuOpen }: MobileNavProps) => {
         </SheetContent>
       </Sheet>
       
-      {user && (
+      {isAuthenticated && (
         <Sheet open={isNotificationOpen} onOpenChange={setIsNotificationOpen}>
           <SheetTrigger asChild>
             <Button 
