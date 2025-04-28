@@ -7,39 +7,39 @@ import { useState, useEffect } from 'react';
 
 const team = [
   {
-    name: 'Priya Shah',
-    position: 'Marketing Director',
-    expertise: 'Brand Strategy, Digital Marketing',
-    photoUrl: 'profiles/experts/priya-shah.png',
-    linkedinUrl: 'https://linkedin.com/in/priya-shah'
+    name: 'Bhonde Kinjal',
+    position: 'Customer Support',
+    expertise: 'Customer Experience, Technical Support, Communication Strategy',
+    photoUrl: 'profiles/experts/bhonde-kinjal.png',
+    linkedinUrl: 'https://linkedin.com/in/bhonde-kinjal'
   },
   {
-    name: 'Raj Patel',
-    position: 'Operations Manager',
-    expertise: 'Process Optimization, Team Management',
-    photoUrl: 'profiles/experts/raj-patel.png',
-    linkedinUrl: 'https://linkedin.com/in/raj-patel'
+    name: 'Siddhi Panchal',
+    position: 'Product Manager',
+    expertise: 'Product Development, Agile Methodologies, User Experience',
+    photoUrl: 'profiles/experts/siddhi-panchal.png',
+    linkedinUrl: 'https://linkedin.com/in/siddhi-panchal'
   },
   {
-    name: 'Anjali Kumar',
-    position: 'Financial Analyst',
-    expertise: 'Investment Analysis, Risk Assessment',
-    photoUrl: 'profiles/experts/anjali-kumar.png',
-    linkedinUrl: 'https://linkedin.com/in/anjali-kumar'
+    name: 'Leua Rachana',
+    position: 'Market Research Analyst',
+    expertise: 'Data Analysis, Market Trends, Consumer Behavior Research',
+    photoUrl: 'profiles/experts/leua-rachana.png',
+    linkedinUrl: 'https://linkedin.com/in/leua-rachana'
   },
   {
-    name: 'Neha Desai',
-    position: 'Client Relations',
-    expertise: 'Customer Success, Relationship Building',
-    photoUrl: 'profiles/experts/neha-desai.png',
-    linkedinUrl: 'https://linkedin.com/in/neha-desai'
+    name: 'Gor Palak',
+    position: 'UI/UX Designer',
+    expertise: 'User Interface Design, User Experience, Design Systems',
+    photoUrl: 'profiles/experts/gor-palak.png',
+    linkedinUrl: 'https://linkedin.com/in/gor-palak'
   },
   {
-    name: 'Meera Singh',
-    position: 'Research Specialist',
-    expertise: 'Market Research, Industry Analysis',
-    photoUrl: 'profiles/experts/meera-singh.png',
-    linkedinUrl: 'https://linkedin.com/in/meera-singh'
+    name: 'Ankit Modi',
+    position: 'IT Manager',
+    expertise: 'Infrastructure Management, Cloud Solutions, IT Strategy',
+    photoUrl: 'profiles/experts/ankit-modi.png',
+    linkedinUrl: 'https://linkedin.com/in/ankit-modi'
   },
 ];
 
