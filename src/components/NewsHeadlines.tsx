@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -52,7 +51,7 @@ export default function NewsHeadlines() {
   };
 
   return (
-    <section className="py-12 md:py-16 relative"> {/* Reduced padding from py-16 md:py-24 */}
+    <section className="py-12 md:py-16 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
           subheading="IN THE NEWS"
@@ -117,7 +116,7 @@ export default function NewsHeadlines() {
           ))}
         </div>
         
-        <div className="mt-8 text-center"> {/* Reduced margin from mt-12 */}
+        <div className="mt-8 text-center">
           <Link to="/more/blogs" className="btn-primary inline-flex items-center rounded-full">
             View All News
             <ArrowRight size={18} className="ml-2" />
@@ -125,9 +124,7 @@ export default function NewsHeadlines() {
         </div>
       </div>
       
-      {/* Removed the curved-wave-bottom and other decorative elements */}
-      <div className="blob-shape bg-purple-500/10 w-64 h-64 -left-24 top-1/3"></div>
-      <div className="blob-shape bg-blue-500/10 w-96 h-96 right-0 bottom-0"></div>
+      {/* Removed all decorative elements including the blob shapes */}
     </section>
   );
 }
