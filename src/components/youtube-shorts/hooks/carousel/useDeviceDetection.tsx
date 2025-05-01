@@ -27,7 +27,7 @@ export const useDeviceDetection = () => {
       ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     
     return mobileUserAgent || (smallScreen && hasTouch);
-  }());
+  })(); // Fixed the syntax error here - proper way to invoke the IIFE
   
   return {
     isLowPerformanceDevice: lowPerformanceDevice.current,
