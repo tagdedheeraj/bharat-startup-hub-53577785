@@ -10,7 +10,6 @@ import StatisticsSlider from '@/components/StatisticsSlider';
 import PopularFundingServices from '@/components/funding/PopularFundingServices';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import NewsHeadlines from '@/components/NewsHeadlines';
-import OfferSection from '@/components/home/OfferSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import StatsSection from '@/components/home/StatsSection';
 import { useRef, useEffect } from 'react';
@@ -61,8 +60,6 @@ const HomePage = () => {
       
       {/* News Headlines Section */}
       <NewsHeadlines />
-
-      {/* Offer Section - SECTION REMOVED */}
 
       {/* Testimonials Section */}
       <TestimonialsSection />
