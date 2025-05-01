@@ -22,8 +22,7 @@ const ExpertCard: React.FC<ExpertProps> = ({
   expertise,
   bio,
   experience,
-  photoUrl,
-  linkedinUrl
+  photoUrl
 }) => {
   const [imageUrl, setImageUrl] = useState<string>('/placeholder.svg');
   const [loading, setLoading] = useState(true);
@@ -133,22 +132,6 @@ const ExpertCard: React.FC<ExpertProps> = ({
         </div>
         
         <p className="text-gray-600 mb-5 flex-grow line-clamp-4">{bio}</p>
-        
-        {linkedinUrl && (
-          <a 
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] py-2 px-4 rounded-lg transition-colors w-full"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-              <rect width="4" height="12" x="2" y="9"></rect>
-              <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-            <span className="font-medium">Connect on LinkedIn</span>
-          </a>
-        )}
       </div>
     </div>
   );

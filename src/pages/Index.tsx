@@ -13,12 +13,18 @@ import NewsHeadlines from '@/components/NewsHeadlines';
 import OfferSection from '@/components/home/OfferSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import StatsSection from '@/components/home/StatsSection';
+import { useRef, useEffect } from 'react';
+import MobileOptimizer from '@/components/layout/MobileOptimizer';
 
 const HomePage = () => {
   const isMobile = useIsMobile();
+  const mainRef = useRef<HTMLDivElement>(null);
   
   return (
-    <div className={`overflow-hidden ${isMobile ? 'pb-16' : ''}`}>
+    <div ref={mainRef} className={`overflow-hidden ${isMobile ? 'pb-16' : ''}`}>
+      {/* Mobile optimizer */}
+      <MobileOptimizer mainRef={mainRef} />
+      
       {/* First-time visitor video popup */}
       <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
 

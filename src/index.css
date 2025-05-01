@@ -118,6 +118,41 @@
     /* Make buttons feel more native on touch */
     button, a {
       @apply active:opacity-70 transition-opacity;
+      min-height: 42px; /* Improve touch target size */
+    }
+
+    /* Fix tab overlapping issues */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Make sure tabs don't overlap */
+    [role="tablist"] {
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-wrap: nowrap !important;
+    }
+    
+    [role="tab"] {
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    
+    /* Mobile specific layout improvements */
+    .grid {
+      grid-gap: 0.75rem !important;
+    }
+    
+    /* Better touch feedback */
+    .interactive-element {
+      @apply active:bg-gray-100 transition-colors;
     }
   }
 
@@ -142,5 +177,29 @@
   
   .btn-secondary {
     @apply bg-white text-gray-800 border border-gray-200 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-all shadow-sm;
+  }
+  
+  /* Fix for mobile horizontal scrolling issues */
+  .container {
+    overflow-x: hidden;
+  }
+  
+  /* Mobile optimization for tabs */
+  .tab-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  
+  /* Ensure proper padding for mobile */
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
+    
+    h1, h2, h3 {
+      word-break: break-word;
+    }
   }
 }

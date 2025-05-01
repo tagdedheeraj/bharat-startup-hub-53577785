@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Calendar, Mail, Linkedin, Map } from 'lucide-react';
+import { Calendar, Mail, Map } from 'lucide-react';
 import type { TeamMember } from '@/types/team';
 
 interface TeamMemberCardProps {
@@ -50,22 +50,10 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({ member }) => {
             <span className="text-sm">Email</span>
           </a>
           
-          {member.linkedinUrl ? (
-            <a 
-              href={member.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-[#0077B5]/10 hover:bg-[#0077B5]/20 text-[#0077B5] p-2 rounded-lg transition-colors"
-            >
-              <Linkedin size={16} />
-              <span className="text-sm">LinkedIn</span>
-            </a>
-          ) : (
-            <div className="flex items-center justify-center gap-2 bg-gray-100 text-gray-500 p-2 rounded-lg">
-              <Map size={16} />
-              <span className="text-sm">{member.location?.split(',')[0]}</span>
-            </div>
-          )}
+          <div className="flex items-center justify-center gap-2 bg-gray-100 text-gray-500 p-2 rounded-lg">
+            <Map size={16} />
+            <span className="text-sm">{member.location?.split(',')[0] || 'Location'}</span>
+          </div>
         </div>
       </div>
     </div>
