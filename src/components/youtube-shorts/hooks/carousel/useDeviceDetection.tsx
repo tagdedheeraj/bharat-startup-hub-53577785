@@ -1,5 +1,5 @@
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { isLowPerformanceDevice } from '@/utils/mobile';
 
 /**
@@ -10,8 +10,8 @@ export const useDeviceDetection = () => {
   // Device capability detection - only compute once
   const lowPerformanceDevice = useRef(isLowPerformanceDevice());
   
-  // Comprehensive mobile device detection
-  const isMobileDevice = useRef(() => {
+  // Comprehensive mobile device detection - use useMemo instead of useRef for function execution
+  const isMobileDevice = useMemo(() => {
     if (typeof navigator === 'undefined') return false;
     
     // Check user agent for mobile devices
@@ -27,10 +27,10 @@ export const useDeviceDetection = () => {
       ('ontouchstart' in window || navigator.maxTouchPoints > 0);
     
     return mobileUserAgent || (smallScreen && hasTouch);
-  })(); // Fixed the syntax error here - proper way to invoke the IIFE
+  }, []); // Empty dependency array means this will only run once on mount
   
   return {
     isLowPerformanceDevice: lowPerformanceDevice.current,
-    isMobileDevice: isMobileDevice.current
+    isMobileDevice: isMobileDevice
   };
 };
