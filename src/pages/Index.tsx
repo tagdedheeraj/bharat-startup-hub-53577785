@@ -62,10 +62,7 @@ const HomePage = () => {
       {/* News Headlines Section */}
       <NewsHeadlines />
 
-      {/* Offer Section */}
-      <div className={isMobile ? "rounded-3xl mx-4 overflow-hidden shadow-lg my-8" : ""}>
-        <OfferSection />
-      </div>
+      {/* Offer Section - SECTION REMOVED */}
 
       {/* Testimonials Section */}
       <TestimonialsSection />
