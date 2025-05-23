@@ -33,7 +33,7 @@ export default function FundingApplicationModal({
       open={open} 
       onOpenChange={onOpenChange}
     >
-      <DialogContent className="sm:max-w-[425px] relative" style={{ zIndex: 10001 }}>
+      <DialogContent className="sm:max-w-[425px] bg-white dark:bg-slate-950 relative z-[10001]">
         <DialogHeader>
           <DialogTitle>Apply for Funding</DialogTitle>
           <DialogDescription>

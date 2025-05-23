@@ -61,7 +61,6 @@ const AIServiceCard = ({ icon: Icon, title, description, pricing }: AIServiceCar
         </CardContent>
       </Card>
       
-      {/* Add the FundingApplicationModal component */}
       <FundingApplicationModal
         open={open}
         onOpenChange={setOpen}
