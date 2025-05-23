@@ -20,6 +20,7 @@ import TeamMembersPage from "@/pages/more/TeamMembers";
 import MSMEEventsPage from "@/pages/more/MSMEEvents";
 import ReviewsPage from "@/pages/more/Reviews";
 import BlogsPage from "@/pages/more/Blogs";
+import BlogPostPage from "@/pages/more/BlogPost";
 import CompliancePage from "@/pages/more/Compliance";
 import NotFound from "@/pages/NotFound";
 import ITSolutionsPage from "@/pages/ITSolutions";
@@ -109,6 +110,7 @@ const AppRoutes = () => {
         <Route path="/more/msme-events" element={<MSMEEventsPage />} />
         <Route path="/more/reviews" element={<ReviewsPage />} />
         <Route path="/more/blogs" element={<BlogsPage />} />
+        <Route path="/more/blogs/:blogId" element={<BlogPostPage />} />
         <Route path="/more/compliance" element={<CompliancePage />} />
         <Route path="/more/special-services" element={<SpecialServicesPage />} />
         <Route path="*" element={<NotFound />} />

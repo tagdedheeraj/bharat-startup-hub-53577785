@@ -1,5 +1,4 @@
-
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Calendar, User, Tag, Clock } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
 import { useState } from 'react';
@@ -18,6 +17,7 @@ const BlogsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 6;
+  const navigate = useNavigate();
   
   const featuredBlogs = [
     {
@@ -164,11 +164,7 @@ const BlogsPage = () => {
   };
   
   const handleReadMore = (blogId: string) => {
-    // In a real app, this would navigate to the blog post page
-    // For now, we'll show a toast notification
-    toast.info(`Opening article: ${blogId}`, {
-      description: "This would navigate to the full article in a real application"
-    });
+    navigate(`/more/blogs/${blogId}`);
   };
 
   const categories = [

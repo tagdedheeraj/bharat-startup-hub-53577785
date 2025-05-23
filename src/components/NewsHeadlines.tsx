@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SectionHeading from '@/components/SectionHeading';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import FundingApplicationForm from '@/components/funding/FundingApplicationForm';
@@ -12,12 +12,13 @@ interface NewsItem {
   source: string;
   excerpt: string;
   imageUrl: string;
-  link: string;
+  blogId: string;
 }
 
 export default function NewsHeadlines() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState<string>('');
+  const navigate = useNavigate();
 
   const newsItems: NewsItem[] = [
     {
@@ -26,7 +27,7 @@ export default function NewsHeadlines() {
       source: "Economic Times",
       excerpt: "Leading startup facilitator raises funding to expand its MSME support services across India.",
       imageUrl: "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1000&auto=format&fit=crop",
-      link: "/more/blogs"
+      blogId: "blog1"
     },
     {
       title: "Government Launches New Scheme for Startups with Support from BSS",
@@ -34,7 +35,7 @@ export default function NewsHeadlines() {
       source: "Business Standard",
       excerpt: "New government initiative partners with Bharat Startup Solution to provide enhanced funding access.",
       imageUrl: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=1000&auto=format&fit=crop",
-      link: "/more/blogs"
+      blogId: "blog2"
     },
     {
       title: "Bharat Startup Solution Expands Operations to 10 New Cities",
@@ -42,13 +43,12 @@ export default function NewsHeadlines() {
       source: "Startup India",
       excerpt: "The company continues its mission to support MSMEs by expanding to tier-2 and tier-3 cities.",
       imageUrl: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=1000&auto=format&fit=crop",
-      link: "/more/blogs"
+      blogId: "blog3"
     }
   ];
 
-  const handleReadMoreClick = (title: string) => {
-    setSelectedNews(title);
-    setIsDialogOpen(true);
+  const handleReadMoreClick = (blogId: string) => {
+    navigate(`/more/blogs/${blogId}`);
   };
 
   return (
@@ -84,34 +84,13 @@ export default function NewsHeadlines() {
                 <h3 className="text-xl font-bold mb-3 line-clamp-2">{news.title}</h3>
                 <p className="text-gray-600 mb-4 line-clamp-2">{news.excerpt}</p>
                 
-                <Dialog open={isDialogOpen && selectedNews === news.title} onOpenChange={(open) => {
-                  setIsDialogOpen(open);
-                  if (!open) setSelectedNews('');
-                }}>
-                  <DialogTrigger asChild>
-                    <button 
-                      className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
-                      onClick={() => handleReadMoreClick(news.title)}
-                    >
-                      Read More
-                      <ArrowRight size={16} className="ml-1" />
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px] rounded-2xl">
-                    <DialogHeader>
-                      <DialogTitle>Stay Updated</DialogTitle>
-                    </DialogHeader>
-                    <div className="py-4">
-                      <p className="text-center mb-4">Enter your details to read the full article and stay updated with our latest news.</p>
-                      <FundingApplicationForm 
-                        fundingTitle="News Subscription" 
-                        fundingAmount="" 
-                        onSuccess={() => setIsDialogOpen(false)}
-                        formType="newsletter"
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <button 
+                  className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
+                  onClick={() => handleReadMoreClick(news.blogId)}
+                >
+                  Read More
+                  <ArrowRight size={16} className="ml-1" />
+                </button>
               </div>
             </div>
           ))}
@@ -124,8 +103,6 @@ export default function NewsHeadlines() {
           </Link>
         </div>
       </div>
-      
-      {/* Removed all decorative elements including the blob shapes */}
     </section>
   );
 }
