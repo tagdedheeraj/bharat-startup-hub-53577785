@@ -2,10 +2,26 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, User, Tag, Clock } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
 
 const BlogsPage = () => {
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const itemsPerPage = 6;
+  
   const featuredBlogs = [
     {
+      id: "blog1",
       title: "5 Effective Funding Strategies for Indian Startups in 2023",
       excerpt: "Discover the most effective ways for Indian startups to secure funding in the current economic climate, from angel investors to government schemes.",
       author: "Rajesh Sharma",
@@ -15,6 +31,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog2",
       title: "Navigating the Legal Landscape: Essential Compliance for MSMEs",
       excerpt: "A comprehensive guide to understanding and implementing the essential legal compliance requirements for Micro, Small, and Medium Enterprises in India.",
       author: "Priya Verma",
@@ -24,6 +41,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog3",
       title: "Digital Transformation for Small Businesses: A Step-by-Step Guide",
       excerpt: "Learn how small businesses can effectively implement digital transformation strategies to enhance operations, customer experience, and market reach.",
       author: "Vikram Singh",
@@ -34,8 +52,9 @@ const BlogsPage = () => {
     }
   ];
 
-  const recentBlogs = [
+  const allBlogs = [
     {
+      id: "blog4",
       title: "The Power of Proper Business Registration: Benefits and Process",
       excerpt: "Understand why proper business registration is crucial and learn about the streamlined process to register your business entity in India.",
       author: "Amit Patel",
@@ -45,6 +64,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog5",
       title: "Marketing Strategies for Bootstrapped Startups",
       excerpt: "Effective marketing strategies that require minimal budget but deliver maximum impact for startups operating with limited resources.",
       author: "Neha Gupta",
@@ -54,6 +74,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog6",
       title: "Understanding Different Funding Rounds: From Seed to Series C",
       excerpt: "A detailed explanation of the various funding rounds, their purposes, expectations, and how to prepare your startup for each stage.",
       author: "Rajesh Sharma",
@@ -63,6 +84,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog7",
       title: "The Importance of Intellectual Property Protection for Startups",
       excerpt: "Why intellectual property protection is crucial for startups and how to implement effective IP strategies to safeguard your innovations.",
       author: "Priya Verma",
@@ -72,6 +94,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog8",
       title: "Building a Sustainable MSME: Environmental Practices and Benefits",
       excerpt: "How incorporating sustainable practices in your MSME can benefit both the environment and your business growth in the long run.",
       author: "Anjali Desai",
@@ -81,6 +104,7 @@ const BlogsPage = () => {
       image: "https://images.unsplash.com/photo-1491961865842-98f7befd1a60?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
+      id: "blog9",
       title: "Effective Financial Management for Small Businesses",
       excerpt: "Essential financial management practices that small businesses should implement to ensure healthy cash flow and sustainable growth.",
       author: "Amit Patel",
@@ -88,8 +112,64 @@ const BlogsPage = () => {
       readTime: "9 min read",
       category: "Finance",
       image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+    },
+    {
+      id: "blog10",
+      title: "Emerging Technologies Transforming the MSME Sector",
+      excerpt: "Explore how AI, blockchain, and IoT are revolutionizing operations for small and medium enterprises across India.",
+      author: "Vikram Singh",
+      date: "May 15, 2023",
+      readTime: "10 min read",
+      category: "Technology",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+    },
+    {
+      id: "blog11",
+      title: "Government Schemes for Women Entrepreneurs in India",
+      excerpt: "A comprehensive overview of financial assistance and support programs available for women starting businesses in India.",
+      author: "Neha Gupta",
+      date: "May 8, 2023",
+      readTime: "8 min read",
+      category: "Funding",
+      image: "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
+    },
+    {
+      id: "blog12",
+      title: "Tax Planning Strategies for Small Business Owners",
+      excerpt: "Essential tax planning techniques to legally minimize your tax burden while ensuring compliance with Indian tax laws.",
+      author: "Amit Patel",
+      date: "May 1, 2023",
+      readTime: "9 min read",
+      category: "Finance",
+      image: "https://images.unsplash.com/photo-1554224155-8131a01f88b0?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     }
   ];
+
+  // Calculate pagination
+  const totalPages = Math.ceil(allBlogs.length / itemsPerPage);
+  const displayedBlogs = allBlogs.slice(0, currentPage * itemsPerPage);
+  
+  const loadMoreBlogs = () => {
+    if (currentPage < totalPages) {
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        setCurrentPage(currentPage + 1);
+        setIsLoading(false);
+        toast.success("More articles loaded successfully");
+      }, 800);
+    } else {
+      toast.info("You've reached the end of our articles");
+    }
+  };
+  
+  const handleReadMore = (blogId: string) => {
+    // In a real app, this would navigate to the blog post page
+    // For now, we'll show a toast notification
+    toast.info(`Opening article: ${blogId}`, {
+      description: "This would navigate to the full article in a real application"
+    });
+  };
 
   const categories = [
     { name: "Funding", count: 8 },
@@ -159,10 +239,13 @@ const BlogsPage = () => {
                       {blog.readTime}
                     </div>
                   </div>
-                  <a href="#" className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700">
+                  <button 
+                    onClick={() => handleReadMore(blog.id)} 
+                    className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
+                  >
                     Read More
                     <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
@@ -184,7 +267,7 @@ const BlogsPage = () => {
               />
               
               <div className="space-y-8 mt-8">
-                {recentBlogs.map((blog, index) => (
+                {displayedBlogs.map((blog, index) => (
                   <div 
                     key={index} 
                     className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100 animate-fadeIn"
@@ -217,10 +300,13 @@ const BlogsPage = () => {
                             <Clock className="h-4 w-4 mr-1" />
                             {blog.readTime}
                           </div>
-                          <a href="#" className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700">
+                          <button 
+                            onClick={() => handleReadMore(blog.id)}
+                            className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
+                          >
                             Read More
                             <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -228,10 +314,45 @@ const BlogsPage = () => {
                 ))}
               </div>
               
-              <div className="mt-12 flex justify-center">
-                <button className="btn-primary">
-                  Load More Articles
+              <div className="mt-12 flex flex-col items-center space-y-4">
+                <button 
+                  className={`btn-primary w-full sm:w-auto ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+                  onClick={loadMoreBlogs}
+                  disabled={isLoading || currentPage >= totalPages}
+                >
+                  {isLoading ? 'Loading...' : currentPage >= totalPages ? 'No More Articles' : 'Load More Articles'}
                 </button>
+                
+                {displayedBlogs.length > 0 && (
+                  <Pagination className="mt-6">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                          className={currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                      
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                          <PaginationLink 
+                            isActive={currentPage === page}
+                            onClick={() => setCurrentPage(page)}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+                          className={currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
               </div>
             </div>
             
@@ -280,7 +401,10 @@ const BlogsPage = () => {
                 <p className="text-gray-600 mb-4">
                   Get the latest insights and articles delivered directly to your inbox.
                 </p>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={(e) => {
+                  e.preventDefault();
+                  toast.success("Thank you for subscribing to our newsletter!");
+                }}>
                   <input
                     type="email"
                     placeholder="Your email address"

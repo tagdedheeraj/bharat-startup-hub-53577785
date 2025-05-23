@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Calendar, ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -25,7 +26,7 @@ export default function NewsHeadlines() {
       source: "Economic Times",
       excerpt: "Leading startup facilitator raises funding to expand its MSME support services across India.",
       imageUrl: "https://images.unsplash.com/photo-1616469829941-c7200edec809?q=80&w=1000&auto=format&fit=crop",
-      link: "#"
+      link: "/more/blogs"
     },
     {
       title: "Government Launches New Scheme for Startups with Support from BSS",
@@ -33,7 +34,7 @@ export default function NewsHeadlines() {
       source: "Business Standard",
       excerpt: "New government initiative partners with Bharat Startup Solution to provide enhanced funding access.",
       imageUrl: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=1000&auto=format&fit=crop",
-      link: "#"
+      link: "/more/blogs"
     },
     {
       title: "Bharat Startup Solution Expands Operations to 10 New Cities",
@@ -41,7 +42,7 @@ export default function NewsHeadlines() {
       source: "Startup India",
       excerpt: "The company continues its mission to support MSMEs by expanding to tier-2 and tier-3 cities.",
       imageUrl: "https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=1000&auto=format&fit=crop",
-      link: "#"
+      link: "/more/blogs"
     }
   ];
 
