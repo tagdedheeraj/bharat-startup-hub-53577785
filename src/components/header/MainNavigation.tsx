@@ -36,18 +36,11 @@ export const MainNavigation = () => {
     document.addEventListener('mousedown', handleClickOutside);
     window.addEventListener('scroll', handleScroll);
     
-    // Add a global click handler on body to ensure menus close
-    document.body.addEventListener('click', (e) => {
-      // Check if click is outside nav items
-      const navItems = document.querySelectorAll('.nav-item-container');
-      let insideNavItem = false;
-      navItems.forEach(item => {
-        if (item.contains(e.target as Node)) {
-          insideNavItem = true;
-        }
-      });
-      
-      if (!insideNavItem && activeItemIndex !== null) {
+    // Add a global click handler on document to close menus when clicked outside
+    document.addEventListener('click', (e) => {
+      // If click target is not inside navigation menu, close all menus
+      const isOutsideNavigation = navigationRef.current && !navigationRef.current.contains(e.target as Node);
+      if (isOutsideNavigation) {
         closeAllMenus();
       }
     });
@@ -55,25 +48,28 @@ export const MainNavigation = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('scroll', handleScroll);
-      document.body.removeEventListener('click', () => {});
+      document.removeEventListener('click', () => {});
     };
-  }, [closeAllMenus, activeItemIndex]);
+  }, [closeAllMenus]);
 
-  // Reset menu state on page load
+  // Add an escape key handler to close menus
   useEffect(() => {
-    closeAllMenus();
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeAllMenus();
+      }
+    };
     
-    // Fix for any lingering menus - force close after a short delay
-    const timer = setTimeout(() => {
-      closeAllMenus();
-    }, 100);
+    document.addEventListener('keydown', handleEscapeKey);
     
-    return () => clearTimeout(timer);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
   }, [closeAllMenus]);
 
   const handleMenuItemClick = (index: number, hasChildren: boolean, path: string) => {
     if (hasChildren) {
-      // Close menu if clicking the same menu item, otherwise open the clicked menu and close others
+      // Toggle menu: close if clicking the same, open if clicking different
       setActiveItemIndex(prevIndex => prevIndex === index ? null : index);
     } else {
       handleDirectNavigation(path);

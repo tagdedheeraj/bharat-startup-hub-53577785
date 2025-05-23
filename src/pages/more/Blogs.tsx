@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Calendar, User, Tag, Clock } from 'lucide-react';
 import SectionHeading from '@/components/SectionHeading';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { 
   Pagination, 
@@ -13,9 +13,11 @@ import {
 } from '@/components/ui/pagination';
 
 const BlogsPage = () => {
-  // State for pagination
+  // State for pagination and search
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredBlogs, setFilteredBlogs] = useState<any[]>([]);
   const itemsPerPage = 6;
   const navigate = useNavigate();
   
@@ -145,9 +147,26 @@ const BlogsPage = () => {
     }
   ];
 
+  // Effect for filtering blogs based on search query
+  useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setFilteredBlogs(allBlogs);
+    } else {
+      const filtered = allBlogs.filter(blog => 
+        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        blog.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        blog.author.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredBlogs(filtered);
+      // Reset to first page when searching
+      setCurrentPage(1);
+    }
+  }, [searchQuery]);
+
   // Calculate pagination
-  const totalPages = Math.ceil(allBlogs.length / itemsPerPage);
-  const displayedBlogs = allBlogs.slice(0, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+  const displayedBlogs = filteredBlogs.slice(0, currentPage * itemsPerPage);
   
   const loadMoreBlogs = () => {
     if (currentPage < totalPages) {
@@ -165,6 +184,10 @@ const BlogsPage = () => {
   
   const handleReadMore = (blogId: string) => {
     navigate(`/more/blogs/${blogId}`);
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   const categories = [
@@ -263,51 +286,57 @@ const BlogsPage = () => {
               />
               
               <div className="space-y-8 mt-8">
-                {displayedBlogs.map((blog, index) => (
-                  <div 
-                    key={index} 
-                    className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100 animate-fadeIn"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className="flex flex-col md:flex-row">
-                      <div className="md:w-1/3 h-48 md:h-auto">
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="md:w-2/3 p-6">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full">
-                            {blog.category}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {blog.date}
-                          </div>
+                {displayedBlogs.length > 0 ? (
+                  displayedBlogs.map((blog, index) => (
+                    <div 
+                      key={index} 
+                      className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100 animate-fadeIn"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <div className="flex flex-col md:flex-row">
+                        <div className="md:w-1/3 h-48 md:h-auto">
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <h3 className="text-xl font-bold mb-3">{blog.title}</h3>
-                        <p className="text-gray-600 mb-4">{blog.excerpt}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center text-sm text-gray-500">
-                            <User className="h-4 w-4 mr-1" />
-                            {blog.author}
-                            <span className="mx-2">•</span>
-                            <Clock className="h-4 w-4 mr-1" />
-                            {blog.readTime}
+                        <div className="md:w-2/3 p-6">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="bg-brand-50 text-brand-700 text-xs font-medium px-3 py-1 rounded-full">
+                              {blog.category}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {blog.date}
+                            </div>
                           </div>
-                          <button 
-                            onClick={() => handleReadMore(blog.id)}
-                            className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
-                          >
-                            Read More
-                            <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
-                          </button>
+                          <h3 className="text-xl font-bold mb-3">{blog.title}</h3>
+                          <p className="text-gray-600 mb-4">{blog.excerpt}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center text-sm text-gray-500">
+                              <User className="h-4 w-4 mr-1" />
+                              {blog.author}
+                              <span className="mx-2">•</span>
+                              <Clock className="h-4 w-4 mr-1" />
+                              {blog.readTime}
+                            </div>
+                            <button 
+                              onClick={() => handleReadMore(blog.id)}
+                              className="inline-flex items-center text-brand-600 font-medium hover:text-brand-700"
+                            >
+                              Read More
+                              <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-1" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="bg-white rounded-xl p-8 text-center">
+                    <p className="text-gray-600">No articles found matching your search criteria.</p>
                   </div>
-                ))}
+                )}
               </div>
               
               <div className="mt-12 flex flex-col items-center space-y-4">
@@ -361,6 +390,8 @@ const BlogsPage = () => {
                   <input
                     type="text"
                     placeholder="Search articles..."
+                    value={searchQuery}
+                    onChange={handleSearch}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 pr-10"
                   />
                   <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -377,7 +408,10 @@ const BlogsPage = () => {
                 <ul className="space-y-2">
                   {categories.map((category, index) => (
                     <li key={index}>
-                      <a href="#" className="flex items-center justify-between py-2 border-b border-gray-100 hover:text-brand-600">
+                      <button 
+                        onClick={() => setSearchQuery(category.name)}
+                        className="flex items-center justify-between w-full text-left py-2 border-b border-gray-100 hover:text-brand-600"
+                      >
                         <span className="flex items-center">
                           <Tag className="h-4 w-4 mr-2" />
                           {category.name}
@@ -385,7 +419,7 @@ const BlogsPage = () => {
                         <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
                           {category.count}
                         </span>
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
