@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock, RefreshCcw, Instagram } from 'lucide-react';
+import { Mail, MapPin, Phone, FileText, Shield, Info, FileSignature, Building, Lock, RefreshCcw, Instagram, Building2 } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -71,6 +72,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/grievances" className="text-gray-300 hover:text-white transition-colors">Submit Grievance</Link>
+              </li>
+              <li>
+                <Link to="/ministry-of-commerce" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <Building2 className="w-4 h-4 mr-2 text-brand-400" />
+                  Ministry of Commerce & Industry
+                </Link>
               </li>
             </ul>
           </div>

@@ -32,6 +32,7 @@ import ClientServiceAgreementPage from "@/pages/ClientServiceAgreement";
 import RefundPolicyPage from "@/pages/RefundPolicy";
 import GrievancesPage from "@/pages/Grievances";
 import SpecialServicesPage from "@/pages/more/SpecialServices";
+import MinistryOfCommercePage from "@/pages/MinistryOfCommerce";
 
 // CA Services Pages
 import CAServicesPage from "@/pages/CAServices";
@@ -69,6 +70,7 @@ const AppRoutes = () => {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/faqs" element={<FAQsPage />} />
         <Route path="/grievances" element={<GrievancesPage />} />
+        <Route path="/ministry-of-commerce" element={<MinistryOfCommercePage />} />
         
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
