@@ -18,44 +18,44 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
  
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 230 70% 24%;
     --primary-foreground: 210 40% 98%;
  
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 205 80% 95%;
+    --secondary-foreground: 230 70% 24%;
  
-    --muted: 210 40% 96.1%;
+    --muted: 205 30% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
  
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 205 80% 95%;
+    --accent-foreground: 230 70% 24%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 230 70% 24%;
  
     --radius: 0.5rem;
 
-    --brand-25: 30 100% 97%;
-    --brand-50: 30 100% 95%;
-    --brand-100: 30 100% 90%;
-    --brand-200: 30 95% 80%;
-    --brand-300: 30 90% 70%;
-    --brand-400: 30 85% 60%;
-    --brand-500: 30 80% 50%;
-    --brand-600: 30 75% 40%;
-    --brand-700: 30 70% 30%;
-    --brand-800: 30 65% 20%;
-    --brand-900: 30 60% 10%;
+    --brand-25: 205 80% 97%;
+    --brand-50: 205 80% 95%;
+    --brand-100: 205 80% 90%;
+    --brand-200: 205 75% 80%;
+    --brand-300: 205 70% 65%;
+    --brand-400: 200 80% 50%;
+    --brand-500: 200 100% 40%;
+    --brand-600: 200 100% 32%;
+    --brand-700: 250 70% 24%;
+    --brand-800: 250 70% 19%;
+    --brand-900: 250 65% 14%;
     
-    /* India flag colors */
-    --india-saffron: 39 100% 50%;
+    /* Brand colors matching logo */
+    --india-saffron: 200 100% 40%;
     --india-white: 0 0% 100%;
-    --india-green: 120 100% 25%;
-    --india-blue: 240 100% 40%;
+    --india-green: 250 70% 24%;
+    --india-blue: 250 70% 24%;
 
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -172,7 +172,7 @@
   }
   
   .btn-primary {
-    @apply bg-india-saffron text-white px-6 py-2.5 rounded-lg font-medium hover:bg-india-saffron/90 transition-all shadow-sm;
+    @apply bg-brand-500 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-brand-600 transition-all shadow-sm;
   }
   
   .btn-secondary {
