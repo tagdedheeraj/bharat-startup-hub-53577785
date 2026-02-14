@@ -145,20 +145,16 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-4">
-              <li className="flex items-start">
-                <MapPin className="w-5 h-5 text-brand-400 mt-1 mr-3" />
-                <span className="text-gray-300">7th Floor - 727, Arved Transcube Plaza, 132 Ft. Ring Road, opp. Ranip BRTS, Ranip, Ahmedabad - 382480</span>
-              </li>
               <li className="flex items-center">
                 <Phone className="w-5 h-5 text-brand-400 mr-3" />
-                <a href="tel:+919081622284" className="text-gray-300 hover:text-white transition-colors">
-                  90816-22284
+                <a href="tel:+919173079797" className="text-gray-300 hover:text-white transition-colors">
+                  +91 91730 79797
                 </a>
               </li>
               <li className="flex items-center">
-                <Mail className="w-5 h-5 text-brand-400 mr-3" />
-                <a href="mailto:info@bharatstartup.com" className="text-gray-300 hover:text-white transition-colors">
-                  info@bharatstartup.com
+                <Phone className="w-5 h-5 text-brand-400 mr-3" />
+                <a href="tel:+919898988968" className="text-gray-300 hover:text-white transition-colors">
+                  +91 9898988968
                 </a>
               </li>
             </ul>
