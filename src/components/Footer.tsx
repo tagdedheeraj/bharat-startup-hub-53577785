@@ -13,17 +13,8 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-display font-bold mb-4">InCorpWale</h3>
             <p className="text-gray-300 mb-4">
-              A Proud Product of <strong>Shaswat Group</strong>
-            </p>
-            <p className="text-gray-300 mb-4">
               Your one-stop solution for MSMEs and startups. We help businesses grow, fund, and succeed.
             </p>
-            <div className="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-india-saffron/20 to-india-green/20 border border-white/10 backdrop-blur-sm hover:from-india-saffron/30 hover:to-india-green/30 transition-all duration-300">
-              <Building className="w-6 h-6 text-india-saffron" />
-              <span className="text-base font-medium text-white">
-                A Division of <strong className="text-india-saffron">Shaswat Group</strong>
-              </span>
-            </div>
             <div className="flex items-center space-x-4">
               <a href="https://www.facebook.com/share/1DWAwDkT81/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -164,7 +155,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400">
-              © {currentYear} InCorpWale. A Product of <strong>Shaswat Group</strong>
+              © {currentYear} InCorpWale. All Rights Reserved.
             </p>
           </div>
         </div>
