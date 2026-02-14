@@ -15,7 +15,7 @@ const OurStory = () => {
               align="left"
             />
             <p className="text-gray-600 mb-6">
-              Bharat Startup Solution was founded with a clear mission: to simplify the startup journey for Indian entrepreneurs and MSME owners. We recognized the challenges that new businesses face in navigating complex regulations, securing funding, and establishing market presence.
+              InCorpWale was founded with a clear mission: to simplify the startup journey for Indian entrepreneurs and MSME owners. We recognized the challenges that new businesses face in navigating complex regulations, securing funding, and establishing market presence.
             </p>
             <p className="text-gray-600 mb-6">
               With our team of experienced professionals from various domains including finance, law, marketing, and business strategy, we've helped over 1000+ startups and MSMEs turn their visions into successful businesses.

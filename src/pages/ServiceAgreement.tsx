@@ -18,7 +18,7 @@ const ServiceAgreement = () => {
       
       <div className="prose prose-lg mt-8">
         <div className="text-center mb-8">
-          <h2 className="text-xl font-bold">Bharat Startup Solution</h2>
+          <h2 className="text-xl font-bold">InCorpWale</h2>
           <p className="text-sm text-gray-600">Service Agreement Rev-00 | 13.11.2024</p>
           <p className="text-sm text-gray-600">
             727, Arved Transcube Plaza, 132 Ft. Ring Road, Ranip,<br />
@@ -32,7 +32,7 @@ const ServiceAgreement = () => {
         
         <h3 className="font-bold mt-6">BY AND BETWEEN</h3>
         <p>
-          Bharat Startup Solution, having its registered office at 727, Arved Transcube Plaza, 132 Ft. Ring Road, Ranip, 
+          InCorpWale, having its registered office at 727, Arved Transcube Plaza, 132 Ft. Ring Road, Ranip, 
           Ahmedabad – 380081, Gujarat, India (hereinafter referred to as the <strong>"Consultant"/"Service Provider"</strong>), 
           of the ONE PART;
         </p>
@@ -50,7 +50,7 @@ const ServiceAgreement = () => {
         <ol className="list-decimal pl-6">
           <li className="mb-4">
             <strong>Company Name</strong>: All instances of "Shaswat Initial Support Pvt. Ltd." or "Shaswat Initial Support" 
-            have been replaced with <strong>"Bharat Startup Solution"</strong> in:
+            have been replaced with <strong>"InCorpWale"</strong> in:
             <ul className="list-disc pl-6 mt-2">
               <li>Headers and footers.</li>
               <li>Definitions (e.g., "Service Provider" and "Consultant").</li>
@@ -63,14 +63,14 @@ const ServiceAgreement = () => {
             <strong>Structure and Content</strong>:
             <ul className="list-disc pl-6 mt-2">
               <li>The scope of services, payment terms, confidentiality clauses, and other legal provisions remain <strong>unchanged</strong>.</li>
-              <li>Only the service provider's name has been updated to reflect "Bharat Startup Solution."</li>
+              <li>Only the service provider's name has been updated to reflect "InCorpWale."</li>
             </ul>
           </li>
           
           <li className="mb-4">
             <strong>Signature Block</strong>:
             <pre className="bg-gray-100 p-4 rounded-md">
-EXECUTED and DELIVERED by, for and on behalf of Bharat Startup Solution, Ahmedabad.
+EXECUTED and DELIVERED by, for and on behalf of InCorpWale, Ahmedabad.
 Authorized Signatory:
 Name: Chandni Solanki
 Title: Business Development Executive

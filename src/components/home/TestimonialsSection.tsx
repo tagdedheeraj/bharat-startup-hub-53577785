@@ -31,7 +31,7 @@ const TestimonialsSection = () => {
               ))}
             </div>
             <p className="text-gray-600">
-              "Bharat Startup Solution helped us secure ₹2 CR funding for our fintech platform. Their guidance throughout the process was invaluable."
+              "InCorpWale helped us secure ₹2 CR funding for our fintech platform. Their guidance throughout the process was invaluable."
             </p>
           </div>
           
@@ -52,7 +52,7 @@ const TestimonialsSection = () => {
               ))}
             </div>
             <p className="text-gray-600">
-              "The legal consultation services provided by Bharat Startup Solution helped us navigate complex regulations and set up our business properly."
+              "The legal consultation services provided by InCorpWale helped us navigate complex regulations and set up our business properly."
             </p>
           </div>
           

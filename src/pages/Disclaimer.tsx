@@ -17,7 +17,7 @@ const Disclaimer = () => {
           General Disclaimer
         </SectionTitle>
         <p>
-          The information provided by Bharat Startup Solution ("we," "us," or "our") on our website and through our services is for general informational purposes only. All information is provided in good faith, however, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information.
+          The information provided by InCorpWale ("we," "us," or "our") on our website and through our services is for general informational purposes only. All information is provided in good faith, however, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information.
         </p>
         
         <SectionTitle icon={<Briefcase size={20} className="text-brand-500" />}>
@@ -52,7 +52,7 @@ const Disclaimer = () => {
           Limitation of Liability
         </SectionTitle>
         <p>
-          In no event shall Bharat Startup Solution, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:
+          In no event shall InCorpWale, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from:
         </p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Your access to or use of or inability to access or use our services</li>

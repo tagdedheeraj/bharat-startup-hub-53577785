@@ -9,7 +9,7 @@ const CoreValues = () => {
         <SectionHeading
           subheading="CORE VALUES"
           heading="The Principles That Guide Us"
-          description="At Bharat Startup Solution, we're driven by these fundamental values in everything we do."
+          description="At InCorpWale, we're driven by these fundamental values in everything we do."
         />
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">

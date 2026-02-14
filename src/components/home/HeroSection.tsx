@@ -35,7 +35,7 @@ const HeroSection = () => {
                 pageName="home"
                 sectionName="hero"
                 fallbackSrc="/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png"
-                alt="Startup team at Bharat Startup Solution"
+                alt="Startup team at InCorpWale"
                 className="relative z-10 rounded-2xl shadow-xl w-full"
               />
             </div>

@@ -243,7 +243,7 @@ const LegalConsultationPage = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             subheading="WHY CHOOSE US"
-            heading="The Bharat Startup Solution Advantage"
+            heading="The InCorpWale Advantage"
             description="Discover what makes our legal consultation services stand out."
           />
           

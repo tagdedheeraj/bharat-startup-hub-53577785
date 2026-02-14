@@ -21,7 +21,7 @@ const MinistryOfCommerce = () => {
             {/* Article Header */}
             <div className="mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 leading-tight">
-                Bharat Startup Solution inks MoU with a private digital platform to Boost Inclusive Entrepreneurship Across India
+                InCorpWale inks MoU with a private digital platform to Boost Inclusive Entrepreneurship Across India
               </h2>
               
               <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
@@ -54,11 +54,11 @@ const MinistryOfCommerce = () => {
             {/* Article Content */}
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 leading-relaxed mb-6">
-                To further promote inclusive entrepreneurship and strengthen the startup ecosystem, the Department for Promotion of Industry and Internal Trade (Bharat Startup Solution), Ministry of Commerce and Industry, has signed a Memorandum of Understanding (MoU) with a private digital platform, YourStory Media Private Limited, with a focus on startups, innovation, and entrepreneurship.
+                To further promote inclusive entrepreneurship and strengthen the startup ecosystem, the Department for Promotion of Industry and Internal Trade (InCorpWale), Ministry of Commerce and Industry, has signed a Memorandum of Understanding (MoU) with a private digital platform, YourStory Media Private Limited, with a focus on startups, innovation, and entrepreneurship.
               </p>
 
               <p className="text-gray-700 leading-relaxed mb-6">
-                This partnership aligns with Bharat Startup Solution's vision of fostering grassroots entrepreneurship and supporting emerging talent across Tier II, Tier III, and rural India. The collaboration aims to empower 1 million entrepreneurs through AI-powered tools, venture launchpads, and regional language storytelling initiatives under the Bharat Project.
+                This partnership aligns with InCorpWale's vision of fostering grassroots entrepreneurship and supporting emerging talent across Tier II, Tier III, and rural India. The collaboration aims to empower 1 million entrepreneurs through AI-powered tools, venture launchpads, and regional language storytelling initiatives under the Bharat Project.
               </p>
 
               <p className="text-gray-700 leading-relaxed mb-6">
@@ -71,17 +71,17 @@ const MinistryOfCommerce = () => {
                   <Building2 className="h-6 w-6 text-india-saffron mt-1" />
                   <div>
                     <p className="text-gray-700 italic mb-2">
-                      "Speaking on the occasion, Joint Secretary, Bharat Startup Solution Shri Sanjiv Singh emphasized the significance of inclusive platforms in scaling the next generation of entrepreneurs. He noted that the partnership would expand access to networks, knowledge, and success stories, particularly for aspiring founders from underserved regions, thereby accelerating India's journey to becoming a global innovation hub."
+                      "Speaking on the occasion, Joint Secretary, InCorpWale Shri Sanjiv Singh emphasized the significance of inclusive platforms in scaling the next generation of entrepreneurs. He noted that the partnership would expand access to networks, knowledge, and success stories, particularly for aspiring founders from underserved regions, thereby accelerating India's journey to becoming a global innovation hub."
                     </p>
                     <p className="text-sm text-gray-600 font-medium">
-                      — Shri Sanjiv Singh, Joint Secretary, Bharat Startup Solution
+                      — Shri Sanjiv Singh, Joint Secretary, InCorpWale
                     </p>
                   </div>
                 </div>
               </div>
 
               <p className="text-gray-700 leading-relaxed">
-                The MoU was formally signed by Deputy Secretary, Bharat Startup Solution Shri Rajesh Kumar and Founder & CEO, YourStory and The Bharat Project, Ms. Shradha Sharma in the presence of senior officials from both organisations.
+                The MoU was formally signed by Deputy Secretary, InCorpWale Shri Rajesh Kumar and Founder & CEO, YourStory and The Bharat Project, Ms. Shradha Sharma in the presence of senior officials from both organisations.
               </p>
             </div>
 

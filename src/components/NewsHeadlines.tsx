@@ -22,7 +22,7 @@ export default function NewsHeadlines() {
 
   const newsItems: NewsItem[] = [
     {
-      title: "Bharat Startup Solution Raises ₹50Cr to Support MSME Growth",
+      title: "InCorpWale Raises ₹50Cr to Support MSME Growth",
       date: "May 15, 2023",
       source: "Economic Times",
       excerpt: "Leading startup facilitator raises funding to expand its MSME support services across India.",
@@ -33,12 +33,12 @@ export default function NewsHeadlines() {
       title: "Government Launches New Scheme for Startups with Support from BSS",
       date: "April 28, 2023",
       source: "Business Standard",
-      excerpt: "New government initiative partners with Bharat Startup Solution to provide enhanced funding access.",
+      excerpt: "New government initiative partners with InCorpWale to provide enhanced funding access.",
       imageUrl: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=1000&auto=format&fit=crop",
       blogId: "blog2"
     },
     {
-      title: "Bharat Startup Solution Expands Operations to 10 New Cities",
+      title: "InCorpWale Expands Operations to 10 New Cities",
       date: "March 12, 2023",
       source: "Startup India",
       excerpt: "The company continues its mission to support MSMEs by expanding to tier-2 and tier-3 cities.",

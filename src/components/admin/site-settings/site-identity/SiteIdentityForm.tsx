@@ -7,7 +7,7 @@ import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const SiteIdentityForm = () => {
   const { settings, loading, uploadLogo, uploadFavicon, updateName } = useSiteSettings();
-  const [siteName, setSiteName] = React.useState(settings?.siteName || 'Bharat Startup Solution');
+  const [siteName, setSiteName] = React.useState(settings?.siteName || 'InCorpWale');
   const [uploading, setUploading] = React.useState({ logo: false, favicon: false });
 
   const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
