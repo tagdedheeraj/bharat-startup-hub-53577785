@@ -10,7 +10,7 @@ const ReviewsPage = () => {
       company: "FinTech Innovations",
       service: "Funding Consultation",
       rating: 5,
-      review: "Bharat Startup Solution helped us secure ₹2 CR funding for our fintech platform. Their guidance throughout the process was invaluable. The team's expertise in preparing our pitch deck and connecting us with the right investors made all the difference. Highly recommended for any startup looking for funding support.",
+      review: "InCorpWale helped us secure ₹2 CR funding for our fintech platform. Their guidance throughout the process was invaluable. The team's expertise in preparing our pitch deck and connecting us with the right investors made all the difference. Highly recommended for any startup looking for funding support.",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
@@ -18,7 +18,7 @@ const ReviewsPage = () => {
       company: "EcoRetail India",
       service: "Legal Consultation",
       rating: 5,
-      review: "The legal consultation services provided by Bharat Startup Solution helped us navigate complex regulations and set up our business properly. Their team of legal experts provided clear guidance on compliance requirements, contract drafting, and intellectual property protection. Their support has been crucial in establishing a solid legal foundation for our business.",
+      review: "The legal consultation services provided by InCorpWale helped us navigate complex regulations and set up our business properly. Their team of legal experts provided clear guidance on compliance requirements, contract drafting, and intellectual property protection. Their support has been crucial in establishing a solid legal foundation for our business.",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
     {
@@ -307,7 +307,7 @@ const ReviewsPage = () => {
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Join Our Success Stories?</h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Start your journey with Bharat Startup Solution and experience the difference our expertise can make for your business.
+              Start your journey with InCorpWale and experience the difference our expertise can make for your business.
             </p>
             <Link to="/contact" className="px-8 py-3 bg-white text-brand-700 font-medium rounded-lg hover:bg-white/90 transition-colors shadow-lg">
               Get Started Today

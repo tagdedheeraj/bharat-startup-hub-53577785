@@ -17,7 +17,7 @@ const MSMEEventsPage = () => {
       title: "Digital Transformation Workshop",
       date: "October 5, 2023",
       time: "2:00 PM - 6:00 PM",
-      location: "Bharat Startup Solution Office, New Delhi",
+      location: "InCorpWale Office, New Delhi",
       description: "A hands-on workshop designed to help MSMEs navigate the digital landscape and implement effective digital transformation strategies.",
       image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
@@ -49,7 +49,7 @@ const MSMEEventsPage = () => {
     {
       title: "Marketing Strategies for Small Businesses",
       date: "July 5, 2023",
-      location: "Bharat Startup Solution Office, New Delhi",
+      location: "InCorpWale Office, New Delhi",
       description: "An interactive session on effective marketing strategies for small businesses with limited budgets, focusing on digital marketing.",
       image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3"
     },
@@ -184,7 +184,7 @@ const MSMEEventsPage = () => {
             <div className="lg:w-1/2 animate-fadeInLeft">
               <SectionHeading
                 subheading="PARTNER WITH US"
-                heading="Host an Event with Bharat Startup Solution"
+                heading="Host an Event with InCorpWale"
                 description=""
                 align="left"
               />

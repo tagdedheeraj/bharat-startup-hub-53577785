@@ -10,7 +10,7 @@ import SectionHeading from "@/components/SectionHeading";
 const FAQs = () => {
   const faqs = [
     {
-      question: "What services does Bharat Startup Solution offer?",
+      question: "What services does InCorpWale offer?",
       answer: "We offer a wide range of services for startups and MSMEs including funding consultation, certificate marketing, legal consultation, CA services, IT solutions, and more. Our goal is to provide comprehensive support for your business growth."
     },
     {

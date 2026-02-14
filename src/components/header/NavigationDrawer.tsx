@@ -23,8 +23,8 @@ export default function NavigationDrawer({ isOpen, onClose }: NavigationDrawerPr
           {/* Header */}
           <div className="p-4 border-b border-gray-100">
             <img 
-              src="/lovable-uploads/5aa945b6-f31a-46aa-a7dd-0b27f6c14482.png" 
-              alt="Logo" 
+              src="/lovable-uploads/incorpwale-logo.png" 
+              alt="InCorpWale"
               className="h-8 w-auto"
             />
           </div>

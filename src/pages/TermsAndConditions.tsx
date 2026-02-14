@@ -17,7 +17,7 @@ const TermsAndConditions = () => {
           1. Acceptance of Terms
         </SectionTitle>
         <p>
-          By accessing or using the services provided by Bharat Startup Solution ("the Company"), you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services.
+          By accessing or using the services provided by InCorpWale ("the Company"), you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services.
         </p>
         
         <SectionTitle icon={<FileText size={20} className="text-india-saffron" />}>

@@ -111,7 +111,7 @@ const TeamSection = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           subheading="OUR TEAM"
-          heading="Meet the Experts Behind Bharat Startup Solution"
+          heading="Meet the Experts Behind InCorpWale"
           description="A team of dedicated professionals with expertise in various domains of business development."
         />
         

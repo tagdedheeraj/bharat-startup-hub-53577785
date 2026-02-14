@@ -9,13 +9,13 @@ const RefundPolicy = () => {
     <LegalPageLayout
       title="Refund Policy"
       subtitle="LEGAL"
-      description="Clear guidelines and procedures for refunds at Bharat Startup Solution"
+      description="Clear guidelines and procedures for refunds at InCorpWale"
       icon="disclaimer"
     >
       <div className="space-y-8">
         <div className="bg-brand-50 p-6 rounded-lg border border-brand-100">
           <p className="text-brand-800">
-            At Bharat Startup Solution, we are committed to maintaining transparency and fairness in our refund process. 
+            At InCorpWale, we are committed to maintaining transparency and fairness in our refund process. 
             This policy outlines the terms and conditions for refunds of our services.
           </p>
         </div>
