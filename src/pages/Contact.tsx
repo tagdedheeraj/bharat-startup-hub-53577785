@@ -180,43 +180,16 @@ const ContactPage = () => {
                 <div className="space-y-6">
                   <div className="flex items-start">
                     <div className="bg-brand-50 p-3 rounded-lg mr-4">
-                      <MapPin className="h-6 w-6 text-brand-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg">Office Address</h4>
-                      <p className="text-gray-600 mt-1">
-                        7th Floor - 727, Arved Transcube Plaza, 132 Ft. Ring Road,<br />
-                        opp. Ranip BRTS, Ranip, Ahmedabad - 382480, India
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-brand-50 p-3 rounded-lg mr-4">
-                      <Mail className="h-6 w-6 text-brand-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg">Email Us</h4>
-                      <p className="text-gray-600 mt-1">
-                        <a href="mailto:info@bharatstartup.com" className="hover:text-brand-600">
-                          info@bharatstartup.com
-                        </a><br />
-                        <a href="mailto:support@bharatstartupsolution.com" className="hover:text-brand-600">
-                          support@bharatstartupsolution.com
-                        </a>
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="bg-brand-50 p-3 rounded-lg mr-4">
                       <Phone className="h-6 w-6 text-brand-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg">Call Us</h4>
                       <p className="text-gray-600 mt-1">
-                        <a href="tel:+919081622284" className="hover:text-brand-600">
-                          90816-22284
+                        <a href="tel:+919173079797" className="hover:text-brand-600">
+                          +91 91730 79797
+                        </a><br />
+                        <a href="tel:+919898988968" className="hover:text-brand-600">
+                          +91 9898988968
                         </a>
                       </p>
                     </div>
@@ -241,24 +214,6 @@ const ContactPage = () => {
                   </li>
                 </ul>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            subheading="FIND US"
-            heading="Our Location"
-            description="Visit our office in the heart of Ahmedabad's business district."
-          />
-          
-          <div className="mt-8 rounded-xl overflow-hidden shadow-lg border border-gray-200 animate-fadeIn">
-            {/* Replace with actual map embed */}
-            <div className="bg-gray-200 h-96 flex items-center justify-center">
-              <p className="text-gray-500 text-lg">Map Embed Placeholder</p>
             </div>
           </div>
         </div>
