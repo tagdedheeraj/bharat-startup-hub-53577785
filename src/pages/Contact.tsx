@@ -185,11 +185,8 @@ const ContactPage = () => {
                     <div>
                       <h4 className="font-semibold text-lg">Call Us</h4>
                       <p className="text-gray-600 mt-1">
-                        <a href="tel:+919173079797" className="hover:text-brand-600">
-                          +91 91730 79797
-                        </a><br />
-                        <a href="tel:+919898988968" className="hover:text-brand-600">
-                          +91 9898988968
+                        <a href="tel:+919726626660" className="hover:text-brand-600">
+                          +91 97266 26660
                         </a>
                       </p>
                     </div>
