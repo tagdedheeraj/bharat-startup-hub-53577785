@@ -21,7 +21,6 @@ const MobileOptimizer = ({ mainRef }: MobileOptimizerProps) => {
       if (mainRef.current) {
         const style = mainRef.current.style as unknown as ExtendedCSSProperties;
         style.WebkitOverflowScrolling = 'touch';
-        mainRef.current.style.overscrollBehavior = 'none';
       }
       
       // Fix scrolling in all overflow areas
