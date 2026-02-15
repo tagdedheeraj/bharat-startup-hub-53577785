@@ -104,15 +104,14 @@
   body {
     @apply bg-background text-foreground;
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
-    overscroll-behavior-y: none; /* Prevent bounce effect on iOS */
+    overscroll-behavior-y: contain;
   }
 
   /* Mobile app-like feel */
   @media (max-width: 767px) {
     body {
       @apply overflow-x-hidden;
-      touch-action: manipulation; /* Optimize for touch */
-      user-select: none; /* Prevent text selection which feels non-native */
+      touch-action: pan-x pan-y; /* Allow smooth single-finger scrolling */
     }
     
     /* Make buttons feel more native on touch */

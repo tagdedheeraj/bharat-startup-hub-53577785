@@ -38,8 +38,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
     <div 
       className={`flex flex-col min-h-screen ${bgClass}`}
       style={isMobile ? {
-        WebkitOverflowScrolling: 'touch',
-        overscrollBehavior: 'none'
+        WebkitOverflowScrolling: 'touch'
       } as ExtendedCSSProperties : undefined}
     >
       <MobileOptimizer mainRef={mainRef} />
