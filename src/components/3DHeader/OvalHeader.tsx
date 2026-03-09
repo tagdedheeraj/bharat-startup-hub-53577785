@@ -49,7 +49,7 @@ const navItems: NavItem[] = [
     name: 'More', 
     href: '#',
     children: [
-      { name: 'Experts', href: '/more/experts' },
+      
       { name: 'MSME Events', href: '/more/msme-events' },
       { name: 'Reviews', href: '/more/reviews' },
       { name: 'Blogs', href: '/more/blogs' },

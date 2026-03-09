@@ -15,8 +15,7 @@ import CertificateMarketingPage from "@/pages/services/CertificateMarketing";
 import LegalConsultationPage from "@/pages/services/LegalConsultation";
 import SuccessStoriesPage from "@/pages/SuccessStories";
 import ContactPage from "@/pages/Contact";
-
-import TeamMembersPage from "@/pages/more/TeamMembers";
+Members";
 import MSMEEventsPage from "@/pages/more/MSMEEvents";
 import ReviewsPage from "@/pages/more/Reviews";
 import BlogsPage from "@/pages/more/Blogs";
@@ -107,8 +106,7 @@ const AppRoutes = () => {
         <Route path="/ca-services/payroll" element={<PayrollPage />} />
         <Route path="/ca-services/compliance" element={<CACompliancePage />} />
         
-        <Route path="/more/experts" element={<ExpertsPage />} />
-        <Route path="/more/team" element={<TeamMembersPage />} />
+        <Route path="/more/experts" element={<ExpertsPamMembersPage />} />
         <Route path="/more/msme-events" element={<MSMEEventsPage />} />
         <Route path="/more/reviews" element={<ReviewsPage />} />
         <Route path="/more/blogs" element={<BlogsPage />} />

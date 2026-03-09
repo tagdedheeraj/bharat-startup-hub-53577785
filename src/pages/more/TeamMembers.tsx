@@ -8,25 +8,6 @@ import type { TeamMember } from '@/types/team';
 const TeamMembersPage = () => {
   const teamMembers: TeamMember[] = [
     {
-      id: '1',
-      name: 'Dhruv Thakar',
-      position: 'Founder & CEO',
-      department: 'Executive',
-      expertise: ['Business Development', 'Real Estate', 'Angel Investment', 'Startup Ecosystem'],
-      experience: '10+ years',
-      bio: 'A distinguished alumnus of LD College of Engineering and SPIPA with a storied career spanning multiple MNCs. As a trailblazing entrepreneur, he has created his own identity and forged strategic partnerships in real estate and startup ecosystems.',
-      photoUrl: '/lovable-uploads/bf4dce02-b165-4d12-a196-e2d67c1b432f.png',
-      email: 'dhruv.thakar@bharatstartup.com',
-      phone: '+91 98765 43210',
-      location: 'Ahmedabad, Gujarat',
-      linkedinUrl: 'https://linkedin.com/in/dhruv-thakar',
-      achievements: [
-        'Distinguished alumnus of LD College of Engineering and SPIPA',
-        'Business Sales Head with experience in MNCs like BOB, Chemmanur International, and Quickr',
-        'Angel investor in multiple companies'
-      ]
-    },
-    {
       id: '2',
       name: 'Priya Sharma',
       position: 'Legal & Compliance Head',
