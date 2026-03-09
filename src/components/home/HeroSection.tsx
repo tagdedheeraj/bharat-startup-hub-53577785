@@ -34,7 +34,7 @@ const HeroSection = () => {
               <SectionImage
                 pageName="home"
                 sectionName="hero"
-                fallbackSrc="/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png"
+                fallbackSrc="/lovable-uploads/incorpwale-team-hero.jpeg"
                 alt="Startup team at InCorpWale"
                 className="relative z-10 rounded-2xl shadow-xl w-full"
               />
