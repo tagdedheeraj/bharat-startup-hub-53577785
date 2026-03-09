@@ -15,7 +15,7 @@ import CertificateMarketingPage from "@/pages/services/CertificateMarketing";
 import LegalConsultationPage from "@/pages/services/LegalConsultation";
 import SuccessStoriesPage from "@/pages/SuccessStories";
 import ContactPage from "@/pages/Contact";
-Members";
+import TeamMembersPage from "@/pages/more/TeamMembers";
 import MSMEEventsPage from "@/pages/more/MSMEEvents";
 import ReviewsPage from "@/pages/more/Reviews";
 import BlogsPage from "@/pages/more/Blogs";
