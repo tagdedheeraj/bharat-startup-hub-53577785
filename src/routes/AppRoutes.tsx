@@ -106,7 +106,7 @@ const AppRoutes = () => {
         <Route path="/ca-services/payroll" element={<PayrollPage />} />
         <Route path="/ca-services/compliance" element={<CACompliancePage />} />
         
-        <Route path="/more/experts" element={<ExpertsPamMembersPage />} />
+        <Route path="/more/team" element={<TeamMembersPage />} />
         <Route path="/more/msme-events" element={<MSMEEventsPage />} />
         <Route path="/more/reviews" element={<ReviewsPage />} />
         <Route path="/more/blogs" element={<BlogsPage />} />
