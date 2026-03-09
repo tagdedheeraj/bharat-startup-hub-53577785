@@ -38,7 +38,7 @@ const services = [
     items: [
       { name: "Success Stories", path: "/success-stories" },
       { name: "MSME Events", path: "/more/msme-events" },
-      { name: "Expert Network", path: "/more/experts" },
+      
       { name: "Blog & News", path: "/more/blogs" },
     ]
   }

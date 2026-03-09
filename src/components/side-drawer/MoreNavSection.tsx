@@ -7,7 +7,7 @@ export default function MoreNavSection() {
   const location = useLocation();
   
   const moreItems = [
-    { name: 'Experts', icon: Info, to: '/more/experts' },
+    
     { name: 'MSME Events', icon: Info, to: '/more/msme-events' },
     { name: 'Reviews', icon: Star, to: '/more/reviews' },
     { name: 'Blogs', icon: Menu, to: '/more/blogs' },
