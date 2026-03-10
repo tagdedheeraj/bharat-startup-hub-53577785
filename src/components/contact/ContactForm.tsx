@@ -10,6 +10,7 @@ import { ContactFormSubject } from './';
 import { ContactFormMessage } from './';
 import { ContactFormSubmitButton } from './';
 import { formSchema, FormValues } from './types';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function ContactForm() {
   const { toast } = useToast();
