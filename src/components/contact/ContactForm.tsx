@@ -32,11 +32,11 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
-      // Here you would normally submit the data to your backend
-      console.log('Contact Form submitted:', data);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { data: result, error } = await supabase.functions.invoke('send-contact-email', {
+        body: data,
+      });
+
+      if (error) throw error;
       
       toast({
         title: "Message sent successfully!",
