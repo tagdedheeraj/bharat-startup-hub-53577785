@@ -7,6 +7,8 @@ import AppRoutes from "@/routes/AppRoutes";
 import NavigationObserver from "@/components/NavigationObserver";
 import SupportPopup from "@/components/SupportPopup";
 import { applyMobileOptimizations, setupPeriodicCleanup } from "@/utils/mobile/optimization";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileBottomNav from "@/components/mobile-nav/MobileBottomNav";
 
 const App = () => {
   const optimizationsApplied = useRef(false);
