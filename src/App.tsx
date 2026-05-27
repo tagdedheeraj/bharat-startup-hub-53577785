@@ -128,7 +128,6 @@ const App = () => {
         />
         <SupportPopup />
         <MobileBottomNav />
-        <PaymentDueOverlay />
       </Router>
     </AppProviders>
   );
