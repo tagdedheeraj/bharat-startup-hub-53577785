@@ -1,22 +1,23 @@
-import { Wrench } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 const PaymentDueOverlay = () => {
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl p-8 text-center border-t-8 border-yellow-500">
+      <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl p-8 text-center border-t-8 border-red-600">
         <div className="flex justify-center mb-4">
-          <div className="bg-yellow-100 p-4 rounded-full">
-            <Wrench className="h-12 w-12 text-yellow-600" />
+          <div className="bg-red-100 p-4 rounded-full">
+            <AlertTriangle className="h-12 w-12 text-red-600" />
           </div>
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-          Under Maintenance
+          Website Temporarily Suspended
         </h1>
-        <p className="text-gray-700 mb-2 font-semibold">
-          Our website is currently undergoing scheduled maintenance.
+        <p className="text-gray-700 mb-3 font-semibold">
+          Your payment has been pending for a very long time.
         </p>
         <p className="text-gray-600">
-          We'll be back online shortly. Thank you for your patience.
+          Due to long overdue payments, this website is being taken down.
+          Please clear your outstanding dues to restore service.
         </p>
       </div>
     </div>
