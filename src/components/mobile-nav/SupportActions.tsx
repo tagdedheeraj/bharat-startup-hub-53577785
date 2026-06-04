@@ -42,7 +42,7 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
           });
           break;
         case 'call':
-          window.open('https://wa.me/919081622284', '_blank');
+          window.open('https://wa.me/919726626660', '_blank');
           toast({
             title: "Opening WhatsApp",
             description: "You'll be connected with our support team."

@@ -26,12 +26,12 @@ export default function SupportPopup() {
   };
   
   const handleOpenPhone = () => {
-    window.open('tel:+919081622284');
+    window.open('tel:+919726626660');
     setOpen(false);
   };
   
   const handleOpenChat = () => {
-    window.open('https://wa.me/919081622284');
+    window.open('https://wa.me/919726626660');
     setOpen(false);
   };
 
@@ -86,7 +86,7 @@ export default function SupportPopup() {
               onClick={handleOpenPhone}
             >
               <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span>Call: +91 90816 22284</span>
+              <span>Call: +91 97266 26660</span>
             </Button>
             
             <Button 

@@ -41,14 +41,14 @@ export function ContactInfo() {
             <div className="flex-1">
               <p className="text-sm text-gray-500 mb-1">Call us at</p>
               <div className="flex items-center gap-2">
-                <a href="tel:+919081622284" className="text-gray-900 hover:text-india-saffron font-medium transition-colors">
-                  +91 90816 22284
+                <a href="tel:+919726626660" className="text-gray-900 hover:text-india-saffron font-medium transition-colors">
+                  +91 97266 26660
                 </a>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="h-8 w-8 p-0"
-                  onClick={() => handleCopy('+919081622284', 'phone')}
+                  onClick={() => handleCopy('+919726626660', 'phone')}
                 >
                   {copiedPhone ? (
                     <CheckCircle2 className="h-4 w-4 text-india-green" />
