@@ -1,5 +1,6 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { Youtube, Play, Pause, RefreshCw } from 'lucide-react';
+import Autoplay from 'embla-carousel-autoplay';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useYouTubeCarousel } from './youtube-shorts/hooks/useYouTubeCarousel';
 import { youtubeShorts } from './youtube-shorts/data';
@@ -23,11 +24,31 @@ const YouTubeShortsCarousel = () => {
     togglePause,
     retryLoading,
     refreshShorts,
-    isLowPerformanceDevice
   } = useYouTubeCarousel(youtubeShorts);
 
-  const optimizedShorts = isLowPerformanceDevice ? displayedShorts.slice(0, 3) : displayedShorts;
+  // Show all videos on every device (no slicing) so users always see the full catalog.
+  const optimizedShorts = displayedShorts;
   const shortsCount = optimizedShorts.length;
+
+  // Duplicate slides when there are too few items so loop + autoplay feel smooth.
+  const slides = shortsCount > 0 && shortsCount < 4
+    ? Array.from({ length: Math.ceil(4 / shortsCount) }).flatMap(() => optimizedShorts)
+    : optimizedShorts;
+
+  // Autoplay plugin instance — stable across renders, controllable via play/stop.
+  const autoplayRef = useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  useEffect(() => {
+    const plugin = autoplayRef.current;
+    if (!plugin) return;
+    if (isPaused || currentVideoId) {
+      plugin.stop();
+    } else {
+      plugin.play();
+    }
+  }, [isPaused, currentVideoId]);
 
   useEffect(() => {
     const handleShortsUpdated = () => refreshShorts();
@@ -35,15 +56,10 @@ const YouTubeShortsCarousel = () => {
     return () => window.removeEventListener('youtube-shorts-updated', handleShortsUpdated);
   }, [refreshShorts]);
 
-  // Use grid for small counts (1-3 videos) — looks much cleaner than carousel.
-  // Carousel is used only when there are 4+ videos.
-  const useGrid = shortsCount <= 3;
-
-  const gridClass = (() => {
-    if (shortsCount === 1) return 'grid grid-cols-1 max-w-xs mx-auto';
-    if (shortsCount === 2) return 'grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl mx-auto';
-    return 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6';
-  })();
+  // Responsive basis: more visible cards as screen widens.
+  const basisClass = shortsCount === 1
+    ? 'basis-full sm:basis-3/4 md:basis-1/2 lg:basis-2/5'
+    : 'basis-[85%] xs:basis-[70%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4';
 
   return (
     <section className="relative py-10 sm:py-14 md:py-16 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-slate-900">
@@ -56,27 +72,25 @@ const YouTubeShortsCarousel = () => {
               <Youtube className="text-red-600 shrink-0" />
               <span>Startup Masterclass Shorts</span>
             </h2>
-            {!useGrid && (
-              <div className="flex items-center justify-center sm:justify-end gap-2">
-                <button
-                  onClick={refreshShorts}
-                  className="flex items-center gap-1 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-3 py-2 rounded-full transition-all hover:scale-105 transform text-sm"
-                  title="Refresh shorts"
-                  aria-label="Refresh shorts"
-                >
-                  <RefreshCw size={16} className="text-blue-600" />
-                  <span className="sr-only md:not-sr-only md:inline-block">Refresh</span>
-                </button>
-                <button
-                  onClick={togglePause}
-                  className="flex items-center gap-1.5 sm:gap-2 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-3 sm:px-4 py-2 rounded-full transition-all hover:scale-105 transform text-sm"
-                  aria-label={isPaused ? 'Resume slideshow' : 'Pause slideshow'}
-                >
-                  {isPaused ? <Play size={16} className="text-green-600" /> : <Pause size={16} className="text-red-600" />}
-                  <span className="hidden xs:inline sm:inline">{isPaused ? 'Resume' : 'Pause'}</span>
-                </button>
-              </div>
-            )}
+            <div className="flex items-center justify-center sm:justify-end gap-2">
+              <button
+                onClick={refreshShorts}
+                className="flex items-center gap-1 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-3 py-2 rounded-full transition-all hover:scale-105 transform text-sm"
+                title="Refresh shorts"
+                aria-label="Refresh shorts"
+              >
+                <RefreshCw size={16} className="text-blue-600" />
+                <span className="sr-only md:not-sr-only md:inline-block">Refresh</span>
+              </button>
+              <button
+                onClick={togglePause}
+                className="flex items-center gap-1.5 sm:gap-2 bg-white/80 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white shadow-md px-3 sm:px-4 py-2 rounded-full transition-all hover:scale-105 transform text-sm"
+                aria-label={isPaused ? 'Resume slideshow' : 'Pause slideshow'}
+              >
+                {isPaused ? <Play size={16} className="text-green-600" /> : <Pause size={16} className="text-red-600" />}
+                <span className="hidden xs:inline sm:inline">{isPaused ? 'Resume' : 'Pause'}</span>
+              </button>
+            </div>
           </div>
           <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-2">
             Quick video tips and insights for entrepreneurs and startup founders. Tap any short to watch the full video.
@@ -102,30 +116,17 @@ const YouTubeShortsCarousel = () => {
               <h3 className="text-lg font-medium text-gray-600 dark:text-gray-300">No YouTube shorts available</h3>
               <p className="mt-2 text-gray-500 dark:text-gray-400">Check back later for new content</p>
             </div>
-          ) : useGrid ? (
-            <div className={gridClass}>
-              {optimizedShorts.map((short, index) => (
-                <div key={short.id} className="w-full max-w-[320px] mx-auto">
-                  <ShortCard
-                    short={short}
-                    index={index}
-                    isHovered={hoveredVideo === short.id}
-                    onPlay={playVideo}
-                    onHover={setHoveredVideo}
-                  />
-                </div>
-              ))}
-            </div>
           ) : (
             <Carousel
               className="w-full"
               opts={{ loop: true, align: 'start', dragFree: false }}
+              plugins={[autoplayRef.current]}
             >
               <CarouselContent className="-ml-3 sm:-ml-4">
-                {optimizedShorts.map((short, index) => (
+                {slides.map((short, index) => (
                   <CarouselItem
-                    key={short.id}
-                    className="pl-3 sm:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3"
+                    key={`${short.id}-${index}`}
+                    className={`pl-3 sm:pl-4 ${basisClass}`}
                   >
                     <div className="mx-auto w-full max-w-[280px] sm:max-w-none">
                       <ShortCard
@@ -149,11 +150,9 @@ const YouTubeShortsCarousel = () => {
           )}
         </div>
 
-        {!useGrid && (
-          <div className="mt-4 sm:mt-6 text-center">
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Swipe or use arrows to navigate through the shorts</p>
-          </div>
-        )}
+        <div className="mt-4 sm:mt-6 text-center">
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Auto-sliding — hover or use arrows to navigate</p>
+        </div>
       </div>
     </section>
   );
