@@ -34,7 +34,7 @@ export default function SupportSection() {
             className="w-full justify-start gap-2"
             asChild
           >
-            <a href="https://wa.me/917046396020">
+            <a href="https://wa.me/919726626660">
               <LifeBuoy size={16} />
               <span>Call Support</span>
             </a>
