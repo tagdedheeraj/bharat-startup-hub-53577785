@@ -21,7 +21,7 @@ export default function SupportPopup() {
   if (isMobile) return null;
   
   const handleOpenMail = () => {
-    window.open('mailto:support@bharatstartupsolution.com');
+    window.open('mailto:incorpwale@gmail.com');
     setOpen(false);
   };
   
@@ -77,7 +77,7 @@ export default function SupportPopup() {
               onClick={handleOpenMail}
             >
               <Mail className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span className="truncate">Email: support@bharatstartupsolution.com</span>
+              <span className="truncate">Email: incorpwale@gmail.com</span>
             </Button>
             
             <Button 

@@ -24,7 +24,7 @@ export default function SupportSection() {
             className="w-full justify-start gap-2"
             asChild
           >
-            <a href="mailto:support@bharatstartupsolution.com">
+            <a href="mailto:incorpwale@gmail.com">
               <Mail size={16} />
               <span>Email Support</span>
             </a>

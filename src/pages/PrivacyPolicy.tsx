@@ -95,7 +95,7 @@ const PrivacyPolicy = () => {
           8. Contact Us
         </SectionTitle>
         <p>
-          If you have questions or concerns about this Privacy Policy or our data practices, please contact us at info@bharatstartup.com.
+          If you have questions or concerns about this Privacy Policy or our data practices, please contact us at incorpwale@gmail.com.
         </p>
       </div>
     </LegalPageLayout>

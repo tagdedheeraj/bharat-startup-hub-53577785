@@ -67,14 +67,14 @@ export function ContactInfo() {
             <div className="flex-1">
               <p className="text-sm text-gray-500 mb-1">Email us at</p>
               <div className="flex items-center gap-2">
-                <a href="mailto:support@bharatstartupsolution.com" className="text-gray-900 hover:text-india-green font-medium break-all transition-colors">
-                  support@bharatstartupsolution.com
+                <a href="mailto:incorpwale@gmail.com" className="text-gray-900 hover:text-india-green font-medium break-all transition-colors">
+                  incorpwale@gmail.com
                 </a>
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   className="h-8 w-8 p-0 flex-shrink-0"
-                  onClick={() => handleCopy('support@bharatstartupsolution.com', 'email')}
+                  onClick={() => handleCopy('incorpwale@gmail.com', 'email')}
                 >
                   {copiedEmail ? (
                     <CheckCircle2 className="h-4 w-4 text-india-green" />
