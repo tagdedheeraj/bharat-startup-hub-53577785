@@ -62,60 +62,9 @@ const convertDocToYouTubeShort = (doc: DocumentData): YouTubeShort | null => {
   }
 };
 
-// Get YouTube shorts from Firebase with improved error handling
-export const getYoutubeShorts = async (timestamp?: number): Promise<YouTubeShort[]> => {
-  try {
-    console.log(`Checking Firestore availability... (timestamp: ${timestamp || 'none'})`);
-    // First check if Firestore is available
-    const isAvailable = await isFirestoreAvailable();
-    
-    if (!isAvailable) {
-      console.warn("Firestore is not available, using initial data");
-      return youtubeShorts;
-    }
-    
-    console.log("Firestore is available, fetching YouTube shorts...");
-    
-    // Set up query with ordering and no limit for admin panel (to show all shorts)
-    const shortsCollection = collection(db, 'youtubeShorts');
-    const shortsQuery = query(
-      shortsCollection, 
-      orderBy('updatedAt', 'desc'), // Sort by most recently updated
-      limit(20) // Increased limit to show more shorts
-    );
-    
-    console.log("Executing Firestore query...");
-    const querySnapshot = await getDocs(shortsQuery);
-    
-    // Check if we have results
-    if (querySnapshot.empty) {
-      console.log('No YouTube shorts found in Firestore, using initial data');
-      return youtubeShorts;
-    }
-    
-    // Convert to YouTubeShort objects and filter out invalid ones
-    const shorts: YouTubeShort[] = [];
-    querySnapshot.forEach(doc => {
-      const short = convertDocToYouTubeShort(doc);
-      if (short) {
-        shorts.push(short);
-      }
-    });
-    
-    console.log(`Successfully loaded ${shorts.length} YouTube shorts from Firestore`);
-    
-    // If we got valid shorts, return them, otherwise use initial data
-    if (shorts.length > 0) {
-      return shorts;
-    } else {
-      console.log('No valid YouTube shorts found in Firestore, using initial data');
-      return youtubeShorts;
-    }
-  } catch (error) {
-    console.error("Error fetching YouTube shorts:", error);
-    toast.error("Could not load YouTube shorts. Using fallback data.");
-    return youtubeShorts;
-  }
+// Always return the static curated YouTube shorts (Firestore overrides disabled)
+export const getYoutubeShorts = async (_timestamp?: number): Promise<YouTubeShort[]> => {
+  return youtubeShorts;
 };
 
 // Add function to validate if YouTube video exists
