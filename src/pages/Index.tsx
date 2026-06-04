@@ -1,5 +1,4 @@
 
-import FirstTimeVideoPopup from '@/components/FirstTimeVideoPopup';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturesSection from '@/components/home/FeaturesSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
@@ -24,9 +23,6 @@ const HomePage = () => {
       {/* Mobile optimizer */}
       <MobileOptimizer mainRef={mainRef} />
       
-      {/* First-time visitor video popup */}
-      <FirstTimeVideoPopup videoId="pq22sadiXqQ" />
-
       {/* Hero Section */}
       <div className={isMobile ? "rounded-b-3xl overflow-hidden shadow-lg" : ""}>
         <HeroSection />
