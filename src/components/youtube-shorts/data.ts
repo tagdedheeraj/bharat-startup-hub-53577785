@@ -19,11 +19,6 @@ export const youtubeShorts: YouTubeShort[] = [
     id: "9xVDjuKP5gs",
     title: "Startup Masterclass",
     thumbnail: "https://i3.ytimg.com/vi/9xVDjuKP5gs/maxresdefault.jpg"
-  },
-  {
-    id: "xoJEsLIgUQg",
-    title: "Startup Masterclass",
-    thumbnail: "https://i3.ytimg.com/vi/xoJEsLIgUQg/maxresdefault.jpg"
   }
 ];
 
