@@ -41,12 +41,16 @@ const YouTubeShortsCarousel = () => {
   );
 
   useEffect(() => {
-    const plugin = autoplayRef.current;
+    const plugin = autoplayRef.current as { play?: () => void; stop?: () => void } | null;
     if (!plugin) return;
-    if (isPaused || currentVideoId) {
-      plugin.stop();
-    } else {
-      plugin.play();
+    try {
+      if (isPaused || currentVideoId) {
+        plugin.stop?.();
+      } else {
+        plugin.play?.();
+      }
+    } catch {
+      // Autoplay may not be attached yet on first render — safe to ignore.
     }
   }, [isPaused, currentVideoId]);
 
