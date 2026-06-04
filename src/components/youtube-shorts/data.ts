@@ -16,14 +16,14 @@ import { toast } from 'sonner';
 // Initial YouTube shorts data as fallback with verified IDs
 export const youtubeShorts: YouTubeShort[] = [
   {
-    id: "I5QH6rGjZEs",
-    title: "Business Growth Tips",
-    thumbnail: "https://i3.ytimg.com/vi/I5QH6rGjZEs/maxresdefault.jpg"
+    id: "9xVDjuKP5gs",
+    title: "Startup Masterclass",
+    thumbnail: "https://i3.ytimg.com/vi/9xVDjuKP5gs/maxresdefault.jpg"
   },
   {
-    id: "sEKYtxnpAP4",
-    title: "Startup Growth Strategies",
-    thumbnail: "https://i3.ytimg.com/vi/sEKYtxnpAP4/maxresdefault.jpg"
+    id: "xoJEsLIgUQg",
+    title: "Startup Masterclass",
+    thumbnail: "https://i3.ytimg.com/vi/xoJEsLIgUQg/maxresdefault.jpg"
   }
 ];
 
