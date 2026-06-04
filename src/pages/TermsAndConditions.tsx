@@ -80,7 +80,7 @@ const TermsAndConditions = () => {
           10. Contact Information
         </SectionTitle>
         <p>
-          If you have any questions about these Terms and Conditions, please contact us at info@bharatstartup.com.
+          If you have any questions about these Terms and Conditions, please contact us at incorpwale@gmail.com.
         </p>
       </div>
     </LegalPageLayout>

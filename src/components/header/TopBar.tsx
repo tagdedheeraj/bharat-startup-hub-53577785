@@ -14,12 +14,12 @@ const TopBar = () => {
               </div>
               <span>+91 97266 26660</span>
             </a>
-            <a href="mailto:info@bharatstartup.com" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
+            <a href="mailto:incorpwale@gmail.com" className="flex items-center gap-1.5 hover:text-black/80 transition-colors group">
               <div className="relative">
                 <Mail size={14} className="group-hover:animate-ping absolute opacity-0 group-hover:opacity-75" />
                 <Mail size={14} className="relative" />
               </div>
-              <span>info@bharatstartup.com</span>
+              <span>incorpwale@gmail.com</span>
             </a>
           </div>
           <div className="flex items-center">

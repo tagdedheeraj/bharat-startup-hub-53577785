@@ -16,7 +16,7 @@ const TeamMembersPage = () => {
       experience: '12+ years',
       bio: 'A seasoned legal professional specializing in corporate law and intellectual property rights. Priya brings extensive experience in handling complex regulatory frameworks and ensuring compliance for businesses across various sectors.',
       photoUrl: '/lovable-uploads/9e5fe674-093d-408f-b174-4f59a6ea7235.png',
-      email: 'priya.sharma@bharatstartup.com',
+      email: 'incorpwale@gmail.com',
       linkedinUrl: 'https://linkedin.com/in/priya-sharma',
       location: 'Mumbai, Maharashtra'
     },
@@ -29,7 +29,7 @@ const TeamMembersPage = () => {
       experience: '15+ years',
       bio: 'With over 15 years of experience in investment banking and financial markets, Rajesh has guided numerous startups and established businesses in their financial journey. His expertise in market analysis has helped companies raise substantial funding.',
       photoUrl: '/lovable-uploads/6566b2a8-7eca-450d-a989-1c3f27d3fdcd.png',
-      email: 'rajesh.kumar@bharatstartup.com',
+      email: 'incorpwale@gmail.com',
       linkedinUrl: 'https://linkedin.com/in/rajesh-kumar',
       location: 'Delhi NCR'
     },
@@ -42,7 +42,7 @@ const TeamMembersPage = () => {
       experience: '14+ years',
       bio: 'Vikram is a technology visionary with expertise in helping businesses navigate digital transformation. His background in AI and machine learning has enabled countless startups to leverage cutting-edge technology for competitive advantage.',
       photoUrl: '/lovable-uploads/1f895d7b-8342-4a9e-8817-3c177ac1b3e4.png',
-      email: 'vikram.mehta@bharatstartup.com',
+      email: 'incorpwale@gmail.com',
       linkedinUrl: 'https://linkedin.com/in/vikram-mehta',
       location: 'Bangalore, Karnataka'
     },
@@ -55,7 +55,7 @@ const TeamMembersPage = () => {
       experience: '9+ years',
       bio: 'Ananya is a creative marketing professional with extensive experience in building brand presence for startups and established businesses alike. Her integrated marketing approaches have driven significant growth for numerous companies.',
       photoUrl: '/lovable-uploads/5aa945b6-f31a-46aa-a7dd-0b27f6c14482.png',
-      email: 'ananya.patel@bharatstartup.com',
+      email: 'incorpwale@gmail.com',
       linkedinUrl: 'https://linkedin.com/in/ananya-patel',
       location: 'Pune, Maharashtra'
     },
@@ -68,7 +68,7 @@ const TeamMembersPage = () => {
       experience: '11+ years',
       bio: 'Sanjay brings extensive experience in streamlining operations and optimizing business processes. His methodical approach to operational challenges has helped numerous startups scale efficiently while maintaining quality standards.',
       photoUrl: '/placeholder.svg',
-      email: 'sanjay.gupta@bharatstartup.com',
+      email: 'incorpwale@gmail.com',
       location: 'Chennai, Tamil Nadu'
     }
   ];

@@ -74,7 +74,7 @@ const RefundPolicy = () => {
           How to Request a Refund
         </SectionTitle>
         <div className="space-y-4">
-          <p>To initiate a refund request, please email us at <a href="mailto:admin@bharatstartupsolution.com" className="text-brand-600 hover:text-brand-700">admin@bharatstartupsolution.com</a> with:</p>
+          <p>To initiate a refund request, please email us at <a href="mailto:incorpwale@gmail.com" className="text-brand-600 hover:text-brand-700">incorpwale@gmail.com</a> with:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>Your full name and contact information</li>
             <li>Service details and date of purchase</li>

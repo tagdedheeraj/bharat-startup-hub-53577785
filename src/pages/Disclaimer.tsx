@@ -65,7 +65,7 @@ const Disclaimer = () => {
           Contact Us
         </SectionTitle>
         <p>
-          If you have any questions about this Disclaimer, please contact us at info@bharatstartup.com.
+          If you have any questions about this Disclaimer, please contact us at incorpwale@gmail.com.
         </p>
       </div>
     </LegalPageLayout>

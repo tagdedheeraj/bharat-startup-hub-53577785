@@ -11,7 +11,7 @@ import AdminLoginForm from '@/components/admin/login/AdminLoginForm';
 import AdminLoginError from '@/components/admin/login/AdminLoginError';
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('admin@bharatstartupsolution.com');
+  const [email, setEmail] = useState('incorpwale@gmail.com');
   const [password, setPassword] = useState('admin@123');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

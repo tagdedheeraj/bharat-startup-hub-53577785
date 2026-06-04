@@ -35,7 +35,7 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
           });
           break;
         case 'email':
-          window.open('mailto:support@bharatstartupsolution.com', '_blank');
+          window.open('mailto:incorpwale@gmail.com', '_blank');
           toast({
             title: "Opening email client",
             description: "Your default email client should open shortly."
