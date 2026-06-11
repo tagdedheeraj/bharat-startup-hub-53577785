@@ -9,6 +9,7 @@ import SupportPopup from "@/components/SupportPopup";
 import { applyMobileOptimizations, setupPeriodicCleanup } from "@/utils/mobile/optimization";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileBottomNav from "@/components/mobile-nav/MobileBottomNav";
+import PaymentDueOverlay from "@/components/PaymentDueOverlay";
 
 
 const App = () => {
@@ -116,6 +117,7 @@ const App = () => {
 
   return (
     <AppProviders>
+      <PaymentDueOverlay />
       <Router>
         <NavigationObserver />
         <AppRoutes />
