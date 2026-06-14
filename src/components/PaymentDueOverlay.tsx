@@ -10,14 +10,14 @@ const PaymentDueOverlay = () => {
           </div>
         </div>
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-          Website Temporarily Down
+          Website Temporarily Suspended
         </h1>
         <p className="text-gray-700 mb-3 font-semibold">
-          You have not made the payment for several months.
+          Your payment has been pending for a very long time.
         </p>
         <p className="text-gray-600">
-          Due to non-payment, your website is being taken down. To bring your
-          website back live, please make the payment immediately.
+          Due to long overdue payments, this website is being taken down.
+          Please clear your outstanding dues to restore service.
         </p>
       </div>
     </div>
