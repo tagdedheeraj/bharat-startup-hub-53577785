@@ -2,7 +2,7 @@ import { AlertTriangle } from "lucide-react";
 
 const PaymentDueOverlay = () => {
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 overflow-y-auto">
       <div className="max-w-lg w-full bg-white rounded-2xl shadow-2xl p-8 text-center border-t-8 border-red-600">
         <div className="flex justify-center mb-4">
           <div className="bg-red-100 p-4 rounded-full">
