@@ -4,7 +4,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from './';
 
 export const setupAdminUser = async () => {
-  const email = 'incorpwale@gmail.com';
+  const email = 'admin@bharatstartupsolution.com';
   const password = 'admin@123';
 
   try {

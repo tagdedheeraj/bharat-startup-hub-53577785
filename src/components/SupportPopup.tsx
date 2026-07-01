@@ -21,17 +21,17 @@ export default function SupportPopup() {
   if (isMobile) return null;
   
   const handleOpenMail = () => {
-    window.open('mailto:incorpwale@gmail.com');
+    window.open('mailto:support@bharatstartupsolution.com');
     setOpen(false);
   };
   
   const handleOpenPhone = () => {
-    window.open('tel:+919726626660');
+    window.open('tel:+919081622284');
     setOpen(false);
   };
   
   const handleOpenChat = () => {
-    window.open('https://wa.me/919726626660');
+    window.open('https://wa.me/919081622284');
     setOpen(false);
   };
 
@@ -77,7 +77,7 @@ export default function SupportPopup() {
               onClick={handleOpenMail}
             >
               <Mail className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span className="truncate">Email: incorpwale@gmail.com</span>
+              <span className="truncate">Email: support@bharatstartupsolution.com</span>
             </Button>
             
             <Button 
@@ -86,7 +86,7 @@ export default function SupportPopup() {
               onClick={handleOpenPhone}
             >
               <Phone className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span>Call: +91 97266 26660</span>
+              <span>Call: +91 90816 22284</span>
             </Button>
             
             <Button 

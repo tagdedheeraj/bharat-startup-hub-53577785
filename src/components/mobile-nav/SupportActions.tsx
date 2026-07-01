@@ -35,14 +35,14 @@ export default function SupportActions({ onActionComplete }: SupportActionProps)
           });
           break;
         case 'email':
-          window.open('mailto:incorpwale@gmail.com', '_blank');
+          window.open('mailto:support@bharatstartupsolution.com', '_blank');
           toast({
             title: "Opening email client",
             description: "Your default email client should open shortly."
           });
           break;
         case 'call':
-          window.open('https://wa.me/919726626660', '_blank');
+          window.open('https://wa.me/919081622284', '_blank');
           toast({
             title: "Opening WhatsApp",
             description: "You'll be connected with our support team."
